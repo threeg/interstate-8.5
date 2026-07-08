@@ -1,0 +1,49 @@
+# Pristine .gitignore template — copied out to the project root as ./.gitignore by sfk-init
+# (only when the repo has none of its own). Named without a leading dot on purpose so it does
+# not act as a live .gitignore inside .sfk/templates/. sfk-init also ensures the
+# .claude/settings.local.json line below is present even when a project brings its own .gitignore.
+
+# --- OS cruft ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# --- Editors / IDEs ---
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+
+# --- Environment / secrets ---
+.env
+.env.*
+!.env.example
+*.local
+
+# --- Logs & temp ---
+*.log
+logs/
+tmp/
+.cache/
+
+# --- Dependency / build artefacts (uncomment those your stack uses) ---
+# node_modules/
+# dist/
+# build/
+# coverage/
+# .venv/
+# __pycache__/
+# *.pyc
+# target/
+# .pytest_cache/
+# .mypy_cache/
+
+# --- Claude Code local state (keep .claude/skills tracked; ignore local settings) ---
+.claude/settings.local.json
