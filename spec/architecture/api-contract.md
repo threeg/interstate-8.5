@@ -4,11 +4,11 @@
 |---|---|
 | **Document** | Interface contract — the read/interface surface |
 | **Repository location** | `spec/architecture/api-contract.md` |
-| **Status** | Draft for review — Milestone 3 in progress |
+| **Status** | Binding specification — Milestone 3 signed off (2026-07-07) |
 
 > **Purpose.** Interstate-8 v5 is a **server-rendered Drupal site**, not a custom HTTP API. For slice 1
 > the "interface" is therefore the **page routes, URL aliases, and filter query parameters**, plus the
-> posture on Drupal's default **JSON:API**. Where code and this contract disagree on these shapes, the
+> posture on Drupal's **core JSON:API** (opt-in — kept off). Where code and this contract disagree on these shapes, the
 > contract wins. There are **no custom REST/RPC endpoints** in slice 1.
 
 ---
@@ -51,10 +51,12 @@ alternate-vs-normal side-by-side when the song has a parent, FR-20), notes, and 
 
 ## 3. JSON:API posture
 
-Drupal core **JSON:API** is on by default at `/jsonapi`. The project keeps entities clean so this
-surface stays coherent, but it is **not a contractual client surface in `5.0.x-dev`** and no client is
-built against it in slice 1. If/when a headless client is ever pursued (explicitly deferred), this
-document gains the entity resource shapes.
+Drupal ships a **JSON:API** module in core, but it is **not enabled by default** — it is opt-in. Since
+`5.0.x-dev` builds no client and headless is explicitly deferred, **JSON:API stays disabled**:
+enabling it would only add attack surface and an endpoint to maintain for no consumer. The
+"keep entities clean" principle is a **content-modelling** discipline (clean fields, view modes) that
+keeps the site headless-*ready* regardless — so if a headless client is ever pursued, enabling
+JSON:API is a switch, not a remodel. Until then there is **no programmatic API surface** in v5.
 
 ---
 

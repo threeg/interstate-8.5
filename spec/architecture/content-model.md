@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Content model — content types, fields, taxonomy (the data contract) |
 | **Repository location** | `spec/architecture/content-model.md` |
-| **Status** | Draft for review — Milestone 3 in progress |
+| **Status** | Binding specification — Milestone 3 signed off (2026-07-07) |
 | **Companion to** | `architecture.md` (§3 data model overview) |
 | **Grounding** | v2 `I8_Songs` / `I8_SongType` (validated schema) and the requirements (`FR`/`NFR`) |
 

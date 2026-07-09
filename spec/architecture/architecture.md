@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | System architecture |
 | **Repository location** | `spec/architecture/architecture.md` |
-| **Status** | Draft for review — Milestone 3 in progress |
+| **Status** | Binding specification — Milestone 3 signed off (2026-07-07) |
 | **Companions** | `content-model.md` (content types + Drupal field mapping — the data contract), `api-contract.md` (read/interface surface) |
 | **Grounding** | Prior v5 proposals (stack-migration, front-end/theme) and the v2 code/schema (`I8_Songs`) |
 
