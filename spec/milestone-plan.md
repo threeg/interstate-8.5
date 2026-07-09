@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Milestone plan and progress tracker |
 | **Repository location** | `spec/milestone-plan.md` |
-| **Last updated** | 2026-07-07 (Milestone 1 (Project brief) signed off; Milestone 2 (Requirements) is next) |
+| **Last updated** | 2026-07-07 (Milestone 2 (Requirements) signed off; Milestone 3 (Architecture & content model) is next) |
 
 This document is the single source of truth for **where the project is**. It is extracted from the
 project brief so the brief stays stable after approval while this tracker is updated as each milestone
@@ -17,11 +17,12 @@ together, commit by commit.
 
 ## Current position
 
-Version `5.0.x-dev` (v5 first release, delivered in vertical slices) is under way. **Milestone 1
-(Project brief) is signed off** — `spec/brief/brief.md` is approved and binding: it covers the
-northstar (v2 → Drupal 11 rebuild, ~99% parity, responsive redesign, board dropped) and **slice 1**
-(dev stack, Songs import, Songs section pages, and a homepage design-draft go/no-go). **Next action:**
-run `sfk-next-milestone` to work **Milestone 2 (Requirements)** — the `FR`/`NFR` rules for slice 1.
+Version `5.0.x-dev` (v5 first release, delivered in vertical slices) is under way. Milestones 1
+(Project brief) and 2 (Requirements) are signed off — `spec/brief/brief.md` and
+`spec/requirements/requirements.md` are approved and binding. **Next action:** run
+`sfk-next-milestone` to work **Milestone 3 (Architecture & content model)** — the module layout, the
+`content-model.md` companion (content types + Drupal field choices, with the version seams), and the
+dependency rule, read against the connected v2 code and schema.
 
 ---
 
@@ -36,7 +37,7 @@ run `sfk-next-milestone` to work **Milestone 2 (Requirements)** — the `FR`/`NF
 | # | Milestone | Deliverable | Tool | Status |
 |---|-----------|-------------|------|--------|
 | 1 | Project brief | `spec/brief/brief.md` — northstar + slice 1 scope, approved | Cowork | ✅ |
-| 2 | Requirements | `spec/requirements/requirements.md` — `FR`/`NFR` for slice 1 (import, Songs section, responsive, FE tests) | Cowork | ⬜ |
+| 2 | Requirements | `spec/requirements/requirements.md` — `FR`/`NFR` for slice 1 (import, Songs section, responsive, FE tests) | Cowork | ✅ |
 | 3 | Architecture & content model | `spec/architecture/architecture.md` + `spec/architecture/content-model.md` (content types + Drupal field choices, seams), data model, dependency rule | Cowork | ⬜ |
 | 4 | Wireframes | `spec/wireframes/` — homepage draft (go/no-go), Songs landing, song page | Cowork | ⬜ |
 | 5 | Design system | `spec/design/design-system.md` — tokens, atoms, and the molecules the slice-1 screens use (Claude Design) | Cowork | ⬜ |
