@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Milestone plan and progress tracker |
 | **Repository location** | `spec/milestone-plan.md` |
-| **Last updated** | 2026-07-07 (Milestone 3 (Architecture & content model) signed off; Milestone 4 (Wireframes) is next) |
+| **Last updated** | 2026-07-07 (Milestone 4 (Wireframes) in progress) |
 
 This document is the single source of truth for **where the project is**. It is extracted from the
 project brief so the brief stays stable after approval while this tracker is updated as each milestone
@@ -17,12 +17,12 @@ together, commit by commit.
 
 ## Current position
 
-Version `5.0.x-dev` (v5 first release, delivered in vertical slices) is under way. Milestones 1
-(Project brief), 2 (Requirements) and 3 (Architecture & content model) are signed off and binding —
-`spec/architecture/` (`architecture.md`, `content-model.md`, `api-contract.md`) fixes the module
-layout, the Song content type + Drupal field mapping, and the read surface. **Next action:** run
-`sfk-next-milestone` to work **Milestone 4 (Wireframes)** — the homepage go/no-go draft plus the Songs
-landing and song page, in Claude Design.
+Version `5.0.x-dev` (v5 first release, delivered in vertical slices) is under way. Milestones 1–3 are
+signed off and binding. **Milestone 4 (Wireframes) is now in progress:** authoring `spec/wireframes/`
+as the structural spec (screen inventory, regions, states, navigation, `FR` mapping) for the homepage,
+Songs landing and song page — the binding brief that Claude Design turns into the actual visual wires
+(exports come back into `spec/wireframes/`). The homepage is the go/no-go viability check. **Next
+action:** finish the wireframe spec + Design brief, then `sfk-signoff` once approved.
 
 ---
 
@@ -39,7 +39,7 @@ landing and song page, in Claude Design.
 | 1 | Project brief | `spec/brief/brief.md` — northstar + slice 1 scope, approved | Cowork | ✅ |
 | 2 | Requirements | `spec/requirements/requirements.md` — `FR`/`NFR` for slice 1 (import, Songs section, responsive, FE tests) | Cowork | ✅ |
 | 3 | Architecture & content model | `spec/architecture/architecture.md` + `spec/architecture/content-model.md` (content types + Drupal field choices, seams), data model, dependency rule | Cowork | ✅ |
-| 4 | Wireframes | `spec/wireframes/` — homepage draft (go/no-go), Songs landing, song page | Cowork | ⬜ |
+| 4 | Wireframes | `spec/wireframes/` — homepage draft (go/no-go), Songs landing, song page | Cowork | 🔶 |
 | 5 | Design system | `spec/design/design-system.md` — tokens, atoms, and the molecules the slice-1 screens use (Claude Design) | Cowork | ⬜ |
 | 6 | Test strategy | `spec/test-strategy/test-strategy.md` — FE test tool (Nightwatch vs Playwright) + what is tested; migration leans on the Migrate module | Cowork | ⬜ |
 | 7 | Ticket generation | `spec/tickets/*.md` + `BOARD.md` index | Cowork | ⬜ |
