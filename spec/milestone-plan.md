@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Milestone plan and progress tracker |
 | **Repository location** | `spec/milestone-plan.md` |
-| **Last updated** | 2026-07-07 (Milestone 4 (Wireframes) in progress) |
+| **Last updated** | 2026-07-11 (Milestone 4 (Wireframes) signed off — go/no-go GO, direction 6d; Milestone 5 (Design system) is next) |
 
 This document is the single source of truth for **where the project is**. It is extracted from the
 project brief so the brief stays stable after approval while this tracker is updated as each milestone
@@ -17,12 +17,14 @@ together, commit by commit.
 
 ## Current position
 
-Version `5.0.x-dev` (v5 first release, delivered in vertical slices) is under way. Milestones 1–3 are
-signed off and binding. **Milestone 4 (Wireframes) is now in progress:** authoring `spec/wireframes/`
-as the structural spec (screen inventory, regions, states, navigation, `FR` mapping) for the homepage,
-Songs landing and song page — the binding brief that Claude Design turns into the actual visual wires
-(exports come back into `spec/wireframes/`). The homepage is the go/no-go viability check. **Next
-action:** finish the wireframe spec + Design brief, then `sfk-signoff` once approved.
+Version `5.0.x-dev` (v5 first release, delivered in vertical slices) is under way. Milestones 1–4 are
+signed off and binding. **Milestone 4's go/no-go came back GO** — Claude Design's
+`spec/wireframes/Interstate-8 Wireframes.dc.html` (direction **6d**) is the chosen visual, covering all
+three screens desktop + mobile on the muted-highway lane; the design-stall risk that killed v3/v4 is
+retired. **Next action:** run `sfk-next-milestone` to work **Milestone 5 (Design system)** — extract
+the tokens (Oswald/Georgia type, corduroy `#5e6b68` + maroon `#7a2432` palette, spacing, core
+components, states) from 6d into `spec/design/design-system.md`, and bring in the third "surprise"
+palette + full visual polish.
 
 ---
 
@@ -39,7 +41,7 @@ action:** finish the wireframe spec + Design brief, then `sfk-signoff` once appr
 | 1 | Project brief | `spec/brief/brief.md` — northstar + slice 1 scope, approved | Cowork | ✅ |
 | 2 | Requirements | `spec/requirements/requirements.md` — `FR`/`NFR` for slice 1 (import, Songs section, responsive, FE tests) | Cowork | ✅ |
 | 3 | Architecture & content model | `spec/architecture/architecture.md` + `spec/architecture/content-model.md` (content types + Drupal field choices, seams), data model, dependency rule | Cowork | ✅ |
-| 4 | Wireframes | `spec/wireframes/` — homepage draft (go/no-go), Songs landing, song page | Cowork | 🔶 |
+| 4 | Wireframes | `spec/wireframes/` — homepage draft (go/no-go), Songs landing, song page | Cowork | ✅ |
 | 5 | Design system | `spec/design/design-system.md` — tokens, atoms, and the molecules the slice-1 screens use (Claude Design) | Cowork | ⬜ |
 | 6 | Test strategy | `spec/test-strategy/test-strategy.md` — FE test tool (Nightwatch vs Playwright) + what is tested; migration leans on the Migrate module | Cowork | ⬜ |
 | 7 | Ticket generation | `spec/tickets/*.md` + `BOARD.md` index | Cowork | ⬜ |

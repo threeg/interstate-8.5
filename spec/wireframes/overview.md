@@ -4,7 +4,8 @@
 |---|---|
 | **Document** | Wireframes overview |
 | **Repository location** | `spec/wireframes/overview.md` |
-| **Status** | Draft for review — Milestone 4 in progress |
+| **Status** | Binding specification (for UI) — Milestone 4 signed off (2026-07-11) |
+| **Chosen visual direction** | **6d** in `Interstate-8 Wireframes.dc.html` (go/no-go: **GO**). Self-contained HTML canvas covering all three screens, desktop + mobile. |
 | **Workflow** | This folder is the **binding structural spec**; the **visual wires are produced in Claude Design** and their exports return here as supporting context (see §4). |
 
 > **Purpose.** The binding description of the slice-1 screens, their states, and the navigation between
@@ -106,6 +107,15 @@ title/lyrics for →"**.
   a highway/interstate motif as the identity through-line; three colour lanes for the three homepage
   directions — shield red/white/blue, the extracted muted-highway palette, and a third "surprise"
   scheme introduced at the actual-design stage. All lanes hold WCAG 2.1 AA contrast (NFR-1).
+- **2026-07-11** — **Go/no-go: GO.** Claude Design produced `Interstate-8 Wireframes.dc.html`;
+  **direction 6d chosen** (highway hero + "TAKE AN EXIT", muted-highway palette with a maroon accent,
+  ledger + letter-rail songlist, side-by-side alternate lyrics). Covers all three screens, desktop +
+  mobile, on the muted-highway lane. The other homepage variants (6a/6c) remain in Claude Design's
+  archive, not exported. Full visual polish and the third "surprise" palette are Milestone 5.
+- **2026-07-11** — **Song-page "coming soon" rail accepted.** 6d reserves a right-rail with disabled
+  "coming soon" stubs for the deferred releases / last-played / tour-stats widgets so lyrics don't
+  reshuffle when those ship. Consistent with FR-14 (no real release/live data is shown — same spirit as
+  the disabled landing filters, FR-11); revisit at implementation if it reads as clutter.
 - **2026-07-07** — **Global nav shown for continuity**, but only Home (design) and Songs (live) are in
   the slice-1 build; other sections deferred.
 - **2026-07-07** — **Released / Played-live filters shown but disabled** on the landing (FR-11).

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#f0eee9;font-family:Oswald,system-ui,sans-serif;color:#1a1a1a}
+  h1,h2,h3{margin:0;font-family:Oswald,system-ui,sans-serif}
+  a{color:inherit}
+  .i8-ph{background:repeating-linear-gradient(45deg,#cfcfcc,#cfcfcc 7px,#dedcd8 7px,#dedcd8 14px);border:1px solid #9a9a96;display:flex;align-items:center;justify-content:center;text-align:center;font:11px/1.3 ui-monospace,Menlo,monospace;color:#54534f;padding:6px}
+</style>
+</helmet>
+
+<div style="padding:44px 44px 80px;max-width:none">
+
+<div style="margin:0 0 36px;max-width:920px">
+  <h1 style="font-size:26px;font-weight:600;letter-spacing:.02em;margin:0 0 8px">Interstate-8 — Wireframe pass</h1>
+  <p style="font:15px/1.6 system-ui,sans-serif;color:#4a4a46;margin:0">Layout &amp; composition exploration for the v5 rebuild. Placeholder content; colour lanes shown for direction only — full visual polish and a third "surprise" palette come at the design-system stage. Pan/zoom freely.</p>
+</div>
+
+<!-- ============================================================ TURN 6 — HOMEPAGE ============================================================ -->
+<section class="dv-turn" id="t6" style="padding:0 0 40px;border-bottom:2px solid rgba(0,0,0,.12);margin-bottom:8px">
+
+  <div style="display:flex;align-items:baseline;gap:12px;margin:0 0 6px">
+    <a href="#t6" style="font:700 11px ui-monospace,Menlo,monospace;padding:4px 8px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none">6</a>
+    <span style="font:600 15px/1.2 system-ui,sans-serif">Homepage</span>
+  </div>
+  <div style="font:13px/1.7 system-ui,sans-serif;color:#4a4a46;max-width:860px;margin:0 0 24px">
+    Transparent header floating over the highway hero, solid once scrolled. Earlier backup variants (6a, 6c) have been moved to the archive.
+  </div>
+
+  <!-- ============ 6d — transparent header OVER hero ============ -->
+  <div id="6d" style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:10px">
+      <a href="#6d" style="font:600 11px ui-monospace,Menlo,monospace;padding:3px 7px;background:#5e6b68;color:#fff;border-radius:5px;text-decoration:none">6d</a>
+      <span style="font:600 14px system-ui,sans-serif">Homepage — transparent header over hero</span>
+      <span style="font:13px 'Kalam',cursive;color:#5a5a56">— header floats over the photo; a top-down gradient on the hero keeps the nav legible without a solid bar</span>
+    </div>
+    <div style="display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap">
+      <!-- DESKTOP -->
+      <div style="width:1160px;max-width:100%;background:#fff;border:1px solid #ccc;border-radius:2px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08)">
+        <div style="font:11px ui-monospace,monospace;color:#888;padding:6px 14px;background:#f3f2ef;border-bottom:1px solid #ddd">DESKTOP · 1160px</div>
+        <div class="i8-ph" style="height:50vh;min-height:320px;border-left:none;border-right:none;border-radius:0;position:relative;display:flex;align-items:center;justify-content:center;padding:0">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.62) 0%,rgba(10,10,10,.15) 22%,rgba(10,10,10,.3) 78%,rgba(10,10,10,.62) 100%)"></div>
+          <div style="position:absolute;top:14px;right:18px;font:9px ui-monospace,monospace;color:#eee;background:rgba(0,0,0,.35);padding:3px 8px;border-radius:3px">photo: highway, 50vh — gradient darkens top+bottom edges for nav/type legibility</div>
+          <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:18px 32px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:34px;height:38px;border:2px solid #fff;border-radius:6px 6px 15px 15px;display:flex;align-items:center;justify-content:center;font:700 15px Oswald;color:#fff;flex:none">8</div>
+              <div style="text-align:left">
+                <div style="color:#fff;font:700 19px Oswald;letter-spacing:.02em;text-shadow:0 1px 4px rgba(0,0,0,.5)">INTERSTATE-8</div>
+                <div style="color:#f0efec;font:11px system-ui,sans-serif;letter-spacing:.03em;text-shadow:0 1px 4px rgba(0,0,0,.5)">A Modest Mouse Fan Collaborative</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:24px;font:600 13px Oswald;letter-spacing:.03em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5)">
+              <span>HOME</span><span>TOUR</span><span style="border-bottom:2px solid #fff;padding-bottom:2px">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+            </div>
+          </div>
+          <div style="position:relative;text-align:center">
+            <div style="font:700 56px Oswald;color:#fff;letter-spacing:.02em;text-shadow:0 2px 10px rgba(0,0,0,.45)">TAKE AN EXIT</div>
+          </div>
+        </div>
+
+        <!-- plain news grid -->
+        <div style="max-width:960px;margin:0 auto;padding:44px 32px 8px">
+          <div style="font:700 20px Oswald;color:#2b302f;margin-bottom:20px;text-align:center">Latest News</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:28px">
+            <div>
+              <div class="i8-ph" style="width:100%;height:140px;margin-bottom:12px">news photo</div>
+              <div style="font:700 16px Oswald;color:#1a1a1a;margin-bottom:4px">[headline placeholder — news article title]</div>
+              <div style="font:11px system-ui,sans-serif;color:#8a8a86;margin-bottom:8px">2026.07.09</div>
+              <div style="font:13px/1.6 Georgia,serif;color:#5e6b68">[one-paragraph teaser placeholder text]</div>
+            </div>
+            <div>
+              <div class="i8-ph" style="width:100%;height:140px;margin-bottom:12px">news photo</div>
+              <div style="font:700 16px Oswald;color:#1a1a1a;margin-bottom:4px">[recent headline #2]</div>
+              <div style="font:11px system-ui,sans-serif;color:#8a8a86;margin-bottom:8px">2026.07.06</div>
+              <div style="font:13px/1.6 Georgia,serif;color:#5e6b68">[one-paragraph teaser placeholder text]</div>
+            </div>
+            <div>
+              <div class="i8-ph" style="width:100%;height:140px;margin-bottom:12px">news photo</div>
+              <div style="font:700 16px Oswald;color:#1a1a1a;margin-bottom:4px">[recent headline #3]</div>
+              <div style="font:11px system-ui,sans-serif;color:#8a8a86;margin-bottom:8px">2026.07.03</div>
+              <div style="font:13px/1.6 Georgia,serif;color:#5e6b68">[one-paragraph teaser placeholder text]</div>
+            </div>
+          </div>
+          <div style="text-align:center;padding:22px 0 4px;font:600 12px Oswald;letter-spacing:.05em;color:#7a2432">SHOW MORE →</div>
+        </div>
+
+        <!-- quiet typographic modules: tour dates / recently passed / on this day -->
+        <div style="max-width:960px;margin:0 auto;padding:24px 32px 8px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px">
+          <div>
+            <div style="font:700 12px Oswald;letter-spacing:.08em;color:#7a2432;margin-bottom:10px">UPCOMING TOUR DATES</div>
+            <div style="font:13px/2 Georgia,serif;color:#2b302f">[2026.08.12 — Portland, OR]<br>[2026.08.14 — Seattle, WA]<br>[2026.08.17 — Vancouver, BC]</div>
+            <div style="font:600 11px Oswald;letter-spacing:.05em;color:#7a2432;margin-top:8px">MORE →</div>
+          </div>
+          <div>
+            <div style="font:700 12px Oswald;letter-spacing:.08em;color:#7a2432;margin-bottom:10px">RECENTLY PASSED</div>
+            <div style="font:13px/2 Georgia,serif;color:#2b302f">[2026.07.02 — Boise, ID] <u>setlist</u><br>[2026.06.29 — SLC] <u>setlist</u></div>
+            <div style="font:600 11px Oswald;letter-spacing:.05em;color:#7a2432;margin-top:8px">MORE →</div>
+          </div>
+          <div>
+            <div style="font:700 12px Oswald;letter-spacing:.08em;color:#7a2432;margin-bottom:10px">THIS WEEK IN HISTORY</div>
+            <div style="font:13px/2 Georgia,serif;color:#2b302f">[2004.07.11 — live debut]<br>[1997.07.11 — album released]</div>
+            <div style="font:600 11px Oswald;letter-spacing:.05em;color:#7a2432;margin-top:8px">MORE →</div>
+          </div>
+        </div>
+
+        <div style="border-top:1px solid #e6e6e3"></div>
+
+        <!-- on trial -->
+        <div style="max-width:760px;margin:0 auto;padding:28px 32px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+            <div style="text-align:center">
+              <div style="font:700 11px Oswald;letter-spacing:.08em;color:#7a2432;margin-bottom:12px">SONG SPOTLIGHT</div>
+              <div class="i8-ph" style="width:120px;aspect-ratio:1/1;margin:0 auto 14px">single art</div>
+              <div style="font:700 18px Oswald;color:#1a1a1a">"Ocean Breathes Salty"</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font:700 11px Oswald;letter-spacing:.08em;color:#7a2432;margin-bottom:12px">FROM THE DISCOGRAPHY</div>
+              <div class="i8-ph" style="width:120px;aspect-ratio:1/1;margin:0 auto 14px">album art</div>
+              <div style="font:700 18px Oswald;color:#1a1a1a">[Album title]</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- contribute, newsletter-style -->
+        <div style="background:#f7f5f2;border-top:1px solid #e6e6e3;padding:32px;text-align:center">
+          <div style="font:700 18px Oswald;color:#2b302f;margin-bottom:8px">Contribute to the Archive</div>
+          <div style="font:13px/1.6 Georgia,serif;color:#5e6b68;margin-bottom:16px">Have a setlist, a correction, or a tip? Help keep the record straight.</div>
+          <div style="display:inline-block;font:700 12px Oswald;letter-spacing:.05em;background:#7a2432;color:#fff;padding:12px 24px;border-radius:3px">SUBMIT IT →</div>
+        </div>
+
+        <div style="text-align:center;padding:16px 0 8px;border-top:1px solid #e6e6e3">
+          <div style="display:flex;justify-content:center;gap:20px;font:600 11px Oswald;letter-spacing:.04em;color:#5e6b68;margin-bottom:10px">
+            <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY POLICY</span>
+          </div>
+          <div style="font:12px system-ui,sans-serif;color:#8a8a86">© Interstate-8 · a Modest Mouse fan collaborative</div>
+          <div style="font:11px system-ui,sans-serif;color:#aaa;margin-top:4px;padding:0 20px">Interstate-8.com is in no way associated with or authorized by Modest Mouse or any of their agents.</div>
+        </div>
+      </div>
+
+      <!-- MOBILE -->
+      <div style="width:320px;max-width:100%;background:#fff;border:1px solid #ccc;border-radius:2px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08)">
+        <div style="font:11px ui-monospace,monospace;color:#888;padding:6px 14px;background:#f3f2ef;border-bottom:1px solid #ddd">MOBILE · 320px</div>
+        <div class="i8-ph" style="height:50vh;min-height:220px;border-left:none;border-right:none;border-radius:0;position:relative;display:flex;align-items:center;justify-content:center;padding:0">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.62) 0%,rgba(10,10,10,.15) 22%,rgba(10,10,10,.3) 78%,rgba(10,10,10,.62) 100%)"></div>
+          <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:12px 16px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:24px;height:28px;border:2px solid #fff;border-radius:5px 5px 12px 12px;display:flex;align-items:center;justify-content:center;font:700 11px Oswald;color:#fff">8</div>
+              <div style="color:#fff;font:700 14px Oswald;text-shadow:0 1px 4px rgba(0,0,0,.5)">INTERSTATE-8</div>
+            </div>
+            <div style="font:700 18px Oswald;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5)">☰</div>
+          </div>
+          <div style="font:700 30px Oswald;color:#fff;letter-spacing:.02em;text-shadow:0 2px 10px rgba(0,0,0,.45)">TAKE AN EXIT</div>
+        </div>
+
+        <div style="padding:36px 20px 4px">
+          <div style="font:700 16px Oswald;color:#2b302f;margin-bottom:14px;text-align:center">Latest News</div>
+          <div style="display:flex;flex-direction:column;gap:20px">
+            <div>
+              <div class="i8-ph" style="width:100%;height:130px;margin-bottom:10px;font-size:9px">news photo</div>
+              <div style="font:700 14px Oswald;color:#1a1a1a;margin-bottom:3px">[headline placeholder]</div>
+              <div style="font:10px system-ui,sans-serif;color:#8a8a86;margin-bottom:6px">2026.07.09</div>
+              <div style="font:12px Georgia,serif;color:#5e6b68">[teaser placeholder text]</div>
+            </div>
+            <div>
+              <div class="i8-ph" style="width:100%;height:130px;margin-bottom:10px;font-size:9px">news photo</div>
+              <div style="font:700 14px Oswald;color:#1a1a1a;margin-bottom:3px">[recent headline #2]</div>
+              <div style="font:10px system-ui,sans-serif;color:#8a8a86;margin-bottom:6px">2026.07.06</div>
+              <div style="font:12px Georgia,serif;color:#5e6b68">[teaser placeholder]</div>
+            </div>
+            <div>
+              <div class="i8-ph" style="width:100%;height:130px;margin-bottom:10px;font-size:9px">news photo</div>
+              <div style="font:700 14px Oswald;color:#1a1a1a;margin-bottom:3px">[recent headline #3]</div>
+              <div style="font:10px system-ui,sans-serif;color:#8a8a86;margin-bottom:6px">2026.07.03</div>
+              <div style="font:12px Georgia,serif;color:#5e6b68">[teaser placeholder]</div>
+            </div>
+          </div>
+          <div style="text-align:center;padding:18px 0 4px;font:600 11px Oswald;letter-spacing:.05em;color:#7a2432">SHOW MORE →</div>
+        </div>
+        <div style="padding:16px 20px;display:flex;flex-direction:column;gap:16px">
+          <div><div style="font:700 11px Oswald;letter-spacing:.08em;color:#7a2432;margin-bottom:6px">UPCOMING TOUR</div><div style="font:12px/1.9 Georgia,serif;color:#2b302f">[2026.08.12 — Portland]<br>[2026.08.14 — Seattle]</div><div style="font:600 10px Oswald;letter-spacing:.05em;color:#7a2432;margin-top:6px">MORE →</div></div>
+          <div><div style="font:700 11px Oswald;letter-spacing:.08em;color:#7a2432;margin-bottom:6px">RECENTLY PASSED</div><div style="font:12px/1.9 Georgia,serif;color:#2b302f">[2026.07.02 — Boise] <u>setlist</u></div><div style="font:600 10px Oswald;letter-spacing:.05em;color:#7a2432;margin-top:6px">MORE →</div></div>
+          <div><div style="font:700 11px Oswald;letter-spacing:.08em;color:#7a2432;margin-bottom:6px">THIS WEEK IN HISTORY</div><div style="font:12px/1.9 Georgia,serif;color:#2b302f">[2004.07.11 — live debut]</div><div style="font:600 10px Oswald;letter-spacing:.05em;color:#7a2432;margin-top:6px">MORE →</div></div>
+        </div>
+        <div style="padding:8px 20px 20px;font:12px/1.8 Georgia,serif;color:#5e6b68">This tour: <b style="color:#2b302f">[Song]</b> most-played (14×) · <b style="color:#2b302f">3</b> debuts</div>
+        <div style="border-top:1px solid #e6e6e3"></div>
+        <div style="padding:20px">
+          <div style="display:flex;flex-direction:column;gap:26px">
+            <div style="text-align:center">
+              <div style="font:700 10px Oswald;letter-spacing:.06em;color:#7a2432;margin-bottom:10px">SONG SPOTLIGHT</div>
+              <div class="i8-ph" style="width:100px;aspect-ratio:1/1;margin:0 auto 10px;font-size:8px">single art</div>
+              <div style="font:700 15px Oswald;color:#1a1a1a">"Ocean Breathes Salty"</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font:700 10px Oswald;letter-spacing:.06em;color:#7a2432;margin-bottom:10px">FROM THE DISCOGRAPHY</div>
+              <div class="i8-ph" style="width:100px;aspect-ratio:1/1;margin:0 auto 10px;font-size:8px">album art</div>
+              <div style="font:700 15px Oswald;color:#1a1a1a">[Album title]</div>
+            </div>
+          </div>
+        </div>
+        <div style="background:#f7f5f2;border-top:1px solid #e6e6e3;padding:24px 20px;text-align:center">
+          <div style="font:700 15px Oswald;color:#2b302f;margin-bottom:8px">Contribute to the Archive</div>
+          <div style="font:12px/1.5 Georgia,serif;color:#5e6b68;margin-bottom:14px">Have a setlist, a correction, or a tip?</div>
+          <div style="display:inline-block;font:700 11px Oswald;letter-spacing:.05em;background:#7a2432;color:#fff;padding:10px 20px;border-radius:3px">SUBMIT IT →</div>
+        </div>
+        <div style="text-align:center;padding:14px 16px 8px;border-top:1px solid #e6e6e3">
+          <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px 14px;font:600 10px Oswald;letter-spacing:.04em;color:#5e6b68;margin-bottom:8px">
+            <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY POLICY</span>
+          </div>
+          <div style="font:11px system-ui,sans-serif;color:#8a8a86">© Interstate-8 · a Modest Mouse fan collaborative</div>
+          <div style="font:10px system-ui,sans-serif;color:#aaa;margin-top:4px">Interstate-8.com is in no way associated with or authorized by Modest Mouse or any of their agents.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p style="font:13px/1.6 system-ui,sans-serif;color:#5a5a56;margin:26px 0 0;max-width:820px">Backup variants 6a and 6c live in the archive file.</p>
+</section>
+
+<!-- ============================================================ TURN 4 — SONGS LANDING + SONG PAGE ============================================================ -->
+<section class="dv-turn" id="t4" style="padding:0 0 40px;border-bottom:2px solid rgba(0,0,0,.12);margin-bottom:8px">
+
+  <div style="display:flex;align-items:baseline;gap:12px;margin:0 0 6px">
+    <a href="#t4" style="font:700 11px ui-monospace,Menlo,monospace;padding:4px 8px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none">4</a>
+    <span style="font:600 15px/1.2 system-ui,sans-serif">Songs landing + Song page</span>
+  </div>
+  <div style="font:13px/1.7 system-ui,sans-serif;color:#4a4a46;max-width:860px;margin:0 0 24px">
+    Header and footer now match 6d's system (nav styled to 6d's scrolled/solid state; footer carries the same secondary menu + legal line).
+  </div>
+
+  <!-- ===== 4b — SONGS LANDING, COMPACT INDEX/TABLE ===== -->
+  <div id="4b" style="display:flex;flex-direction:column;gap:12px;margin-bottom:48px">
+    <div style="display:flex;align-items:baseline;gap:10px">
+      <a href="#4b" style="font:600 11px ui-monospace,Menlo,monospace;padding:3px 7px;background:#5e6b68;color:#fff;border-radius:5px;text-decoration:none">4b</a>
+      <span style="font:600 14px system-ui,sans-serif">Songs landing — compact index/table</span>
+      <span style="font:13px 'Kalam',cursive;color:#5a5a56">— tight ledger rows, 3 columns, letter as a slim left rail rather than inline headers; most songs visible per screen</span>
+    </div>
+
+    <div style="display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap">
+      <!-- DESKTOP -->
+      <div style="width:1160px;max-width:100%;background:#fff;border:1px solid #ccc;border-radius:2px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08)">
+        <div style="font:11px ui-monospace,monospace;color:#888;padding:6px 14px;background:#f3f2ef;border-bottom:1px solid #ddd">DESKTOP · 1160px — nav bar styled as 6d's solid/scrolled state</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid #e6e6e3;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06)">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:34px;height:38px;background:#fff;border:2px solid #7a2432;border-radius:6px 6px 15px 15px;display:flex;align-items:center;justify-content:center;font:700 15px Oswald;color:#7a2432">8</div>
+            <div style="color:#222;font:700 19px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+          </div>
+          <div style="display:flex;gap:24px;font:600 13px Oswald;letter-spacing:.03em;color:#333">
+            <span>HOME</span><span>TOUR DATES</span><span style="border-bottom:2px solid #7a2432;padding-bottom:2px;color:#7a2432">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+          </div>
+        </div>
+        <div class="i8-ph" style="height:110px;border-left:none;border-right:none;border-radius:0;position:relative;display:block;text-align:left;padding:0">
+          <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(20,22,21,.72),rgba(20,22,21,.3))"></div>
+          <div style="position:absolute;left:0;right:0;bottom:0;padding:16px 44px">
+            <h2 style="font:700 26px Oswald;color:#fff;margin:0;text-shadow:0 1px 3px rgba(0,0,0,.4)">Songs</h2>
+          </div>
+        </div>
+
+        <div style="padding:22px 44px">
+          <div style="display:flex;align-items:baseline;justify-content:flex-end;margin-bottom:14px">
+            <div style="font:12px system-ui,sans-serif;color:#5e6b68">412 results</div>
+          </div>
+
+          <div style="display:flex;align-items:flex-end;gap:22px;flex-wrap:wrap;background:#fff;border:1px solid #ddd;border-radius:4px;padding:12px 16px;margin-bottom:14px">
+            <div><label style="display:block;font:10px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:4px">TYPE</label><select style="font:12px system-ui,sans-serif;padding:5px 8px;border:1px solid #7a2432;border-radius:3px"><option>All</option><option selected>Modest Mouse</option><option>Ugly Casanova</option><option>Side projects</option><option>Covers</option></select></div>
+            <div><label style="display:block;font:10px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:4px">ALTERNATE TITLES</label><div style="display:flex;border:1px solid #7a2432;border-radius:3px;overflow:hidden;font:12px system-ui,sans-serif"><div style="padding:5px 12px;background:#7a2432;color:#fff;font-weight:600">Show</div><div style="padding:5px 12px;color:#5e6b68">Hide</div></div></div>
+            <div style="opacity:.5"><label style="display:block;font:10px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:4px">RELEASED</label><select disabled style="font:12px system-ui,sans-serif;padding:5px 8px;border:1px solid #c3c8c7;border-radius:3px;background:#eceae7;color:#8a8a86"><option>Coming soon</option></select></div>
+            <div style="opacity:.5"><label style="display:block;font:10px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:4px">PLAYED LIVE</label><select disabled style="font:12px system-ui,sans-serif;padding:5px 8px;border:1px solid #c3c8c7;border-radius:3px;background:#eceae7;color:#8a8a86"><option>Coming soon</option></select></div>
+            <div style="margin-left:auto"><div style="font:600 12px Oswald;letter-spacing:.04em;background:#7a2432;color:#fff;padding:8px 18px;border-radius:3px">APPLY</div></div>
+          </div>
+
+          <!-- layout: slim letter rail (sticky) + 3-col ledger -->
+          <div style="display:grid;grid-template-columns:34px 1fr;gap:18px">
+            <div style="display:flex;flex-direction:column;gap:2px;font:700 11px Oswald;color:#7a2432;position:sticky;top:0">
+              <span style="padding:3px 0;color:#3a4342">A</span><span style="padding:3px 0">B</span><span style="padding:3px 0">C</span><span style="padding:3px 0">D</span><span style="padding:3px 0">E</span><span style="padding:3px 0">F</span><span style="padding:3px 0;color:#d3d6d5">G</span><span style="padding:3px 0">H</span><span style="padding:3px 0;color:#d3d6d5">…</span><span style="padding:3px 0">W</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 24px">
+              <div style="grid-column:1/-1;font:700 12px Oswald;letter-spacing:.05em;color:#3a4342;background:#e8ebea;padding:4px 10px;border-radius:2px;margin-bottom:2px">A</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">…But Theyre Not Singing Gohsts</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">A Life Of Arctic Sounds</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">A Manic Depressive Named Laughing Boy</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">A Different City</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">A Song</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">AEIOU And Sometimes Why <span style="font:9px Oswald;color:#7a2432;border:1px solid #7a2432;border-radius:8px;padding:0 5px">alt</span></div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">All Night Diner</div>
+              <div style="border-bottom:1px solid #e3e2de"></div>
+              <div style="border-bottom:1px solid #e3e2de"></div>
+
+              <div style="grid-column:1/-1;font:700 12px Oswald;letter-spacing:.05em;color:#3a4342;background:#e8ebea;padding:4px 10px;border-radius:2px;margin:8px 0 2px">B</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">Baby Blue Sedan</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">Bankrupt On Selling</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">Black Cadillacs</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">Blame It On The Tetons</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">Bukowski</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">Bury Me With It</div>
+
+              <div style="grid-column:1/-1;font:700 12px Oswald;letter-spacing:.05em;color:#3a4342;background:#e8ebea;padding:4px 10px;border-radius:2px;margin:8px 0 2px">C</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">Cowboy Dan</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">Convenient Parking</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">Custom Concern</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">Cicatriz ESP</div>
+              <div style="font:13px/2 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">Convincing People</div>
+
+              <div style="grid-column:1/-1;font:12px Georgia,serif;color:#7a2432;padding:14px 10px 0">[… 394 more songs, same tight ledger, through W …]</div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center;padding:14px 16px 8px;border-top:1px solid #e6e6e3">
+          <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px 14px;font:600 10px Oswald;letter-spacing:.04em;color:#5e6b68;margin-bottom:8px">
+            <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY POLICY</span>
+          </div>
+          <div style="font:11px system-ui,sans-serif;color:#8a8a86">© Interstate-8 · a Modest Mouse fan collaborative</div>
+          <div style="font:10px system-ui,sans-serif;color:#aaa;margin-top:4px">Interstate-8.com is in no way associated with or authorized by Modest Mouse or any of their agents.</div>
+        </div>
+      </div>
+
+      <!-- MOBILE -->
+      <div style="width:320px;max-width:100%;background:#fff;border:1px solid #ccc;border-radius:2px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08)">
+        <div style="font:11px ui-monospace,monospace;color:#888;padding:6px 14px;background:#f3f2ef;border-bottom:1px solid #ddd">MOBILE · 320px</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #e6e6e3;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06)">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:24px;height:28px;background:#fff;border:2px solid #7a2432;border-radius:5px 5px 12px 12px;display:flex;align-items:center;justify-content:center;font:700 11px Oswald;color:#7a2432">8</div>
+            <div style="color:#222;font:700 14px Oswald">INTERSTATE-8</div>
+          </div>
+          <div style="font:700 18px Oswald;color:#333">☰</div>
+        </div>
+        <div class="i8-ph" style="height:80px;border-left:none;border-right:none;border-radius:0;position:relative;display:block;text-align:left;padding:0">
+          <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(20,22,21,.72),rgba(20,22,21,.3))"></div>
+          <div style="position:absolute;left:0;right:0;bottom:0;padding:10px 14px">
+            <h2 style="font:700 20px Oswald;color:#fff;margin:0;text-shadow:0 1px 3px rgba(0,0,0,.4)">Songs</h2>
+          </div>
+        </div>
+        <div style="padding:12px 14px">
+
+          <div style="display:flex;flex-direction:column;gap:8px;background:#fff;border:1px solid #ddd;border-radius:4px;padding:10px;margin-bottom:10px">
+            <select style="width:100%;font:12px system-ui,sans-serif;padding:5px;border:1px solid #7a2432;border-radius:3px"><option selected>Modest Mouse</option></select>
+            <div style="display:flex;border:1px solid #7a2432;border-radius:3px;overflow:hidden;font:12px system-ui,sans-serif"><div style="flex:1;text-align:center;padding:5px;background:#7a2432;color:#fff;font-weight:600">Show alt.</div><div style="flex:1;text-align:center;padding:5px;color:#5e6b68">Hide</div></div>
+            <div style="text-align:center;font:600 12px Oswald;letter-spacing:.04em;background:#7a2432;color:#fff;padding:8px;border-radius:3px">APPLY</div>
+          </div>
+          <div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:10px;font:600 11px Oswald;padding-bottom:4px">
+            <span style="padding:3px 8px;background:#7a2432;color:#fff;border-radius:3px;flex:none">A</span><span style="padding:3px 8px;color:#3a4342;flex:none">B</span><span style="padding:3px 8px;color:#3a4342;flex:none">C</span><span style="padding:3px 8px;color:#3a4342;flex:none">…</span>
+          </div>
+          <div style="font:700 11px Oswald;letter-spacing:.05em;color:#3a4342;background:#e8ebea;padding:4px 8px;border-radius:2px;margin-bottom:2px">A</div>
+          <div style="font:12px/1.9 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">…But Theyre Not Singing Gohsts</div>
+          <div style="font:12px/1.9 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">A Different City</div>
+          <div style="font:12px/1.9 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">A Life Of Arctic Sounds</div>
+          <div style="font:12px/1.9 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">AEIOU And Sometimes Why <span style="font:9px Oswald;color:#7a2432;border:1px solid #7a2432;border-radius:8px;padding:0 4px">alt</span></div>
+          <div style="font:700 11px Oswald;letter-spacing:.05em;color:#3a4342;background:#e8ebea;padding:4px 8px;border-radius:2px;margin:6px 0 2px">B</div>
+          <div style="font:12px/1.9 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">Baby Blue Sedan</div>
+          <div style="font:12px/1.9 Georgia,serif;color:#2b302f;border-bottom:1px solid #e3e2de">Bukowski</div>
+          <div style="font:11px Georgia,serif;color:#7a2432;margin-top:8px">[… 399 more …]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 4c — SONG PAGE, FIXED ===== -->
+  <div id="4c" style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:10px">
+      <a href="#4c" style="font:600 11px ui-monospace,Menlo,monospace;padding:3px 7px;background:#5e6b68;color:#fff;border-radius:5px;text-decoration:none">4c</a>
+      <span style="font:600 14px system-ui,sans-serif">Song page — fixed</span>
+      <span style="font:13px 'Kalam',cursive;color:#5a5a56">— nav restored; a disabled "coming soon" rail reserves room for releases/last-played/tour-stat widgets so lyrics don't get reshuffled when those ship</span>
+    </div>
+
+    <div style="display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap">
+      <!-- DESKTOP: standard song -->
+      <div style="width:1040px;max-width:100%;background:#fff;border:1px solid #ccc;border-radius:2px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08)">
+        <div style="font:11px ui-monospace,monospace;color:#888;padding:6px 14px;background:#f3f2ef;border-bottom:1px solid #ddd">DESKTOP · standard song — nav bar styled as 6d's solid/scrolled state</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid #e6e6e3;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06)">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:28px;height:32px;background:#fff;border:2px solid #7a2432;border-radius:6px 6px 13px 13px;display:flex;align-items:center;justify-content:center;font:700 13px Oswald;color:#7a2432">8</div>
+            <div style="color:#222;font:700 17px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+          </div>
+          <div style="display:flex;gap:20px;font:600 11px Oswald;letter-spacing:.03em;color:#333">
+            <span>HOME</span><span>TOUR DATES</span><span style="border-bottom:2px solid #7a2432;padding-bottom:2px;color:#7a2432">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+          </div>
+        </div>
+        <div class="i8-ph" style="height:170px;border-left:none;border-right:none;border-radius:0;position:relative;display:block;text-align:left;padding:0">
+          <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(20,22,21,.75),rgba(20,22,21,.25));display:flex;align-items:flex-end;padding:16px 44px 20px">
+            <h2 style="font:700 34px Oswald;color:#fff;margin:0;text-shadow:0 1px 3px rgba(0,0,0,.4)">Ocean Breathes Salty</h2>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 260px;gap:0;padding:28px 44px">
+          <div style="padding-right:32px;border-right:2px dashed #d9b0b6">
+            <blockquote style="margin:0 0 26px;padding:12px 0 12px 20px;border-left:3px solid #7a2432;font:italic 16px/1.6 Georgia,serif;color:#4a5251">"[a quote about the song, from the band or a source — shown only when present]"</blockquote>
+
+            <div style="font:11px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:8px">LYRICS</div>
+            <div style="font:17px/2 Georgia,serif;color:#2b302f;margin-bottom:8px">[Stanza one — placeholder lyric line]<br>[placeholder lyric line]<br>[placeholder lyric line]</div>
+            <div style="font:17px/2 Georgia,serif;color:#2b302f;margin-bottom:8px">[Stanza two — placeholder lyric line]<br>[placeholder lyric line]</div>
+            <div style="font:17px/2 Georgia,serif;color:#2b302f;margin-bottom:28px">[Stanza three — placeholder lyric line]<br>[placeholder lyric line]<br>[placeholder lyric line]</div>
+
+            <div style="font:11px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:8px">NOTES</div>
+            <div style="font:14px/1.7 Georgia,serif;color:#4a5251;margin-bottom:28px">[placeholder note — recording anecdote, lyric-variant history, etc. Omitted entirely when a song has none.]</div>
+
+            <div style="font:11px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:8px">VIDEO</div>
+            <div class="i8-ph" style="height:200px">embedded video (oEmbed)</div>
+          </div>
+
+          <!-- coming soon rail -->
+          <div style="padding-left:28px;display:flex;flex-direction:column;gap:16px">
+            <div style="font:10px Oswald;letter-spacing:.1em;color:#8a8a86;margin-bottom:-4px">MORE ABOUT THIS SONG</div>
+            <div style="border:1.5px dashed #c3c8c7;border-radius:4px;padding:14px;opacity:.6">
+              <div style="font:700 10px Oswald;letter-spacing:.06em;color:#8a8a86;margin-bottom:6px">RELEASES</div>
+              <div style="font:12px Georgia,serif;color:#8a8a86">Coming soon</div>
+            </div>
+            <div style="border:1.5px dashed #c3c8c7;border-radius:4px;padding:14px;opacity:.6">
+              <div style="font:700 10px Oswald;letter-spacing:.06em;color:#8a8a86;margin-bottom:6px">LAST PLAYED LIVE</div>
+              <div style="font:12px Georgia,serif;color:#8a8a86">Coming soon</div>
+            </div>
+            <div style="border:1.5px dashed #c3c8c7;border-radius:4px;padding:14px;opacity:.6">
+              <div style="font:700 10px Oswald;letter-spacing:.06em;color:#8a8a86;margin-bottom:6px">TIMES PLAYED / TOUR STATS</div>
+              <div style="font:12px Georgia,serif;color:#8a8a86">Coming soon</div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center;padding:14px 16px 8px;border-top:1px solid #e6e6e3">
+          <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px 14px;font:600 10px Oswald;letter-spacing:.04em;color:#5e6b68;margin-bottom:8px">
+            <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY POLICY</span>
+          </div>
+          <div style="font:11px system-ui,sans-serif;color:#8a8a86">© Interstate-8 · a Modest Mouse fan collaborative</div>
+          <div style="font:10px system-ui,sans-serif;color:#aaa;margin-top:4px">Interstate-8.com is in no way associated with or authorized by Modest Mouse or any of their agents.</div>
+        </div>
+      </div>
+
+      <!-- MOBILE: standard song -->
+      <div style="width:320px;max-width:100%;background:#fff;border:1px solid #ccc;border-radius:2px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08)">
+        <div style="font:11px ui-monospace,monospace;color:#888;padding:6px 14px;background:#f3f2ef;border-bottom:1px solid #ddd">MOBILE · standard song — nav bar styled as 6d's solid/scrolled state</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid #e6e6e3;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06)">
+          <div style="display:flex;align-items:center;gap:7px">
+            <div style="width:22px;height:26px;background:#fff;border:2px solid #7a2432;border-radius:5px 5px 11px 11px;display:flex;align-items:center;justify-content:center;font:700 10px Oswald;color:#7a2432">8</div>
+            <div style="color:#222;font:700 13px Oswald">INTERSTATE-8</div>
+          </div>
+          <div style="font:700 16px Oswald;color:#333">☰</div>
+        </div>
+        <div class="i8-ph" style="height:130px;border-left:none;border-right:none;border-radius:0;position:relative;display:block;text-align:left;padding:0">
+          <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(20,22,21,.75),rgba(20,22,21,.25));display:flex;align-items:flex-end;padding:10px 16px 14px">
+            <h2 style="font:700 22px Oswald;color:#fff;margin:0;text-shadow:0 1px 3px rgba(0,0,0,.4)">Ocean Breathes Salty</h2>
+          </div>
+        </div>
+        <div style="padding:16px">
+          <blockquote style="margin:0 0 18px;padding:8px 0 8px 14px;border-left:3px solid #7a2432;font:italic 14px/1.5 Georgia,serif;color:#4a5251">"[quote, when present]"</blockquote>
+          <div style="font:10px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:6px">LYRICS</div>
+          <div style="font:15px/1.9 Georgia,serif;color:#2b302f;margin-bottom:8px">[placeholder line]<br>[placeholder line]</div>
+          <div style="font:15px/1.9 Georgia,serif;color:#2b302f;margin-bottom:20px">[stanza two]<br>[placeholder line]</div>
+          <div style="font:10px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:6px">NOTES</div>
+          <div style="font:13px/1.6 Georgia,serif;color:#4a5251;margin-bottom:20px">[placeholder note text]</div>
+          <div style="font:10px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:6px">VIDEO</div>
+          <div class="i8-ph" style="height:150px;margin-bottom:20px">video</div>
+
+          <div style="font:10px Oswald;letter-spacing:.1em;color:#8a8a86;margin-bottom:8px">MORE ABOUT THIS SONG</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="border:1.5px dashed #c3c8c7;border-radius:4px;padding:10px;opacity:.6"><div style="font:700 9px Oswald;letter-spacing:.06em;color:#8a8a86;margin-bottom:4px">RELEASES</div><div style="font:11px Georgia,serif;color:#8a8a86">Coming soon</div></div>
+            <div style="border:1.5px dashed #c3c8c7;border-radius:4px;padding:10px;opacity:.6"><div style="font:700 9px Oswald;letter-spacing:.06em;color:#8a8a86;margin-bottom:4px">LAST PLAYED LIVE</div><div style="font:11px Georgia,serif;color:#8a8a86">Coming soon</div></div>
+            <div style="border:1.5px dashed #c3c8c7;border-radius:4px;padding:10px;opacity:.6"><div style="font:700 9px Oswald;letter-spacing:.06em;color:#8a8a86;margin-bottom:4px">TIMES PLAYED / TOUR STATS</div><div style="font:11px Georgia,serif;color:#8a8a86">Coming soon</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- side-by-side lyrics variant -->
+    <div style="margin-top:34px;font:14px 'Kalam',cursive;color:#5e6b68">Variant A — alternate version, lyrics paired with the parent's</div>
+    <div style="display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap;margin-top:10px">
+      <div style="width:1040px;max-width:100%;background:#fff;border:1px solid #ccc;border-radius:2px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08)">
+        <div style="font:11px ui-monospace,monospace;color:#888;padding:6px 14px;background:#f3f2ef;border-bottom:1px solid #ddd">DESKTOP · alternate version, side-by-side lyrics</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid #e6e6e3;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06)">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:28px;height:32px;background:#fff;border:2px solid #7a2432;border-radius:6px 6px 13px 13px;display:flex;align-items:center;justify-content:center;font:700 13px Oswald;color:#7a2432">8</div>
+            <div style="color:#222;font:700 17px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+          </div>
+          <div style="display:flex;gap:20px;font:600 11px Oswald;letter-spacing:.03em;color:#333">
+            <span>HOME</span><span>TOUR DATES</span><span style="border-bottom:2px solid #7a2432;padding-bottom:2px;color:#7a2432">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+          </div>
+        </div>
+        <div class="i8-ph" style="height:150px;border-left:none;border-right:none;border-radius:0;position:relative;display:block;text-align:left;padding:0">
+          <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(20,22,21,.75),rgba(20,22,21,.25));display:flex;align-items:flex-end;padding:16px 44px 18px">
+            <h2 style="font:700 30px Oswald;color:#fff;margin:0;text-shadow:0 1px 3px rgba(0,0,0,.4)">King Rat (Live Version)</h2>
+          </div>
+        </div>
+        <div style="padding:20px 44px 28px">
+          <div style="font:13px Georgia,serif;color:#5e6b68;margin-bottom:22px">alternate title/lyrics for → <u style="color:#3a4342">King Rat</u></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid #ddd;border-radius:4px;overflow:hidden">
+            <div style="padding:20px 24px;border-right:2px dashed #d9b0b6">
+              <div style="font:11px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:10px">THIS VERSION</div>
+              <div style="font:16px/1.9 Georgia,serif;color:#2b302f">[alternate stanza — placeholder line]<br>[placeholder line]<br>[placeholder line]</div>
+            </div>
+            <div style="padding:20px 24px;background:#fff">
+              <div style="font:11px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:10px">NORMAL VERSION — <u style="color:#3a4342">King Rat</u></div>
+              <div style="font:16px/1.9 Georgia,serif;color:#2b302f">[normal stanza — placeholder line]<br>[placeholder line]<br>[placeholder line]</div>
+            </div>
+          </div>
+          <div style="margin-top:14px;font:12px system-ui,sans-serif;color:#5e6b68">If lyrics are identical: <em style="color:#3a4342">"[same as normal version]" → King Rat</em> — no repeated text.</div>
+        </div>
+      </div>
+
+      <div style="width:320px;max-width:100%;background:#fff;border:1px solid #ccc;border-radius:2px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08)">
+        <div style="font:11px ui-monospace,monospace;color:#888;padding:6px 14px;background:#f3f2ef;border-bottom:1px solid #ddd">MOBILE · lyrics stack</div>
+        <div class="i8-ph" style="height:110px;border-left:none;border-right:none;border-radius:0;position:relative;display:block;text-align:left;padding:0">
+          <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(20,22,21,.75),rgba(20,22,21,.25));display:flex;align-items:flex-end;padding:10px 16px 12px">
+            <h2 style="font:700 20px Oswald;color:#fff;margin:0;text-shadow:0 1px 3px rgba(0,0,0,.4)">King Rat (Live Version)</h2>
+          </div>
+        </div>
+        <div style="padding:16px">
+          <div style="font:12px Georgia,serif;color:#5e6b68;margin-bottom:16px">alternate title/lyrics for → <u style="color:#3a4342">King Rat</u></div>
+          <div style="border:1px solid #ddd;border-radius:4px;overflow:hidden">
+            <div style="padding:14px;border-bottom:2px dashed #d9b0b6"><div style="font:10px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:8px">THIS VERSION</div><div style="font:14px/1.8 Georgia,serif;color:#2b302f">[alternate line]<br>[placeholder line]</div></div>
+            <div style="padding:14px;background:#fff"><div style="font:10px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:8px">NORMAL VERSION — King Rat</div><div style="font:14px/1.8 Georgia,serif;color:#2b302f">[normal line]<br>[placeholder line]</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- parent variant -->
+    <div style="margin-top:34px;font:14px 'Kalam',cursive;color:#5e6b68">Variant B — parent song, listing its alternate versions</div>
+    <div style="display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap;margin-top:10px">
+      <div style="width:640px;max-width:100%;background:#fff;border:1px solid #ccc;border-radius:2px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08)">
+        <div style="font:11px ui-monospace,monospace;color:#888;padding:6px 14px;background:#f3f2ef;border-bottom:1px solid #ddd">DESKTOP · parent with alternates</div>
+        <div class="i8-ph" style="height:120px;border-left:none;border-right:none;border-radius:0;position:relative;display:block;text-align:left;padding:0">
+          <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(20,22,21,.75),rgba(20,22,21,.25));display:flex;align-items:flex-end;padding:16px 44px">
+            <h2 style="font:700 28px Oswald;color:#fff;margin:0;text-shadow:0 1px 3px rgba(0,0,0,.4)">King Rat</h2>
+          </div>
+        </div>
+        <div style="padding:26px 44px;background:#fff">
+          <div style="font:16px/1.9 Georgia,serif;color:#2b302f;margin-bottom:24px">[normal lyrics — placeholder line]<br>[placeholder line]</div>
+          <div style="font:11px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:8px">ALTERNATE VERSIONS</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font:14px Georgia,serif">
+            <div><u style="color:#3a4342">King Rat (Live Version)</u></div>
+            <div><u style="color:#3a4342">King Rat (Early Demo)</u></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</div>
+</x-dc>
+</body>
+</html>
