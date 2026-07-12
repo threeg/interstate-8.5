@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#efece5;font-family:Oswald,system-ui,sans-serif}
+  a{color:inherit;text-decoration:none}
+  .dv-turn{padding:44px 44px 40px}
+  .dv-thd{display:flex;align-items:baseline;gap:12px;margin:0 0 8px}
+  .dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px}
+  .dv-tname{font:600 15px/1.2 system-ui,sans-serif;color:#1a1a1a}
+  .dv-tsub{font:13px/1.6 system-ui,sans-serif;color:#66655e;max-width:860px;margin:0 0 28px}
+  .dv-opts{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}
+  .dv-opt{flex:none;display:flex;flex-direction:column;gap:14px;scroll-margin-top:16px}
+  .dv-oid{font:700 11px ui-monospace,Menlo,monospace;padding:4px 9px;background:#1a1a1a;color:#fff;border-radius:5px}
+  .dv-olabel{display:flex;align-items:baseline;gap:10px;font:600 13px/1.3 system-ui,sans-serif;color:#1a1a1a}
+  .dv-odesc{font:12px/1.5 system-ui,sans-serif;color:#77766e;max-width:1160px;margin:-6px 0 4px}
+  .dv-screen{background:#fff;border-radius:3px;overflow:hidden;box-shadow:0 3px 18px rgba(0,0,0,.1)}
+  .dv-tag{font:11px ui-monospace,Menlo,monospace;color:#9a988f;padding:7px 16px;background:#f3f2ee;border-bottom:1px solid #e4e2d9}
+  .dv-next{margin:28px 0 0;font:12px/1.5 system-ui,sans-serif;color:rgba(0,0,0,.5)}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t1">
+  <div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Hi-fi pass — homepage (6d), songs landing (4b), song page (4c)</span></div>
+  <p class="dv-tsub">Structure locked to the wireframe. Three colour lanes from the design brief, each carried through real photography slots, finished type (Oswald headlines / Lora body &amp; lyrics), and full spacing. Drop your own photos into the dashed tiles — hero highway shots, news photos, single &amp; album art.</p>
+
+  <div class="dv-opts">
+
+  <!-- ============================================================ 1A — SHIELD BOLD ============================================================ -->
+  <div class="dv-opt" id="1a">
+    <div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Shield-bold — interstate red / white / blue</div>
+    <div class="dv-odesc">Deep route blue for structure, shield red as the single accent for links, CTAs and active states. Warm off-white paper, not stark white.</div>
+
+    <!-- HOMEPAGE DESKTOP -->
+    <div class="dv-screen" style="width:1160px">
+      <div class="dv-tag">HOMEPAGE · DESKTOP · 1160px</div>
+      <div style="background:#ffffff">
+        <div style="height:48vh;min-height:345px;position:relative;overflow:hidden">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1a-hero" shape="rect" placeholder="Drop a highway hero photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-madsdonald-2739010.jpg"></x-import>
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,14,20,.68) 0%,rgba(10,14,20,.12) 24%,rgba(10,14,20,.22) 76%,rgba(10,14,20,.7) 100%);pointer-events:none"></div>
+          <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:24px 40px;pointer-events:none">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:38px;height:42px;border:2.5px solid #fff;border-radius:7px 7px 17px 17px;display:flex;align-items:center;justify-content:center;font:700 17px Oswald;color:#fff;flex:none">8</div>
+              <div>
+                <div style="color:#fff;font:700 21px Oswald;letter-spacing:.02em;text-shadow:0 1px 5px rgba(0,0,0,.5)">INTERSTATE-8</div>
+                <div style="color:#eef1f5;font:11px system-ui,sans-serif;letter-spacing:.04em;text-shadow:0 1px 4px rgba(0,0,0,.5)">A MODEST MOUSE FAN COLLABORATIVE</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:30px;font:600 14px Oswald;letter-spacing:.04em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5)">
+              <span>HOME</span><span>TOUR</span><span style="border-bottom:2px solid #ce4b58;padding-bottom:3px">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+            </div>
+          </div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+            <div style="text-align:center">
+              <div style="font:700 48px Oswald;color:#fff;letter-spacing:.02em;text-shadow:0 3px 14px rgba(0,0,0,.5)">TAKE AN EXIT</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="max-width:980px;margin:0 auto;padding:36px 32px 8px">
+          <div style="font:700 24px Oswald;color:#14315c;margin-bottom:28px;text-align:center;letter-spacing:.01em">Latest News</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+            <div>
+              <div style="margin-bottom:22px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1a-news1" shape="rect" radius="2" placeholder="News photo" style="width:100%;aspect-ratio:4/3;display:block" src="uploads/live.jpg"></x-import></div>
+              <div style="font:700 17px Oswald;color:#1a1a1a;margin-bottom:5px">Setlist archive hits 1,000 shows indexed</div>
+              <div style="font:11px system-ui,sans-serif;color:#8f8d85;margin-bottom:9px;letter-spacing:.03em">2026.07.09</div>
+              <div style="font:14px/1.6 Lora,Georgia,serif;color:#4a4f57">A milestone for the tour-history project — every show from 1994 on, now searchable by song.</div>
+            </div>
+            <div>
+              <div style="margin-bottom:22px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1a-news2" shape="rect" radius="2" placeholder="News photo" style="width:100%;aspect-ratio:4/3;display:block" src="uploads/isaac_brock_2015_2.jpg"></x-import></div>
+              <div style="font:700 17px Oswald;color:#1a1a1a;margin-bottom:5px">Lyrics pass complete for the Ugly Casanova catalogue</div>
+              <div style="font:11px system-ui,sans-serif;color:#8f8d85;margin-bottom:9px;letter-spacing:.03em">2026.07.06</div>
+              <div style="font:14px/1.6 Lora,Georgia,serif;color:#4a4f57">Cross-checked against three live recordings and the original liner notes.</div>
+            </div>
+            <div>
+              <div style="margin-bottom:22px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1a-news3" shape="rect" radius="2" placeholder="News photo" style="width:100%;aspect-ratio:4/3;display:block" src="uploads/mm_of_course_we_know.jpg"></x-import></div>
+              <div style="font:700 17px Oswald;color:#1a1a1a;margin-bottom:5px">Site rebuild: what's changing under the hood</div>
+              <div style="font:11px system-ui,sans-serif;color:#8f8d85;margin-bottom:9px;letter-spacing:.03em">2026.07.03</div>
+              <div style="font:14px/1.6 Lora,Georgia,serif;color:#4a4f57">Faster pages, a better editor, the same archive you've relied on since 2006.</div>
+            </div>
+          </div>
+          <div style="text-align:center;padding:26px 0 4px;font:600 13px Oswald;letter-spacing:.06em;color:#b0202f">SHOW MORE →</div>
+        </div>
+
+        <div style="max-width:980px;margin:0 auto;padding:28px 32px 8px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+          <div>
+            <div style="font:700 12px Oswald;letter-spacing:.09em;color:#b0202f;margin-bottom:12px">UPCOMING TOUR DATES</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f">2026.08.12 — Portland, OR<br>2026.08.14 — Seattle, WA<br>2026.08.17 — Vancouver, BC</div>
+            <div style="font:600 11px Oswald;letter-spacing:.06em;color:#b0202f;margin-top:10px">MORE →</div>
+          </div>
+          <div>
+            <div style="font:700 12px Oswald;letter-spacing:.09em;color:#b0202f;margin-bottom:12px">RECENTLY PASSED</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f">2026.07.02 — Boise, ID <u>setlist</u><br>2026.06.29 — Salt Lake City <u>setlist</u></div>
+            <div style="font:600 11px Oswald;letter-spacing:.06em;color:#b0202f;margin-top:10px">MORE →</div>
+          </div>
+          <div>
+            <div style="font:700 12px Oswald;letter-spacing:.09em;color:#b0202f;margin-bottom:12px">THIS WEEK IN HISTORY</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f">2004.07.11 — live debut<br>1997.07.11 — album released</div>
+            <div style="font:600 11px Oswald;letter-spacing:.06em;color:#b0202f;margin-top:10px">MORE →</div>
+          </div>
+        </div>
+
+        <div style="max-width:980px;margin:24px auto 0;border-top:1px solid #e2e0d8"></div>
+
+        <div style="max-width:980px;margin:0 auto;padding:36px 32px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px">
+            <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
+              <div style="font:700 11px Oswald;letter-spacing:.09em;color:#b0202f;margin-bottom:16px">SONG SPOTLIGHT</div>
+              <div style="margin-bottom:22px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1a-spotlight" shape="rect" radius="2" placeholder="Single art" style="width:168px;height:168px;margin:0 auto" src="uploads/i8_cover.jpg"></x-import></div>
+              <div style="font:700 19px Oswald;color:#1a1a1a">"Ocean Breathes Salty"</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
+              <div style="font:700 11px Oswald;letter-spacing:.09em;color:#b0202f;margin-bottom:16px">FROM THE DISCOGRAPHY</div>
+              <div style="margin-bottom:22px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1a-album" shape="rect" radius="2" placeholder="Album art" style="width:168px;height:168px;margin:0 auto" src="uploads/tmaa_cover.jpg"></x-import></div>
+              <div style="font:700 19px Oswald;color:#1a1a1a">The Moon &amp; Antarctica</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#eef1f5;border-top:1px solid #e2e0d8;padding:40px 32px;text-align:center">
+          <div style="font:700 20px Oswald;color:#14315c;margin-bottom:10px">Contribute to the Archive</div>
+          <div style="font:14px/1.6 Lora,Georgia,serif;color:#4a4f57;margin-bottom:18px">Have a setlist, a correction, or a tip? Help keep the record straight.</div>
+          <div style="display:inline-block;font:700 13px Oswald;letter-spacing:.06em;background:#b0202f;color:#fff;padding:13px 26px;border-radius:3px">SUBMIT IT →</div>
+        </div>
+
+        <div style="text-align:center;padding:20px 0 10px;border-top:1px solid #e2e0d8">
+          <div style="display:flex;justify-content:center;gap:22px;font:600 11px Oswald;letter-spacing:.05em;color:#5c6570;margin-bottom:12px">
+            <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY POLICY</span>
+          </div>
+          <div style="font:12px system-ui,sans-serif;color:#8f8d85">© Interstate-8 · a Modest Mouse fan collaborative</div>
+          <div style="font:11px system-ui,sans-serif;color:#b1afa6;margin-top:5px;padding:0 20px">Interstate-8.com is in no way associated with or authorized by Modest Mouse or any of their agents.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOMEPAGE MOBILE -->
+    <div class="dv-screen" style="width:375px">
+      <div class="dv-tag">HOMEPAGE · MOBILE · 375px</div>
+      <div style="background:#ffffff">
+        <div style="height:255px;position:relative;overflow:hidden">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1a-hero-m" shape="rect" placeholder="Highway hero" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-madsdonald-2739010.jpg"></x-import>
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,14,20,.68) 0%,rgba(10,14,20,.12) 24%,rgba(10,14,20,.22) 76%,rgba(10,14,20,.7) 100%);pointer-events:none"></div>
+          <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;pointer-events:none">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:26px;height:30px;border:2px solid #fff;border-radius:5px 5px 12px 12px;display:flex;align-items:center;justify-content:center;font:700 12px Oswald;color:#fff">8</div>
+              <div style="color:#fff;font:700 15px Oswald;text-shadow:0 1px 4px rgba(0,0,0,.5)">INTERSTATE-8</div>
+            </div>
+            <div style="font:700 20px Oswald;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5)">☰</div>
+          </div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+            <div style="font:700 26px Oswald;color:#fff;letter-spacing:.02em;text-shadow:0 2px 10px rgba(0,0,0,.5)">TAKE AN EXIT</div>
+          </div>
+        </div>
+        <div style="padding:32px 20px 4px">
+          <div style="font:700 18px Oswald;color:#14315c;margin-bottom:18px;text-align:center">Latest News</div>
+          <div style="display:flex;flex-direction:column;gap:24px">
+            <div>
+              <div style="margin-bottom:16px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1a-news1-m" shape="rect" radius="2" placeholder="News photo" style="width:100%;aspect-ratio:4/3" src="uploads/live.jpg"></x-import></div>
+              <div style="font:700 15px Oswald;color:#1a1a1a;margin-bottom:4px">Setlist archive hits 1,000 shows indexed</div>
+              <div style="font:10px system-ui,sans-serif;color:#8f8d85;margin-bottom:6px">2026.07.09</div>
+              <div style="font:13px Lora,Georgia,serif;color:#4a4f57">A milestone for the tour-history project.</div>
+            </div>
+            <div>
+              <div style="margin-bottom:16px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1a-news2-m" shape="rect" radius="2" placeholder="News photo" style="width:100%;aspect-ratio:4/3" src="uploads/isaac_brock_2015_2.jpg"></x-import></div>
+              <div style="font:700 15px Oswald;color:#1a1a1a;margin-bottom:4px">Lyrics pass complete: Ugly Casanova</div>
+              <div style="font:10px system-ui,sans-serif;color:#8f8d85;margin-bottom:6px">2026.07.06</div>
+              <div style="font:13px Lora,Georgia,serif;color:#4a4f57">Cross-checked against liner notes.</div>
+            </div>
+          </div>
+          <div style="text-align:center;padding:20px 0 4px;font:600 12px Oswald;letter-spacing:.06em;color:#b0202f">SHOW MORE →</div>
+        </div>
+        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:20px">
+          <div><div style="font:700 11px Oswald;letter-spacing:.09em;color:#b0202f;margin-bottom:8px">UPCOMING TOUR</div><div style="font:13px/1.9 Lora,Georgia,serif;color:#2b302f">2026.08.12 — Portland<br>2026.08.14 — Seattle</div></div>
+          <div><div style="font:700 11px Oswald;letter-spacing:.09em;color:#b0202f;margin-bottom:8px">RECENTLY PASSED</div><div style="font:13px/1.9 Lora,Georgia,serif;color:#2b302f">2026.07.02 — Boise <u>setlist</u></div></div>
+        </div>
+        <div style="border-top:1px solid #e2e0d8;padding:22px 20px">
+          <div style="display:flex;flex-direction:column;gap:28px">
+            <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
+              <div style="font:700 11px Oswald;letter-spacing:.07em;color:#b0202f;margin-bottom:12px">SONG SPOTLIGHT</div>
+              <div style="margin-bottom:18px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1a-spotlight-m" shape="rect" radius="2" placeholder="Single art" style="width:136px;height:136px;margin:0 auto" src="uploads/i8_cover.jpg"></x-import></div>
+              <div style="font:700 16px Oswald;color:#1a1a1a">"Ocean Breathes Salty"</div>
+            </div>
+          </div>
+        </div>
+        <div style="background:#eef1f5;border-top:1px solid #e2e0d8;padding:28px 20px;text-align:center">
+          <div style="font:700 16px Oswald;color:#14315c;margin-bottom:9px">Contribute to the Archive</div>
+          <div style="font:13px/1.5 Lora,Georgia,serif;color:#4a4f57;margin-bottom:16px">Have a setlist, a correction, or a tip?</div>
+          <div style="display:inline-block;font:700 12px Oswald;letter-spacing:.06em;background:#b0202f;color:#fff;padding:11px 22px;border-radius:3px">SUBMIT IT →</div>
+        </div>
+        <div style="text-align:center;padding:16px 18px 10px;border-top:1px solid #e2e0d8">
+          <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px 14px;font:600 10px Oswald;letter-spacing:.04em;color:#5c6570;margin-bottom:9px">
+            <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY</span>
+          </div>
+          <div style="font:11px system-ui,sans-serif;color:#8f8d85">© Interstate-8 · fan collaborative</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SONGS LANDING DESKTOP -->
+    <div class="dv-screen" style="width:1160px">
+      <div class="dv-tag">SONGS LANDING · DESKTOP · 1160px</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 36px;border-bottom:1px solid #e2e0d8;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:38px;height:42px;background:#fff;border:2.5px solid #b0202f;border-radius:7px 7px 17px 17px;display:flex;align-items:center;justify-content:center;font:700 17px Oswald;color:#14315c">8</div>
+          <div style="color:#1a1a1a;font:700 21px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+        </div>
+        <div style="display:flex;gap:30px;font:600 14px Oswald;letter-spacing:.04em;color:#3a3a38">
+          <span>HOME</span><span>TOUR DATES</span><span style="border-bottom:2px solid #b0202f;padding-bottom:3px;color:#b0202f">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+        </div>
+      </div>
+      <div style="height:140px;position:relative;overflow:hidden">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1a-songs-hero" shape="rect" placeholder="Highway band photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-kelly-3997070.jpg"></x-import>
+        <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(15,20,28,.78),rgba(15,20,28,.25))"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;padding:20px 40px">
+          <h2 style="font:700 32px Oswald;color:#fff;margin:0;text-shadow:0 1px 4px rgba(0,0,0,.4)">Songs</h2>
+        </div>
+      </div>
+      <div style="padding:28px 40px">
+        <div style="text-align:right;margin-bottom:16px"><span style="font:13px system-ui,sans-serif;color:#5c6570">412 results</span></div>
+        <div style="display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;background:#fff;border:1px solid #d9d7cd;border-radius:5px;padding:14px 18px;margin-bottom:18px">
+          <div><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#5c6570;margin-bottom:5px">TYPE</label><select style="font:13px system-ui,sans-serif;padding:6px 9px;border:1px solid #b0202f;border-radius:3px;color:#1a1a1a"><option>All</option><option selected>Modest Mouse</option><option>Ugly Casanova</option><option>Side projects</option><option>Covers</option></select></div>
+          <div><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#5c6570;margin-bottom:5px">ALTERNATE TITLES</label><div style="display:flex;border:1px solid #b0202f;border-radius:3px;overflow:hidden;font:13px system-ui,sans-serif"><div style="padding:6px 14px;background:#b0202f;color:#fff;font-weight:600">Show</div><div style="padding:6px 14px;color:#5c6570">Hide</div></div></div>
+          <div style="opacity:.5"><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#5c6570;margin-bottom:5px">RELEASED</label><select disabled style="font:13px system-ui,sans-serif;padding:6px 9px;border:1px solid #cfcdc2;border-radius:3px;background:#f0eee6;color:#8f8d85"><option>Coming soon</option></select></div>
+          <div style="opacity:.5"><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#5c6570;margin-bottom:5px">PLAYED LIVE</label><select disabled style="font:13px system-ui,sans-serif;padding:6px 9px;border:1px solid #cfcdc2;border-radius:3px;background:#f0eee6;color:#8f8d85"><option>Coming soon</option></select></div>
+          <div style="margin-left:auto"><div style="font:600 13px Oswald;letter-spacing:.05em;background:#b0202f;color:#fff;padding:9px 20px;border-radius:3px">APPLY</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:36px 1fr;gap:20px">
+          <div style="display:flex;flex-direction:column;gap:3px;font:700 12px Oswald;color:#b0202f;position:sticky;top:0">
+            <span style="padding:3px 0;color:#26333f">A</span><span style="padding:3px 0">B</span><span style="padding:3px 0">C</span><span style="padding:3px 0">D</span><span style="padding:3px 0">E</span><span style="padding:3px 0">F</span><span style="padding:3px 0;color:#d5d3ca">G</span><span style="padding:3px 0">H</span><span style="padding:3px 0;color:#d5d3ca">…</span><span style="padding:3px 0">W</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 26px">
+            <div style="grid-column:1/-1;font:700 13px Oswald;letter-spacing:.06em;color:#26333f;background:#eef1f5;padding:5px 12px;border-radius:2px;margin-bottom:3px">A</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f;border-bottom:1px solid #ece9df">…But Theyre Not Singing Ghosts</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f;border-bottom:1px solid #ece9df">A Life Of Arctic Sounds</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f;border-bottom:1px solid #ece9df">A Manic Depressive Named Laughing Boy</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f;border-bottom:1px solid #ece9df">A Different City</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f;border-bottom:1px solid #ece9df">A Song</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f;border-bottom:1px solid #ece9df">AEIOU And Sometimes Why <span style="font:9px Oswald;color:#b0202f;border:1px solid #b0202f;border-radius:8px;padding:0 5px">alt</span></div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f;border-bottom:1px solid #ece9df">All Night Diner</div>
+            <div style="grid-column:1/-1;font:700 13px Oswald;letter-spacing:.06em;color:#26333f;background:#eef1f5;padding:5px 12px;border-radius:2px;margin:10px 0 3px">B</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f;border-bottom:1px solid #ece9df">Baby Blue Sedan</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f;border-bottom:1px solid #ece9df">Bankrupt On Selling</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f;border-bottom:1px solid #ece9df">Black Cadillacs</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f;border-bottom:1px solid #ece9df">Blame It On The Tetons</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f;border-bottom:1px solid #ece9df">Bukowski</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#2b302f;border-bottom:1px solid #ece9df">Bury Me With It</div>
+            <div style="grid-column:1/-1;font:13px Lora,Georgia,serif;color:#b0202f;padding:16px 12px 0">… 394 more songs, same ledger, through W …</div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;padding:18px 16px 10px;border-top:1px solid #e2e0d8">
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px 14px;font:600 11px Oswald;letter-spacing:.04em;color:#5c6570;margin-bottom:9px">
+          <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY POLICY</span>
+        </div>
+        <div style="font:11px system-ui,sans-serif;color:#8f8d85">© Interstate-8 · a Modest Mouse fan collaborative</div>
+      </div>
+    </div>
+
+    <!-- SONG PAGE DESKTOP -->
+    <div class="dv-screen" style="width:1040px">
+      <div class="dv-tag">SONG PAGE · DESKTOP</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 34px;border-bottom:1px solid #e2e0d8;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)">
+        <div style="display:flex;align-items:center;gap:9px">
+          <div style="width:30px;height:34px;background:#fff;border:2.5px solid #b0202f;border-radius:6px 6px 14px 14px;display:flex;align-items:center;justify-content:center;font:700 14px Oswald;color:#14315c">8</div>
+          <div style="color:#1a1a1a;font:700 18px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+        </div>
+        <div style="display:flex;gap:22px;font:600 12px Oswald;letter-spacing:.03em;color:#3a3a38">
+          <span>HOME</span><span>TOUR DATES</span><span style="border-bottom:2px solid #b0202f;padding-bottom:3px;color:#b0202f">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+        </div>
+      </div>
+      <div style="height:190px;position:relative;overflow:hidden">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1a-song-hero" shape="rect" placeholder="Song hero photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-jack-redgate-333633-3049268.jpg"></x-import>
+        <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(15,20,28,.8),rgba(15,20,28,.2));display:flex;align-items:flex-end;padding:18px 44px 22px">
+          <h2 style="font:700 38px Oswald;color:#fff;margin:0;text-shadow:0 1px 4px rgba(0,0,0,.4)">Ocean Breathes Salty</h2>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 260px;gap:0;padding:32px 44px">
+        <div style="padding-right:36px;border-right:2px dashed #e5c0c4">
+          <blockquote style="margin:0 0 28px;padding:14px 0 14px 22px;border-left:3px solid #b0202f;font:italic 17px/1.6 Lora,Georgia,serif;color:#3f4653">"I wrote it in about ten minutes, on a ferry, looking at the water." — Isaac Brock</blockquote>
+          <div style="font:11px Oswald;letter-spacing:.11em;color:#5c6570;margin-bottom:10px">LYRICS</div>
+          <div style="font:18px/2.05 Lora,Georgia,serif;color:#2b302f;margin-bottom:10px">The ocean breathes salty, well, today<br>I could hardly hear the words you were saying<br>I hear ya' but barely, this is my only chance</div>
+          <div style="font:18px/2.05 Lora,Georgia,serif;color:#2b302f;margin-bottom:10px">I looked at you, then looked away<br>Kept lookin' out when the day turns gray</div>
+          <div style="font:18px/2.05 Lora,Georgia,serif;color:#2b302f;margin-bottom:30px">And your smile was the only thing<br>That should've made my day, but it just made me sadder still</div>
+          <div style="font:11px Oswald;letter-spacing:.11em;color:#5c6570;margin-bottom:10px">NOTES</div>
+          <div style="font:15px/1.7 Lora,Georgia,serif;color:#4a4f57;margin-bottom:30px">Written for a friend who died in a car accident; the b-side "Whenever You Breathe Out, I Breathe In" is its companion piece.</div>
+          <div style="font:11px Oswald;letter-spacing:.11em;color:#5c6570;margin-bottom:10px">VIDEO</div>
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1a-song-video" shape="rect" radius="3" placeholder="Embedded video (oEmbed)" style="width:100%;aspect-ratio:16/9"></x-import>
+        </div>
+        <div style="padding-left:32px;display:flex;flex-direction:column;gap:18px">
+          <div style="font:10px Oswald;letter-spacing:.11em;color:#9a988f;margin-bottom:-6px">MORE ABOUT THIS SONG</div>
+          <div style="border:1.5px dashed #d5d3ca;border-radius:4px;padding:16px;opacity:.65">
+            <div style="font:700 10px Oswald;letter-spacing:.07em;color:#9a988f;margin-bottom:7px">RELEASES</div>
+            <div style="font:13px Lora,Georgia,serif;color:#9a988f">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #d5d3ca;border-radius:4px;padding:16px;opacity:.65">
+            <div style="font:700 10px Oswald;letter-spacing:.07em;color:#9a988f;margin-bottom:7px">LAST PLAYED LIVE</div>
+            <div style="font:13px Lora,Georgia,serif;color:#9a988f">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #d5d3ca;border-radius:4px;padding:16px;opacity:.65">
+            <div style="font:700 10px Oswald;letter-spacing:.07em;color:#9a988f;margin-bottom:7px">TIMES PLAYED / TOUR STATS</div>
+            <div style="font:13px Lora,Georgia,serif;color:#9a988f">Coming soon</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- side-by-side lyrics variant -->
+      <div style="padding:0 44px 36px">
+        <div style="font:12px system-ui,sans-serif;color:#8f8d85;margin-bottom:16px;padding-top:16px;border-top:1px solid #e2e0d8">Alternate version, side-by-side lyrics</div>
+        <div style="border:1px solid #d9d7cd;border-radius:5px;overflow:hidden">
+          <div style="background:#eef1f5;padding:14px 24px"><h3 style="font:700 22px Oswald;color:#14315c;margin:0">King Rat (Live Version)</h3><div style="font:13px Lora,Georgia,serif;color:#5c6570;margin-top:4px">alternate title/lyrics for → <u>King Rat</u></div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr">
+            <div style="padding:22px 26px;border-right:2px dashed #e5c0c4">
+              <div style="font:11px Oswald;letter-spacing:.11em;color:#5c6570;margin-bottom:12px">THIS VERSION</div>
+              <div style="font:16px/1.9 Lora,Georgia,serif;color:#2b302f">Well I'm a king rat, and you're a bucket of shit<br>You're not big enough for me<br>I just made you up to hurt myself</div>
+            </div>
+            <div style="padding:22px 26px">
+              <div style="font:11px Oswald;letter-spacing:.11em;color:#5c6570;margin-bottom:12px">NORMAL VERSION — <u>King Rat</u></div>
+              <div style="font:16px/1.9 Lora,Georgia,serif;color:#2b302f">Well I'm a king rat, and you're a bucket of shit<br>You're not big enough to hold what's in you<br>I just made you up to hurt myself</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;padding:18px 16px 10px;border-top:1px solid #e2e0d8">
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px 14px;font:600 11px Oswald;letter-spacing:.04em;color:#5c6570;margin-bottom:9px">
+          <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY POLICY</span>
+        </div>
+        <div style="font:11px system-ui,sans-serif;color:#8f8d85">© Interstate-8 · a Modest Mouse fan collaborative</div>
+      </div>
+    </div>
+
+    <!-- DESIGN TOKENS -->
+    <div class="dv-screen" style="width:1040px">
+      <div class="dv-tag">DESIGN TOKENS · 1A · SHIELD-BOLD</div>
+      <div style="padding:32px 40px;background:#ffffff">
+
+        <div style="font:700 11px Oswald;letter-spacing:.1em;color:#b0202f;margin-bottom:14px">COLOUR</div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:32px">
+          <div><div style="height:56px;border-radius:4px;background:#1a1a1a;border:1px solid rgba(0,0,0,.08)"></div><div style="font:600 11px Oswald;color:#1a1a1a;margin-top:6px">Ink</div><div style="font:10px ui-monospace,Menlo,monospace;color:#5c6570">#1a1a1a</div></div>
+          <div><div style="height:56px;border-radius:4px;background:#14315c;border:1px solid rgba(0,0,0,.08)"></div><div style="font:600 11px Oswald;color:#1a1a1a;margin-top:6px">Primary</div><div style="font:10px ui-monospace,Menlo,monospace;color:#5c6570">#14315c</div></div>
+          <div><div style="height:56px;border-radius:4px;background:#b0202f;border:1px solid rgba(0,0,0,.08)"></div><div style="font:600 11px Oswald;color:#1a1a1a;margin-top:6px">Accent</div><div style="font:10px ui-monospace,Menlo,monospace;color:#5c6570">#b0202f</div></div>
+          <div><div style="height:56px;border-radius:4px;background:#5c6570;border:1px solid rgba(0,0,0,.08)"></div><div style="font:600 11px Oswald;color:#1a1a1a;margin-top:6px">Muted</div><div style="font:10px ui-monospace,Menlo,monospace;color:#5c6570">#5c6570</div></div>
+          <div><div style="height:56px;border-radius:4px;background:#ffffff;border:1px solid #e2e0d8"></div><div style="font:600 11px Oswald;color:#1a1a1a;margin-top:6px">Surface</div><div style="font:10px ui-monospace,Menlo,monospace;color:#5c6570">#ffffff</div></div>
+          <div><div style="height:56px;border-radius:4px;background:#eef1f5;border:1px solid rgba(0,0,0,.08)"></div><div style="font:600 11px Oswald;color:#1a1a1a;margin-top:6px">Tint</div><div style="font:10px ui-monospace,Menlo,monospace;color:#5c6570">#eef1f5</div></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:40px">
+
+          <div>
+            <div style="font:700 11px Oswald;letter-spacing:.1em;color:#b0202f;margin-bottom:14px">TYPE</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:26px">
+              <div style="display:flex;align-items:baseline;gap:14px"><div style="font:700 32px Oswald;color:#1a1a1a">Aa</div><div style="font:11px system-ui,sans-serif;color:#5c6570">Oswald 700 · headlines 64/56/38/32/24/21px</div></div>
+              <div style="display:flex;align-items:baseline;gap:14px"><div style="font:600 18px Oswald;color:#1a1a1a">Aa</div><div style="font:11px system-ui,sans-serif;color:#5c6570">Oswald 600 · nav/labels 14/13/12/11px, letter-spacing .03–.11em</div></div>
+              <div style="display:flex;align-items:baseline;gap:14px"><div style="font:18px Lora,Georgia,serif;color:#1a1a1a">Aa</div><div style="font:11px system-ui,sans-serif;color:#5c6570">Lora · body/lyrics 18/17/16/15/14/13px, line-height 1.6–2.1</div></div>
+              <div style="display:flex;align-items:baseline;gap:14px"><div style="font:11px system-ui,sans-serif;color:#1a1a1a">Aa</div><div style="font:11px system-ui,sans-serif;color:#5c6570">System-ui · meta/dates/UI chrome 10–13px</div></div>
+            </div>
+
+            <div style="font:700 11px Oswald;letter-spacing:.1em;color:#b0202f;margin-bottom:14px">SPACING SCALE (px)</div>
+            <div style="display:flex;align-items:flex-end;gap:8px;margin-bottom:8px">
+              <div style="text-align:center"><div style="width:18px;height:4px;background:#b0202f;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5c6570;margin-top:4px">4</div></div><div style="text-align:center"><div style="width:18px;height:8px;background:#b0202f;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5c6570;margin-top:4px">8</div></div><div style="text-align:center"><div style="width:18px;height:12px;background:#b0202f;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5c6570;margin-top:4px">12</div></div><div style="text-align:center"><div style="width:18px;height:16px;background:#b0202f;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5c6570;margin-top:4px">16</div></div><div style="text-align:center"><div style="width:18px;height:20px;background:#b0202f;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5c6570;margin-top:4px">20</div></div><div style="text-align:center"><div style="width:18px;height:24px;background:#b0202f;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5c6570;margin-top:4px">24</div></div><div style="text-align:center"><div style="width:18px;height:28px;background:#b0202f;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5c6570;margin-top:4px">28</div></div><div style="text-align:center"><div style="width:18px;height:32px;background:#b0202f;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5c6570;margin-top:4px">32</div></div><div style="text-align:center"><div style="width:18px;height:40px;background:#b0202f;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5c6570;margin-top:4px">40</div></div><div style="text-align:center"><div style="width:18px;height:44px;background:#b0202f;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5c6570;margin-top:4px">44</div></div><div style="text-align:center"><div style="width:18px;height:56px;background:#b0202f;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5c6570;margin-top:4px">56</div></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font:700 11px Oswald;letter-spacing:.1em;color:#b0202f;margin-bottom:14px">BUTTON STATES</div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:26px">
+              <div style="display:flex;align-items:center;gap:12px"><div style="font:700 12px Oswald;letter-spacing:.05em;background:#b0202f;color:#fff;padding:10px 20px;border-radius:3px;width:100px;text-align:center">DEFAULT</div><div style="font:11px system-ui,sans-serif;color:#5c6570">background #b0202f, white text</div></div>
+              <div style="display:flex;align-items:center;gap:12px"><div style="font:700 12px Oswald;letter-spacing:.05em;background:#8c1926;color:#fff;padding:10px 20px;border-radius:3px;width:100px;text-align:center">HOVER</div><div style="font:11px system-ui,sans-serif;color:#5c6570">background #8c1926 (darkened 12%)</div></div>
+              <div style="display:flex;align-items:center;gap:12px"><div style="font:700 12px Oswald;letter-spacing:.05em;background:#e2e0d8;color:#5c6570;padding:10px 20px;border-radius:3px;width:100px;text-align:center;opacity:.7">DISABLED</div><div style="font:11px system-ui,sans-serif;color:#5c6570">background #e2e0d8, 70% opacity, no pointer</div></div>
+            </div>
+
+            <div style="font:700 11px Oswald;letter-spacing:.1em;color:#b0202f;margin-bottom:14px">LINK STATES</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font:14px Lora,Georgia,serif">
+              <div><span style="color:#b0202f">Default link</span> <span style="font:11px system-ui,sans-serif;color:#5c6570">— #b0202f, no underline</span></div>
+              <div><span style="color:#b0202f;text-decoration:underline">Hover link</span> <span style="font:11px system-ui,sans-serif;color:#5c6570">— underline on hover</span></div>
+              <div><span style="color:#1a1a1a;text-decoration:underline;text-decoration-color:#5c6570">Inline text link</span> <span style="font:11px system-ui,sans-serif;color:#5c6570">— e.g. setlist refs</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ 1B — MUTED HIGHWAY ============================================================ -->
+  <div class="dv-opt" id="1b">
+    <div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Muted highway — Corduroy / Periwinkle Gray / Pumice / Polo Blue</div>
+    <div class="dv-odesc">Straight from the extracted v2 background board. Corduroy for ink and structure, Polo Blue deepened for accessible links/CTAs, Periwinkle Gray as a cool tint, Pumice as the quiet neutral for cards and dividers. Overcast, dusk-highway mood.</div>
+
+    <div class="dv-screen" style="width:1160px">
+      <div class="dv-tag">HOMEPAGE · DESKTOP · 1160px</div>
+      <div style="background:#ffffff">
+        <div style="height:48vh;min-height:345px;position:relative;overflow:hidden">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1b-hero" shape="rect" placeholder="Drop a highway hero photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-jack-redgate-333633-3014002.jpg"></x-import>
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,26,28,.68) 0%,rgba(20,26,28,.12) 24%,rgba(20,26,28,.22) 76%,rgba(20,26,28,.7) 100%);pointer-events:none"></div>
+          <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:24px 40px;pointer-events:none">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:38px;height:42px;border:2.5px solid #fff;border-radius:7px 7px 17px 17px;display:flex;align-items:center;justify-content:center;font:700 17px Oswald;color:#fff;flex:none">8</div>
+              <div>
+                <div style="color:#fff;font:700 21px Oswald;letter-spacing:.02em;text-shadow:0 1px 5px rgba(0,0,0,.5)">INTERSTATE-8</div>
+                <div style="color:#eef3f6;font:11px system-ui,sans-serif;letter-spacing:.04em;text-shadow:0 1px 4px rgba(0,0,0,.5)">A MODEST MOUSE FAN COLLABORATIVE</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:30px;font:600 14px Oswald;letter-spacing:.04em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5)">
+              <span>HOME</span><span>TOUR</span><span style="border-bottom:2px solid #98b9d0;padding-bottom:3px">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+            </div>
+          </div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+            <div style="font:700 48px Oswald;color:#fff;letter-spacing:.02em;text-shadow:0 3px 14px rgba(0,0,0,.5)">TAKE AN EXIT</div>
+          </div>
+        </div>
+
+        <div style="max-width:980px;margin:0 auto;padding:36px 32px 8px">
+          <div style="font:700 24px Oswald;color:#3d4442;margin-bottom:28px;text-align:center;letter-spacing:.01em">Latest News</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+            <div>
+              <div style="margin-bottom:22px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1b-news1" shape="rect" radius="2" placeholder="News photo" style="width:100%;aspect-ratio:4/3" src="uploads/live_2013.jpg"></x-import></div>
+              <div style="font:700 17px Oswald;color:#2b302f;margin-bottom:5px">Setlist archive hits 1,000 shows indexed</div>
+              <div style="font:11px system-ui,sans-serif;color:#8a938f;margin-bottom:9px;letter-spacing:.03em">2026.07.09</div>
+              <div style="font:14px/1.6 Lora,Georgia,serif;color:#556361">A milestone for the tour-history project — every show from 1994 on, now searchable by song.</div>
+            </div>
+            <div>
+              <div style="margin-bottom:22px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1b-news2" shape="rect" radius="2" placeholder="News photo" style="width:100%;aspect-ratio:4/3" src="uploads/isaac_brock_bridge_school_2010.jpg"></x-import></div>
+              <div style="font:700 17px Oswald;color:#2b302f;margin-bottom:5px">Lyrics pass complete for the Ugly Casanova catalogue</div>
+              <div style="font:11px system-ui,sans-serif;color:#8a938f;margin-bottom:9px;letter-spacing:.03em">2026.07.06</div>
+              <div style="font:14px/1.6 Lora,Georgia,serif;color:#556361">Cross-checked against three live recordings and the original liner notes.</div>
+            </div>
+            <div>
+              <div style="margin-bottom:22px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1b-news3" shape="rect" radius="2" placeholder="News photo" style="width:100%;aspect-ratio:4/3" src="uploads/band.jpg"></x-import></div>
+              <div style="font:700 17px Oswald;color:#2b302f;margin-bottom:5px">Site rebuild: what's changing under the hood</div>
+              <div style="font:11px system-ui,sans-serif;color:#8a938f;margin-bottom:9px;letter-spacing:.03em">2026.07.03</div>
+              <div style="font:14px/1.6 Lora,Georgia,serif;color:#556361">Faster pages, a better editor, the same archive you've relied on since 2006.</div>
+            </div>
+          </div>
+          <div style="text-align:center;padding:26px 0 4px;font:600 13px Oswald;letter-spacing:.06em;color:#3f7ca0">SHOW MORE →</div>
+        </div>
+
+        <div style="max-width:980px;margin:0 auto;padding:28px 32px 8px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+          <div>
+            <div style="font:700 12px Oswald;letter-spacing:.09em;color:#3f7ca0;margin-bottom:12px">UPCOMING TOUR DATES</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442">2026.08.12 — Portland, OR<br>2026.08.14 — Seattle, WA<br>2026.08.17 — Vancouver, BC</div>
+            <div style="font:600 11px Oswald;letter-spacing:.06em;color:#3f7ca0;margin-top:10px">MORE →</div>
+          </div>
+          <div>
+            <div style="font:700 12px Oswald;letter-spacing:.09em;color:#3f7ca0;margin-bottom:12px">RECENTLY PASSED</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442">2026.07.02 — Boise, ID <u>setlist</u><br>2026.06.29 — Salt Lake City <u>setlist</u></div>
+            <div style="font:600 11px Oswald;letter-spacing:.06em;color:#3f7ca0;margin-top:10px">MORE →</div>
+          </div>
+          <div>
+            <div style="font:700 12px Oswald;letter-spacing:.09em;color:#3f7ca0;margin-bottom:12px">THIS WEEK IN HISTORY</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442">2004.07.11 — live debut<br>1997.07.11 — album released</div>
+            <div style="font:600 11px Oswald;letter-spacing:.06em;color:#3f7ca0;margin-top:10px">MORE →</div>
+          </div>
+        </div>
+
+        <div style="max-width:980px;margin:24px auto 0;border-top:1px solid #d3d6d5"></div>
+
+        <div style="max-width:980px;margin:0 auto;padding:36px 32px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px">
+            <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
+              <div style="font:700 11px Oswald;letter-spacing:.09em;color:#3f7ca0;margin-bottom:16px">SONG SPOTLIGHT</div>
+              <div style="margin-bottom:22px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1b-spotlight" shape="rect" radius="2" placeholder="Single art" style="width:168px;height:168px;margin:0 auto" src="uploads/wysf_cover.jpg"></x-import></div>
+              <div style="font:700 19px Oswald;color:#2b302f">"Ocean Breathes Salty"</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
+              <div style="font:700 11px Oswald;letter-spacing:.09em;color:#3f7ca0;margin-bottom:16px">FROM THE DISCOGRAPHY</div>
+              <div style="margin-bottom:22px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1b-album" shape="rect" radius="2" placeholder="Album art" style="width:168px;height:168px;margin:0 auto" src="uploads/tmaa_cover.jpg"></x-import></div>
+              <div style="font:700 19px Oswald;color:#2b302f">The Moon &amp; Antarctica</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#e4edf2;border-top:1px solid #d3d6d5;padding:40px 32px;text-align:center">
+          <div style="font:700 20px Oswald;color:#3d4442;margin-bottom:10px">Contribute to the Archive</div>
+          <div style="font:14px/1.6 Lora,Georgia,serif;color:#556361;margin-bottom:18px">Have a setlist, a correction, or a tip? Help keep the record straight.</div>
+          <div style="display:inline-block;font:700 13px Oswald;letter-spacing:.06em;background:#98b9d0;color:#1c3038;padding:13px 26px;border-radius:3px">SUBMIT IT →</div>
+        </div>
+
+        <div style="text-align:center;padding:20px 0 10px;border-top:1px solid #d3d6d5">
+          <div style="display:flex;justify-content:center;gap:22px;font:600 11px Oswald;letter-spacing:.05em;color:#5e6b68;margin-bottom:12px">
+            <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY POLICY</span>
+          </div>
+          <div style="font:12px system-ui,sans-serif;color:#8a938f">© Interstate-8 · a Modest Mouse fan collaborative</div>
+          <div style="font:11px system-ui,sans-serif;color:#aeb4b2;margin-top:5px;padding:0 20px">Interstate-8.com is in no way associated with or authorized by Modest Mouse or any of their agents.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOMEPAGE MOBILE -->
+    <div class="dv-screen" style="width:375px">
+      <div class="dv-tag">HOMEPAGE · MOBILE · 375px</div>
+      <div style="background:#ffffff">
+        <div style="height:255px;position:relative;overflow:hidden">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1b-hero-m" shape="rect" placeholder="Highway hero" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-jack-redgate-333633-3014002.jpg"></x-import>
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,26,28,.68) 0%,rgba(20,26,28,.12) 24%,rgba(20,26,28,.22) 76%,rgba(20,26,28,.7) 100%);pointer-events:none"></div>
+          <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;pointer-events:none">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:26px;height:30px;border:2px solid #fff;border-radius:5px 5px 12px 12px;display:flex;align-items:center;justify-content:center;font:700 12px Oswald;color:#fff">8</div>
+              <div style="color:#fff;font:700 15px Oswald;text-shadow:0 1px 4px rgba(0,0,0,.5)">INTERSTATE-8</div>
+            </div>
+            <div style="font:700 20px Oswald;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5)">☰</div>
+          </div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+            <div style="font:700 26px Oswald;color:#fff;letter-spacing:.02em;text-shadow:0 2px 10px rgba(0,0,0,.5)">TAKE AN EXIT</div>
+          </div>
+        </div>
+        <div style="padding:32px 20px 4px">
+          <div style="font:700 18px Oswald;color:#3d4442;margin-bottom:18px;text-align:center">Latest News</div>
+          <div style="display:flex;flex-direction:column;gap:24px">
+            <div>
+              <div style="margin-bottom:16px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1b-news1-m" shape="rect" radius="2" placeholder="News photo" style="width:100%;aspect-ratio:4/3" src="uploads/live_2013.jpg"></x-import></div>
+              <div style="font:700 15px Oswald;color:#2b302f;margin-bottom:4px">Setlist archive hits 1,000 shows indexed</div>
+              <div style="font:10px system-ui,sans-serif;color:#8a938f;margin-bottom:6px">2026.07.09</div>
+              <div style="font:13px Lora,Georgia,serif;color:#556361">A milestone for the tour-history project.</div>
+            </div>
+            <div>
+              <div style="margin-bottom:16px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1b-news2-m" shape="rect" radius="2" placeholder="News photo" style="width:100%;aspect-ratio:4/3" src="uploads/isaac_brock_bridge_school_2010.jpg"></x-import></div>
+              <div style="font:700 15px Oswald;color:#2b302f;margin-bottom:4px">Lyrics pass complete: Ugly Casanova</div>
+              <div style="font:10px system-ui,sans-serif;color:#8a938f;margin-bottom:6px">2026.07.06</div>
+              <div style="font:13px Lora,Georgia,serif;color:#556361">Cross-checked against liner notes.</div>
+            </div>
+          </div>
+          <div style="text-align:center;padding:20px 0 4px;font:600 12px Oswald;letter-spacing:.06em;color:#3f7ca0">SHOW MORE →</div>
+        </div>
+        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:20px">
+          <div><div style="font:700 11px Oswald;letter-spacing:.09em;color:#3f7ca0;margin-bottom:8px">UPCOMING TOUR</div><div style="font:13px/1.9 Lora,Georgia,serif;color:#3d4442">2026.08.12 — Portland<br>2026.08.14 — Seattle</div></div>
+          <div><div style="font:700 11px Oswald;letter-spacing:.09em;color:#3f7ca0;margin-bottom:8px">RECENTLY PASSED</div><div style="font:13px/1.9 Lora,Georgia,serif;color:#3d4442">2026.07.02 — Boise <u>setlist</u></div></div>
+        </div>
+        <div style="border-top:1px solid #d3d6d5;padding:22px 20px">
+          <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
+            <div style="font:700 11px Oswald;letter-spacing:.07em;color:#3f7ca0;margin-bottom:12px">SONG SPOTLIGHT</div>
+            <div style="margin-bottom:18px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1b-spotlight-m" shape="rect" radius="2" placeholder="Single art" style="width:136px;height:136px;margin:0 auto" src="uploads/wysf_cover.jpg"></x-import></div>
+            <div style="font:700 16px Oswald;color:#2b302f">"Ocean Breathes Salty"</div>
+          </div>
+        </div>
+        <div style="background:#e4edf2;border-top:1px solid #d3d6d5;padding:28px 20px;text-align:center">
+          <div style="font:700 16px Oswald;color:#3d4442;margin-bottom:9px">Contribute to the Archive</div>
+          <div style="font:13px/1.5 Lora,Georgia,serif;color:#556361;margin-bottom:16px">Have a setlist, a correction, or a tip?</div>
+          <div style="display:inline-block;font:700 12px Oswald;letter-spacing:.06em;background:#98b9d0;color:#1c3038;padding:11px 22px;border-radius:3px">SUBMIT IT →</div>
+        </div>
+        <div style="text-align:center;padding:16px 18px 10px;border-top:1px solid #d3d6d5">
+          <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px 14px;font:600 10px Oswald;letter-spacing:.04em;color:#5e6b68;margin-bottom:9px">
+            <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY</span>
+          </div>
+          <div style="font:11px system-ui,sans-serif;color:#8a938f">© Interstate-8 · fan collaborative</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SONGS LANDING DESKTOP -->
+    <div class="dv-screen" style="width:1160px">
+      <div class="dv-tag">SONGS LANDING · DESKTOP · 1160px</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 36px;border-bottom:1px solid #d3d6d5;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:38px;height:42px;background:#fff;border:2.5px solid #98b9d0;border-radius:7px 7px 17px 17px;display:flex;align-items:center;justify-content:center;font:700 17px Oswald;color:#5e6b68">8</div>
+          <div style="color:#2b302f;font:700 21px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+        </div>
+        <div style="display:flex;gap:30px;font:600 14px Oswald;letter-spacing:.04em;color:#454e4c">
+          <span>HOME</span><span>TOUR DATES</span><span style="border-bottom:2px solid #3f7ca0;padding-bottom:3px;color:#3f7ca0">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+        </div>
+      </div>
+      <div style="height:140px;position:relative;overflow:hidden">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1b-songs-hero" shape="rect" placeholder="Highway band photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-hobiphotography-36346406.jpg"></x-import>
+        <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(20,26,28,.78),rgba(20,26,28,.25))"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;padding:20px 40px">
+          <h2 style="font:700 32px Oswald;color:#fff;margin:0;text-shadow:0 1px 4px rgba(0,0,0,.4)">Songs</h2>
+        </div>
+      </div>
+      <div style="padding:28px 40px">
+        <div style="text-align:right;margin-bottom:16px"><span style="font:13px system-ui,sans-serif;color:#5e6b68">412 results</span></div>
+        <div style="display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;background:#fff;border:1px solid #ccd0ce;border-radius:5px;padding:14px 18px;margin-bottom:18px">
+          <div><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#5e6b68;margin-bottom:5px">TYPE</label><select style="font:13px system-ui,sans-serif;padding:6px 9px;border:1px solid #3f7ca0;border-radius:3px;color:#2b302f"><option>All</option><option selected>Modest Mouse</option><option>Ugly Casanova</option><option>Side projects</option><option>Covers</option></select></div>
+          <div><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#5e6b68;margin-bottom:5px">ALTERNATE TITLES</label><div style="display:flex;border:1px solid #3f7ca0;border-radius:3px;overflow:hidden;font:13px system-ui,sans-serif"><div style="padding:6px 14px;background:#3f7ca0;color:#fff;font-weight:600">Show</div><div style="padding:6px 14px;color:#5e6b68">Hide</div></div></div>
+          <div style="opacity:.5"><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#5e6b68;margin-bottom:5px">RELEASED</label><select disabled style="font:13px system-ui,sans-serif;padding:6px 9px;border:1px solid #c7cbca;border-radius:3px;background:#eef0ef;color:#8a938f"><option>Coming soon</option></select></div>
+          <div style="opacity:.5"><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#5e6b68;margin-bottom:5px">PLAYED LIVE</label><select disabled style="font:13px system-ui,sans-serif;padding:6px 9px;border:1px solid #c7cbca;border-radius:3px;background:#eef0ef;color:#8a938f"><option>Coming soon</option></select></div>
+          <div style="margin-left:auto"><div style="font:600 13px Oswald;letter-spacing:.05em;background:#3f7ca0;color:#fff;padding:9px 20px;border-radius:3px">APPLY</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:36px 1fr;gap:20px">
+          <div style="display:flex;flex-direction:column;gap:3px;font:700 12px Oswald;color:#3f7ca0;position:sticky;top:0">
+            <span style="padding:3px 0;color:#3d4442">A</span><span style="padding:3px 0">B</span><span style="padding:3px 0">C</span><span style="padding:3px 0">D</span><span style="padding:3px 0">E</span><span style="padding:3px 0">F</span><span style="padding:3px 0;color:#d3d6d5">G</span><span style="padding:3px 0">H</span><span style="padding:3px 0;color:#d3d6d5">…</span><span style="padding:3px 0">W</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 26px">
+            <div style="grid-column:1/-1;font:700 13px Oswald;letter-spacing:.06em;color:#3d4442;background:#e4edf2;padding:5px 12px;border-radius:2px;margin-bottom:3px">A</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">…But Theyre Not Singing Ghosts</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">A Life Of Arctic Sounds</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">A Manic Depressive Named Laughing Boy</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">A Different City</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">A Song</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">AEIOU And Sometimes Why <span style="font:9px Oswald;color:#3f7ca0;border:1px solid #3f7ca0;border-radius:8px;padding:0 5px">alt</span></div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">All Night Diner</div>
+            <div style="grid-column:1/-1;font:700 13px Oswald;letter-spacing:.06em;color:#3d4442;background:#e4edf2;padding:5px 12px;border-radius:2px;margin:10px 0 3px">B</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">Baby Blue Sedan</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">Bankrupt On Selling</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">Black Cadillacs</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">Blame It On The Tetons</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">Bukowski</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">Bury Me With It</div>
+            <div style="grid-column:1/-1;font:13px Lora,Georgia,serif;color:#3f7ca0;padding:16px 12px 0">… 394 more songs, same ledger, through W …</div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;padding:18px 16px 10px;border-top:1px solid #d3d6d5">
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px 14px;font:600 11px Oswald;letter-spacing:.04em;color:#5e6b68;margin-bottom:9px">
+          <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY POLICY</span>
+        </div>
+        <div style="font:11px system-ui,sans-serif;color:#8a938f">© Interstate-8 · a Modest Mouse fan collaborative</div>
+      </div>
+    </div>
+
+    <!-- SONG PAGE DESKTOP -->
+    <div class="dv-screen" style="width:1040px">
+      <div class="dv-tag">SONG PAGE · DESKTOP</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 34px;border-bottom:1px solid #d3d6d5;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)">
+        <div style="display:flex;align-items:center;gap:9px">
+          <div style="width:30px;height:34px;background:#fff;border:2.5px solid #98b9d0;border-radius:6px 6px 14px 14px;display:flex;align-items:center;justify-content:center;font:700 14px Oswald;color:#5e6b68">8</div>
+          <div style="color:#2b302f;font:700 18px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+        </div>
+        <div style="display:flex;gap:22px;font:600 12px Oswald;letter-spacing:.03em;color:#454e4c">
+          <span>HOME</span><span>TOUR DATES</span><span style="border-bottom:2px solid #3f7ca0;padding-bottom:3px;color:#3f7ca0">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+        </div>
+      </div>
+      <div style="height:190px;position:relative;overflow:hidden">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1b-song-hero" shape="rect" placeholder="Song hero photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-tomverdoot-3444649.jpg"></x-import>
+        <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(20,26,28,.8),rgba(20,26,28,.2));display:flex;align-items:flex-end;padding:18px 44px 22px">
+          <h2 style="font:700 38px Oswald;color:#fff;margin:0;text-shadow:0 1px 4px rgba(0,0,0,.4)">Ocean Breathes Salty</h2>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 260px;gap:0;padding:32px 44px">
+        <div style="padding-right:36px;border-right:2px dashed #b9d3e3">
+          <blockquote style="margin:0 0 28px;padding:14px 0 14px 22px;border-left:3px solid #3f7ca0;font:italic 17px/1.6 Lora,Georgia,serif;color:#455250">"I wrote it in about ten minutes, on a ferry, looking at the water." — Isaac Brock</blockquote>
+          <div style="font:11px Oswald;letter-spacing:.11em;color:#5e6b68;margin-bottom:10px">LYRICS</div>
+          <div style="font:18px/2.05 Lora,Georgia,serif;color:#3d4442;margin-bottom:10px">The ocean breathes salty, well, today<br>I could hardly hear the words you were saying<br>I hear ya' but barely, this is my only chance</div>
+          <div style="font:18px/2.05 Lora,Georgia,serif;color:#3d4442;margin-bottom:10px">I looked at you, then looked away<br>Kept lookin' out when the day turns gray</div>
+          <div style="font:18px/2.05 Lora,Georgia,serif;color:#3d4442;margin-bottom:30px">And your smile was the only thing<br>That should've made my day, but it just made me sadder still</div>
+          <div style="font:11px Oswald;letter-spacing:.11em;color:#5e6b68;margin-bottom:10px">NOTES</div>
+          <div style="font:15px/1.7 Lora,Georgia,serif;color:#556361;margin-bottom:30px">Written for a friend who died in a car accident; the b-side "Whenever You Breathe Out, I Breathe In" is its companion piece.</div>
+          <div style="font:11px Oswald;letter-spacing:.11em;color:#5e6b68;margin-bottom:10px">VIDEO</div>
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1b-song-video" shape="rect" radius="3" placeholder="Embedded video (oEmbed)" style="width:100%;aspect-ratio:16/9"></x-import>
+        </div>
+        <div style="padding-left:32px;display:flex;flex-direction:column;gap:18px">
+          <div style="font:10px Oswald;letter-spacing:.11em;color:#9aa4a1;margin-bottom:-6px">MORE ABOUT THIS SONG</div>
+          <div style="border:1.5px dashed #d3d6d5;border-radius:4px;padding:16px;opacity:.65">
+            <div style="font:700 10px Oswald;letter-spacing:.07em;color:#9aa4a1;margin-bottom:7px">RELEASES</div>
+            <div style="font:13px Lora,Georgia,serif;color:#9aa4a1">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #d3d6d5;border-radius:4px;padding:16px;opacity:.65">
+            <div style="font:700 10px Oswald;letter-spacing:.07em;color:#9aa4a1;margin-bottom:7px">LAST PLAYED LIVE</div>
+            <div style="font:13px Lora,Georgia,serif;color:#9aa4a1">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #d3d6d5;border-radius:4px;padding:16px;opacity:.65">
+            <div style="font:700 10px Oswald;letter-spacing:.07em;color:#9aa4a1;margin-bottom:7px">TIMES PLAYED / TOUR STATS</div>
+            <div style="font:13px Lora,Georgia,serif;color:#9aa4a1">Coming soon</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:0 44px 36px">
+        <div style="font:12px system-ui,sans-serif;color:#8a938f;margin-bottom:16px;padding-top:16px;border-top:1px solid #d3d6d5">Alternate version, side-by-side lyrics</div>
+        <div style="border:1px solid #ccd0ce;border-radius:5px;overflow:hidden">
+          <div style="background:#e4edf2;padding:14px 24px"><h3 style="font:700 22px Oswald;color:#3d4442;margin:0">King Rat (Live Version)</h3><div style="font:13px Lora,Georgia,serif;color:#5e6b68;margin-top:4px">alternate title/lyrics for → <u>King Rat</u></div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr">
+            <div style="padding:22px 26px;border-right:2px dashed #b9d3e3">
+              <div style="font:11px Oswald;letter-spacing:.11em;color:#5e6b68;margin-bottom:12px">THIS VERSION</div>
+              <div style="font:16px/1.9 Lora,Georgia,serif;color:#3d4442">Well I'm a king rat, and you're a bucket of shit<br>You're not big enough for me<br>I just made you up to hurt myself</div>
+            </div>
+            <div style="padding:22px 26px">
+              <div style="font:11px Oswald;letter-spacing:.11em;color:#5e6b68;margin-bottom:12px">NORMAL VERSION — <u>King Rat</u></div>
+              <div style="font:16px/1.9 Lora,Georgia,serif;color:#3d4442">Well I'm a king rat, and you're a bucket of shit<br>You're not big enough to hold what's in you<br>I just made you up to hurt myself</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;padding:18px 16px 10px;border-top:1px solid #d3d6d5">
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px 14px;font:600 11px Oswald;letter-spacing:.04em;color:#5e6b68;margin-bottom:9px">
+          <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY POLICY</span>
+        </div>
+        <div style="font:11px system-ui,sans-serif;color:#8a938f">© Interstate-8 · a Modest Mouse fan collaborative</div>
+      </div>
+    </div>
+
+    <!-- DESIGN TOKENS -->
+    <div class="dv-screen" style="width:1040px">
+      <div class="dv-tag">DESIGN TOKENS · 1B · MUTED HIGHWAY</div>
+      <div style="padding:32px 40px;background:#ffffff">
+
+        <div style="font:700 11px Oswald;letter-spacing:.1em;color:#3f7ca0;margin-bottom:14px">COLOUR</div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:32px">
+          <div><div style="height:56px;border-radius:4px;background:#3d4442;border:1px solid rgba(0,0,0,.08)"></div><div style="font:600 11px Oswald;color:#3d4442;margin-top:6px">Ink</div><div style="font:10px ui-monospace,Menlo,monospace;color:#5e6b68">#3d4442</div></div>
+          <div><div style="height:56px;border-radius:4px;background:#5e6b68;border:1px solid rgba(0,0,0,.08)"></div><div style="font:600 11px Oswald;color:#3d4442;margin-top:6px">Primary</div><div style="font:10px ui-monospace,Menlo,monospace;color:#5e6b68">#5e6b68</div></div>
+          <div><div style="height:56px;border-radius:4px;background:#3f7ca0;border:1px solid rgba(0,0,0,.08)"></div><div style="font:600 11px Oswald;color:#3d4442;margin-top:6px">Accent</div><div style="font:10px ui-monospace,Menlo,monospace;color:#5e6b68">#3f7ca0</div></div>
+          <div><div style="height:56px;border-radius:4px;background:#5e6b68;border:1px solid rgba(0,0,0,.08)"></div><div style="font:600 11px Oswald;color:#3d4442;margin-top:6px">Muted</div><div style="font:10px ui-monospace,Menlo,monospace;color:#5e6b68">#5e6b68</div></div>
+          <div><div style="height:56px;border-radius:4px;background:#ffffff;border:1px solid #d3d6d5"></div><div style="font:600 11px Oswald;color:#3d4442;margin-top:6px">Surface</div><div style="font:10px ui-monospace,Menlo,monospace;color:#5e6b68">#ffffff</div></div>
+          <div><div style="height:56px;border-radius:4px;background:#e4edf2;border:1px solid rgba(0,0,0,.08)"></div><div style="font:600 11px Oswald;color:#3d4442;margin-top:6px">Tint</div><div style="font:10px ui-monospace,Menlo,monospace;color:#5e6b68">#e4edf2</div></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:40px">
+
+          <div>
+            <div style="font:700 11px Oswald;letter-spacing:.1em;color:#3f7ca0;margin-bottom:14px">TYPE</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:26px">
+              <div style="display:flex;align-items:baseline;gap:14px"><div style="font:700 32px Oswald;color:#3d4442">Aa</div><div style="font:11px system-ui,sans-serif;color:#5e6b68">Oswald 700 · headlines 64/56/38/32/24/21px</div></div>
+              <div style="display:flex;align-items:baseline;gap:14px"><div style="font:600 18px Oswald;color:#3d4442">Aa</div><div style="font:11px system-ui,sans-serif;color:#5e6b68">Oswald 600 · nav/labels 14/13/12/11px, letter-spacing .03–.11em</div></div>
+              <div style="display:flex;align-items:baseline;gap:14px"><div style="font:18px Lora,Georgia,serif;color:#3d4442">Aa</div><div style="font:11px system-ui,sans-serif;color:#5e6b68">Lora · body/lyrics 18/17/16/15/14/13px, line-height 1.6–2.1</div></div>
+              <div style="display:flex;align-items:baseline;gap:14px"><div style="font:11px system-ui,sans-serif;color:#3d4442">Aa</div><div style="font:11px system-ui,sans-serif;color:#5e6b68">System-ui · meta/dates/UI chrome 10–13px</div></div>
+            </div>
+
+            <div style="font:700 11px Oswald;letter-spacing:.1em;color:#3f7ca0;margin-bottom:14px">SPACING SCALE (px)</div>
+            <div style="display:flex;align-items:flex-end;gap:8px;margin-bottom:8px">
+              <div style="text-align:center"><div style="width:18px;height:4px;background:#3f7ca0;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5e6b68;margin-top:4px">4</div></div><div style="text-align:center"><div style="width:18px;height:8px;background:#3f7ca0;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5e6b68;margin-top:4px">8</div></div><div style="text-align:center"><div style="width:18px;height:12px;background:#3f7ca0;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5e6b68;margin-top:4px">12</div></div><div style="text-align:center"><div style="width:18px;height:16px;background:#3f7ca0;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5e6b68;margin-top:4px">16</div></div><div style="text-align:center"><div style="width:18px;height:20px;background:#3f7ca0;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5e6b68;margin-top:4px">20</div></div><div style="text-align:center"><div style="width:18px;height:24px;background:#3f7ca0;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5e6b68;margin-top:4px">24</div></div><div style="text-align:center"><div style="width:18px;height:28px;background:#3f7ca0;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5e6b68;margin-top:4px">28</div></div><div style="text-align:center"><div style="width:18px;height:32px;background:#3f7ca0;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5e6b68;margin-top:4px">32</div></div><div style="text-align:center"><div style="width:18px;height:40px;background:#3f7ca0;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5e6b68;margin-top:4px">40</div></div><div style="text-align:center"><div style="width:18px;height:44px;background:#3f7ca0;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5e6b68;margin-top:4px">44</div></div><div style="text-align:center"><div style="width:18px;height:56px;background:#3f7ca0;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#5e6b68;margin-top:4px">56</div></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font:700 11px Oswald;letter-spacing:.1em;color:#3f7ca0;margin-bottom:14px">BUTTON STATES</div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:26px">
+              <div style="display:flex;align-items:center;gap:12px"><div style="font:700 12px Oswald;letter-spacing:.05em;background:#3f7ca0;color:#fff;padding:10px 20px;border-radius:3px;width:100px;text-align:center">DEFAULT</div><div style="font:11px system-ui,sans-serif;color:#5e6b68">background #3f7ca0, white text</div></div>
+              <div style="display:flex;align-items:center;gap:12px"><div style="font:700 12px Oswald;letter-spacing:.05em;background:#336585;color:#fff;padding:10px 20px;border-radius:3px;width:100px;text-align:center">HOVER</div><div style="font:11px system-ui,sans-serif;color:#5e6b68">background #336585 (darkened 12%)</div></div>
+              <div style="display:flex;align-items:center;gap:12px"><div style="font:700 12px Oswald;letter-spacing:.05em;background:#d3d6d5;color:#5e6b68;padding:10px 20px;border-radius:3px;width:100px;text-align:center;opacity:.7">DISABLED</div><div style="font:11px system-ui,sans-serif;color:#5e6b68">background #d3d6d5, 70% opacity, no pointer</div></div>
+            </div>
+
+            <div style="font:700 11px Oswald;letter-spacing:.1em;color:#3f7ca0;margin-bottom:14px">LINK STATES</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font:14px Lora,Georgia,serif">
+              <div><span style="color:#3f7ca0">Default link</span> <span style="font:11px system-ui,sans-serif;color:#5e6b68">— #3f7ca0, no underline</span></div>
+              <div><span style="color:#3f7ca0;text-decoration:underline">Hover link</span> <span style="font:11px system-ui,sans-serif;color:#5e6b68">— underline on hover</span></div>
+              <div><span style="color:#3d4442;text-decoration:underline;text-decoration-color:#5e6b68">Inline text link</span> <span style="font:11px system-ui,sans-serif;color:#5e6b68">— e.g. setlist refs</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ 1C — SURPRISE: DESERT DUSK ============================================================ -->
+  <div class="dv-opt" id="1c">
+    <div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Surprise — desert dusk (twilight indigo + rust terracotta)</div>
+    <div class="dv-odesc">Pulled from the surreal, sunset-desert side of the band's own album art and v1's warm highway header — twilight indigo for structure, a rust/terracotta accent instead of red, warm sand paper instead of white. Least literal-highway, most "band" in feel.</div>
+
+    <div class="dv-screen" style="width:1160px">
+      <div class="dv-tag">HOMEPAGE · DESKTOP · 1160px</div>
+      <div style="background:#fffdf9">
+        <div style="height:48vh;min-height:345px;position:relative;overflow:hidden">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1c-hero" shape="rect" placeholder="Drop a desert-highway hero photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-lio-voo-262755153-12882656.jpg"></x-import>
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,22,26,.68) 0%,rgba(30,22,26,.12) 24%,rgba(30,22,26,.24) 76%,rgba(30,22,26,.72) 100%);pointer-events:none"></div>
+          <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:24px 40px;pointer-events:none">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:38px;height:42px;border:2.5px solid #fff;border-radius:7px 7px 17px 17px;display:flex;align-items:center;justify-content:center;font:700 17px Oswald;color:#fff;flex:none">8</div>
+              <div>
+                <div style="color:#fff;font:700 21px Oswald;letter-spacing:.02em;text-shadow:0 1px 5px rgba(0,0,0,.5)">INTERSTATE-8</div>
+                <div style="color:#f2ece0;font:11px system-ui,sans-serif;letter-spacing:.04em;text-shadow:0 1px 4px rgba(0,0,0,.5)">A MODEST MOUSE FAN COLLABORATIVE</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:30px;font:600 14px Oswald;letter-spacing:.04em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5)">
+              <span>HOME</span><span>TOUR</span><span style="border-bottom:2px solid #d9814f;padding-bottom:3px">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+            </div>
+          </div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+            <div style="font:700 48px Oswald;color:#fff;letter-spacing:.02em;text-shadow:0 3px 14px rgba(0,0,0,.5)">TAKE AN EXIT</div>
+          </div>
+        </div>
+
+        <div style="max-width:980px;margin:0 auto;padding:36px 32px 8px">
+          <div style="font:700 24px Oswald;color:#363467;margin-bottom:28px;text-align:center;letter-spacing:.01em">Latest News</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+            <div>
+              <div style="margin-bottom:22px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1c-news1" shape="rect" radius="2" placeholder="News photo" style="width:100%;aspect-ratio:4/3" src="uploads/video.jpg"></x-import></div>
+              <div style="font:700 17px Oswald;color:#2c2a2f;margin-bottom:5px">Setlist archive hits 1,000 shows indexed</div>
+              <div style="font:11px system-ui,sans-serif;color:#9a9084;margin-bottom:9px;letter-spacing:.03em">2026.07.09</div>
+              <div style="font:14px/1.6 Lora,Georgia,serif;color:#5b5548">A milestone for the tour-history project — every show from 1994 on, now searchable by song.</div>
+            </div>
+            <div>
+              <div style="margin-bottom:22px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1c-news2" shape="rect" radius="2" placeholder="News photo" style="width:100%;aspect-ratio:4/3" src="uploads/isaac_brock_2015_1.jpg"></x-import></div>
+              <div style="font:700 17px Oswald;color:#2c2a2f;margin-bottom:5px">Lyrics pass complete for the Ugly Casanova catalogue</div>
+              <div style="font:11px system-ui,sans-serif;color:#9a9084;margin-bottom:9px;letter-spacing:.03em">2026.07.06</div>
+              <div style="font:14px/1.6 Lora,Georgia,serif;color:#5b5548">Cross-checked against three live recordings and the original liner notes.</div>
+            </div>
+            <div>
+              <div style="margin-bottom:22px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1c-news3" shape="rect" radius="2" placeholder="News photo" style="width:100%;aspect-ratio:4/3" src="uploads/mm_of_course_we_know.jpg"></x-import></div>
+              <div style="font:700 17px Oswald;color:#2c2a2f;margin-bottom:5px">Site rebuild: what's changing under the hood</div>
+              <div style="font:11px system-ui,sans-serif;color:#9a9084;margin-bottom:9px;letter-spacing:.03em">2026.07.03</div>
+              <div style="font:14px/1.6 Lora,Georgia,serif;color:#5b5548">Faster pages, a better editor, the same archive you've relied on since 2006.</div>
+            </div>
+          </div>
+          <div style="text-align:center;padding:26px 0 4px;font:600 13px Oswald;letter-spacing:.06em;color:#c1502e">SHOW MORE →</div>
+        </div>
+
+        <div style="max-width:980px;margin:0 auto;padding:28px 32px 8px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+          <div>
+            <div style="font:700 12px Oswald;letter-spacing:.09em;color:#c1502e;margin-bottom:12px">UPCOMING TOUR DATES</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630">2026.08.12 — Portland, OR<br>2026.08.14 — Seattle, WA<br>2026.08.17 — Vancouver, BC</div>
+            <div style="font:600 11px Oswald;letter-spacing:.06em;color:#c1502e;margin-top:10px">MORE →</div>
+          </div>
+          <div>
+            <div style="font:700 12px Oswald;letter-spacing:.09em;color:#c1502e;margin-bottom:12px">RECENTLY PASSED</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630">2026.07.02 — Boise, ID <u>setlist</u><br>2026.06.29 — Salt Lake City <u>setlist</u></div>
+            <div style="font:600 11px Oswald;letter-spacing:.06em;color:#c1502e;margin-top:10px">MORE →</div>
+          </div>
+          <div>
+            <div style="font:700 12px Oswald;letter-spacing:.09em;color:#c1502e;margin-bottom:12px">THIS WEEK IN HISTORY</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630">2004.07.11 — live debut<br>1997.07.11 — album released</div>
+            <div style="font:600 11px Oswald;letter-spacing:.06em;color:#c1502e;margin-top:10px">MORE →</div>
+          </div>
+        </div>
+
+        <div style="max-width:980px;margin:24px auto 0;border-top:1px solid #e3d9c8"></div>
+
+        <div style="max-width:980px;margin:0 auto;padding:36px 32px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px">
+            <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
+              <div style="font:700 11px Oswald;letter-spacing:.09em;color:#c1502e;margin-bottom:16px">SONG SPOTLIGHT</div>
+              <div style="margin-bottom:22px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1c-spotlight" shape="rect" radius="2" placeholder="Single art" style="width:168px;height:168px;margin:0 auto" src="uploads/eahnpt_cover.jpg"></x-import></div>
+              <div style="font:700 19px Oswald;color:#2c2a2f">"Ocean Breathes Salty"</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
+              <div style="font:700 11px Oswald;letter-spacing:.09em;color:#c1502e;margin-bottom:16px">FROM THE DISCOGRAPHY</div>
+              <div style="margin-bottom:22px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1c-album" shape="rect" radius="2" placeholder="Album art" style="width:168px;height:168px;margin:0 auto" src="uploads/tmaa_cover.jpg"></x-import></div>
+              <div style="font:700 19px Oswald;color:#2c2a2f">The Moon &amp; Antarctica</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#efe6d6;border-top:1px solid #e3d9c8;padding:40px 32px;text-align:center">
+          <div style="font:700 20px Oswald;color:#363467;margin-bottom:10px">Contribute to the Archive</div>
+          <div style="font:14px/1.6 Lora,Georgia,serif;color:#5b5548;margin-bottom:18px">Have a setlist, a correction, or a tip? Help keep the record straight.</div>
+          <div style="display:inline-block;font:700 13px Oswald;letter-spacing:.06em;background:#c1502e;color:#fff;padding:13px 26px;border-radius:3px">SUBMIT IT →</div>
+        </div>
+
+        <div style="text-align:center;padding:20px 0 10px;border-top:1px solid #e3d9c8">
+          <div style="display:flex;justify-content:center;gap:22px;font:600 11px Oswald;letter-spacing:.05em;color:#7d7566;margin-bottom:12px">
+            <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY POLICY</span>
+          </div>
+          <div style="font:12px system-ui,sans-serif;color:#9a9084">© Interstate-8 · a Modest Mouse fan collaborative</div>
+          <div style="font:11px system-ui,sans-serif;color:#b5ab9b;margin-top:5px;padding:0 20px">Interstate-8.com is in no way associated with or authorized by Modest Mouse or any of their agents.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOMEPAGE MOBILE -->
+    <div class="dv-screen" style="width:375px">
+      <div class="dv-tag">HOMEPAGE · MOBILE · 375px</div>
+      <div style="background:#fffdf9">
+        <div style="height:255px;position:relative;overflow:hidden">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1c-hero-m" shape="rect" placeholder="Desert highway hero" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-lio-voo-262755153-12882656.jpg"></x-import>
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,22,26,.68) 0%,rgba(30,22,26,.12) 24%,rgba(30,22,26,.24) 76%,rgba(30,22,26,.72) 100%);pointer-events:none"></div>
+          <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;pointer-events:none">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:26px;height:30px;border:2px solid #fff;border-radius:5px 5px 12px 12px;display:flex;align-items:center;justify-content:center;font:700 12px Oswald;color:#fff">8</div>
+              <div style="color:#fff;font:700 15px Oswald;text-shadow:0 1px 4px rgba(0,0,0,.5)">INTERSTATE-8</div>
+            </div>
+            <div style="font:700 20px Oswald;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5)">☰</div>
+          </div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+            <div style="font:700 26px Oswald;color:#fff;letter-spacing:.02em;text-shadow:0 2px 10px rgba(0,0,0,.5)">TAKE AN EXIT</div>
+          </div>
+        </div>
+        <div style="padding:32px 20px 4px">
+          <div style="font:700 18px Oswald;color:#363467;margin-bottom:18px;text-align:center">Latest News</div>
+          <div style="display:flex;flex-direction:column;gap:24px">
+            <div>
+              <div style="margin-bottom:16px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1c-news1-m" shape="rect" radius="2" placeholder="News photo" style="width:100%;aspect-ratio:4/3" src="uploads/video.jpg"></x-import></div>
+              <div style="font:700 15px Oswald;color:#2c2a2f;margin-bottom:4px">Setlist archive hits 1,000 shows indexed</div>
+              <div style="font:10px system-ui,sans-serif;color:#9a9084;margin-bottom:6px">2026.07.09</div>
+              <div style="font:13px Lora,Georgia,serif;color:#5b5548">A milestone for the tour-history project.</div>
+            </div>
+            <div>
+              <div style="margin-bottom:16px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1c-news2-m" shape="rect" radius="2" placeholder="News photo" style="width:100%;aspect-ratio:4/3" src="uploads/isaac_brock_2015_1.jpg"></x-import></div>
+              <div style="font:700 15px Oswald;color:#2c2a2f;margin-bottom:4px">Lyrics pass complete: Ugly Casanova</div>
+              <div style="font:10px system-ui,sans-serif;color:#9a9084;margin-bottom:6px">2026.07.06</div>
+              <div style="font:13px Lora,Georgia,serif;color:#5b5548">Cross-checked against liner notes.</div>
+            </div>
+          </div>
+          <div style="text-align:center;padding:20px 0 4px;font:600 12px Oswald;letter-spacing:.06em;color:#c1502e">SHOW MORE →</div>
+        </div>
+        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:20px">
+          <div><div style="font:700 11px Oswald;letter-spacing:.09em;color:#c1502e;margin-bottom:8px">UPCOMING TOUR</div><div style="font:13px/1.9 Lora,Georgia,serif;color:#3a3630">2026.08.12 — Portland<br>2026.08.14 — Seattle</div></div>
+          <div><div style="font:700 11px Oswald;letter-spacing:.09em;color:#c1502e;margin-bottom:8px">RECENTLY PASSED</div><div style="font:13px/1.9 Lora,Georgia,serif;color:#3a3630">2026.07.02 — Boise <u>setlist</u></div></div>
+        </div>
+        <div style="border-top:1px solid #e3d9c8;padding:22px 20px">
+          <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
+            <div style="font:700 11px Oswald;letter-spacing:.07em;color:#c1502e;margin-bottom:12px">SONG SPOTLIGHT</div>
+            <div style="margin-bottom:18px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1c-spotlight-m" shape="rect" radius="2" placeholder="Single art" style="width:136px;height:136px;margin:0 auto" src="uploads/eahnpt_cover.jpg"></x-import></div>
+            <div style="font:700 16px Oswald;color:#2c2a2f">"Ocean Breathes Salty"</div>
+          </div>
+        </div>
+        <div style="background:#efe6d6;border-top:1px solid #e3d9c8;padding:28px 20px;text-align:center">
+          <div style="font:700 16px Oswald;color:#363467;margin-bottom:9px">Contribute to the Archive</div>
+          <div style="font:13px/1.5 Lora,Georgia,serif;color:#5b5548;margin-bottom:16px">Have a setlist, a correction, or a tip?</div>
+          <div style="display:inline-block;font:700 12px Oswald;letter-spacing:.06em;background:#c1502e;color:#fff;padding:11px 22px;border-radius:3px">SUBMIT IT →</div>
+        </div>
+        <div style="text-align:center;padding:16px 18px 10px;border-top:1px solid #e3d9c8">
+          <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px 14px;font:600 10px Oswald;letter-spacing:.04em;color:#7d7566;margin-bottom:9px">
+            <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY</span>
+          </div>
+          <div style="font:11px system-ui,sans-serif;color:#9a9084">© Interstate-8 · fan collaborative</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SONGS LANDING DESKTOP -->
+    <div class="dv-screen" style="width:1160px">
+      <div class="dv-tag">SONGS LANDING · DESKTOP · 1160px</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 36px;border-bottom:1px solid #e3d9c8;background:#fffdf9;box-shadow:0 2px 8px rgba(0,0,0,.05)">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:38px;height:42px;background:#fff;border:2.5px solid #c1502e;border-radius:7px 7px 17px 17px;display:flex;align-items:center;justify-content:center;font:700 17px Oswald;color:#363467">8</div>
+          <div style="color:#2c2a2f;font:700 21px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+        </div>
+        <div style="display:flex;gap:30px;font:600 14px Oswald;letter-spacing:.04em;color:#454042">
+          <span>HOME</span><span>TOUR DATES</span><span style="border-bottom:2px solid #c1502e;padding-bottom:3px;color:#c1502e">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+        </div>
+      </div>
+      <div style="height:140px;position:relative;overflow:hidden">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1c-songs-hero" shape="rect" placeholder="Highway band photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-sebastian-palomino-933481-1955134.jpg"></x-import>
+        <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(30,22,26,.8),rgba(30,22,26,.28))"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;padding:20px 40px">
+          <h2 style="font:700 32px Oswald;color:#fff;margin:0;text-shadow:0 1px 4px rgba(0,0,0,.4)">Songs</h2>
+        </div>
+      </div>
+      <div style="padding:28px 40px;background:#fffdf9">
+        <div style="text-align:right;margin-bottom:16px"><span style="font:13px system-ui,sans-serif;color:#7d7566">412 results</span></div>
+        <div style="display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;background:#fffdf9;border:1px solid #ded2bc;border-radius:5px;padding:14px 18px;margin-bottom:18px">
+          <div><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#7d7566;margin-bottom:5px">TYPE</label><select style="font:13px system-ui,sans-serif;padding:6px 9px;border:1px solid #c1502e;border-radius:3px;color:#2c2a2f"><option>All</option><option selected>Modest Mouse</option><option>Ugly Casanova</option><option>Side projects</option><option>Covers</option></select></div>
+          <div><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#7d7566;margin-bottom:5px">ALTERNATE TITLES</label><div style="display:flex;border:1px solid #c1502e;border-radius:3px;overflow:hidden;font:13px system-ui,sans-serif"><div style="padding:6px 14px;background:#c1502e;color:#fff;font-weight:600">Show</div><div style="padding:6px 14px;color:#7d7566">Hide</div></div></div>
+          <div style="opacity:.5"><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#7d7566;margin-bottom:5px">RELEASED</label><select disabled style="font:13px system-ui,sans-serif;padding:6px 9px;border:1px solid #d8cdb8;border-radius:3px;background:#f0e9db;color:#9a9084"><option>Coming soon</option></select></div>
+          <div style="opacity:.5"><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#7d7566;margin-bottom:5px">PLAYED LIVE</label><select disabled style="font:13px system-ui,sans-serif;padding:6px 9px;border:1px solid #d8cdb8;border-radius:3px;background:#f0e9db;color:#9a9084"><option>Coming soon</option></select></div>
+          <div style="margin-left:auto"><div style="font:600 13px Oswald;letter-spacing:.05em;background:#c1502e;color:#fff;padding:9px 20px;border-radius:3px">APPLY</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:36px 1fr;gap:20px">
+          <div style="display:flex;flex-direction:column;gap:3px;font:700 12px Oswald;color:#c1502e;position:sticky;top:0">
+            <span style="padding:3px 0;color:#363467">A</span><span style="padding:3px 0">B</span><span style="padding:3px 0">C</span><span style="padding:3px 0">D</span><span style="padding:3px 0">E</span><span style="padding:3px 0">F</span><span style="padding:3px 0;color:#e3d9c8">G</span><span style="padding:3px 0">H</span><span style="padding:3px 0;color:#e3d9c8">…</span><span style="padding:3px 0">W</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 26px">
+            <div style="grid-column:1/-1;font:700 13px Oswald;letter-spacing:.06em;color:#363467;background:#efe6d6;padding:5px 12px;border-radius:2px;margin-bottom:3px">A</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630;border-bottom:1px solid #ece3d3">…But Theyre Not Singing Ghosts</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630;border-bottom:1px solid #ece3d3">A Life Of Arctic Sounds</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630;border-bottom:1px solid #ece3d3">A Manic Depressive Named Laughing Boy</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630;border-bottom:1px solid #ece3d3">A Different City</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630;border-bottom:1px solid #ece3d3">A Song</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630;border-bottom:1px solid #ece3d3">AEIOU And Sometimes Why <span style="font:9px Oswald;color:#c1502e;border:1px solid #c1502e;border-radius:8px;padding:0 5px">alt</span></div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630;border-bottom:1px solid #ece3d3">All Night Diner</div>
+            <div style="grid-column:1/-1;font:700 13px Oswald;letter-spacing:.06em;color:#363467;background:#efe6d6;padding:5px 12px;border-radius:2px;margin:10px 0 3px">B</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630;border-bottom:1px solid #ece3d3">Baby Blue Sedan</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630;border-bottom:1px solid #ece3d3">Bankrupt On Selling</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630;border-bottom:1px solid #ece3d3">Black Cadillacs</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630;border-bottom:1px solid #ece3d3">Blame It On The Tetons</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630;border-bottom:1px solid #ece3d3">Bukowski</div>
+            <div style="font:14px/2.1 Lora,Georgia,serif;color:#3a3630;border-bottom:1px solid #ece3d3">Bury Me With It</div>
+            <div style="grid-column:1/-1;font:13px Lora,Georgia,serif;color:#c1502e;padding:16px 12px 0">… 394 more songs, same ledger, through W …</div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;padding:18px 16px 10px;border-top:1px solid #e3d9c8;background:#fffdf9">
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px 14px;font:600 11px Oswald;letter-spacing:.04em;color:#7d7566;margin-bottom:9px">
+          <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY POLICY</span>
+        </div>
+        <div style="font:11px system-ui,sans-serif;color:#9a9084">© Interstate-8 · a Modest Mouse fan collaborative</div>
+      </div>
+    </div>
+
+    <!-- SONG PAGE DESKTOP -->
+    <div class="dv-screen" style="width:1040px">
+      <div class="dv-tag">SONG PAGE · DESKTOP</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 34px;border-bottom:1px solid #e3d9c8;background:#fffdf9;box-shadow:0 2px 8px rgba(0,0,0,.05)">
+        <div style="display:flex;align-items:center;gap:9px">
+          <div style="width:30px;height:34px;background:#fff;border:2.5px solid #c1502e;border-radius:6px 6px 14px 14px;display:flex;align-items:center;justify-content:center;font:700 14px Oswald;color:#363467">8</div>
+          <div style="color:#2c2a2f;font:700 18px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+        </div>
+        <div style="display:flex;gap:22px;font:600 12px Oswald;letter-spacing:.03em;color:#454042">
+          <span>HOME</span><span>TOUR DATES</span><span style="border-bottom:2px solid #c1502e;padding-bottom:3px;color:#c1502e">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+        </div>
+      </div>
+      <div style="height:190px;position:relative;overflow:hidden">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1c-song-hero" shape="rect" placeholder="Song hero photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-silveremeya-7381780.jpg"></x-import>
+        <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(30,22,26,.82),rgba(30,22,26,.24));display:flex;align-items:flex-end;padding:18px 44px 22px">
+          <h2 style="font:700 38px Oswald;color:#fff;margin:0;text-shadow:0 1px 4px rgba(0,0,0,.4)">Ocean Breathes Salty</h2>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 260px;gap:0;padding:32px 44px;background:#fffdf9">
+        <div style="padding-right:36px;border-right:2px dashed #e6c2ac">
+          <blockquote style="margin:0 0 28px;padding:14px 0 14px 22px;border-left:3px solid #c1502e;font:italic 17px/1.6 Lora,Georgia,serif;color:#4a4550">"I wrote it in about ten minutes, on a ferry, looking at the water." — Isaac Brock</blockquote>
+          <div style="font:11px Oswald;letter-spacing:.11em;color:#7d7566;margin-bottom:10px">LYRICS</div>
+          <div style="font:18px/2.05 Lora,Georgia,serif;color:#2c2a2f;margin-bottom:10px">The ocean breathes salty, well, today<br>I could hardly hear the words you were saying<br>I hear ya' but barely, this is my only chance</div>
+          <div style="font:18px/2.05 Lora,Georgia,serif;color:#2c2a2f;margin-bottom:10px">I looked at you, then looked away<br>Kept lookin' out when the day turns gray</div>
+          <div style="font:18px/2.05 Lora,Georgia,serif;color:#2c2a2f;margin-bottom:30px">And your smile was the only thing<br>That should've made my day, but it just made me sadder still</div>
+          <div style="font:11px Oswald;letter-spacing:.11em;color:#7d7566;margin-bottom:10px">NOTES</div>
+          <div style="font:15px/1.7 Lora,Georgia,serif;color:#5b5548;margin-bottom:30px">Written for a friend who died in a car accident; the b-side "Whenever You Breathe Out, I Breathe In" is its companion piece.</div>
+          <div style="font:11px Oswald;letter-spacing:.11em;color:#7d7566;margin-bottom:10px">VIDEO</div>
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="1c-song-video" shape="rect" radius="3" placeholder="Embedded video (oEmbed)" style="width:100%;aspect-ratio:16/9"></x-import>
+        </div>
+        <div style="padding-left:32px;display:flex;flex-direction:column;gap:18px">
+          <div style="font:10px Oswald;letter-spacing:.11em;color:#a89e8e;margin-bottom:-6px">MORE ABOUT THIS SONG</div>
+          <div style="border:1.5px dashed #e3d9c8;border-radius:4px;padding:16px;opacity:.65">
+            <div style="font:700 10px Oswald;letter-spacing:.07em;color:#a89e8e;margin-bottom:7px">RELEASES</div>
+            <div style="font:13px Lora,Georgia,serif;color:#a89e8e">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #e3d9c8;border-radius:4px;padding:16px;opacity:.65">
+            <div style="font:700 10px Oswald;letter-spacing:.07em;color:#a89e8e;margin-bottom:7px">LAST PLAYED LIVE</div>
+            <div style="font:13px Lora,Georgia,serif;color:#a89e8e">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #e3d9c8;border-radius:4px;padding:16px;opacity:.65">
+            <div style="font:700 10px Oswald;letter-spacing:.07em;color:#a89e8e;margin-bottom:7px">TIMES PLAYED / TOUR STATS</div>
+            <div style="font:13px Lora,Georgia,serif;color:#a89e8e">Coming soon</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:0 44px 36px;background:#fffdf9">
+        <div style="font:12px system-ui,sans-serif;color:#9a9084;margin-bottom:16px;padding-top:16px;border-top:1px solid #e3d9c8">Alternate version, side-by-side lyrics</div>
+        <div style="border:1px solid #ded2bc;border-radius:5px;overflow:hidden">
+          <div style="background:#efe6d6;padding:14px 24px"><h3 style="font:700 22px Oswald;color:#363467;margin:0">King Rat (Live Version)</h3><div style="font:13px Lora,Georgia,serif;color:#7d7566;margin-top:4px">alternate title/lyrics for → <u>King Rat</u></div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr">
+            <div style="padding:22px 26px;border-right:2px dashed #e6c2ac">
+              <div style="font:11px Oswald;letter-spacing:.11em;color:#7d7566;margin-bottom:12px">THIS VERSION</div>
+              <div style="font:16px/1.9 Lora,Georgia,serif;color:#2c2a2f">Well I'm a king rat, and you're a bucket of shit<br>You're not big enough for me<br>I just made you up to hurt myself</div>
+            </div>
+            <div style="padding:22px 26px">
+              <div style="font:11px Oswald;letter-spacing:.11em;color:#7d7566;margin-bottom:12px">NORMAL VERSION — <u>King Rat</u></div>
+              <div style="font:16px/1.9 Lora,Georgia,serif;color:#2c2a2f">Well I'm a king rat, and you're a bucket of shit<br>You're not big enough to hold what's in you<br>I just made you up to hurt myself</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;padding:18px 16px 10px;border-top:1px solid #e3d9c8;background:#fffdf9">
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px 14px;font:600 11px Oswald;letter-spacing:.04em;color:#7d7566;margin-bottom:9px">
+          <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY POLICY</span>
+        </div>
+        <div style="font:11px system-ui,sans-serif;color:#9a9084">© Interstate-8 · a Modest Mouse fan collaborative</div>
+      </div>
+    </div>
+
+    <!-- DESIGN TOKENS -->
+    <div class="dv-screen" style="width:1040px">
+      <div class="dv-tag">DESIGN TOKENS · 1C · DESERT DUSK</div>
+      <div style="padding:32px 40px;background:#fffdf9">
+
+        <div style="font:700 11px Oswald;letter-spacing:.1em;color:#c1502e;margin-bottom:14px">COLOUR</div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:32px">
+          <div><div style="height:56px;border-radius:4px;background:#2c2a2f;border:1px solid rgba(0,0,0,.08)"></div><div style="font:600 11px Oswald;color:#2c2a2f;margin-top:6px">Ink</div><div style="font:10px ui-monospace,Menlo,monospace;color:#7d7566">#2c2a2f</div></div>
+          <div><div style="height:56px;border-radius:4px;background:#363467;border:1px solid rgba(0,0,0,.08)"></div><div style="font:600 11px Oswald;color:#2c2a2f;margin-top:6px">Primary</div><div style="font:10px ui-monospace,Menlo,monospace;color:#7d7566">#363467</div></div>
+          <div><div style="height:56px;border-radius:4px;background:#c1502e;border:1px solid rgba(0,0,0,.08)"></div><div style="font:600 11px Oswald;color:#2c2a2f;margin-top:6px">Accent</div><div style="font:10px ui-monospace,Menlo,monospace;color:#7d7566">#c1502e</div></div>
+          <div><div style="height:56px;border-radius:4px;background:#7d7566;border:1px solid rgba(0,0,0,.08)"></div><div style="font:600 11px Oswald;color:#2c2a2f;margin-top:6px">Muted</div><div style="font:10px ui-monospace,Menlo,monospace;color:#7d7566">#7d7566</div></div>
+          <div><div style="height:56px;border-radius:4px;background:#fffdf9;border:1px solid #e3d9c8"></div><div style="font:600 11px Oswald;color:#2c2a2f;margin-top:6px">Surface</div><div style="font:10px ui-monospace,Menlo,monospace;color:#7d7566">#fffdf9</div></div>
+          <div><div style="height:56px;border-radius:4px;background:#efe6d6;border:1px solid rgba(0,0,0,.08)"></div><div style="font:600 11px Oswald;color:#2c2a2f;margin-top:6px">Tint</div><div style="font:10px ui-monospace,Menlo,monospace;color:#7d7566">#efe6d6</div></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:40px">
+
+          <div>
+            <div style="font:700 11px Oswald;letter-spacing:.1em;color:#c1502e;margin-bottom:14px">TYPE</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:26px">
+              <div style="display:flex;align-items:baseline;gap:14px"><div style="font:700 32px Oswald;color:#2c2a2f">Aa</div><div style="font:11px system-ui,sans-serif;color:#7d7566">Oswald 700 · headlines 64/56/38/32/24/21px</div></div>
+              <div style="display:flex;align-items:baseline;gap:14px"><div style="font:600 18px Oswald;color:#2c2a2f">Aa</div><div style="font:11px system-ui,sans-serif;color:#7d7566">Oswald 600 · nav/labels 14/13/12/11px, letter-spacing .03–.11em</div></div>
+              <div style="display:flex;align-items:baseline;gap:14px"><div style="font:18px Lora,Georgia,serif;color:#2c2a2f">Aa</div><div style="font:11px system-ui,sans-serif;color:#7d7566">Lora · body/lyrics 18/17/16/15/14/13px, line-height 1.6–2.1</div></div>
+              <div style="display:flex;align-items:baseline;gap:14px"><div style="font:11px system-ui,sans-serif;color:#2c2a2f">Aa</div><div style="font:11px system-ui,sans-serif;color:#7d7566">System-ui · meta/dates/UI chrome 10–13px</div></div>
+            </div>
+
+            <div style="font:700 11px Oswald;letter-spacing:.1em;color:#c1502e;margin-bottom:14px">SPACING SCALE (px)</div>
+            <div style="display:flex;align-items:flex-end;gap:8px;margin-bottom:8px">
+              <div style="text-align:center"><div style="width:18px;height:4px;background:#c1502e;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#7d7566;margin-top:4px">4</div></div><div style="text-align:center"><div style="width:18px;height:8px;background:#c1502e;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#7d7566;margin-top:4px">8</div></div><div style="text-align:center"><div style="width:18px;height:12px;background:#c1502e;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#7d7566;margin-top:4px">12</div></div><div style="text-align:center"><div style="width:18px;height:16px;background:#c1502e;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#7d7566;margin-top:4px">16</div></div><div style="text-align:center"><div style="width:18px;height:20px;background:#c1502e;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#7d7566;margin-top:4px">20</div></div><div style="text-align:center"><div style="width:18px;height:24px;background:#c1502e;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#7d7566;margin-top:4px">24</div></div><div style="text-align:center"><div style="width:18px;height:28px;background:#c1502e;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#7d7566;margin-top:4px">28</div></div><div style="text-align:center"><div style="width:18px;height:32px;background:#c1502e;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#7d7566;margin-top:4px">32</div></div><div style="text-align:center"><div style="width:18px;height:40px;background:#c1502e;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#7d7566;margin-top:4px">40</div></div><div style="text-align:center"><div style="width:18px;height:44px;background:#c1502e;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#7d7566;margin-top:4px">44</div></div><div style="text-align:center"><div style="width:18px;height:56px;background:#c1502e;border-radius:2px 2px 0 0;opacity:.55"></div><div style="font:9px ui-monospace,Menlo,monospace;color:#7d7566;margin-top:4px">56</div></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font:700 11px Oswald;letter-spacing:.1em;color:#c1502e;margin-bottom:14px">BUTTON STATES</div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:26px">
+              <div style="display:flex;align-items:center;gap:12px"><div style="font:700 12px Oswald;letter-spacing:.05em;background:#c1502e;color:#fff;padding:10px 20px;border-radius:3px;width:100px;text-align:center">DEFAULT</div><div style="font:11px system-ui,sans-serif;color:#7d7566">background #c1502e, white text</div></div>
+              <div style="display:flex;align-items:center;gap:12px"><div style="font:700 12px Oswald;letter-spacing:.05em;background:#9e3f24;color:#fff;padding:10px 20px;border-radius:3px;width:100px;text-align:center">HOVER</div><div style="font:11px system-ui,sans-serif;color:#7d7566">background #9e3f24 (darkened 12%)</div></div>
+              <div style="display:flex;align-items:center;gap:12px"><div style="font:700 12px Oswald;letter-spacing:.05em;background:#e3d9c8;color:#7d7566;padding:10px 20px;border-radius:3px;width:100px;text-align:center;opacity:.7">DISABLED</div><div style="font:11px system-ui,sans-serif;color:#7d7566">background #e3d9c8, 70% opacity, no pointer</div></div>
+            </div>
+
+            <div style="font:700 11px Oswald;letter-spacing:.1em;color:#c1502e;margin-bottom:14px">LINK STATES</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font:14px Lora,Georgia,serif">
+              <div><span style="color:#c1502e">Default link</span> <span style="font:11px system-ui,sans-serif;color:#7d7566">— #c1502e, no underline</span></div>
+              <div><span style="color:#c1502e;text-decoration:underline">Hover link</span> <span style="font:11px system-ui,sans-serif;color:#7d7566">— underline on hover</span></div>
+              <div><span style="color:#2c2a2f;text-decoration:underline;text-decoration-color:#7d7566">Inline text link</span> <span style="font:11px system-ui,sans-serif;color:#7d7566">— e.g. setlist refs</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  </div>
+
+  <p class="dv-next">Try next: "make <a class="dv-oid" href="#1b">1b</a> the direction, apply to songs + song page" · "warm up <a class="dv-oid" href="#1a">1a</a>'s whites" · "push <a class="dv-oid" href="#1c">1c</a> darker/moodier"</p>
+</section>
+
+</x-dc>
+</body>
+</html>
