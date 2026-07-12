@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Milestone plan and progress tracker |
 | **Repository location** | `spec/milestone-plan.md` |
-| **Last updated** | 2026-07-11 (Milestone 7 (Ticket generation) in progress — grouping under review before ticket files are written) |
+| **Last updated** | 2026-07-11 (Milestone 7 (Ticket generation) signed off — spec phase complete; Milestone 8 (Scaffolding) is next) |
 
 This document is the single source of truth for **where the project is**. It is extracted from the
 project brief so the brief stays stable after approval while this tracker is updated as each milestone
@@ -17,13 +17,14 @@ together, commit by commit.
 
 ## Current position
 
-Version `5.0.x-dev` (v5 first release, delivered in vertical slices) is under way. Milestones 1–6 are
-signed off and binding. **Milestone 7 (Ticket generation) is now in progress:** deriving the
-`INT8-NNN` tickets + `BOARD.md` from the whole spec, in dependency order (scaffolding, then the Songs
-slice: content-model → migration → services → theme). The **grouping is under review with the
-operator** before the ticket files are written; config/entity tickets are **site-building** (operator
-implements in the Drupal UI + exports config; Claude verifies against the spec). **Next action:**
-agree the grouping, write the tickets + `BOARD.md`, then `sfk-signoff`.
+Version `5.0.x-dev` (v5 first release, delivered in vertical slices). **The authoring phase is
+complete** — Milestones 1–7 are signed off and binding: brief, requirements, architecture + content
+model, wireframes, design system, test strategy, and the ticket queue (`spec/tickets/` — 4 epics + 21
+tickets, `BOARD.md` in dependency order, full FR/NFR traceability). **Next action:** run
+`sfk-next-milestone` to work **Milestone 8 (Scaffolding)** — the first **Code** milestone: initialise
+the repo/DDEV/Drupal, wire the gate + boundary check, fill `sfk-verify` (tickets INT8-001…007). Then
+implementation proceeds ticket-by-ticket via `sfk-next-ticket` (M9). Config/entity tickets are
+**site-building** (operator builds in the Drupal UI + exports; Claude verifies).
 
 ---
 
@@ -43,7 +44,7 @@ agree the grouping, write the tickets + `BOARD.md`, then `sfk-signoff`.
 | 4 | Wireframes | `spec/wireframes/` — homepage draft (go/no-go), Songs landing, song page | Cowork | ✅ |
 | 5 | Design system | `spec/design/design-system.md` — tokens, atoms, and the molecules the slice-1 screens use (Claude Design) | Cowork | ✅ |
 | 6 | Test strategy | `spec/test-strategy/test-strategy.md` — FE test tool (Nightwatch vs Playwright) + what is tested; migration leans on the Migrate module | Cowork | ✅ |
-| 7 | Ticket generation | `spec/tickets/*.md` + `BOARD.md` index | Cowork | 🔶 |
+| 7 | Ticket generation | `spec/tickets/*.md` + `BOARD.md` index | Cowork | ✅ |
 | 8 | Repository setup & scaffolding | Drupal 11 + DDEV up, essential contrib + admin theme, theme scaffold, dependency-rule check wired in, `sfk-verify` filled for the stack | Code | ⬜ |
 | 9 | Implementation, slice by slice | working slice 1 — Songs import + Songs section pages built to the designs; tickets updated in the same commits | Code | ⬜ |
 
