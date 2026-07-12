@@ -2,7 +2,7 @@
 id: INT8-001
 title: Initialise repo + DDEV environment
 type: task
-status: todo
+status: in-review
 milestone: 8
 batch: scaffolding
 layer: repo
@@ -34,3 +34,11 @@ so Drupal can be installed (INT8-002).
 ## Tests / verification
 `tests_required: false` — **build-plumbing.** Verified by `ddev start` + `ddev composer install`
 succeeding and `ddev drush status` responding.
+
+## Notes
+2026-07-12 — Created `.ddev/config.yaml` (PHP 8.3, nginx-fpm, MariaDB 10.11, docroot `web/`),
+`.ddev/.gitignore` for generated DDEV files, `composer.json` Drupal 11 manifest (core-recommended
+^11.0 + drush ^13.0 + core-dev in require-dev; no install yet), `config/sync/` and
+`web/modules/custom/` placeholder dirs, and expanded `.gitignore` with Drupal/DDEV patterns.
+**Sanity test:** `ddev start && ddev composer install && ddev drush status` — requires DDEV
+installed on the machine first (`ddev.readthedocs.io/en/stable/install/`).

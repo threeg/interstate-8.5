@@ -45,8 +45,24 @@ coverage/
 # .pytest_cache/
 # .mypy_cache/
 
-# --- Drupal / Composer (docroot layout finalised in the scaffolding milestone) ---
+# --- Drupal / Composer ---
 /vendor/
+/drush/Commands/contrib/
+/web/core/
+/web/libraries/
+/web/modules/contrib/
+/web/themes/contrib/
+/web/profiles/contrib/
+/web/sites/*/files/
+/web/sites/*/private/
+/web/sites/*/settings.local.php
+/web/sites/*/services.local.yml
+
+# --- DDEV ---
+/.ddev/.ddev-docker-compose*.yaml
+/.ddev/.homeadditions/
+/.ddev/db_snapshots/
+/.ddev/import-db/
 
 # --- Claude Code local state (keep .claude/skills tracked; ignore local settings) ---
 .claude/settings.local.json

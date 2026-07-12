@@ -1,0 +1,5 @@
+# ddev-generated
+.ddev-docker-compose*.yaml
+.homeadditions
+db_snapshots/
+import-db/
