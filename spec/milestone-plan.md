@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Milestone plan and progress tracker |
 | **Repository location** | `spec/milestone-plan.md` |
-| **Last updated** | 2026-07-11 (Milestone 5 (Design system) in progress) |
+| **Last updated** | 2026-07-11 (Milestone 5 (Design system) signed off; Milestone 6 (Test strategy) is next) |
 
 This document is the single source of truth for **where the project is**. It is extracted from the
 project brief so the brief stays stable after approval while this tracker is updated as each milestone
@@ -17,12 +17,13 @@ together, commit by commit.
 
 ## Current position
 
-Version `5.0.x-dev` (v5 first release, delivered in vertical slices) is under way. Milestones 1–4 are
-signed off and binding (M4 go/no-go: **GO**, direction 6d). **Milestone 5 (Design system) is now in
-progress:** authoring `spec/design/design-system.md` — the token set (CSS custom properties), core
-components and their states. A **hi-fi design is being produced in Claude Design** from the 6d wires;
-its export is the source of truth for the concrete tokens/components. **Next action:** formalize the
-design system from the hi-fi export when it lands, then `sfk-signoff`.
+Version `5.0.x-dev` (v5 first release, delivered in vertical slices) is under way. Milestones 1–5 are
+signed off and binding. The design system is formalized from the Claude Design hi-fi
+(`spec/design/design-system.md` + `spec/design/tokens.css`; canonical visual
+`…/Interstate-8 1B.dc.html`), with the FE build references wired into `design-system.md` §1 and root
+`CLAUDE.md`. **Next action:** run `sfk-next-milestone` to work **Milestone 6 (Test strategy)** —
+frameworks and the definition of done (the FE test tool, Nightwatch vs Playwright, from NFR-7; the
+migration leaning on the Migrate module).
 
 ---
 
@@ -40,7 +41,7 @@ design system from the hi-fi export when it lands, then `sfk-signoff`.
 | 2 | Requirements | `spec/requirements/requirements.md` — `FR`/`NFR` for slice 1 (import, Songs section, responsive, FE tests) | Cowork | ✅ |
 | 3 | Architecture & content model | `spec/architecture/architecture.md` + `spec/architecture/content-model.md` (content types + Drupal field choices, seams), data model, dependency rule | Cowork | ✅ |
 | 4 | Wireframes | `spec/wireframes/` — homepage draft (go/no-go), Songs landing, song page | Cowork | ✅ |
-| 5 | Design system | `spec/design/design-system.md` — tokens, atoms, and the molecules the slice-1 screens use (Claude Design) | Cowork | 🔶 |
+| 5 | Design system | `spec/design/design-system.md` — tokens, atoms, and the molecules the slice-1 screens use (Claude Design) | Cowork | ✅ |
 | 6 | Test strategy | `spec/test-strategy/test-strategy.md` — FE test tool (Nightwatch vs Playwright) + what is tested; migration leans on the Migrate module | Cowork | ⬜ |
 | 7 | Ticket generation | `spec/tickets/*.md` + `BOARD.md` index | Cowork | ⬜ |
 | 8 | Repository setup & scaffolding | Drupal 11 + DDEV up, essential contrib + admin theme, theme scaffold, dependency-rule check wired in, `sfk-verify` filled for the stack | Code | ⬜ |

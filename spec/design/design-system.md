@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Design system (visual contract) |
 | **Repository location** | `spec/design/design-system.md` |
-| **Status** | Draft for review — Milestone 5 in progress |
+| **Status** | Binding specification (for UI) — Milestone 5 signed off (2026-07-11) |
 | **Depends on** | `spec/wireframes/` (direction 6d) |
 
 > **Purpose.** The visual contract the frontend binds to — the analog of `api-contract.md` for the
