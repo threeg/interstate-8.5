@@ -46,7 +46,7 @@ gaps and stays agent-legible — not merely as scaffolding.
 - `spec/architecture/architecture.md` — module layout, data model, the dependency rule, flows.
 - `spec/architecture/api-contract.md` — authoritative interface shapes; where code and contract disagree, the contract wins.
 - `spec/wireframes/` — the screens, states and navigation.
-- `spec/design/design-system.md` — tokens, components, visual states; the frontend's visual contract.
+- `spec/design/design-system.md` — tokens, components, visual states; the frontend's visual contract. Its **§1 lists exactly where to build the FE from**: the token file `spec/design/tokens.css` (import it; never hardcode hex/px) and the canonical hi-fi `spec/design/interstate-8-design-refinement/project/Interstate-8 1B.dc.html` (match it).
 - `spec/test-strategy/test-strategy.md` — frameworks, conventions, the definition of done.
 - `spec/tickets/` — the work queue; ticket workflow rules in `spec/tickets/CLAUDE.md`.
 - `.sfk/` — kit machinery (read-only): `manifest.md` (kit identity), `CHANGELOG.md`, and `templates/` (pristine sources the skills copy out). Never edit `.sfk/` by hand.

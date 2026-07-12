@@ -1,0 +1,99 @@
+/* ============================================================================
+   Interstate-8 v5 — Design tokens (the executable visual contract)
+   ----------------------------------------------------------------------------
+   Source of truth: the Claude Design hi-fi,
+     spec/design/interstate-8-design-refinement/project/Interstate-8 1B.dc.html
+   The owned theme imports THIS file; components read tokens (var(--…)), never
+   raw hex/px. Both Tailwind @theme and raw SDC component CSS read from here.
+   Contrast: every text/background pairing MUST meet WCAG 2.1 AA (NFR-1) —
+   body text ≥ 4.5:1, large text / UI ≥ 3:1.
+   ============================================================================ */
+
+:root {
+  /* --- Raw palette (muted-highway lane + teal accent) --- */
+  --i8-ink:        #2b302f; /* near-black: wordmark, news headlines, song titles */
+  --i8-slate:      #3d4442; /* dark slate: section headings, ledger rows, dark body */
+  --i8-corduroy:   #5e6b68; /* muted primary: labels, secondary text */
+  --i8-teal:       #3f7ca0; /* ACCENT: actions, active nav, section labels, links */
+  --i8-teal-hover: #336585; /* accent hover (−12%) */
+  --i8-polo:       #98b9d0; /* polo blue: shield outline, primary CTA, hero nav underline */
+  --i8-on-polo:    #1c3038; /* text on polo-blue CTA */
+  --i8-pumice:     #d3d6d5; /* borders, dividers, disabled fills */
+  --i8-tint:       #e4edf2; /* light-blue section fill (Contribute, group headers, alt-header) */
+  --i8-body:       #556361; /* muted serif body copy */
+  --i8-meta:       #6d766f; /* dates, fine print */
+  --i8-nav:        #454e4c; /* solid-header nav text */
+  --i8-surface:    #ffffff; /* content sheet */
+  --i8-canvas:     #eef0ef; /* page background outside the sheet */
+  --i8-scrim:      rgba(20, 26, 28, .70); /* hero-photo darkening gradient base */
+
+  /* --- Semantic colour aliases (use these in components) --- */
+  --color-fg:            var(--i8-ink);
+  --color-fg-slate:      var(--i8-slate);
+  --color-fg-muted:      var(--i8-corduroy);
+  --color-fg-body:       var(--i8-body);
+  --color-meta:          var(--i8-meta);
+  --color-nav:           var(--i8-nav);
+  --color-accent:        var(--i8-teal);
+  --color-accent-hover:  var(--i8-teal-hover);
+  --color-accent-alt:    var(--i8-polo);   /* the polo-blue CTA / shield */
+  --color-on-accent:     #ffffff;
+  --color-on-accent-alt: var(--i8-on-polo);
+  --color-surface:       var(--i8-surface);
+  --color-canvas:        var(--i8-canvas);
+  --color-tint:          var(--i8-tint);
+  --color-line:          var(--i8-pumice);
+  --color-disabled:      var(--i8-pumice);
+
+  /* --- Typography --- */
+  --font-display: "Oswald", system-ui, sans-serif; /* headings, nav, labels, buttons */
+  --font-body:    "Lora", Georgia, serif;          /* body, lyrics, notes, quotes */
+  --font-meta:    system-ui, -apple-system, sans-serif; /* dates, counts, chrome */
+
+  --fs-display-1: 48px; /* hero (mobile 26 · tablet 36 · desktop 48 · x-wide 54) */
+  --fs-display-2: 38px; /* song-page title */
+  --fs-h2:        32px; /* section hero titles */
+  --fs-h3:        24px; /* block headings (Latest News) */
+  --fs-h4:        21px;
+  --fs-nav:       14px;
+  --fs-label:     12px; /* Oswald 600–700, letter-spacing .06–.11em */
+  --fs-body-lg:   18px; /* lyrics */
+  --fs-body:      16px;
+  --fs-body-sm:   14px;
+  --fs-meta:      11px;
+
+  --lh-tight:   1.2;
+  --lh-body:    1.6;
+  --lh-lyrics:  1.9;  /* 1.9–2.1 for lyrics/ledger */
+
+  --ls-display: .02em;
+  --ls-nav:     .04em;
+  --ls-label:   .09em;
+
+  /* --- Spacing scale (px) --- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-9: 40px;
+
+  /* --- Radius --- */
+  --radius-sm: 2px; /* ledger group headers, small chips */
+  --radius:    3px; /* cards, controls, buttons */
+  --radius-md: 4px; /* filter bar, "coming soon" stubs */
+  --radius-shield: 7px 7px 17px 17px; /* the "8" route-shield mark */
+
+  /* --- Elevation --- */
+  --shadow-card:   0 3px 18px rgba(0, 0, 0, .10);
+  --shadow-header: 0 2px 8px rgba(0, 0, 0, .05); /* solid/scrolled header */
+  --shadow-sheet:  0 8px 28px rgba(20, 30, 32, .16); /* extra-wide content sheet */
+
+  /* --- Layout --- */
+  --content-max: 980px;   /* text content column */
+  --sheet-max:   1440px;  /* content sheet on very wide viewports */
+  --viewport-min: 320px;  /* responsive floor (NFR-2) */
+}
