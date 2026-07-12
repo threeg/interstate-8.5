@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Milestone plan and progress tracker |
 | **Repository location** | `spec/milestone-plan.md` |
-| **Last updated** | 2026-07-11 (Milestone 6 (Test strategy) in progress) |
+| **Last updated** | 2026-07-11 (Milestone 6 (Test strategy) signed off; Milestone 7 (Ticket generation) is next) |
 
 This document is the single source of truth for **where the project is**. It is extracted from the
 project brief so the brief stays stable after approval while this tracker is updated as each milestone
@@ -17,11 +17,13 @@ together, commit by commit.
 
 ## Current position
 
-Version `5.0.x-dev` (v5 first release, delivered in vertical slices) is under way. Milestones 1–5 are
-signed off and binding. **Milestone 6 (Test strategy) is now in progress:** authoring
-`spec/test-strategy/test-strategy.md` — frameworks, what is unit/integration/FE tested, and the
-definition of done for slice 1 (the FE test tool per NFR-7; migration leaning on the Migrate module).
-**Next action:** finish the test-strategy draft, then `sfk-signoff`.
+Version `5.0.x-dev` (v5 first release, delivered in vertical slices) is under way. Milestones 1–6 are
+signed off and binding. The test strategy is set: **Playwright + Axe** for the FE, migration verified
+(not re-tested), **PHPCS + PHPStan** (deprecation rules) on custom code in the default gate
+(`ddev test`); SEO / performance / Lighthouse / manual a11y audit deferred with named homes. **Next
+action:** run `sfk-next-milestone` to work **Milestone 7 (Ticket generation)** — derive the `INT8-NNN`
+tickets + `BOARD.md` from the whole spec, in dependency order. This is the **last authoring milestone**
+before scaffolding (M8) and implementation (M9).
 
 ---
 
@@ -40,7 +42,7 @@ definition of done for slice 1 (the FE test tool per NFR-7; migration leaning on
 | 3 | Architecture & content model | `spec/architecture/architecture.md` + `spec/architecture/content-model.md` (content types + Drupal field choices, seams), data model, dependency rule | Cowork | ✅ |
 | 4 | Wireframes | `spec/wireframes/` — homepage draft (go/no-go), Songs landing, song page | Cowork | ✅ |
 | 5 | Design system | `spec/design/design-system.md` — tokens, atoms, and the molecules the slice-1 screens use (Claude Design) | Cowork | ✅ |
-| 6 | Test strategy | `spec/test-strategy/test-strategy.md` — FE test tool (Nightwatch vs Playwright) + what is tested; migration leans on the Migrate module | Cowork | 🔶 |
+| 6 | Test strategy | `spec/test-strategy/test-strategy.md` — FE test tool (Nightwatch vs Playwright) + what is tested; migration leans on the Migrate module | Cowork | ✅ |
 | 7 | Ticket generation | `spec/tickets/*.md` + `BOARD.md` index | Cowork | ⬜ |
 | 8 | Repository setup & scaffolding | Drupal 11 + DDEV up, essential contrib + admin theme, theme scaffold, dependency-rule check wired in, `sfk-verify` filled for the stack | Code | ⬜ |
 | 9 | Implementation, slice by slice | working slice 1 — Songs import + Songs section pages built to the designs; tickets updated in the same commits | Code | ⬜ |

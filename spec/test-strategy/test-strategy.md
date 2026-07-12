@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Test strategy |
 | **Repository location** | `spec/test-strategy/test-strategy.md` |
-| **Status** | Draft for review — Milestone 6 in progress |
+| **Status** | Binding specification — Milestone 6 signed off (2026-07-11) |
 | **Scope** | Slice 1 (dev stack, Songs import, Songs section). Proportionate — this slice is small; lazy adoption applies to test tooling too. |
 
 > **Purpose.** Written *before* implementation so tests express the **spec**, not the code. It fixes
