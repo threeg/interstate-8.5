@@ -167,8 +167,9 @@ id**. Detailed per-entity mapping is in `content-model.md`.
 Local development is **DDEV** (nginx + PHP-FPM + MySQL). `ddev start` brings the environment up in one
 command; `ddev composer install` installs pinned PHP dependencies; `ddev launch` opens the site;
 `ddev npm run watch` runs the theme build once scaffolded. Drush runs inside DDEV (`ddev drush`). The
-default gate is `ddev exec phpunit`. Production hosting is out of scope for `5.0.x-dev` (VPS-lean,
-Pantheon late-bindable per the stack proposal).
+default gate is `ddev test` (PHPUnit + PHPCS + PHPStan on custom code + the boundary check; see
+test-strategy §2.2). Production hosting is out of scope for `5.0.x-dev` (VPS-lean, Pantheon
+late-bindable per the stack proposal).
 
 ---
 

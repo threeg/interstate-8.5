@@ -90,11 +90,14 @@ Keep this paragraph in step with `spec/architecture/architecture.md` §6.
 
 Test targets:
 
-- `ddev exec phpunit` — **the default gate**: the check that must pass on every ticket and at the
-  pre-commit hook. Kept fast and honest while the codebase is small.
-- Grows into a composite `ddev test` custom command adding **PHPCS** (Drupal coding standards) and
-  **PHPStan** (static analysis) once there is enough code to justify it (lazy adoption).
-- `ddev test-all` — everything; required at milestone completion (defined in the scaffolding milestone).
+- `ddev test` — **the default gate**: PHPUnit + **PHPCS** (`Drupal`/`DrupalPractice`) + **PHPStan**
+  (deprecation rules) + the dependency-rule boundary check. PHPCS/PHPStan are **scoped to custom code
+  only** (`web/modules/custom` + the custom theme) — **never core/contrib**. Must pass on every ticket
+  and at the pre-commit hook. (PHPStan's deprecation gate is the on-mission guard against the PHP-EOL
+  trap that ended v2.)
+- `ddev playwright` — the Playwright + Axe front-end suite (theme / song-screen tickets).
+- `ddev test-all` — everything (the default gate **+ Playwright**); required at milestone completion.
+  Exact command wiring is set in the scaffolding milestone.
 
 ## Definition of done (implementation tickets)
 
