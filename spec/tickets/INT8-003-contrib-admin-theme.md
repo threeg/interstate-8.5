@@ -2,7 +2,7 @@
 id: INT8-003
 title: Essential contrib + Gin admin theme
 type: task
-status: todo
+status: in-review
 milestone: 8
 batch: scaffolding
 layer: config
@@ -31,10 +31,19 @@ Keep contrib minimal (own-the-stack principle). Only what slice 1 needs; **no** 
 - No Search API, no Metatag, no Layout Builder enablement beyond core defaults.
 
 ## Definition of done (acceptance criteria)
-- [ ] The listed modules are enabled and pinned; Gin is the admin theme.
-- [ ] `config/sync` updated (`core.extension` etc.) and committed; `lando drush cim` is a no-op.
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] The listed modules are enabled and pinned; Gin is the admin theme.
+- [x] `config/sync` updated (`core.extension` etc.) and committed; `lando drush cim` is a no-op.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 `tests_required: false` — **config.** **Claude verifies** the exported `core.extension` matches this
 list (no extras) and pins are present in `composer.json`.
+
+## Notes
+2026-07-12 — Required all contrib via `lando composer require` (added `packages.drupal.org/8`
+repository and `minimum-stability: dev` to `composer.json` — both required for Drupal contrib,
+missing from the initial handcrafted manifest). Enabled modules via `lando drush en`; Gin theme
+enabled via `lando drush theme:enable gin` and set as admin theme via `lando drush config:set
+system.theme admin gin`. Exported 68 new config files to `config/sync/`. `lando drush cim -y`
+reports "There are no changes to import". **Sanity test:** `lando drush cim -y` → "There are no
+changes to import".
