@@ -180,7 +180,7 @@ Settled in the prior proposals; made contractual here.
 | Area | Choice | Rationale / exclusions |
 |------|--------|------------------------|
 | Platform | **Drupal 11** on PHP | Maintainable upgrade path (the v2 PHP-5 EOL trap). |
-| Local dev | **DDEV** | Over Lando; single-command environment. |
+| Local dev | **Lando** | Switched from DDEV: runs natively on Windows, no WSL/mutagen overhead, proven stable on this machine. |
 | Migration | **Migrate API**, Path A (v2 dump sole source) | Porting the v3 plugin set; external services are not a v5 source. |
 | Content editing | Core entity/field + **Gin** admin theme | Faster editing than v2. |
 | Media | **Core Media** | Nothing to install; modelling is the work (later slices). |

@@ -75,7 +75,7 @@ wired in during the scaffolding milestone.
 
 ## Stack
 
-Drupal 11 on PHP, local development via **DDEV**. Front end: an owned starterkit-generated theme with
+Drupal 11 on PHP, local development via **Lando**. Front end: an owned starterkit-generated theme with
 **SDC** as the component layer and **Tailwind v4** hand-wired without SASS (design tokens as CSS
 custom properties); Layout Builder scoped narrowly. Search via **Search API** with a database backend
 to start. Data comes in through the **Migrate API** (v2 MySQL dump as the sole source of truth).
@@ -83,20 +83,20 @@ Keep this paragraph in step with `spec/architecture/architecture.md` §6.
 
 ## Commands
 
-- `ddev start` — bring the environment up (one-time / per-session).
-- `ddev composer install` — install pinned PHP deps (one-time, online).
-- `ddev launch` — open the running site.
-- `ddev npm run watch` — theme dev mode (Tailwind rebuild + reload) once the theme is scaffolded.
+- `lando start` — bring the environment up (one-time / per-session).
+- `lando composer install` — install pinned PHP deps (one-time, online).
+- `lando drush uli` — open the running site (generates a one-time login URL).
+- `lando npm run watch` — theme dev mode (Tailwind rebuild + reload) once the theme is scaffolded.
 
 Test targets:
 
-- `ddev test` — **the default gate**: PHPUnit + **PHPCS** (`Drupal`/`DrupalPractice`) + **PHPStan**
+- `lando test` — **the default gate**: PHPUnit + **PHPCS** (`Drupal`/`DrupalPractice`) + **PHPStan**
   (deprecation rules) + the dependency-rule boundary check. PHPCS/PHPStan are **scoped to custom code
   only** (`web/modules/custom` + the custom theme) — **never core/contrib**. Must pass on every ticket
   and at the pre-commit hook. (PHPStan's deprecation gate is the on-mission guard against the PHP-EOL
   trap that ended v2.)
-- `ddev playwright` — the Playwright + Axe front-end suite (theme / song-screen tickets).
-- `ddev test-all` — everything (the default gate **+ Playwright**); required at milestone completion.
+- `lando playwright` — the Playwright + Axe front-end suite (theme / song-screen tickets).
+- `lando test-all` — everything (the default gate **+ Playwright**); required at milestone completion.
   Exact command wiring is set in the scaffolding milestone.
 
 ## Definition of done (implementation tickets)

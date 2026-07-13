@@ -856,9 +856,9 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 # $settings['migrate_file_public_path'] = '';
 # $settings['migrate_file_private_path'] = '';
 
-// Automatically generated include for settings managed by ddev.
-if (getenv('IS_DDEV_PROJECT') == 'true' && file_exists(__DIR__ . '/settings.ddev.php')) {
-  include __DIR__ . '/settings.ddev.php';
+// Lando database connection.
+if (getenv('LANDO') === 'ON' && file_exists(__DIR__ . '/settings.lando.php')) {
+  include __DIR__ . '/settings.lando.php';
 }
 
 /**
