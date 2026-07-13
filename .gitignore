@@ -56,6 +56,7 @@ coverage/
 /web/sites/*/files/
 /web/sites/*/private/
 /web/sites/*/settings.local.php
+/web/sites/*/settings.ddev.php
 /web/sites/*/services.local.yml
 
 # --- DDEV ---
@@ -66,3 +67,5 @@ coverage/
 
 # --- Claude Code local state (keep .claude/skills tracked; ignore local settings) ---
 .claude/settings.local.json
+/.editorconfig
+/.gitattributes

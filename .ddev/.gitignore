@@ -3,3 +3,5 @@
 .homeadditions
 db_snapshots/
 import-db/
+.dbimageBuild/
+.webimageBuild/
