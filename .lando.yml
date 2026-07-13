@@ -7,3 +7,12 @@ config:
   drush: '*'
   composer_version: '2'
   via: nginx
+
+services:
+  legacy:
+    type: mariadb:10.11
+    creds:
+      user: legacy
+      password: legacy
+      database: legacy
+

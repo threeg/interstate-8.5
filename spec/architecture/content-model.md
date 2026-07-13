@@ -127,7 +127,7 @@ Either way the content model carries **no sort field**.
 
 | v2 | v5 |
 |----|----|
-| `I8_Songs` row (active) | `song` node, keyed on `PK_Song_ID` (FR-4) |
+| `I8_Songs` row where `Song_Active = 1` | `song` node, keyed on `PK_Song_ID` (FR-4) |
 | `PK_Song_ID` | `field_legacy_id` (permanent; join-repair + redirects) |
 | `Song_Name` | `title` |
 | `Song_Lyrics` / `_Notes` / `_Quotes` | `field_lyrics` / `field_notes` / `field_quotes` (Restricted HTML, FR-21 cleanup) |
@@ -136,6 +136,7 @@ Either way the content model carries **no sort field**.
 | `FK_Song_ID` | `field_parent_song` |
 | `Song_LyricsSameAsNormal` | `field_lyrics_same_as_parent` |
 | `Song_Live` | `field_exclude_from_list` |
+| `Song_Active` | migration filter only (`WHERE Song_Active = 1`); all 492 dump rows are 1, so no rows are excluded today, but the filter is correct practice |
 | `Song_Download` | — (dropped; defunct iTunes referral) |
 | `I8_SongType` row | `song_type` term (weight ← `SongType_Order`) |
 

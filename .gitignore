@@ -63,6 +63,9 @@ coverage/
 # --- Lando ---
 /.lando.local.yml
 
+# --- Legacy v2 data (not committed — large; sourced from the v4 repo) ---
+/legacy/
+
 # --- Claude Code local state (keep .claude/skills tracked; ignore local settings) ---
 .claude/settings.local.json
 /.editorconfig

@@ -2,7 +2,7 @@
 id: INT8-004
 title: Mount the v2 MySQL dump as a migration source
 type: task
-status: todo
+status: in-review
 milestone: 8
 batch: scaffolding
 layer: tooling
@@ -27,10 +27,19 @@ Path A: the v2 MySQL dump is the sole migration source. A copy is preserved in t
 - Keep credentials in `settings.local.php`; the dump itself is **not** committed (large / already in the v4 repo).
 
 ## Definition of done (acceptance criteria)
-- [ ] The `legacy` DB is importable via a documented `lando` command and holds the `I8_*` tables.
-- [ ] A `lando drush` one-liner (or SQL) confirms `I8_Songs` / `I8_SongType` row counts.
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] The `legacy` DB is importable via a documented `lando` command and holds the `I8_*` tables.
+- [x] A `lando drush` one-liner (or SQL) confirms `I8_Songs` / `I8_SongType` row counts.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 `tests_required: false` — **build-plumbing.** Verified by the documented import command succeeding and
 a row-count query against `I8_Songs` returning the expected ~412 songs.
+
+## Notes
+2026-07-12 — Added `legacy` MariaDB 10.11 service to `.lando.yml`; wired `$databases['migrate']['default']`
+in `settings.lando.php` (host `legacy`, credentials `legacy/legacy/legacy`). Import command:
+`lando db-import --host legacy legacy/db/legacy.sql.zip` (handles zip natively). Actual row counts:
+492 `I8_Songs` (all `Song_Active = 1`; the ~412 estimate was off), 4 `I8_SongType` rows. Discovered
+`Song_Active` field not in spec — added to `content-model.md` §8 migration mapping as a filter
+condition (`WHERE Song_Active = 1`). The dump itself is gitignored (`/legacy/`). **Sanity test:**
+`lando ssh -s legacy -c "mysql -u legacy -plegacy legacy -e 'SELECT COUNT(*) FROM I8_Songs;'"` → 492.
