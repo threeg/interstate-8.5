@@ -38,6 +38,7 @@ node_modules/
 /web/themes/custom/*/node_modules/
 dist/
 build/
+!web/themes/custom/*/css/build/
 coverage/
 # .venv/
 # __pycache__/
