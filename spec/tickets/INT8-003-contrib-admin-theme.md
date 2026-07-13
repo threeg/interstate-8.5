@@ -2,7 +2,7 @@
 id: INT8-003
 title: Essential contrib + Gin admin theme
 type: task
-status: in-review
+status: done
 milestone: 8
 batch: scaffolding
 layer: config
