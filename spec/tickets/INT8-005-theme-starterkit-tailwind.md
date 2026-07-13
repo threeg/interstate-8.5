@@ -2,7 +2,7 @@
 id: INT8-005
 title: Owned theme from starterkit + Tailwind v4 + tokens.css
 type: task
-status: in-review
+status: done
 milestone: 8
 batch: scaffolding
 layer: theme
