@@ -23,7 +23,7 @@ navigable front page and the primary menu so nav resolves (FR-16).
 ## Site-building steps (operator) — terse
 1. Primary menu items for the intended IA (Home, Tour, Songs, Discography, Band, News); only **Home** and **Songs** resolve this slice — others may be present-but-unlinked or omitted (design shows them).
 2. Set a **minimal front page** (a simple page/route) — not the full homepage composition.
-3. `ddev drush cex -y` → commit (menu + site front page config).
+3. `lando drush cex -y` → commit (menu + site front page config).
 
 ## Technical requirements
 - Nav rendered by the header SDC (INT8-015); active-section marking works.

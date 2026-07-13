@@ -22,7 +22,7 @@ map). The legacy-URL redirects themselves are the **SEO slice** — this ticket 
 ## Site-building steps (operator) — terse
 1. Pathauto pattern for `song` nodes: **`/songs/[node:title]`**.
 2. Confirm the Songs landing lives at **`/songs`** (View path set in INT8-018).
-3. `ddev drush cex -y` → commit.
+3. `lando drush cex -y` → commit.
 
 ## Technical requirements
 - Alias pattern `/songs/[node:title]`; transliteration/dedupe on. Unknown slug → 404 (api-contract §2.2).
@@ -30,7 +30,7 @@ map). The legacy-URL redirects themselves are the **SEO slice** — this ticket 
 
 ## Definition of done (acceptance criteria)
 - [ ] Song aliases generate as `/songs/<slug>`; exported and committed.
-- [ ] `ddev drush cim` is a no-op.
+- [ ] `lando drush cim` is a no-op.
 - [ ] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification

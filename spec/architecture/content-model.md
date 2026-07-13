@@ -105,7 +105,7 @@ mechanisms, with verified status:
   own index table (so it *also* duplicates the normalised string), giving richer number/symbol sorting
   not needed at ~400 rows.
 
-**The final mechanism is chosen at the build milestone, tested against the actual D11/DDEV stack.**
+**The final mechanism is chosen at the build milestone, tested against the actual D11/Lando stack.**
 Either way the content model carries **no sort field**.
 
 ---

@@ -28,7 +28,7 @@ Own the theme (FE proposal): starterkit-generated, SDC as the component layer, T
 - SDC enabled; component directory scaffolded.
 
 ## Definition of done (acceptance criteria)
-- [ ] The owned theme is default; `ddev npm run watch`/build compiles Tailwind + tokens.
+- [ ] The owned theme is default; `lando npm run watch`/build compiles Tailwind + tokens.
 - [ ] A trivial SDC component renders using `var(--…)` tokens (proves the token pipeline).
 - [ ] `config/sync` updated (theme settings) and committed.
 - [ ] Ticket status + notes and BOARD.md row updated in the same commit.

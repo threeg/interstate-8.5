@@ -24,14 +24,14 @@ implementation safe.
 - **PHPUnit** configured for custom modules/theme (`web/modules/custom`, custom theme) — Unit/Kernel/Functional.
 - **PHPCS** with `drupal/coder` (`Drupal` + `DrupalPractice`), **scoped to custom code only**.
 - **PHPStan** with `mglaman/phpstan-drupal` + `phpstan/phpstan-deprecation-rules`, **custom code only**, modest level, deprecation rules on.
-- **Playwright** + **@axe-core/playwright** project (against the DDEV URL), browser matrix per NFR-8.
+- **Playwright** + **@axe-core/playwright** project (against the Lando URL), browser matrix per NFR-8.
 - **Dependency-rule boundary check** (deptrac or a custom PHPUnit test): `content-model → services → theme`, `migration → content-model`, nothing imports `theme` (architecture §2.1, NFR-5).
-- DDEV custom commands: **`ddev test`** (PHPUnit + PHPCS + PHPStan + boundary), **`ddev playwright`**, **`ddev test-all`**.
-- **Pre-commit hook** runs `ddev test`.
+- Lando custom commands: **`lando test`** (PHPUnit + PHPCS + PHPStan + boundary), **`lando playwright`**, **`lando test-all`**.
+- **Pre-commit hook** runs `lando test`.
 
 ## Definition of done (acceptance criteria)
-- [ ] `ddev test` runs all four checks and passes on the empty skeleton (zero warnings).
-- [ ] `ddev playwright` runs (empty/smoke) green; `ddev test-all` wired.
+- [ ] `lando test` runs all four checks and passes on the empty skeleton (zero warnings).
+- [ ] `lando playwright` runs (empty/smoke) green; `lando test-all` wired.
 - [ ] The boundary check fails on a deliberate violation (proves it works), then reverted.
 - [ ] Pre-commit hook installed and documented.
 - [ ] Ticket status + notes and BOARD.md row updated in the same commit.

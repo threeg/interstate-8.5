@@ -74,7 +74,7 @@ so that I can find any song and see the whole body of work at once.
 
 ## Definition of done
 - [ ] Acceptance criteria met
-- [ ] Playwright + Axe tests added and passing in the default gate; `ddev playwright` green
+- [ ] Playwright + Axe tests added and passing in the default gate; `lando playwright` green
 - [ ] Tokens-only styling; matches `1B.dc.html`
 - [ ] View/config exported (site-building parts verified by Claude)
 - [ ] Ticket status + notes and BOARD.md row updated in the same commit

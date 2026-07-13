@@ -25,12 +25,12 @@ this consolidates the journeys, the a11y sweep, and the browser/responsive matri
 - **Axe** on the landing and song page: no serious/critical WCAG 2.1 AA violations (NFR-1).
 - **Responsive** run at **320px** and desktop (NFR-2); **browser matrix** per the Playwright project
   config (NFR-8).
-- Wire into `ddev playwright` / `ddev test-all` (milestone-completion gate).
+- Wire into `lando playwright` / `lando test-all` (milestone-completion gate).
 
 ## Definition of done (acceptance criteria)
 - [ ] The journey suite passes; Axe clean on both screens (NFR-1).
 - [ ] 320px + desktop pass (NFR-2); the configured browser matrix runs (NFR-7/NFR-8).
-- [ ] `ddev test-all` green (default gate + Playwright).
+- [ ] `lando test-all` green (default gate + Playwright).
 - [ ] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification

@@ -22,7 +22,7 @@ Maps v2 `I8_SongType`. See `content-model.md` §3.
 ## Site-building steps (operator) — terse
 1. Add vocabulary **`song_type`** ("Song type").
 2. Add terms in v2 order (preserve `SongType_Order` as weight): **Modest Mouse, Ugly Casanova, Side projects, Covers** (confirm the full set against the dump at migration).
-3. `ddev drush cex -y` → commit.
+3. `lando drush cex -y` → commit.
 
 ## Technical requirements
 - Vocabulary machine name `song_type`; term weights preserve v2 ordering.
@@ -30,7 +30,7 @@ Maps v2 `I8_SongType`. See `content-model.md` §3.
 
 ## Definition of done (acceptance criteria)
 - [ ] `song_type` vocabulary + the working term set exist and are exported.
-- [ ] Exported config matches `content-model.md` §3; `ddev drush cim` is a no-op.
+- [ ] Exported config matches `content-model.md` §3; `lando drush cim` is a no-op.
 - [ ] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification

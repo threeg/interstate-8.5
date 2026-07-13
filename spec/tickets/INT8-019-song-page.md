@@ -60,6 +60,6 @@ so that I have the song's full record in one place.
 
 ## Definition of done
 - [ ] Acceptance criteria met
-- [ ] Playwright + Axe tests added and passing; `ddev playwright` green
+- [ ] Playwright + Axe tests added and passing; `lando playwright` green
 - [ ] Tokens-only styling; matches `1B.dc.html`
 - [ ] Ticket status + notes and BOARD.md row updated in the same commit

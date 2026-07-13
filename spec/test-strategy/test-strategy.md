@@ -43,13 +43,13 @@
 
 | Command | What it runs | When |
 |---------|-------------|------|
-| `ddev test` | **the default gate** — PHPUnit (Unit/Kernel/Functional) + **PHPCS** + **PHPStan** (both **custom code only**) + the boundary check | every ticket |
-| `ddev playwright` | Playwright FE + Axe suite (against the DDEV URL) | tickets touching the theme / song screens |
-| `ddev test-all` | everything (the default gate **+ Playwright**) | milestone completion |
+| `lando test` | **the default gate** — PHPUnit (Unit/Kernel/Functional) + **PHPCS** + **PHPStan** (both **custom code only**) + the boundary check | every ticket |
+| `lando playwright` | Playwright FE + Axe suite (against the Lando URL) | tickets touching the theme / song screens |
+| `lando test-all` | everything (the default gate **+ Playwright**) | milestone completion |
 
-> Exact command wiring — how `ddev test` invokes PHPCS/PHPStan **scoped to `web/modules/custom`** (and
-> the custom theme) rather than core/contrib, and how `ddev playwright` invokes `@playwright/test`
-> against the DDEV site — is finalized in the scaffolding milestone (M8).
+> Exact command wiring — how `lando test` invokes PHPCS/PHPStan **scoped to `web/modules/custom`** (and
+> the custom theme) rather than core/contrib, and how `lando playwright` invokes `@playwright/test`
+> against the Lando site — is finalized in the scaffolding milestone (M8).
 
 ### 2.3 Coverage policy
 
@@ -105,7 +105,7 @@ no custom API in slice 1. Pathauto aliases and the 404 for an unknown slug are a
 
 ## 7. Front-end testing (Playwright + Axe)
 
-The core of slice-1 testing. Against the DDEV site, over a seeded Songs fixture (§8):
+The core of slice-1 testing. Against the Lando site, over a seeded Songs fixture (§8):
 
 **Songs landing** (FR-6–FR-11, FR-16, FR-18, FR-19)
 - lists songs as links; **excludes** `field_exclude_from_list` (FR-6); complete list, no pagination.
@@ -153,9 +153,9 @@ the v2 dump so migration spot-checks and FE tests share one fixture.
 
 Binding checklist — kept in sync with root `CLAUDE.md` and the ticket template:
 
-- [ ] The default gate (`ddev test` — PHPUnit + PHPCS + PHPStan on custom code + boundary check) passes **with zero warnings** (PHPStan reports **no deprecated-API usage**).
+- [ ] The default gate (`lando test` — PHPUnit + PHPCS + PHPStan on custom code + boundary check) passes **with zero warnings** (PHPStan reports **no deprecated-API usage**).
 - [ ] New/changed numbered-requirement behaviour has tests **in the same commit** (§12.2 rule).
-- [ ] The relevant heavier suite passes where the ticket says so (`ddev playwright` for theme/song-screen tickets).
+- [ ] The relevant heavier suite passes where the ticket says so (`lando playwright` for theme/song-screen tickets).
 - [ ] The dependency-rule boundary check passes (§5).
 - [ ] The ticket's `status` + `## Notes` and its `BOARD.md` row are updated in **that same commit**.
 - [ ] A completion report (summary + one-line sanity test; QA steps for UI tickets) is recorded.

@@ -28,7 +28,7 @@ Create node type **`song`** with fields (machine names per `content-model.md` §
 - `field_lyrics_same_as_parent` — Boolean.
 - `field_exclude_from_list` — Boolean (v2 `Song_Live`; hides from the landing).
 - `field_legacy_id` — Integer, **indexed** (v2 `PK_Song_ID`; cross-cutting legacy id).
-Then `ddev drush cex -y` → commit.
+Then `lando drush cex -y` → commit.
 
 ## Technical requirements
 - Matches `content-model.md` §2 exactly (names, types, cardinality, required). Title is the node title.
@@ -37,7 +37,7 @@ Then `ddev drush cex -y` → commit.
 
 ## Definition of done (acceptance criteria)
 - [ ] `song` type + all fields exist per `content-model.md` §2 and are exported.
-- [ ] `ddev drush cim` is a no-op; `field_legacy_id` is indexed.
+- [ ] `lando drush cim` is a no-op; `field_legacy_id` is indexed.
 - [ ] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification

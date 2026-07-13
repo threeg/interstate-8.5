@@ -21,8 +21,8 @@ The `sfk-verify` skill is a template with placeholder commands; fill it with the
 that the gate exists (INT8-006).
 
 ## Technical requirements
-- Fill `.claude/skills/sfk-verify/SKILL.md` placeholders with: the `ddev test` / `ddev playwright` /
-  `ddev test-all` commands, the PHPCS/PHPStan/boundary invocations (custom-code scope), and the
+- Fill `.claude/skills/sfk-verify/SKILL.md` placeholders with: the `lando test` / `lando playwright` /
+  `lando test-all` commands, the PHPCS/PHPStan/boundary invocations (custom-code scope), and the
   spec-audit steps (config exported vs `content-model.md`; FR/NFR traceability vs `BOARD.md`).
 - Note the Drupal-specific review points: no hand-authored config YAML; deprecation-clean; tokens not
   hardcoded.

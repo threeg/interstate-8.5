@@ -22,7 +22,7 @@ their lyrics/notes are stored cleanly and consistently.
 ## Site-building steps (operator) — terse
 1. Confirm core **Media** "Remote video" type (oEmbed: YouTube, Vimeo) is available; add if needed.
 2. Create text format **"Restricted HTML"** (machine `restricted_html`): allow `<p><br><em><strong><a>`; no image/script; convert-line-breaks/URL filters as suitable. This is the FR-21 destination.
-3. `ddev drush cex -y` → commit.
+3. `lando drush cex -y` → commit.
 
 ## Technical requirements
 - Remote-video media type present (used by `field_video`, INT8-010, FR-17).
@@ -30,7 +30,7 @@ their lyrics/notes are stored cleanly and consistently.
 
 ## Definition of done (acceptance criteria)
 - [ ] Remote-video media type + `restricted_html` format exist and are exported.
-- [ ] Exported config matches `content-model.md` §4–§5; `ddev drush cim` is a no-op.
+- [ ] Exported config matches `content-model.md` §4–§5; `lando drush cim` is a no-op.
 - [ ] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification

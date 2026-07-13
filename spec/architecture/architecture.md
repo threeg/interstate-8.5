@@ -17,7 +17,7 @@
 
 ## 1. Architectural overview
 
-Interstate-8 v5 is a **Drupal 11 monolith**, developed locally on **DDEV**, rebuilding the v2 archive
+Interstate-8 v5 is a **Drupal 11 monolith**, developed locally on **Lando**, rebuilding the v2 archive
 one vertical slice at a time. Content enters through the **Migrate API** from the v2 MySQL dump (the
 sole source of truth); it is stored in Drupal's entity/field system; it is presented through an owned,
 code-first theme.
@@ -120,7 +120,7 @@ fields for them now. The `setlistfm_id` seam belongs on the tour-date entity, no
 
 ### 3.2 Storage
 
-Drupal's entity/field storage on MySQL (via DDEV). No bespoke storage. Legacy media assets are handled
+Drupal's entity/field storage on MySQL (via Lando). No bespoke storage. Legacy media assets are handled
 by Core Media in later slices; slice 1's only media is the song video (see `content-model.md`).
 
 ### 3.3 Legacy identifiers (cross-cutting convention)
@@ -164,10 +164,10 @@ id**. Detailed per-entity mapping is in `content-model.md`.
 
 ## 5. Startup and runtime topology
 
-Local development is **DDEV** (nginx + PHP-FPM + MySQL). `ddev start` brings the environment up in one
-command; `ddev composer install` installs pinned PHP dependencies; `ddev launch` opens the site;
-`ddev npm run watch` runs the theme build once scaffolded. Drush runs inside DDEV (`ddev drush`). The
-default gate is `ddev test` (PHPUnit + PHPCS + PHPStan on custom code + the boundary check; see
+Local development is **Lando** (nginx + PHP-FPM + MySQL). `lando start` brings the environment up in one
+command; `lando composer install` installs pinned PHP dependencies; `lando drush uli` opens the site;
+`lando npm run watch` runs the theme build once scaffolded. Drush runs inside Lando (`lando drush`). The
+default gate is `lando test` (PHPUnit + PHPCS + PHPStan on custom code + the boundary check; see
 test-strategy §2.2). Production hosting is out of scope for `5.0.x-dev` (VPS-lean, Pantheon
 late-bindable per the stack proposal).
 

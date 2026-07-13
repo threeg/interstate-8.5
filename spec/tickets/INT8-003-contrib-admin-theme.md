@@ -21,10 +21,10 @@ Keep contrib minimal (own-the-stack principle). Only what slice 1 needs; **no** 
 **no** Metatag (SEO slice).
 
 ## Site-building steps (operator) — terse
-1. `ddev composer require` + enable: **migrate_plus**, **migrate_tools**, **pathauto** (+ **ctools**, **token** deps), **redirect**, **admin_toolbar**, **gin** (admin theme) + **gin_toolbar**.
+1. `lando composer require` + enable: **migrate_plus**, **migrate_tools**, **pathauto** (+ **ctools**, **token** deps), **redirect**, **admin_toolbar**, **gin** (admin theme) + **gin_toolbar**.
 2. Set Gin as the admin theme; keep the default front-end theme until INT8-005.
 3. Core **Media** + **Media Library** enabled (for Remote video, INT8-009).
-4. `ddev drush cex -y` → commit.
+4. `lando drush cex -y` → commit.
 
 ## Technical requirements
 - Pin all contrib in `composer.json`; enable via config (exported), not code.
@@ -32,7 +32,7 @@ Keep contrib minimal (own-the-stack principle). Only what slice 1 needs; **no** 
 
 ## Definition of done (acceptance criteria)
 - [ ] The listed modules are enabled and pinned; Gin is the admin theme.
-- [ ] `config/sync` updated (`core.extension` etc.) and committed; `ddev drush cim` is a no-op.
+- [ ] `config/sync` updated (`core.extension` etc.) and committed; `lando drush cim` is a no-op.
 - [ ] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification

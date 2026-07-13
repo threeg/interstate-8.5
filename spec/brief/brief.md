@@ -57,7 +57,7 @@ than deferred until it kills the project.
 The northstar is the full v5 rebuild (§10 roadmap holds the rest). Slice 1 is the first increment and
 must deliver, in order:
 
-1. **Dev stack stood up** — Drupal 11, DDEV, a testing harness, the essential contrib modules, and an
+1. **Dev stack stood up** — Drupal 11, Lando, a testing harness, the essential contrib modules, and an
    admin theme, ready for day-to-day work.
 2. **A repeatable Songs import** from the v2 MySQL dump via the Migrate API (rollbackable), Songs
    being the most self-contained content type to start with.
@@ -96,12 +96,12 @@ reconsider before investing further. Only the **Song-section** designs are imple
 
 ## 8. Technical direction
 
-Drupal 11 / PHP, local development via **DDEV**. Front end: an owned starterkit-generated theme with
+Drupal 11 / PHP, local development via **Lando**. Front end: an owned starterkit-generated theme with
 **SDC** as the component layer and **Tailwind v4** hand-wired without SASS (design tokens as CSS
 custom properties); Layout Builder scoped narrowly. **Search API is deferred** until a content type
 needs it — a View covers the Songs landing for now (lazy adoption). Data enters through the **Migrate
 API** from the v2 dump. **Hard constraint:** never hand-author Drupal config YAML — generate it via
-the admin UI/API and verify the exported config against the spec. Default gate: `ddev exec phpunit`;
+the admin UI/API and verify the exported config against the spec. Default gate: `lando test`;
 front-end tests run on the sections built. These are directional; the Architecture milestone makes
 them binding.
 
@@ -129,12 +129,12 @@ them binding.
 
 Slice 1 is done when:
 
-1. A fresh checkout can `ddev start` + install and bring the site up.
+1. A fresh checkout can `lando start` + install and bring the site up.
 2. Running the migration imports the Songs from the v2 dump (repeatable/rollbackable), verifiable by
    row counts and spot checks.
 3. A visitor can browse the Songs landing page and open a song page showing its data, lyrics, notes,
    and videos — responsively.
-4. Front-end tests for the Songs landing and song pages pass, alongside the `ddev exec phpunit` gate.
+4. Front-end tests for the Songs landing and song pages pass, alongside the `lando test` gate.
 5. A homepage design draft exists in Claude Design, judged good enough to continue (the go/no-go), and
    the Song-section designs the pages are built to exist.
 
