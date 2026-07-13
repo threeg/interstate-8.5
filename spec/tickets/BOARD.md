@@ -40,7 +40,7 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 1 | INT8-001 | Initialise repo + DDEV environment | task | repo | 8 / scaffolding | E01 | code | done | — |
 | 2 | INT8-002 | Install Drupal 11 (minimal) + config/sync | task | config | 8 / scaffolding | E01 | site-building | done | INT8-001 |
 | 3 | INT8-003 | Essential contrib + Gin admin theme | task | config | 8 / scaffolding | E01 | site-building | done | INT8-002 |
-| 4 | INT8-004 | Mount the v2 MySQL dump as a migration source | task | tooling | 8 / scaffolding | E01 | code | in-review | INT8-002 |
+| 4 | INT8-004 | Mount the v2 MySQL dump as a migration source | task | tooling | 8 / scaffolding | E01 | code | done | INT8-002 |
 | 5 | INT8-005 | Owned theme from starterkit + Tailwind v4 + tokens.css | task | theme | 8 / scaffolding | E01 | code | todo | INT8-002 |
 | 6 | INT8-006 | Test tooling + the default gate | task | tooling | 8 / scaffolding | E01 | code | todo | INT8-002, INT8-005 |
 | 7 | INT8-007 | Fill in `sfk-verify` for the stack | task | docs | 8 / scaffolding | E01 | code | todo | INT8-006 |

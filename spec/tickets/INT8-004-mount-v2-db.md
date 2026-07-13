@@ -2,7 +2,7 @@
 id: INT8-004
 title: Mount the v2 MySQL dump as a migration source
 type: task
-status: in-review
+status: done
 milestone: 8
 batch: scaffolding
 layer: tooling
