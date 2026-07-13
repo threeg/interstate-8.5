@@ -1,19 +1,29 @@
 ---
 name: sfk-verify
-description: Post-batch verification pass — audit completed work against the binding spec and review code quality, then propose cleanup tickets. This is a template — fill the placeholder commands and stack-specific checks during the scaffolding milestone. Trigger on "verify", "review this batch", "run the verifier", or "spec-audit the recent work".
+description: Post-batch verification pass — audit completed work against the binding spec and review code quality, then propose cleanup tickets. Trigger on "verify", "review this batch", "run the verifier", or "spec-audit the recent work".
 ---
 
 # sfk-verify — post-batch spec audit + quality review
 
-> **This is a template.** During the scaffolding milestone, replace every `PLACEHOLDER` with the
-> project's real commands and stack-specific checks, and delete this note. A verifier that names the
-> actual gates and the actual spec sections catches far more than a generic one. On a later kit update,
-> `sfk-update-kit` **merges** the kit's improvements into your filled-in copy rather than
-> overwriting it — your stack-specific checks are preserved (see that skill, step 6).
-
 Run after a batch of related tickets completes — before the gate the batch feeds into. Verification is
 a first-class step: tests answer "is the code correct?"; this answers "does the code implement what the
 spec *says*?" — a different question that tests alone do not cover.
+
+## Commands
+
+- `lando test` — the default gate: PHPUnit (Unit/Kernel/Functional, `phpunit.xml`) + PHPCS
+  (`Drupal` + `DrupalPractice`, `.phpcs.xml`, scoped to `web/modules/custom` +
+  `web/themes/custom/interstate_85`) + PHPStan (`phpstan.neon`, same scope, deprecation rules on) +
+  `tooling/check-boundary.sh` (dependency-rule boundary check). Wired via `tooling/run-tests.sh`; must
+  pass with **zero warnings**.
+- `lando playwright` — the Playwright + Axe FE suite (`tests/playwright/`), against the Lando site, via
+  the dedicated `pw` service.
+- **"`lando test-all`"** — there is no single wired command; run `lando test` then `lando playwright`
+  from the host (two separate Lando services — see `INT8-006` notes).
+- Boundary check standalone: `bash tooling/check-boundary.sh` — greps custom modules for
+  `use Drupal\interstate_85\...` (theme-namespace imports); fails on any hit.
+- Pre-commit hook (`.githooks/pre-commit`, wired via `git config core.hooksPath .githooks`) runs
+  `lando test` automatically.
 
 ## What to check
 
@@ -23,14 +33,25 @@ spec *says*?" — a different question that tests alone do not cover.
    just outright bugs.
 2. **Contract conformance.** Where the batch touched the interface, confirm requests/responses match
    `spec/architecture/api-contract.md` exactly (shapes, status codes, error envelope).
-3. **Architecture & dependency rule.** Confirm no layer imports something it may not (the
-   boundary-enforcement tool), and that the ticket `depends_on` graph still agrees with the import
-   contracts.
-4. **Code quality.** Look for duplication, dead code, needless complexity, and efficiency traps the
+3. **Content-model conformance.** Where the batch touched `content-model` (config), confirm the
+   exported config under `config/` matches `spec/architecture/content-model.md` field-for-field. Config
+   is generated in the Drupal admin UI/API and exported — **never hand-authored**; if you find
+   hand-edited config YAML, that is a critical finding, not a style note.
+4. **Architecture & dependency rule.** Confirm no layer imports something it may not
+   (`content-model → services → theme`, `migration → content-model`, nothing imports `theme` —
+   architecture §2.1) — run `bash tooling/check-boundary.sh` (or `lando test`, which includes it) — and
+   that the ticket `depends_on` graph in `spec/tickets/BOARD.md` still agrees with the import contracts.
+5. **Code quality.** Look for duplication, dead code, needless complexity, and efficiency traps the
    tests would pass but a gate would later fail (e.g. an N+1 query, an unbounded loop, a missing index).
-   Run the default gate and any heavier gate the batch affects (perf / e2e / real-dependency).
-5. **Honesty of the record.** Confirm each ticket's status, `## Notes` completion report, and `BOARD.md`
-   row were updated in the same commit as the work.
+   Run `lando test` and, for any batch touching the theme or song screens, `lando playwright`.
+6. **Drupal-specific review points:**
+   - No hand-authored config YAML (point 3).
+   - **Deprecation-clean** — PHPStan (`phpstan.neon`, deprecation rules) reports no deprecated-API
+     usage in custom code; this is the on-mission guard against the PHP-EOL trap that ended v2.
+   - **Tokens not hardcoded** — theme/SDC changes reference `spec/design/tokens.css` custom properties;
+     flag any hardcoded hex/px values that should be tokens.
+7. **Honesty of the record.** Confirm each ticket's status, `## Notes` completion report, and
+   `BOARD.md` row were updated in the same commit as the work.
 
 ## What to produce
 
