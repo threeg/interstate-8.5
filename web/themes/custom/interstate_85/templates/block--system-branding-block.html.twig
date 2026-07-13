@@ -1,0 +1,10 @@
+{% block content %}
+<div{{ attributes.addClass('site-branding') }}>
+  {{ include('interstate_85:site-badge') }}
+  {% if site_name %}
+    <a class="site-branding__name" href="{{ front_page }}" title="{{ 'Home'|t }}" rel="home">
+      {{ site_name }}
+    </a>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,15 +1,15 @@
-uuid: 7d9d5b1e-7671-4f3b-9451-9a70c4c19fe0
+uuid: 96d416de-f920-44b3-bdc7-cbce20f17aab
 langcode: en
 status: true
 dependencies:
   module:
     - system
   theme:
-    - interstate_8
+    - interstate_85
 _core:
   default_config_hash: sG8t_FghbUscJ-GrnQ8zs_vx5YM4bJCfntrK-J5HcAY
-id: interstate_8_branding
-theme: interstate_8
+id: interstate_85_branding
+theme: interstate_85
 region: header
 weight: 0
 provider: null

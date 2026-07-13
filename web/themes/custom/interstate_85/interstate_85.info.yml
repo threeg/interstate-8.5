@@ -6,7 +6,7 @@ version: VERSION
 core_version_requirement: ^11
 
 libraries:
-  - interstate_8/base
+  - interstate_85/base
 
 regions:
   header: Header

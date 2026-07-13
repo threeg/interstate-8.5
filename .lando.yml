@@ -23,5 +23,5 @@ tooling:
     service: node
   npm:
     service: node
-    dir: /app/web/themes/custom/interstate_8
+    dir: /app/web/themes/custom/interstate_85
 
