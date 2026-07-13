@@ -47,8 +47,7 @@
         "sort-packages": true
     },
     "scripts": {
-        "install-hooks": "git config core.hooksPath .githooks",
-        "post-install-cmd": ["@install-hooks"]
+        "install-hooks": "git config core.hooksPath .githooks"
     },
     "extra": {
         "drupal-scaffold": {
