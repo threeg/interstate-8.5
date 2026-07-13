@@ -2,7 +2,7 @@
 id: INT8-007
 title: Fill in sfk-verify for the stack
 type: task
-status: in-review
+status: done
 milestone: 8
 batch: scaffolding
 layer: docs

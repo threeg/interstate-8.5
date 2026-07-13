@@ -2,7 +2,7 @@
 id: INT8-E01
 title: Foundation & tooling (scaffolding)
 type: epic
-status: todo
+status: done
 milestone: 8
 batch: scaffolding
 layer: repo

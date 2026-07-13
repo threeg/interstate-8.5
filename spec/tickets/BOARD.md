@@ -23,7 +23,7 @@ spec (no hand-authored config YAML); everything else is code.
 
 | id | title | milestone | status |
 |----|-------|-----------|--------|
-| INT8-E01 | Foundation & tooling (scaffolding) | 8 | todo |
+| INT8-E01 | Foundation & tooling (scaffolding) | 8 | done |
 | INT8-E02 | Songs content model & migration | 9 | todo |
 | INT8-E03 | Theme foundation | 9 | todo |
 | INT8-E04 | Songs section (landing + song page) | 9 | todo |
@@ -43,7 +43,7 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 4 | INT8-004 | Mount the v2 MySQL dump as a migration source | task | tooling | 8 / scaffolding | E01 | code | done | INT8-002 |
 | 5 | INT8-005 | Owned theme from starterkit + Tailwind v4 + tokens.css | task | theme | 8 / scaffolding | E01 | code | done | INT8-002 |
 | 6 | INT8-006 | Test tooling + the default gate | task | tooling | 8 / scaffolding | E01 | code | done | INT8-002, INT8-005 |
-| 7 | INT8-007 | Fill in `sfk-verify` for the stack | task | docs | 8 / scaffolding | E01 | code | in-review | INT8-006 |
+| 7 | INT8-007 | Fill in `sfk-verify` for the stack | task | docs | 8 / scaffolding | E01 | code | done | INT8-006 |
 | 8 | INT8-008 | Song type taxonomy (vocabulary + terms) | task | content-model | 9 / content-model | E02 | site-building | todo | INT8-003 |
 | 9 | INT8-009 | Remote-video media type + Restricted HTML format | task | content-model | 9 / content-model | E02 | site-building | todo | INT8-003 |
 | 10 | INT8-010 | Song content type + fields | task | content-model | 9 / content-model | E02 | site-building | todo | INT8-008, INT8-009 |
