@@ -2,7 +2,7 @@
 id: INT8-006
 title: Test tooling + the default gate
 type: task
-status: in-review
+status: done
 milestone: 8
 batch: scaffolding
 layer: tooling
