@@ -1,0 +1,14 @@
+.site-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2em;
+  aspect-ratio: 1;
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-h3);
+  border-radius: var(--radius-shield);
+  letter-spacing: var(--ls-display);
+}

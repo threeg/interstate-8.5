@@ -35,6 +35,7 @@ tmp/
 
 # --- Dependency / build artefacts (uncomment those your stack uses) ---
 node_modules/
+/web/themes/custom/*/node_modules/
 dist/
 build/
 coverage/

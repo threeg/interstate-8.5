@@ -1,0 +1,12 @@
+{
+  "name": "interstate-8",
+  "private": true,
+  "scripts": {
+    "build": "tailwindcss -i css/app.css -o css/build/app.css --minify",
+    "watch": "tailwindcss -i css/app.css -o css/build/app.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.0.0",
+    "tailwindcss": "^4.0.0"
+  }
+}

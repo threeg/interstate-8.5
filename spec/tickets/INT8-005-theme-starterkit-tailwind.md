@@ -2,7 +2,7 @@
 id: INT8-005
 title: Owned theme from starterkit + Tailwind v4 + tokens.css
 type: task
-status: todo
+status: in-review
 milestone: 8
 batch: scaffolding
 layer: theme
@@ -28,12 +28,23 @@ Own the theme (FE proposal): starterkit-generated, SDC as the component layer, T
 - SDC enabled; component directory scaffolded.
 
 ## Definition of done (acceptance criteria)
-- [ ] The owned theme is default; `lando npm run watch`/build compiles Tailwind + tokens.
-- [ ] A trivial SDC component renders using `var(--…)` tokens (proves the token pipeline).
-- [ ] `config/sync` updated (theme settings) and committed.
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] The owned theme is default; `lando npm run watch`/build compiles Tailwind + tokens.
+- [x] A trivial SDC component renders using `var(--…)` tokens (proves the token pipeline).
+- [x] `config/sync` updated (theme settings) and committed.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 `tests_required: false` — **build-plumbing / pure-styling.** Verified by the theme building and a
 token-driven component rendering; behavioural/visual tests come with the components that use it
 (INT8-015+).
+
+## Notes
+2026-07-12 — Scaffolded `web/themes/custom/interstate_8/` from scratch (core `generate-theme` script
+incompatible with recommended-project vendor layout; manual scaffold is equivalent). Added a `node:22`
+Lando service and `npm` tooling (dir: /app/web/themes/custom/interstate_8) to `.lando.yml`. Installed
+Tailwind v4.3.2 (`tailwindcss` + `@tailwindcss/cli`). `css/app.css` imports `spec/design/tokens.css`
+then `@import "tailwindcss"` with base typography wired to token variables. Compiled output committed
+at `css/build/app.css` so fresh checkouts work without running npm. Proof-of-pipeline SDC component:
+`components/site-badge/` renders using `var(--color-accent)`, `var(--font-display)`, etc. Theme set
+as default front-end (admin stays Gin). **Sanity test:** `lando npm run build` → "Done in ~300ms";
+visit the site front end and confirm token-based typography (Lora body, dark-canvas background).

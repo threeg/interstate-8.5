@@ -1,0 +1,34 @@
+/* =============================================================================
+   Interstate-8 v5 — Theme stylesheet
+   Source: web/themes/custom/interstate_8/css/app.css
+   Compile: lando npm run build  |  Dev: lando npm run watch
+   ============================================================================= */
+
+/* 1. Design tokens — the visual contract (single source of truth) */
+@import "../../../../../spec/design/tokens.css";
+
+/* 2. Tailwind v4 — CSS-first, no config file needed */
+@import "tailwindcss";
+
+/* 3. Base typography from tokens */
+@layer base {
+  body {
+    font-family: var(--font-body);
+    color: var(--color-fg-body);
+    background-color: var(--color-canvas);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: var(--color-fg);
+    line-height: var(--lh-tight);
+  }
+
+  a {
+    color: var(--color-accent);
+  }
+
+  a:hover {
+    color: var(--color-accent-hover);
+  }
+}

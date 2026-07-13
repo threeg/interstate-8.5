@@ -1,0 +1,17 @@
+name: Interstate 8
+type: theme
+base theme: false
+description: 'Interstate-8 v5 — owned starterkit theme with Tailwind v4, SDC components, and design tokens.'
+version: VERSION
+core_version_requirement: ^11
+
+libraries:
+  - interstate_8/base
+
+regions:
+  header: Header
+  primary_menu: Primary menu
+  breadcrumb: Breadcrumb
+  content: Content
+  sidebar_first: Sidebar first
+  footer: Footer

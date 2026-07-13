@@ -1,0 +1,20 @@
+uuid: 9d3d43cd-fb91-4e43-8b4f-ef081a4513aa
+langcode: en
+status: true
+dependencies:
+  theme:
+    - interstate_8
+_core:
+  default_config_hash: Oh72CHUkp6cj6dbrXMK2hzCsM05w9cHVoD22rMLQUfk
+id: interstate_8_page_title
+theme: interstate_8
+region: content
+weight: -30
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: '0'
+  provider: core
+visibility: {  }

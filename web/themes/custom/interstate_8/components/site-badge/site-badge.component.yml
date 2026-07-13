@@ -1,0 +1,11 @@
+$schema: 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/metadata.schema.json'
+name: Site badge
+status: experimental
+description: 'The Interstate-8 route-shield badge. Renders a styled "8" mark using design tokens.'
+props:
+  type: object
+  properties:
+    label:
+      type: string
+      title: Label
+      description: 'Accessible label for the badge (defaults to "Interstate 8").'

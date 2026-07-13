@@ -1,0 +1,22 @@
+uuid: 8d10c406-1687-4d2c-bfe0-bec75c3c1111
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - interstate_8
+_core:
+  default_config_hash: aeqlWs7HwctZeZC7ADcbxfqehJzBRfZKmuZz3DsH3_4
+id: interstate_8_messages
+theme: interstate_8
+region: header
+weight: 0
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  label_display: '0'
+  provider: system
+visibility: {  }

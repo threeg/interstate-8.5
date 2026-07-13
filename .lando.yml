@@ -15,4 +15,13 @@ services:
       user: legacy
       password: legacy
       database: legacy
+  node:
+    type: node:22
+
+tooling:
+  node:
+    service: node
+  npm:
+    service: node
+    dir: /app/web/themes/custom/interstate_8
 
