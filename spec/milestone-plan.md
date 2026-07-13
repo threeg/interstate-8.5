@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Milestone plan and progress tracker |
 | **Repository location** | `spec/milestone-plan.md` |
-| **Last updated** | 2026-07-12 (Milestone 8 (Scaffolding) started — first code milestone) |
+| **Last updated** | 2026-07-12 (Milestone 8 (Scaffolding) signed off — complete) |
 
 This document is the single source of truth for **where the project is**. It is extracted from the
 project brief so the brief stays stable after approval while this tracker is updated as each milestone
@@ -18,11 +18,12 @@ together, commit by commit.
 ## Current position
 
 Version `5.0.x-dev` (v5 first release, delivered in vertical slices). **Milestone 8 (Scaffolding) is
-in progress** — the first Code milestone. Work proceeds ticket-by-ticket via `sfk-next-ticket`:
-INT8-001…007 cover Lando + Composer scaffold, Drupal 11 install, essential contrib + Gin admin theme,
-v2 migration-source mount, owned theme + Tailwind v4 + tokens, the default gate (PHPUnit + PHPCS +
-PHPStan + boundary check), and filling `sfk-verify` for the stack. Config/entity tickets are
-**site-building** (operator builds in the Drupal UI + exports; Claude verifies).
+complete** — INT8-001…007 delivered Lando + Composer scaffold, Drupal 11 install, essential contrib +
+Gin admin theme, v2 migration-source mount, owned theme + Tailwind v4 + tokens, the default gate
+(PHPUnit + PHPCS + PHPStan + boundary check), and `sfk-verify` filled in for the stack. **Milestone 9
+(Implementation, slice by slice) is next** — content model, migration, theme foundation, and the Songs
+section, ticket-by-ticket via `sfk-next-ticket`. Config/entity tickets are **site-building** (operator
+builds in the Drupal UI + exports; Claude verifies).
 
 ---
 
@@ -43,7 +44,7 @@ PHPStan + boundary check), and filling `sfk-verify` for the stack. Config/entity
 | 5 | Design system | `spec/design/design-system.md` — tokens, atoms, and the molecules the slice-1 screens use (Claude Design) | Cowork | ✅ |
 | 6 | Test strategy | `spec/test-strategy/test-strategy.md` — FE test tool (Nightwatch vs Playwright) + what is tested; migration leans on the Migrate module | Cowork | ✅ |
 | 7 | Ticket generation | `spec/tickets/*.md` + `BOARD.md` index | Cowork | ✅ |
-| 8 | Repository setup & scaffolding | Drupal 11 + Lando up, essential contrib + admin theme, theme scaffold, dependency-rule check wired in, `sfk-verify` filled for the stack | Code | 🔶 |
+| 8 | Repository setup & scaffolding | Drupal 11 + Lando up, essential contrib + admin theme, theme scaffold, dependency-rule check wired in, `sfk-verify` filled for the stack | Code | ✅ |
 | 9 | Implementation, slice by slice | working slice 1 — Songs import + Songs section pages built to the designs; tickets updated in the same commits | Code | ⬜ |
 
 <!-- Later slices/versions append their own table and run as a DELTA PASS (see spec/README.md):
