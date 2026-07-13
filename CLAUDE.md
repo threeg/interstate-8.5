@@ -97,7 +97,9 @@ Test targets:
   trap that ended v2.)
 - `lando playwright` — the Playwright + Axe front-end suite (theme / song-screen tickets).
 - `lando test-all` — everything (the default gate **+ Playwright**); required at milestone completion.
-  Exact command wiring is set in the scaffolding milestone.
+  **Not a single wired command:** the gate runs on the `appserver` service and Playwright on the
+  separate `pw` compose service, so run `lando test` **then** `lando playwright` from the host (decided
+  in INT8-006; see `spec/test-strategy/test-strategy.md` §2.2).
 
 ## Definition of done (implementation tickets)
 

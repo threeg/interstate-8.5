@@ -47,9 +47,15 @@
 | `lando playwright` | Playwright FE + Axe suite (against the Lando URL) | tickets touching the theme / song screens |
 | `lando test-all` | everything (the default gate **+ Playwright**) | milestone completion |
 
-> Exact command wiring — how `lando test` invokes PHPCS/PHPStan **scoped to `web/modules/custom`** (and
-> the custom theme) rather than core/contrib, and how `lando playwright` invokes `@playwright/test`
-> against the Lando site — is finalized in the scaffolding milestone (M8).
+> **`lando test-all` is not a single wired Lando command** (decided at scaffolding, INT8-006): the
+> default gate runs on the `appserver` service while Playwright runs on a separate `pw` compose
+> service, so a single Lando tooling command cannot span both. "`lando test-all`" is therefore
+> shorthand for **running `lando test` then `lando playwright` from the host** at milestone completion.
+>
+> Command wiring finalized in the scaffolding milestone (M8): `lando test` runs
+> `tooling/run-tests.sh` (PHPUnit + PHPCS + PHPStan, all **scoped to `web/modules/custom`** and the
+> custom theme via `.phpcs.xml`/`phpstan.neon`, + `tooling/check-boundary.sh`); `lando playwright`
+> runs `@playwright/test` against the Lando site on the dedicated `pw` service.
 
 ### 2.3 Coverage policy
 
