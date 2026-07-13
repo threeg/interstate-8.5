@@ -39,12 +39,16 @@ token-driven component rendering; behavioural/visual tests come with the compone
 (INT8-015+).
 
 ## Notes
-2026-07-12 — Scaffolded `web/themes/custom/interstate_8/` from scratch (core `generate-theme` script
+2026-07-12 — Scaffolded `web/themes/custom/interstate_85/` from scratch (core `generate-theme` script
 incompatible with recommended-project vendor layout; manual scaffold is equivalent). Added a `node:22`
-Lando service and `npm` tooling (dir: /app/web/themes/custom/interstate_8) to `.lando.yml`. Installed
+Lando service and `npm` tooling (dir: /app/web/themes/custom/interstate_85) to `.lando.yml`. Installed
 Tailwind v4.3.2 (`tailwindcss` + `@tailwindcss/cli`). `css/app.css` imports `spec/design/tokens.css`
 then `@import "tailwindcss"` with base typography wired to token variables. Compiled output committed
 at `css/build/app.css` so fresh checkouts work without running npm. Proof-of-pipeline SDC component:
-`components/site-badge/` renders using `var(--color-accent)`, `var(--font-display)`, etc. Theme set
-as default front-end (admin stays Gin). **Sanity test:** `lando npm run build` → "Done in ~300ms";
-visit the site front end and confirm token-based typography (Lora body, dark-canvas background).
+`components/site-badge/` renders the route-shield mark: transparent fill, `2.5px solid var(--color-accent-alt)`
+border, `var(--radius-shield)` shape, `var(--font-display)` Oswald — all tokens, no raw hex/px. New
+`--badge-w`, `--badge-h`, `--fs-badge` tokens added to `spec/design/tokens.css` for the component
+dimensions (matching the desktop reference in the hi-fi). Theme set as default front-end (admin stays
+Gin). **Sanity test:** `lando npm run build` → "Done in ~300ms"; visit the site front end and
+confirm: site-branding block shows the polo-blue shield outline with "8" in Oswald, plus Lora body
+text and the dark-canvas page background.

@@ -2,13 +2,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2em;
-  aspect-ratio: 1;
-  background-color: var(--color-accent);
-  color: var(--color-on-accent);
+  width: var(--badge-w);
+  height: var(--badge-h);
+  border: 2.5px solid var(--color-accent-alt);
+  border-radius: var(--radius-shield);
+  background: transparent;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: var(--fs-h3);
-  border-radius: var(--radius-shield);
+  font-size: var(--fs-badge);
+  color: var(--color-fg-slate);
   letter-spacing: var(--ls-display);
+  flex: none;
 }
