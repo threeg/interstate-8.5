@@ -21,29 +21,30 @@ Drupal must be installed before contrib, theme or content-model work. Use the **
 (stack proposal) and route configuration to a root `config/sync` outside the docroot.
 
 ## Site-building steps (operator) — terse
-1. `ddev drush site:install minimal --account-name=admin -y`.
-2. Set `$settings['config_sync_directory'] = '../config/sync';` in `settings.php` (repo-committed settings; secrets in `settings.local.php`).
+1. `lando drush site:install minimal --account-name=admin -y`.
+2. Set `$settings['config_sync_directory'] = '../config/sync';` in `settings.php` (repo-committed settings; secrets in `settings.lando.php`).
 3. Enable core essentials only as needed later; leave the profile minimal.
-4. `ddev drush cex -y` → commit `config/sync`.
+4. `lando drush cex -y` → commit `config/sync`.
 
 ## Technical requirements
-- Minimal install profile; `config/sync` outside docroot; trusted-host + hash salt in `settings.php`/`.local`.
+- Minimal install profile; `config/sync` outside docroot; trusted-host + hash salt in `settings.php`/`.lando.php`.
 - No contrib yet (INT8-003).
 
 ## Definition of done (acceptance criteria)
-- [ ] Site installs and loads; `ddev drush status` shows bootstrap successful.
-- [ ] `config/sync` populated and committed; a clean `ddev drush cim` is a no-op (config matches DB).
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] Site installs and loads; `lando drush status` shows bootstrap successful.
+- [x] `config/sync` populated and committed; a clean `lando drush cim` is a no-op (config matches DB).
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
-`tests_required: false` — **build-plumbing / config.** Verified by a no-op `ddev drush cim` and the
+`tests_required: false` — **build-plumbing / config.** Verified by a no-op `lando drush cim` and the
 exported `core.extension` / system config committed. **Claude verifies** the exported config is the
 minimal profile with the config/sync location set.
 
 ## Notes
-2026-07-12 — Installed Drupal 11.4.2 (minimal profile) via `ddev drush site:install minimal
---account-name=admin -y`. Set `config_sync_directory = '../config/sync'` and enabled the
-`settings.local.php` include in `settings.php`. Exported 67 config files to `config/sync/` via
-`ddev drush cex -y`. Hash salt is provided by DDEV via `settings.ddev.php` (not committed);
-production deployments will need it configured separately. **Sanity test:** `ddev drush cim -y`
-should report "There are no changes to import" (run after `ddev start` from WSL filesystem).
+2026-07-12 — Installed Drupal 11.4.2 (minimal profile) via Lando. Switched mid-ticket from DDEV to
+Lando (DDEV mutagen sessions broke on every restart on Windows; Lando runs natively, ~90% faster).
+Set `config_sync_directory = '../config/sync'` and enabled the `settings.lando.php` include in
+`settings.php`. DB credentials and hash salt moved to gitignored `settings.lando.php`. Exported 67
+config files to `config/sync/`. Site UUID mismatch resolved by setting the UUID from
+`config/sync/system.site.yml` before `cim`. **Sanity test:** `lando drush cim -y` should report
+"There are no changes to import".
