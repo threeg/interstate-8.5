@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<ruleset name="Interstate-8">
+  <description>Drupal coding standards — custom code only (never core/contrib).</description>
+
+  <!-- Scope: custom modules and custom theme -->
+  <file>web/modules/custom</file>
+  <file>web/themes/custom/interstate_85</file>
+
+  <!-- Ignore non-PHP/Twig build artefacts and third-party dirs -->
+  <exclude-pattern>*/node_modules/*</exclude-pattern>
+  <exclude-pattern>*/vendor/*</exclude-pattern>
+  <exclude-pattern>*/css/build/*</exclude-pattern>
+  <exclude-pattern>*.css</exclude-pattern>
+  <exclude-pattern>*.js</exclude-pattern>
+  <exclude-pattern>*.json</exclude-pattern>
+  <exclude-pattern>*.md</exclude-pattern>
+
+  <rule ref="Drupal"/>
+  <rule ref="DrupalPractice"/>
+</ruleset>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- PHPUnit config for Interstate-8 custom code.
+     Scoped to web/modules/custom and web/themes/custom/interstate_85 only — never core/contrib.
+     Run via: lando php vendor/bin/phpunit (or lando test)
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.5/phpunit.xsd"
+         bootstrap="web/core/tests/bootstrap.php"
+         colors="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         displayDetailsOnTestsThatTriggerErrors="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         cacheResult="false"
+         cacheDirectory=".phpunit.cache">
+
+  <php>
+    <ini name="error_reporting" value="32767"/>
+    <ini name="memory_limit" value="-1"/>
+    <!-- Lando site URL -->
+    <env name="SIMPLETEST_BASE_URL" value="http://interstate-8-5.lndo.site"/>
+    <!-- Lando DB: mysql://user:pass@host/db -->
+    <env name="SIMPLETEST_DB" value="mysql://drupal11:drupal11@database/drupal11"/>
+    <env name="BROWSERTEST_OUTPUT_DIRECTORY" value="/tmp/phpunit-output"/>
+    <env name="BROWSERTEST_OUTPUT_BASE_URL" value="http://interstate-8-5.lndo.site"/>
+  </php>
+
+  <testsuites>
+    <testsuite name="unit">
+      <directory>web/modules/custom/*/tests/src/Unit</directory>
+      <directory>web/modules/custom/*/*/tests/src/Unit</directory>
+    </testsuite>
+    <testsuite name="kernel">
+      <directory>web/modules/custom/*/tests/src/Kernel</directory>
+      <directory>web/modules/custom/*/*/tests/src/Kernel</directory>
+    </testsuite>
+    <testsuite name="functional">
+      <directory>web/modules/custom/*/tests/src/Functional</directory>
+      <directory>web/modules/custom/*/*/tests/src/Functional</directory>
+    </testsuite>
+  </testsuites>
+
+  <source>
+    <include>
+      <directory>web/modules/custom</directory>
+    </include>
+  </source>
+
+</phpunit>

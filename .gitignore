@@ -40,6 +40,11 @@ dist/
 build/
 !web/themes/custom/*/css/build/
 coverage/
+
+# --- Playwright test artefacts ---
+/tests/playwright/test-results/
+/tests/playwright/playwright-report/
+.phpunit.cache/
 # .venv/
 # __pycache__/
 # *.pyc

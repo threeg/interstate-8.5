@@ -1,0 +1,8 @@
+parameters:
+  level: 2
+  paths:
+    - web/modules/custom
+    - web/themes/custom/interstate_85
+  excludePaths:
+    - web/themes/custom/interstate_85/node_modules
+    - web/themes/custom/interstate_85/css/build

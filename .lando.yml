@@ -17,6 +17,13 @@ services:
       database: legacy
   node:
     type: node:22
+  pw:
+    type: compose
+    services:
+      image: mcr.microsoft.com/playwright:v1.61.1-jammy
+      command: sleep infinity
+      volumes:
+        - .:/app
 
 tooling:
   node:
@@ -24,4 +31,12 @@ tooling:
   npm:
     service: node
     dir: /app/web/themes/custom/interstate_85
+  test:
+    service: appserver
+    cmd: bash /app/tooling/run-tests.sh
+    description: "Default gate: PHPUnit + PHPCS + PHPStan + boundary check (custom code only)"
+  playwright:
+    service: pw
+    cmd: "bash -c 'cd /app/tests/playwright && npm install --silent && npx playwright test'"
+    description: "Playwright + Axe FE suite (lando rebuild required once for pw service)"
 
