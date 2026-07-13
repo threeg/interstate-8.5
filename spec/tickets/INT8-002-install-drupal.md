@@ -2,7 +2,7 @@
 id: INT8-002
 title: Install Drupal 11 (minimal profile) + config/sync
 type: task
-status: in-review
+status: done
 milestone: 8
 batch: scaffolding
 layer: config
