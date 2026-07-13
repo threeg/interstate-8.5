@@ -2,7 +2,7 @@
 id: INT8-001
 title: Initialise repo + DDEV environment
 type: task
-status: in-review
+status: done
 milestone: 8
 batch: scaffolding
 layer: repo

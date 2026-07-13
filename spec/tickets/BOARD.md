@@ -37,7 +37,7 @@ on a higher-numbered one. Epics close when their children are all `done`.
 
 | # | id | title | type | layer | M / batch | epic | kind | status | depends_on |
 |---|----|-------|------|-------|-----------|------|------|--------|------------|
-| 1 | INT8-001 | Initialise repo + DDEV environment | task | repo | 8 / scaffolding | E01 | code | in-review | — |
+| 1 | INT8-001 | Initialise repo + DDEV environment | task | repo | 8 / scaffolding | E01 | code | done | — |
 | 2 | INT8-002 | Install Drupal 11 (minimal) + config/sync | task | config | 8 / scaffolding | E01 | site-building | todo | INT8-001 |
 | 3 | INT8-003 | Essential contrib + Gin admin theme | task | config | 8 / scaffolding | E01 | site-building | todo | INT8-002 |
 | 4 | INT8-004 | Mount the v2 MySQL dump as a migration source | task | tooling | 8 / scaffolding | E01 | code | todo | INT8-002 |
