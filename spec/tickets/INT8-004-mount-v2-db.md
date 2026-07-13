@@ -40,6 +40,6 @@ a row-count query against `I8_Songs` returning the expected ~412 songs.
 in `settings.lando.php` (host `legacy`, credentials `legacy/legacy/legacy`). Import command:
 `lando db-import --host legacy legacy/db/legacy.sql.zip` (handles zip natively). Actual row counts:
 492 `I8_Songs` (all `Song_Active = 1`; the ~412 estimate was off), 4 `I8_SongType` rows. Discovered
-`Song_Active` field not in spec — added to `content-model.md` §8 migration mapping as a filter
-condition (`WHERE Song_Active = 1`). The dump itself is gitignored (`/legacy/`). **Sanity test:**
+`Song_Active` field not in spec — added to `content-model.md` §8 migration mapping; maps to node
+`status` (published/unpublished), not a filter condition. The dump itself is gitignored (`/legacy/`). **Sanity test:**
 `lando ssh -s legacy -c "mysql -u legacy -plegacy legacy -e 'SELECT COUNT(*) FROM I8_Songs;'"` → 492.

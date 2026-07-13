@@ -136,7 +136,7 @@ Either way the content model carries **no sort field**.
 | `FK_Song_ID` | `field_parent_song` |
 | `Song_LyricsSameAsNormal` | `field_lyrics_same_as_parent` |
 | `Song_Live` | `field_exclude_from_list` |
-| `Song_Active` | migration filter only (`WHERE Song_Active = 1`); all 492 dump rows are 1, so no rows are excluded today, but the filter is correct practice |
+| `Song_Active` | node `status` (published/unpublished): 1 → published, 0 → unpublished; all 492 dump rows are 1 |
 | `Song_Download` | — (dropped; defunct iTunes referral) |
 | `I8_SongType` row | `song_type` term (weight ← `SongType_Order`) |
 
