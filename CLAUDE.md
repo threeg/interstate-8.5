@@ -8,7 +8,7 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 ## Project & kit
 
 - **Project code:** `INT8` — the ticket prefix (`INT8-001`). Set by `sfk-init`.
-- **Spec-First Kit version applied:** `1.0.0` — the *kit* version this project is on (set by
+- **Spec-First Kit version applied:** `1.0.1` — the *kit* version this project is on (set by
   `sfk-init`, raised by `sfk-update-kit`). This is **not** the software's release version (that is
   chosen by the project and tracked in `spec/milestone-plan.md`). The kit's own version, changelog
   and pristine templates live in `.sfk/` (read-only — never edit it by hand; skills copy templates
@@ -31,6 +31,15 @@ gaps and stays agent-legible — not merely as scaffolding.
 - The documents in `spec/` are the **binding specification.** Do not reopen or reinterpret a settled
   decision — implement to the spec. If the spec is genuinely wrong or missing, raise it and change
   the relevant `spec/` file first; never silently diverge.
+- **Contractual values are not workarounds.** A model name, endpoint, threshold, or named constant
+  fixed in `requirements.md` / `api-contract.md` is contractual. **Never** change it to work around an
+  external or environmental error (an API 404, an auth failure, a missing key). When an external
+  dependency errors: reproduce it directly (e.g. `curl`), check config / keys / endpoints, and if it is
+  still unresolved **STOP and ask the user** — do not edit a spec'd value to make the error go away.
+- **One ticket per commit; finalize before advancing.** Each ticket's work is one commit. When you
+  start the next ticket, first mark the previously reviewed ticket `done` and commit **that alone**
+  (`INT8-NNN: mark done (reviewed)`). **Never** bundle one ticket's closure into another ticket's
+  commit, and never work more than one ticket before its predecessor is committed and reviewed.
 - **Never hand-author Drupal config YAML.** Let Drupal generate its own config via the admin UI or
   API, then verify the exported config against the durable spec document on disk. Hand-writing config
   is error-prone (hallucination/consistency risk) and is not permitted.
@@ -50,7 +59,7 @@ gaps and stays agent-legible — not merely as scaffolding.
 - `spec/test-strategy/test-strategy.md` — frameworks, conventions, the definition of done.
 - `spec/tickets/` — the work queue; ticket workflow rules in `spec/tickets/CLAUDE.md`.
 - `.sfk/` — kit machinery (read-only): `manifest.md` (kit identity), `CHANGELOG.md`, and `templates/` (pristine sources the skills copy out). Never edit `.sfk/` by hand.
-- `.claude/skills/sfk-*` — the workflow skills (`sfk-init`, `sfk-version`, `sfk-next-milestone`, `sfk-signoff`, `sfk-next-ticket`, `sfk-verify`, `sfk-update-kit`, `sfk-feedback`).
+- `.claude/skills/sfk-*` — the workflow skills (`sfk-init`, `sfk-version`, `sfk-next-milestone`, `sfk-signoff`, `sfk-next-ticket`, `sfk-close-ticket`, `sfk-verify`, `sfk-update-kit`, `sfk-feedback`).
 
 ## Architecture dependency rule (enforced, not aspirational)
 
@@ -100,6 +109,21 @@ Test targets:
   **Not a single wired command:** the gate runs on the `appserver` service and Playwright on the
   separate `pw` compose service, so run `lando test` **then** `lando playwright` from the host (decided
   in INT8-006; see `spec/test-strategy/test-strategy.md` §2.2).
+
+## Commit protocol (who runs git)
+
+Commits are gated by the **git-safety of the runtime**, which tracks the authoring/building split:
+
+- **Authoring milestones (worked in Cowork): the agent hands off — it must never run `git`.** Cowork
+  mounts the repo into a sandbox where the agent cannot safely touch `.git` (a partial commit can
+  corrupt `.git/index`). The agent presents the exact `git add` / `git commit` commands and **you** run
+  them. Committing the reviewed deliverable is your gate.
+- **Building milestones (worked in Claude Code): the agent commits directly** — one ticket per commit,
+  per `spec/tickets/CLAUDE.md`.
+
+The rule follows *git-safety*, not the tool name: if you author in a git-safe runtime you may let the
+agent commit; if you ever build in Cowork, switch that phase to hand-off. **When unsure, hand off** — it
+is safe in every runtime.
 
 ## Definition of done (implementation tickets)
 

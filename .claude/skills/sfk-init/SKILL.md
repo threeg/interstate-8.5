@@ -54,7 +54,10 @@ optional: if an argument is supplied, use it without asking; otherwise ask for i
      it is missing.
 
 4. **Stop and hand off.** Tell the user the environment is ready and the next step is `sfk-version`
-   (give it a version number and goals). Do **not** start Milestone 1.
+   (give it a version number and goals). Do **not** start Milestone 1. To commit the initial scaffold,
+   follow the **Commit protocol** you just wrote into the root `CLAUDE.md`: **do not run `git`
+   yourself** — present the exact `git add` / `git commit` commands and have the user run them (safe in
+   every runtime for this first commit).
 
 ## Rules
 

@@ -10,12 +10,16 @@ format in `spec/tickets/TICKET-TEMPLATE.md`; the execution order in `spec/ticket
 - **One ticket per commit.** A commit moves exactly one ticket: its code, its tests, its
   `status`/`## Notes`, and its `BOARD.md` row — together. This keeps the history honest and reviewable.
   The later `in-review → done` finalize is a separate small status-only commit for that same ticket.
+  **Stage deliberately** — commit only the ticket's own files; never `git add -A` blindly (it sweeps in
+  stray sanity-test artifacts). Run throwaway sanity checks outside the repo (e.g. `/tmp`) or clean them
+  up, and check `git status` before you commit.
 - **Status lifecycle:** `todo → in-progress → in-review → done` (`blocked` when stuck). Set
   `in-progress` when you start; set **`in-review`** when implementation is finished and the definition
   of done holds (this is where `sfk-next-ticket` leaves a ticket); `done` only after the user's review.
 - **Finalize before starting the next.** `sfk-next-ticket` first flips any `in-review` ticket to `done`
   (its own commit) — the user asking for the next ticket is their approval — then implements the next.
-  `sfk-signoff` finalizes the last `in-review` ticket at milestone sign-off.
+  `sfk-signoff` finalizes the last `in-review` ticket at milestone sign-off. To close a reviewed ticket
+  **without** starting the next (e.g. before `sfk-verify`, or to pause), use `sfk-close-ticket`.
 - **Commit message:** `INT8-NNN: <short imperative>` for work; `INT8-NNN: mark done (reviewed)` for a
   finalize.
 - **Close epics when their last child is finalized.** When the `in-review → done` finalize completes an

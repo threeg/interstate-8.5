@@ -16,22 +16,26 @@ records the user's sign-off and advances the project.
    back to `sfk-next-milestone` to revise first.
 
 2. **Check the deliverable is committed.** The milestone's draft and any revisions should already be
-   committed (by `sfk-next-milestone`). If there are uncommitted changes, commit them first.
+   committed (by `sfk-next-milestone`). If there are uncommitted changes, commit them **per the Commit
+   protocol** (root `CLAUDE.md`) — hand off in authoring/Cowork; agent commits in building/Code.
 
 3. **Mark it `Complete` (✅)** in `spec/milestone-plan.md` and **move the *Current position*** line
    to the next milestone (or, if this was the version's last milestone, note the version is ready to
    ship/tag and that `sfk-version` starts the next one).
 
-4. **Commit the status change**, e.g. `process: <milestone> — signed off (complete)`. This commit
-   carries the status flip and the *Current position* move; the deliverable itself was already
-   committed.
+4. **Commit the status change — per the Commit protocol.** For an **authoring**-milestone sign-off
+   (Cowork), present the exact `git` commands and have the user run them; for a **building**-milestone
+   sign-off (Code), the agent commits. Message e.g. `process: <milestone> — signed off (complete)`.
+   This commit carries the status flip and the *Current position* move; the deliverable itself was
+   already committed.
 
-5. **For the implementation milestone**, first **finalize any ticket left `in-review`**: signing off
-   the milestone is your approval of that last reviewed ticket. For each, flip it to `done`, update its
-   `BOARD.md` row, close any epic whose last open child it completes, and commit as
-   `<PRJ>-NNN: mark done (reviewed)` (its own commit, before the milestone status change). Sign-off then
-   means the version's tickets are all `done` and the gates pass; note that the version can be tagged
-   with its version number per `spec/README.md`.
+5. **For a building milestone (scaffolding or implementation)**, first **finalize any ticket left
+   `in-review`**: signing off the milestone is your approval of that last reviewed ticket. For each,
+   flip it to `done`, update its `BOARD.md` row, close any epic whose last open child it completes, and
+   commit as `<PRJ>-NNN: mark done (reviewed)` (its own commit, before the milestone status change).
+   Sign-off then means the milestone's tickets are all `done` and the gates pass. **For the
+   implementation milestone specifically**, note that the version can now be tagged with its version
+   number per `spec/README.md`.
 
 6. **Hand off.** Tell the user what is next: `sfk-next-milestone` for the following milestone, or
    `sfk-version` if the version is complete.

@@ -61,6 +61,10 @@
 > how annotations are written. State whether a visual-design pass follows — the **design-system
 > milestone** (`spec/design/design-system.md`) — or is deferred (e.g. "styling to emerge in
 > implementation against these wireframes"), in which case that milestone is skipped.
+>
+> **Offer interactive HTML mockups.** If you (the agent) can render HTML/CSS, *proactively offer* to
+> generate an interactive HTML mockup per screen (`NN-<screen>.html`) alongside the Markdown — they let
+> the user click through the empty/loading/populated/error states in a browser. Don't wait to be asked.
 
 ---
 

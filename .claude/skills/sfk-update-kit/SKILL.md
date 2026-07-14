@@ -78,9 +78,9 @@ If you cannot see the newer kit, ask the user where it is before proceeding.
 
 8. **Bump and commit.** Set the applied kit version in the root `CLAUDE.md` (*Project & kit*) to the
    newer kit's `kit_version`; the refreshed `.sfk/` now carries that kit's identity. Commit the
-   refresh + applied deltas together, e.g.
-   `process: update kit to vX.Y.Z`. Summarise for the user what changed, what you interviewed them
-   about, and anything you deliberately left for them.
+   refresh + applied deltas together (per the **Commit protocol** in the root `CLAUDE.md` — hand off if
+   you are not in a git-safe runtime), e.g. `process: update kit to vX.Y.Z`. Summarise for the user what
+   changed, what you interviewed them about, and anything you deliberately left for them.
 
 ## Rules
 

@@ -12,7 +12,7 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 ## Project & kit
 
 - **Project code:** `<PRJ>` — the ticket prefix (`<PRJ>-001`). Set by `sfk-init`.
-- **Spec-First Kit version applied:** `1.0.0` — the *kit* version this project is on (set by
+- **Spec-First Kit version applied:** `1.0.1` — the *kit* version this project is on (set by
   `sfk-init`, raised by `sfk-update-kit`). This is **not** your software's release version (that
   is chosen by the project and tracked in `spec/milestone-plan.md`). The kit's own version,
   changelog and pristine templates live in `.sfk/` (read-only — never edit it by hand; skills
@@ -32,6 +32,15 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 - The documents in `spec/` are the **binding specification.** Do not reopen or reinterpret a
   settled decision — implement to the spec. If the spec is genuinely wrong or missing, raise it and
   change the relevant `spec/` file first; never silently diverge.
+- **Contractual values are not workarounds.** A model name, endpoint, threshold, or named constant
+  fixed in `requirements.md` / `api-contract.md` is contractual. **Never** change it to work around an
+  external or environmental error (an API 404, an auth failure, a missing key). When an external
+  dependency errors: reproduce it directly (e.g. `curl`), check config / keys / endpoints, and if it is
+  still unresolved **STOP and ask the user** — do not edit a spec'd value to make the error go away.
+- **One ticket per commit; finalize before advancing.** Each ticket's work is one commit. When you
+  start the next ticket, first mark the previously reviewed ticket `done` and commit **that alone**
+  (`<PRJ>-NNN: mark done (reviewed)`). **Never** bundle one ticket's closure into another ticket's
+  commit, and never work more than one ticket before its predecessor is committed and reviewed.
 - **<Any hard runtime constraint>** (e.g. no network at runtime).
 
 ## Where things live
@@ -47,7 +56,7 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 - `spec/test-strategy/test-strategy.md` — frameworks, conventions, the definition of done.
 - `spec/tickets/` — the work queue; ticket workflow rules in `spec/tickets/CLAUDE.md`.
 - `.sfk/` — kit machinery (read-only): `manifest.md` (kit identity), `CHANGELOG.md`, and `templates/` (pristine sources the skills copy out). Never edit `.sfk/` by hand.
-- `.claude/skills/sfk-*` — the workflow skills (`sfk-init`, `sfk-version`, `sfk-next-milestone`, `sfk-signoff`, `sfk-next-ticket`, `sfk-verify`, `sfk-update-kit`, `sfk-feedback`).
+- `.claude/skills/sfk-*` — the workflow skills (`sfk-init`, `sfk-version`, `sfk-next-milestone`, `sfk-signoff`, `sfk-next-ticket`, `sfk-close-ticket`, `sfk-verify`, `sfk-update-kit`, `sfk-feedback`).
 
 > Each authoring milestone has its own folder under `spec/` (e.g. `spec/architecture/`). The
 > named master file in it is binding; any other files in the folder are supporting context (reference
@@ -88,6 +97,21 @@ Test targets (all offline after setup):
   core coverage gate. Run it on every ticket.
 - `<make test-<heavy>>` / `<make test-perf>` / `<make test-e2e>` — heavier gates, per ticket type.
 - `<make test-all>` — everything; required at milestone completion.
+
+## Commit protocol (who runs git)
+
+Commits are gated by the **git-safety of the runtime**, which tracks the authoring/building split:
+
+- **Authoring milestones (worked in Cowork): the agent hands off — it must never run `git`.** Cowork
+  mounts the repo into a sandbox where the agent cannot safely touch `.git` (a partial commit can
+  corrupt `.git/index`). The agent presents the exact `git add` / `git commit` commands and **you** run
+  them. Committing the reviewed deliverable is your gate.
+- **Building milestones (worked in Claude Code): the agent commits directly** — one ticket per commit,
+  per `spec/tickets/CLAUDE.md`.
+
+The rule follows *git-safety*, not the tool name: if you author in a git-safe runtime you may let the
+agent commit; if you ever build in Cowork, switch that phase to hand-off. **When unsure, hand off** — it
+is safe in every runtime.
 
 ## Definition of done (implementation tickets)
 

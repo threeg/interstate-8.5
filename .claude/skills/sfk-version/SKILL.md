@@ -33,7 +33,10 @@ there; it does **not** work the milestones (that is `sfk-next-milestone`).
    Number the milestones continuing from the previous version; set all to `Not started` (⬜); set the
    *Current position* to the first one.
 
-4. **Commit** the brief and the milestone table together.
+4. **Commit — per the Commit protocol** (root `CLAUDE.md`). This is an authoring step (Cowork), so
+   **do not run `git` yourself**: present the exact `git add` / `git commit` commands for the brief and
+   the milestone table and have the user run them. (Only in a git-safe building runtime may you commit
+   directly.)
 
 5. **Hand off.** Tell the user the version is scoped and the next step is `sfk-next-milestone` to work
    the first milestone. Do **not** start it yourself, and do **not** mark anything complete.

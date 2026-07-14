@@ -22,7 +22,9 @@ software belongs in a ticket. Feedback here is "the method or its tooling could 
 1. **Make the outbox safe before writing anything.** Confirm `spec/.gitignore` exists and contains a
    `.sfk-feedback/` rule. If it is missing (an older project, or a project that never had one), create or
    append it **first**, so no feedback file can ever be staged. Then ensure the `spec/.sfk-feedback/` folder
-   exists. Never write a feedback file until the ignore is in place.
+   exists. Never write a feedback file until the ignore is in place. **Feedback files go only in
+   `spec/.sfk-feedback/`** — never in your agent's own memory, notes, or scratch directory, and never
+   anywhere else in the repo.
 
 2. **Interview.** Draw out each distinct piece of feedback. For every item capture:
    - **category** — `bug` | `friction` | `doc-gap` | `enhancement` | `idea`;

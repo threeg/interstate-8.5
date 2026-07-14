@@ -52,6 +52,11 @@ spec *says*?" — a different question that tests alone do not cover.
      flag any hardcoded hex/px values that should be tokens.
 7. **Honesty of the record.** Confirm each ticket's status, `## Notes` completion report, and
    `BOARD.md` row were updated in the same commit as the work.
+8. **Contractual-value sweep.** Grep the code, the tests, **and** the docs (`spec/`, wireframes,
+   READMEs) for hardcoded contractual values — numeric thresholds from `requirements.md` (e.g. result
+   counts, timeouts), interface shapes/field names from `api-contract.md`, content-type/field machine
+   names, and design tokens — and confirm each still matches the spec. A value that is correct in most
+   places but drifted in one is exactly what the tests pass over; this is the check that catches it.
 
 ## What to produce
 
@@ -68,3 +73,6 @@ spec *says*?" — a different question that tests alone do not cover.
 - A finding that reveals a genuine spec gap is a specification change (CONVENTIONS §5.5), recorded in
   `spec/` first — not a cleanup ticket.
 - Never sign off a milestone here; that is the user's call via `sfk-signoff`.
+- Audit committed work, **including tickets still `in-review`** — verification does not require them to
+  be `done`, and it never finalizes a ticket. Closing a ticket is the review gate (`sfk-close-ticket`,
+  `sfk-next-ticket`, or `sfk-signoff`), not the verifier's job.

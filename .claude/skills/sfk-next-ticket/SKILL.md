@@ -1,21 +1,25 @@
 ---
 name: sfk-next-ticket
-description: Advance the implementation queue by one ticket. First finalizes the previously reviewed ticket if one is left in-review (marks it done and commits that), then implements the next ready todo ticket test-first where applicable and leaves it in-review for the user to review. Keeps the ticket, board, and tests honest in the work commit. Trigger on "next ticket", "work the next ticket", "implement the next ticket", or "keep building".
+description: Advance the build queue by one ticket, during the scaffolding and implementation milestones. First finalizes the previously reviewed ticket if one is left in-review (marks it done and commits that), then implements the next ready todo ticket test-first where applicable and leaves it in-review for the user to review. Keeps the ticket, board, and tests honest in the work commit. Trigger on "next ticket", "work the next ticket", "implement the next ticket", or "keep building".
 ---
 
 # sfk-next-ticket — implement one ticket
 
-Use during the implementation milestone. One invocation **finalizes the previously reviewed ticket**
-(if one is left `in-review`) and then **implements the next one**, leaving it `in-review`. Follow the
-ticket-workflow rules in `spec/tickets/CLAUDE.md` and the definition of done in the root `CLAUDE.md`.
+Use during the **building milestones — scaffolding and implementation** (both are worked ticket by
+ticket, one at a time). One invocation **finalizes the previously reviewed ticket** (if one is left
+`in-review`) and then **implements the next one**, leaving it `in-review`. Follow the ticket-workflow
+rules in `spec/tickets/CLAUDE.md` and the definition of done in the root `CLAUDE.md`.
 
 ## Procedure
 
-1. **Finalize the previously reviewed ticket first.** Before anything else, check `spec/tickets/BOARD.md`
-   for a ticket already `in-review`. If one exists, the user asking for the next ticket **is** their
-   approval of it: flip it to `done`, update its `BOARD.md` row, and — if it was the last open child of
-   an epic — close that epic. Commit this on its own as `<PRJ>-NNN: mark done (reviewed)`. Only then
-   continue. (Normally there is exactly one; finalize each if somehow more.)
+1. **STOP — finalize the previously reviewed ticket before you do anything else.** Check
+   `spec/tickets/BOARD.md` for a ticket already `in-review`. If one exists, you **must** close it out in
+   **its own commit** before you touch the next ticket — do **not** start, edit, or stage the next
+   ticket, and **never** bundle the closure into the next ticket's work or a later fix commit. The user
+   asking for the next ticket **is** their approval: flip it to `done`, update its `BOARD.md` row, close
+   its epic if it was the last open child, and commit **only** that change as
+   `<PRJ>-NNN: mark done (reviewed)`. Confirm that commit exists, then continue. (Normally exactly one;
+   finalize each if somehow more.)
    - **Exception — outstanding feedback.** If the user has given feedback on the in-review ticket rather
      than approving it, do **not** finalize: revise the ticket, re-commit under its id, leave it
      `in-review`, and stop. Feedback is handled before the queue advances.
@@ -71,3 +75,7 @@ finalizes it (→ `done`) as it completes the implementation milestone; there is
   or `sfk-signoff`).
 - If implementing reveals the spec is wrong, change the relevant `spec/` file first and reference it
   — do not silently reinterpret a settled decision.
+- **External/environmental errors are not licence to edit the spec.** If an external dependency errors
+  (API 404, auth failure, missing key), reproduce and diagnose it (`curl`, config, keys) — **never**
+  change a contractual value (model name, endpoint, threshold) to dodge it. If unresolved, STOP and ask
+  the user.

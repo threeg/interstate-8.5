@@ -81,6 +81,10 @@ title/lyrics for →"**.
   stays binding, the visuals sit beside it. (Keeps the spec on disk, per the project's premise.)
 - **A visual-design pass follows** in **Milestone 5 (Design system)** — tokens, components, states.
 
+> **Interactive HTML mockups** are part of this workflow, not an afterthought: the go/no-go was decided
+> against a click-through canvas, `Interstate-8 Wireframes.dc.html` (all three screens, desktop +
+> mobile), which sits beside these files as supporting context. Offer the same for any new screen.
+
 ---
 
 ## 5. State coverage matrix

@@ -28,16 +28,23 @@ off — that is the separate `sfk-signoff` skill, which the user triggers.
      by section and fill the **working** copy. For ticket generation the working `spec/tickets/*`
      already exist (copied out at init); derive the tickets and `BOARD.md` from the spec in dependency
      order.
-   - **Building steps** (scaffolding → implementation): scaffolding initialises the repo, wires the
-     dependency-rule check and fills in the `sfk-verify` skill for the real stack, and commits skeletons
-     that pass the empty gate. Implementation is handled ticket by ticket — defer to `sfk-next-ticket`.
+   - **Building steps** (scaffolding → implementation): mark the milestone in progress, then **work its
+     tickets one at a time via `sfk-next-ticket`** — do **not** batch. This applies to **scaffolding as
+     well as implementation**: each scaffolding ticket (repo init, backend skeleton, frontend skeleton,
+     test tooling + dependency-rule check, filling in `sfk-verify` for the stack) is a different thing
+     and is implemented, committed, and reviewed **separately**, exactly like an implementation ticket.
+     Never batch-commit the skeletons in one pass. Defer to `sfk-next-ticket` for both.
 
-4. **Commit the draft (WIP).** Commit the status change (step 2) and the draft deliverable together,
-   e.g. `process: <milestone> — draft for review`. Do not wait for the user to commit.
+4. **Commit the draft (WIP) — per the Commit protocol** (root `CLAUDE.md`). For an **authoring**
+   milestone (Cowork) **do not run `git`**: present the exact commands to commit the status change
+   (step 2) and the draft deliverable together (e.g. `process: <milestone> — draft for review`) and have
+   the user run them. (For a **building** milestone the commits happen per ticket via `sfk-next-ticket`,
+   where the agent commits directly.)
 
 5. **Present and iterate.** Show the user the deliverable and ask for feedback. If they have changes,
-   revise and **commit each revision** (`process: <milestone> — revise <what>`). Loop until the user is
-   satisfied. The milestone stays `In progress` throughout.
+   revise and **commit each revision** (`process: <milestone> — revise <what>`) per the Commit protocol
+   (hand off in authoring/Cowork; agent commits in building/Code). Loop until the user is satisfied. The
+   milestone stays `In progress` throughout.
 
 6. **Hand off to sign-off.** When the user is happy, tell them the deliverable is ready and that
    `sfk-signoff` will mark the milestone complete and advance the plan. **Never** mark it `Complete`
