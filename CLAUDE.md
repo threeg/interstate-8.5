@@ -8,7 +8,7 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 ## Project & kit
 
 - **Project code:** `INT8` — the ticket prefix (`INT8-001`). Set by `sfk-init`.
-- **Spec-First Kit version applied:** `1.0.1` — the *kit* version this project is on (set by
+- **Spec-First Kit version applied:** `1.1.0` — the *kit* version this project is on (set by
   `sfk-init`, raised by `sfk-update-kit`). This is **not** the software's release version (that is
   chosen by the project and tracked in `spec/milestone-plan.md`). The kit's own version, changelog
   and pristine templates live in `.sfk/` (read-only — never edit it by hand; skills copy templates
@@ -31,6 +31,10 @@ gaps and stays agent-legible — not merely as scaffolding.
 - The documents in `spec/` are the **binding specification.** Do not reopen or reinterpret a settled
   decision — implement to the spec. If the spec is genuinely wrong or missing, raise it and change
   the relevant `spec/` file first; never silently diverge.
+- **Red-green is binding, not a preference.** For deterministic and contract-pinned work: write the
+  failing test **first**, confirm it fails for the right reason, **then** implement. Never write the
+  implementation first and back-fill tests. This is the default for all implementation work and is
+  overridden only where `spec/test-strategy/test-strategy.md` explicitly names a layer as exempt.
 - **Contractual values are not workarounds.** A model name, endpoint, threshold, or named constant
   fixed in `requirements.md` / `api-contract.md` is contractual. **Never** change it to work around an
   external or environmental error (an API 404, an auth failure, a missing key). When an external
@@ -128,7 +132,9 @@ is safe in every runtime.
 ## Definition of done (implementation tickets)
 
 A ticket reaches **`in-review`** (ready for the user's review) when: the default gate passes **with
-zero warnings**; new/changed numbered-requirement behaviour has tests **in the same commit**; the
+zero warnings**; **red-green was followed** — the failing test was written first and confirmed to fail
+for the right reason, or the test strategy explicitly exempts that layer (say which in the completion
+report); new/changed numbered-requirement behaviour has tests **in the same commit**; the
 relevant heavier gate passes where the ticket says so; and the ticket's status + `## Notes` and its
 `BOARD.md` row are updated in that commit. It becomes **`done`** only after the user reviews it —
 `sfk-next-ticket` finalizes the previous `in-review` ticket on its next run (asking for the next

@@ -35,10 +35,14 @@ rules in `spec/tickets/CLAUDE.md` and the definition of done in the root `CLAUDE
 
 4. **Set `in-progress`** in the ticket and its `BOARD.md` row.
 
-5. **Implement.** Honour the architecture dependency rule. Use test-first (red–green) for deterministic
-   and contract-pinned work (write the failing test from the requirement/contract, confirm it fails for
-   the right reason, then implement); characterisation tests for probabilistic/external layers. New or
-   changed numbered-requirement behaviour ships with its tests **in the same commit**.
+5. **Implement — test-first, and that is binding.** Honour the architecture dependency rule. For
+   deterministic and contract-pinned work: **write the failing test FIRST**, run it, **confirm it fails
+   for the right reason**, and only **then** write the implementation. Do not write implementation
+   first and back-fill tests — that is a process violation, not a shortcut, and it loses coverage you
+   will not notice missing. Red-green is the default for **all** implementation work; it is overridden
+   only where `spec/test-strategy/test-strategy.md` **explicitly names** that layer as exempt (§1).
+   Characterisation tests for probabilistic/external layers. New or changed numbered-requirement
+   behaviour ships with its tests **in the same commit**.
 
 6. **Run the gates.** The default gate must pass with zero warnings; run the heavier gate the ticket
    names (model / perf / e2e) where it applies; hold the core coverage gate for core-touching work.

@@ -1,0 +1,4 @@
+# SFK — outbound feedback is local-only and must never be committed to your project.
+# The sfk-feedback skill writes feedback files here; you send them to the SFK maintainer
+# out of band (they are consumed and deleted on the SFK side — see spec/README.md).
+/.sfk-feedback/

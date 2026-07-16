@@ -12,7 +12,7 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 ## Project & kit
 
 - **Project code:** `<PRJ>` — the ticket prefix (`<PRJ>-001`). Set by `sfk-init`.
-- **Spec-First Kit version applied:** `1.0.1` — the *kit* version this project is on (set by
+- **Spec-First Kit version applied:** `1.1.0` — the *kit* version this project is on (set by
   `sfk-init`, raised by `sfk-update-kit`). This is **not** your software's release version (that
   is chosen by the project and tracked in `spec/milestone-plan.md`). The kit's own version,
   changelog and pristine templates live in `.sfk/` (read-only — never edit it by hand; skills
@@ -32,6 +32,10 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 - The documents in `spec/` are the **binding specification.** Do not reopen or reinterpret a
   settled decision — implement to the spec. If the spec is genuinely wrong or missing, raise it and
   change the relevant `spec/` file first; never silently diverge.
+- **Red-green is binding, not a preference.** For deterministic and contract-pinned work: write the
+  failing test **first**, confirm it fails for the right reason, **then** implement. Never write the
+  implementation first and back-fill tests. This is the default for all implementation work and is
+  overridden only where `spec/test-strategy/test-strategy.md` explicitly names a layer as exempt.
 - **Contractual values are not workarounds.** A model name, endpoint, threshold, or named constant
   fixed in `requirements.md` / `api-contract.md` is contractual. **Never** change it to work around an
   external or environmental error (an API 404, an auth failure, a missing key). When an external
@@ -54,6 +58,7 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 - `spec/wireframes/` — the screens, states and navigation. (Omit for non-UI projects.)
 - `spec/design/design-system.md` — tokens, components, visual states; the frontend's visual contract. (Omit if no visual design.)
 - `spec/test-strategy/test-strategy.md` — frameworks, conventions, the definition of done.
+- `spec/verify/verify.md` — the verifier's project-specific instructions (gate commands, contractual values to sweep, extra checks). `sfk-verify` is neutral and reads this; created by interview on its first run.
 - `spec/tickets/` — the work queue; ticket workflow rules in `spec/tickets/CLAUDE.md`.
 - `.sfk/` — kit machinery (read-only): `manifest.md` (kit identity), `CHANGELOG.md`, and `templates/` (pristine sources the skills copy out). Never edit `.sfk/` by hand.
 - `.claude/skills/sfk-*` — the workflow skills (`sfk-init`, `sfk-version`, `sfk-next-milestone`, `sfk-signoff`, `sfk-next-ticket`, `sfk-close-ticket`, `sfk-verify`, `sfk-update-kit`, `sfk-feedback`).
@@ -116,7 +121,9 @@ is safe in every runtime.
 ## Definition of done (implementation tickets)
 
 A ticket reaches **`in-review`** (ready for the user's review) when: `<make test>` passes **with zero
-warnings**; new/changed numbered-requirement behaviour has tests **in the same commit**; the core
+warnings**; **red-green was followed** — the failing test was written first and confirmed to fail for
+the right reason, or the test strategy explicitly exempts that layer (say which in the completion
+report); new/changed numbered-requirement behaviour has tests **in the same commit**; the core
 coverage gate holds for core-touching work; the relevant heavier gate passes where the ticket says so;
 and the ticket's status + `## Notes` and its `BOARD.md` row are updated in that commit. It becomes
 **`done`** only after the user reviews it — `sfk-next-ticket` finalizes the previous `in-review` ticket

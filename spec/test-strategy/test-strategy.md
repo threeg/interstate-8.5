@@ -15,9 +15,19 @@
 
 ## 1. Principles
 
-1. **Test-first where behaviour is deterministic and contract-pinned** — the FE behaviour in the
-   `FR`s (filters, navigation, the side-by-side lyrics) and any owned services logic: write the test
-   from the requirement, watch it fail, implement to green.
+1. **Test-first (red-green) where behaviour is deterministic and contract-pinned — BINDING, not a
+   preference.** The FE behaviour in the `FR`s (filters, navigation, the side-by-side lyrics), owned
+   services logic, and the deterministic FR-21 rich-text transform: write the test from the requirement,
+   confirm it fails *for the right reason*, then implement to green. This is the **default for all
+   implementation work**, not "when there's time"; it is overridden **only** by the exemptions named
+   below (silence means red-green applies).
+
+   > **Exemptions.** Two layers are exempt because they are *verified*, not written test-first:
+   > **migration** (Migrate API) — verified by outcomes (count parity, spot-checks, idempotency/rollback)
+   > per NFR-3, §4 — **except** the deterministic FR-21 transform, which stays red-green; and
+   > **content-model / config**, which is generated in the Drupal UI/API and exported, then diffed
+   > field-for-field against `content-model.md` (§2.1), not unit-tested. Every other deterministic layer
+   > is red-green.
 2. **Verify rather than re-test the framework** — the migration leans on the Migrate module's own
    mechanisms; we verify *outcomes* (counts, spot-checks), not Migrate itself (NFR-3).
 3. **Tests live in the same commit as the behaviour they cover** (§12).

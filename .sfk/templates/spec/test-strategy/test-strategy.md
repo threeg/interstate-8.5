@@ -15,9 +15,19 @@
 
 ## 1. Principles
 
-1. **Test-first (red-green) for deterministic and contract-pinned layers.** For the pure core, the
-   domain rules, and the interface contract shapes: write the failing test from the requirement or
-   the contract, confirm it fails *for the right reason*, then implement to green.
+1. **Test-first (red-green) for deterministic and contract-pinned layers — BINDING, not a preference.**
+   For the pure core, the domain rules, and the interface contract shapes: write the failing test from
+   the requirement or the contract, confirm it fails *for the right reason*, then implement to green.
+   This is the **default discipline for all implementation work** and is not optional "when there's
+   time". It may be overridden **only** by an explicit decision recorded in this document — name the
+   exempt layer(s) and the rationale below; silence means red-green applies.
+
+   > **Exemptions (if any).** <Layer + why it is exempt, or "none — red-green applies everywhere
+   > deterministic.">
+   >
+   > *Why this is binding:* implementation-first quietly loses coverage you don't know you need. In a
+   > real run, redoing one ticket test-first took its suite from 21 to 27 tests — the six new ones
+   > covered composition-root wiring that the implementation-first pass never surfaced.
 2. **Characterisation (after) tests for probabilistic / external layers.** Where output is
    non-deterministic (models, network, randomness), pin behaviour with seeded or recorded tests and
    assert *properties*, not exact values. Make randomness **seedable** so the layer stays testable.

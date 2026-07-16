@@ -41,7 +41,7 @@ together, commit by commit.
 | 5 | Design system | `spec/design/design-system.md` — tokens, components, visual states (UI only; omit if no visual design) | Cowork | ⬜ |
 | 6 | Test strategy | `spec/test-strategy/test-strategy.md` — frameworks, what is unit/integration/E2E tested | Cowork | ⬜ |
 | 7 | Ticket generation | `spec/tickets/*.md` + conventions + `BOARD.md` index | Cowork | ⬜ |
-| 8 | Repository setup & scaffolding | repo initialised, docs + tickets committed, skeletons, dependency-rule check wired in, `sfk-verify` skill filled in for the stack | Code | ⬜ |
+| 8 | Repository setup & scaffolding | repo initialised, docs + tickets committed, skeletons, dependency-rule check wired in | Code | ⬜ |
 | 9 | Implementation, ticket by ticket | working software; tickets updated in the same commits | Code | ⬜ |
 
 <!-- Append a new table per version. Subsequent versions run as a DELTA PASS (see README): a

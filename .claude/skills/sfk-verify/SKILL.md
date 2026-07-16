@@ -1,6 +1,6 @@
 ---
 name: sfk-verify
-description: Post-batch verification pass — audit completed work against the binding spec and review code quality, then propose cleanup tickets. Trigger on "verify", "review this batch", "run the verifier", or "spec-audit the recent work".
+description: Post-batch verification pass — audit completed work against the binding spec and review code quality, then propose cleanup tickets. Reads its project-specific gate commands and checks from spec/verify/verify.md, creating that file by interview on first run. Trigger on "verify", "review this batch", "run the verifier", or "spec-audit the recent work".
 ---
 
 # sfk-verify — post-batch spec audit + quality review
@@ -9,54 +9,47 @@ Run after a batch of related tickets completes — before the gate the batch fee
 a first-class step: tests answer "is the code correct?"; this answers "does the code implement what the
 spec *says*?" — a different question that tests alone do not cover.
 
-## Commands
+> **This skill is neutral and kit-owned — never edit it.** It owns the *method* (what to check, below).
+> The *specifics* — your gate commands, your stack-specific checks, your extra checks — live in
+> **`spec/verify/verify.md`**, which is yours. That split is deliberate: kit updates improve the method
+> for free without touching your content, and your content is never overwritten.
 
-- `lando test` — the default gate: PHPUnit (Unit/Kernel/Functional, `phpunit.xml`) + PHPCS
-  (`Drupal` + `DrupalPractice`, `.phpcs.xml`, scoped to `web/modules/custom` +
-  `web/themes/custom/interstate_85`) + PHPStan (`phpstan.neon`, same scope, deprecation rules on) +
-  `tooling/check-boundary.sh` (dependency-rule boundary check). Wired via `tooling/run-tests.sh`; must
-  pass with **zero warnings**.
-- `lando playwright` — the Playwright + Axe FE suite (`tests/playwright/`), against the Lando site, via
-  the dedicated `pw` service.
-- **"`lando test-all`"** — there is no single wired command; run `lando test` then `lando playwright`
-  from the host (two separate Lando services — see `INT8-006` notes).
-- Boundary check standalone: `bash tooling/check-boundary.sh` — greps custom modules for
-  `use Drupal\interstate_85\...` (theme-namespace imports); fails on any hit.
-- Pre-commit hook (`.githooks/pre-commit`, wired via `git config core.hooksPath .githooks`) runs
-  `lando test` automatically.
+## Procedure
+
+1. **Load your instructions — or create them.** Read `spec/verify/verify.md`.
+   - **If it does not exist, create it now, by interview.** Copy
+     `.sfk/templates/spec/verify/verify.md` out to `spec/verify/verify.md`, then **interview the user**
+     before filling it: the real **gate commands**; the **contractual values** that must match the spec
+     everywhere (model names, endpoints, thresholds, named constants — and where each is defined); any
+     **stack-specific checks** a generic verifier would miss; and — ask explicitly — **anything extra
+     they want the verifier to do every run** (extra workload, project quirks, traps that have bitten
+     before). Fill the copy, commit it per the **Commit protocol** (root `CLAUDE.md`), then continue.
+   - Every later run just reads the file. If the user mentions a new check, offer to add it to §5.
+
+2. **Run the checks below**, using the commands and specifics from `spec/verify/verify.md`.
 
 ## What to check
 
 1. **Spec audit (requirement by requirement).** For each `FR`/`NFR` the batch's tickets `implement`,
-   open `spec/requirements/requirements.md` and confirm the behaviour matches — exact thresholds,
-   ordering, boundary conditions, error cases. Flag loose interpretations and missing edge cases, not
-   just outright bugs.
+   open the requirements document and confirm the behaviour matches — exact thresholds, ordering,
+   boundary conditions, error cases. Flag loose interpretations and missing edge cases, not just
+   outright bugs.
 2. **Contract conformance.** Where the batch touched the interface, confirm requests/responses match
-   `spec/architecture/api-contract.md` exactly (shapes, status codes, error envelope).
-3. **Content-model conformance.** Where the batch touched `content-model` (config), confirm the
-   exported config under `config/` matches `spec/architecture/content-model.md` field-for-field. Config
-   is generated in the Drupal admin UI/API and exported — **never hand-authored**; if you find
-   hand-edited config YAML, that is a critical finding, not a style note.
-4. **Architecture & dependency rule.** Confirm no layer imports something it may not
-   (`content-model → services → theme`, `migration → content-model`, nothing imports `theme` —
-   architecture §2.1) — run `bash tooling/check-boundary.sh` (or `lando test`, which includes it) — and
-   that the ticket `depends_on` graph in `spec/tickets/BOARD.md` still agrees with the import contracts.
-5. **Code quality.** Look for duplication, dead code, needless complexity, and efficiency traps the
+   the interface contract exactly (shapes, status codes, error envelope).
+3. **Architecture & dependency rule.** Confirm no layer imports something it may not (run the
+   boundary-enforcement command from §1 of your instructions), and that the ticket `depends_on` graph
+   still agrees with the import contracts.
+4. **Code quality.** Look for duplication, dead code, needless complexity, and efficiency traps the
    tests would pass but a gate would later fail (e.g. an N+1 query, an unbounded loop, a missing index).
-   Run `lando test` and, for any batch touching the theme or song screens, `lando playwright`.
-6. **Drupal-specific review points:**
-   - No hand-authored config YAML (point 3).
-   - **Deprecation-clean** — PHPStan (`phpstan.neon`, deprecation rules) reports no deprecated-API
-     usage in custom code; this is the on-mission guard against the PHP-EOL trap that ended v2.
-   - **Tokens not hardcoded** — theme/SDC changes reference `spec/design/tokens.css` custom properties;
-     flag any hardcoded hex/px values that should be tokens.
-7. **Honesty of the record.** Confirm each ticket's status, `## Notes` completion report, and
-   `BOARD.md` row were updated in the same commit as the work.
-8. **Contractual-value sweep.** Grep the code, the tests, **and** the docs (`spec/`, wireframes,
-   READMEs) for hardcoded contractual values — numeric thresholds from `requirements.md` (e.g. result
-   counts, timeouts), interface shapes/field names from `api-contract.md`, content-type/field machine
-   names, and design tokens — and confirm each still matches the spec. A value that is correct in most
-   places but drifted in one is exactly what the tests pass over; this is the check that catches it.
+   Run the default gate and any heavier gate the batch affects.
+5. **Honesty of the record.** Confirm each ticket's status, `## Notes` completion report, and `BOARD.md`
+   row were updated in the same commit as the work — including that red-green was followed or the layer
+   is a stated exemption.
+6. **Contractual-value sweep.** Grep the code, the tests, **and** the docs for the contractual values
+   listed in §3 of your instructions, and confirm each still matches the spec. A value that is correct
+   in most places but drifted in one is exactly what the tests pass over; this is the check that catches
+   it.
+7. **The project's own extra checks** — everything in §4 and §5 of your instructions.
 
 ## What to produce
 
@@ -69,6 +62,8 @@ spec *says*?" — a different question that tests alone do not cover.
 ## Rules
 
 - **Never edit `.sfk/`** — it is the kit's read-only source (templates, changelog, manifest).
+- **Never edit this skill.** It is kit-owned and refreshed wholesale on a kit update. Project-specific
+  content belongs in `spec/verify/verify.md`.
 - Verification proposes tickets; it does not silently rewrite shipped code.
 - A finding that reveals a genuine spec gap is a specification change (CONVENTIONS §5.5), recorded in
   `spec/` first — not a cleanup ticket.

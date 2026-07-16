@@ -31,8 +31,8 @@ off — that is the separate `sfk-signoff` skill, which the user triggers.
    - **Building steps** (scaffolding → implementation): mark the milestone in progress, then **work its
      tickets one at a time via `sfk-next-ticket`** — do **not** batch. This applies to **scaffolding as
      well as implementation**: each scaffolding ticket (repo init, backend skeleton, frontend skeleton,
-     test tooling + dependency-rule check, filling in `sfk-verify` for the stack) is a different thing
-     and is implemented, committed, and reviewed **separately**, exactly like an implementation ticket.
+     test tooling + dependency-rule check) is a different thing and is implemented, committed, and
+     reviewed **separately**, exactly like an implementation ticket.
      Never batch-commit the skeletons in one pass. Defer to `sfk-next-ticket` for both.
 
 4. **Commit the draft (WIP) — per the Commit protocol** (root `CLAUDE.md`). For an **authoring**

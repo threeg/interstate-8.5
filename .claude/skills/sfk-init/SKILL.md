@@ -42,11 +42,17 @@ optional: if an argument is supplied, use it without asking; otherwise ask for i
    - `.sfk/templates/spec/milestone-plan.md` → `spec/milestone-plan.md`. Leave the
      milestone table **empty** with a *Current position* line "Environment bootstrapped; run
      `sfk-version` to start the first version." — the table is laid down by `sfk-version`.
+   - `.sfk/templates/spec/README.md` → `spec/README.md` — the method guide. **Kit-owned: copy it
+     verbatim, fill nothing.** (It is not shipped in the payload; `spec/` is created entirely here.)
+   - `.sfk/templates/spec/gitignore` → `spec/.gitignore` — ignores the `.sfk-feedback/` outbox. Copy
+     verbatim.
    - `.sfk/templates/spec/tickets/*` → `spec/tickets/*`, and
      `.sfk/templates/spec/templates/layer-CLAUDE.md` → `spec/templates/layer-CLAUDE.md`.
      Adapt the prefix and layer names.
    - Do **not** copy out the per-milestone spec docs (brief, requirements, architecture, wireframes,
-     design, test-strategy) — `sfk-next-milestone` copies each out when its milestone is worked.
+     design, test-strategy) — `sfk-next-milestone` copies each out when its milestone is worked. Do
+     **not** copy out `spec/verify/verify.md` either — `sfk-verify` creates it by interview on its
+     first run.
    - **Root `.gitignore`:** if the repo has **no** `.gitignore`, copy `.sfk/templates/gitignore` out to
      `./.gitignore` and uncomment the build-artefact lines your stack uses. If the repo **already has**
      a `.gitignore` (e.g. from a framework scaffold), leave it as the source of truth — do **not**

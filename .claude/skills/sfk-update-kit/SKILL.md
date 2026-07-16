@@ -1,95 +1,96 @@
 ---
 name: sfk-update-kit
-description: Pull a newer version of the Spec-First Kit into an existing project without disturbing the project's filled-in docs. Compares kit versions, refreshes kit-owned files and the pristine template mirror, and applies changelog deltas to the living spec — interviewing the user where a change needs input. Trigger on "update the process", "update the kit", "pull the latest starter kit", "upgrade sfk", or "apply the new kit version".
+description: Bring a newer Spec-First Kit version into this project after its two kit-owned folders have been copied over. Reads the changelog as a migration script and applies the deltas to the files the project owns — the root CLAUDE.md and the spec documents — interviewing the user where a change needs input, never overwriting their content. Trigger on "update the process", "update the kit", "pull the latest starter kit", "upgrade sfk", or "apply the new kit version".
 ---
 
 # sfk-update-kit — bring a newer kit version into this project
 
-Use when a newer version of the kit has shipped and you want its improvements in an existing project.
-You apply the *method's* updates to the project's living spec **without overwriting the user's
-content**. This is a semantic migration, not a blind file copy — a blind copy would clobber filled-in
-docs, because the kit also ships working-named files for fresh inits.
+Use when a newer version of the kit has been copied over this project and you want its improvements
+applied. **The copy is the easy half and the user does it; you do the semantic half** — bringing the
+kit's declared changes into the files the *project* owns, without touching their content.
+
+> **Why a copy is safe.** The payload is exactly two folders — `.sfk/` and `.claude/` — and both are
+> **100% kit-owned**: nothing in a project ever edits them. Everything the project owns (the root
+> `CLAUDE.md`, all of `spec/`) is *generated* from `.sfk/templates/` and is never shipped, so a copy
+> cannot clobber it. There are no exceptions and no skill to merge.
 
 ## Inputs you need
 
-- **This project**, whose *applied* kit version is recorded in the root `CLAUDE.md` (*Project & kit*
-  section). `.sfk/manifest.md` here is the kit identity it was last refreshed from.
-- **The newer kit**, available somewhere readable (a clone of the kit repo, or a temp folder the user
-  points you at). You will read its `.sfk/manifest.md` (its `kit_version`), its
-  `.sfk/CHANGELOG.md`, its `.sfk/templates/` mirror, and its kit-owned files.
+Everything is **inside this project** — you never need an external kit, a temp folder, or a path to
+fetch from. After the copy, the project already contains:
 
-If you cannot see the newer kit, ask the user where it is before proceeding.
+- the **new** `.sfk/manifest.md` (its `kit_version`), `.sfk/CHANGELOG.md` (your migration script), and
+  `.sfk/templates/` (the new pristine text);
+- the **new** `.claude/skills/`;
+- the project's **own** files, untouched by the copy: the root `CLAUDE.md` (which records the *applied*
+  kit version) and everything under `spec/`.
+
+**If the copy has not happened yet**, stop and tell the user how — *commit the project, copy the newer
+kit's `.sfk/` and `.claude/` folders over it, don't commit, then re-run me*. **Never fetch or copy the
+kit yourself.**
 
 ## Procedure
 
-1. **Compare versions.** Read the project's applied kit version (root `CLAUDE.md`, *Project & kit*) and
-   the newer kit's `kit_version` (its `.sfk/manifest.md`). If
-   they are equal, report "already up to date" and stop. If the project's is higher, stop and ask
-   (something is off).
+1. **Check the preconditions.**
+   - Compare the applied kit version (root `CLAUDE.md`, *Project & kit*) against `kit_version` in
+     `.sfk/manifest.md`. Equal → report "already up to date" and stop. Applied is *higher* → stop and
+     ask; something is off.
+   - Prefer the copy to be **uncommitted**, so `HEAD` still holds the pre-update state — that is the
+     optional fallback in step 3. If it was already committed, or the tree is dirty for other reasons,
+     say so and continue; it only costs you that fallback.
 
-2. **Collect the deltas.** From the newer kit's `CHANGELOG.md`, take every entry with a version greater
-   than the project's applied kit version, oldest-to-newest. The changelog is your migration script:
-   each entry carries an **Apply** note (*refresh* / *add* / *amend* / *interview*).
+2. **Collect the deltas.** From `.sfk/CHANGELOG.md`, take every entry newer than the applied version,
+   oldest-to-newest. **The changelog is the migration script**: each entry's **Apply** note
+   (*refresh* / *add* / *amend* / *interview*) declares what the kit changed and how to bring it in. You
+   do **not** have to diff old-vs-new to discover the kit's delta — it is stated.
+   - **Check for `Pre-copy` notes first.** Those were instructions to the *human*, to be done **before**
+     the copy that has already happened — they exist because the copy destroys something. If one was
+     missed, **stop and say so**; then recover if you can (if the copy is uncommitted, `HEAD` still holds
+     the pre-copy state: `git show HEAD:<path>`) or ask the user for their backup. **Never silently
+     proceed past a missed `Pre-copy` step** — the thing it protected is already gone from the working
+     tree.
 
-3. **Refresh kit-owned files.** Overwrite the files the user does not edit, from the newer kit: the
-   skills in `.claude/skills/` (**except `sfk-verify`** — the project fills it in for its own stack, so
-   it is merged, not overwritten; see step 6), `spec/README.md`, `spec/.gitignore` (create it if the
-   project predates the feedback loop, so `spec/.sfk-feedback/` is ignored), and the `.sfk/` machinery
-   (`manifest.md` body, `CHANGELOG.md`). Before overwriting any kit-owned file, check whether the user
-   has locally modified it (compare against the old pristine where one exists); if so, show the
-   difference and confirm rather than silently discarding their change.
+3. **Apply each delta to the files the project owns.** The kit-owned folders are already current (the
+   copy did that) — **do not re-copy them**. What remains is the root `CLAUDE.md` and the documents
+   under `spec/`. Per the Apply note:
+   - **add:** insert the new section/heading where the new template (`.sfk/templates/…`) has it; leave
+     the body empty, or interview if content is needed.
+   - **amend:** apply the wording/guidance change; keep the user's edits in that section.
+   - **interview:** ask the user, then write their answer.
+   - **refresh:** for a project-owned file the changelog says to replace wholesale, confirm first.
 
-4. **Refresh the pristine mirror.** Copy the newer kit's `.sfk/templates/` over the project's,
-   but **keep the previous mirror** available for the three-way comparison in step 5 (e.g. read the old
-   one from version control, or copy it aside first).
+   Use `.sfk/templates/` for the new exact text. **If an Apply note is ambiguous** — you cannot tell
+   whether a difference is the kit's change or the user's own edit — recover the old pristine from git
+   (`git show HEAD:.sfk/templates/<path>`) and reason three ways (user's file vs old pristine vs new
+   pristine). If git is unavailable, ask the user rather than guess.
 
-5. **Apply each delta to the living docs.** For every changed living file, reason three ways — the
-   user's working file vs the *old* pristine mirror vs the *new* pristine mirror — and apply only the
-   kit's change, preserving the user's content:
-   - **add:** insert the new section/heading where the new template has it; leave the body empty (or
-     interview the user if they want it filled now).
-   - **amend:** apply the wording/guidance change; keep any user edits in that section.
-   - **refresh:** for a living file the changelog says to replace wholesale, confirm with the user first.
-   - **interview:** when the change needs a decision or content, ask the user, then write their answer.
    Never overwrite filled-in content, and never touch generated artefacts (individual tickets, code) or
    the gitignored `spec/.sfk-feedback/` outbox.
 
-6. **Merge `sfk-verify` — never overwrite it.** `sfk-verify` is the one skill the project fills in for
-   its own stack at the scaffolding milestone, so its working copy at
-   `.claude/skills/sfk-verify/SKILL.md` holds project-specific gate commands and stack-specific checks.
-   Do **not** refresh it wholesale. Instead bring the newer kit's improvements into the filled-in copy,
-   aided by the user:
-   - Read the sources available: the project's **filled** `sfk-verify` and the **newer kit's**
-     `sfk-verify` template (the new pristine). If the version the project originally filled from is
-     recoverable (the pre-scaffolding commit in git history), use it as the old pristine for a
-     three-way reason; otherwise reason two-way.
-   - The **generic, instructional parts** — the *What to check* list, new check categories, wording,
-     the *Rules* — are the kit's delta to bring in. The **filled-in specifics** — real gate commands,
-     stack-specific checks, the named spec sections — are the user's content and are preserved.
-   - Where the new template adds a check with no analog in the filled copy, adapt it to the project's
-     stack, **interviewing** the user for the concrete command or spec section rather than leaving a
-     `PLACEHOLDER`.
-   - Present the proposed merged `sfk-verify` for approval before writing it. Never discard a
-     stack-specific check in order to take a generic one.
+4. **Leave lazily-created files alone.** Some project-owned files are created on demand by the skill
+   that owns them, not by this one — `spec/verify/verify.md` is created by `sfk-verify` on its first
+   run. If such a file does not exist, do not create it; if it *does* exist and the changelog changed its
+   template, apply the delta to it like any other living doc (step 3).
 
-7. **Offer optional backfills.** When a template gained a section that existing artefacts could also
+5. **Offer optional backfills.** When a template gained a section that existing artefacts could also
    carry (e.g. the ticket template gained `## In plain English`), *offer* — do not force — to backfill
    it into the existing instances, interviewing per item for the wording. Skip if the user declines.
 
-8. **Bump and commit.** Set the applied kit version in the root `CLAUDE.md` (*Project & kit*) to the
-   newer kit's `kit_version`; the refreshed `.sfk/` now carries that kit's identity. Commit the
-   refresh + applied deltas together (per the **Commit protocol** in the root `CLAUDE.md` — hand off if
-   you are not in a git-safe runtime), e.g. `process: update kit to vX.Y.Z`. Summarise for the user what
-   changed, what you interviewed them about, and anything you deliberately left for them.
+6. **Bump and commit.** Set the applied kit version in the root `CLAUDE.md` (*Project & kit*) to the
+   `kit_version` from `.sfk/manifest.md`. Commit the copied kit folders **and** the applied deltas
+   together (per the **Commit protocol** in the root `CLAUDE.md` — hand off if you are not in a git-safe
+   runtime), e.g. `process: update kit to vX.Y.Z`. Summarise for the user what changed, what you
+   interviewed them about, and anything you deliberately left for them.
 
 ## Rules
 
-- Never overwrite the user's filled-in living docs or their code; apply only the kit's deltas.
-- Kit-owned files are refreshed wholesale, but warn before discarding any local modification to one.
-  **`sfk-verify` is the exception:** it is merged, not overwritten (step 6) — the project's
-  stack-specific fill-in is preserved while the kit's generic improvements are brought in, aided by the
-  user.
-- The CHANGELOG is authoritative for *what* changed; the pristine mirrors are authoritative for the
-  *exact* before/after text. Use both.
+- **Never fetch or copy the kit yourself.** The user copies the two kit-owned folders; you apply the
+  semantic half. If they have not, say so and stop.
+- **No kit file is ever merged.** `.sfk/` and `.claude/` are wholesale-replaced by the copy — a project
+  never edits a skill. `sfk-verify` is neutral; its project-specific half is `spec/verify/verify.md`,
+  which is an ordinary living doc.
+- Never overwrite the user's filled-in living docs or their code; apply only the kit's declared deltas.
+- The CHANGELOG is authoritative for *what* changed; `.sfk/templates/` for the *new* exact text; git
+  (`HEAD`) for the *old* text on the rare occasion you need it.
 - Do not mark milestones complete or alter project status — this skill changes the *method*, not the
   *project's* progress.
