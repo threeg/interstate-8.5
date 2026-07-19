@@ -2,7 +2,7 @@
 id: INT8-011
 title: Pathauto pattern for songs
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: config
 layer: config
