@@ -46,7 +46,7 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 7 | INT8-007 | Fill in `sfk-verify` for the stack | task | docs | 8 / scaffolding | E01 | code | done | INT8-006 |
 | 8 | INT8-008 | Song type taxonomy (vocabulary + terms) | task | content-model | 9 / content-model | E02 | site-building | done | INT8-003 |
 | 9 | INT8-009 | Remote-video media type + Restricted HTML format | task | content-model | 9 / content-model | E02 | site-building | done | INT8-003 |
-| 10 | INT8-010 | Song content type + fields | task | content-model | 9 / content-model | E02 | site-building | in-review | INT8-008, INT8-009 |
+| 10 | INT8-010 | Song content type + fields | task | content-model | 9 / content-model | E02 | site-building | done | INT8-008, INT8-009 |
 | 11 | INT8-011 | Pathauto pattern for songs | task | config | 9 / config | E02 | site-building | todo | INT8-010 |
 | 12 | INT8-012 | Song type migration (`I8_SongType` → terms) | task | migration | 9 / migration | E02 | code | todo | INT8-004, INT8-008 |
 | 13 | INT8-013 | Songs migration (`I8_Songs` → nodes) | task | migration | 9 / migration | E02 | code | todo | INT8-010, INT8-011, INT8-012 |

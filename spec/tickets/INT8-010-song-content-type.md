@@ -2,7 +2,7 @@
 id: INT8-010
 title: Song content type + fields
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: content-model
 layer: content-model
