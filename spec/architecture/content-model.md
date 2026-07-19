@@ -61,12 +61,15 @@ resolution keys on **entity type + legacy id**. See `architecture.md` §3 for th
 | Property | Value |
 |----------|-------|
 | Vocabulary | `song_type` |
-| Terms (working set) | Modest Mouse, Ugly Casanova, Side projects, Covers |
+| Terms (working set) | Modest Mouse, Ugly Casanova, Side Projects, Covers |
 | Term order | Preserve v2 `SongType_Order` as term weight. |
-| Source | `I8_SongType` (`SongType_Name`, `SongType_Order`). |
+| Legacy id | `field_legacy_id` (Integer, indexed) on the term ← `PK_SongType_ID`. Cross-cutting convention (architecture.md §3.3) — applies to every migrated content entity, not just Song. |
+| Source | `I8_SongType` (`PK_SongType_ID`, `SongType_Name`, `SongType_Order`). |
 
-The exact term set is reconfirmed against the dump at migration. The landing's **default view is the
-*Modest Mouse* term** (FR-9). Taxonomy leaves room for per-type pages/metadata later without remodelling.
+The term set and spelling are confirmed against the dump: `Modest Mouse` (PK 1), `Ugly Casanova`
+(PK 2), `Covers` (PK 3), `Side Projects` (PK 4, capital P). The landing's **default view is the
+*Modest Mouse* term** (FR-9). Taxonomy leaves room for per-type pages/metadata later without
+remodelling.
 
 ---
 
@@ -146,6 +149,11 @@ Migration is idempotent and rollbackable (FR-4); imported count is verified agai
 
 ## 9. Decisions log
 
+- **2026-07-12** — **`field_legacy_id` extended to the Song type taxonomy term** (§3), closing a gap
+  where the cross-cutting convention (architecture.md §3.3, "every migrated content entity") wasn't
+  reflected here — only Song had the field listed. Also corrected the working term set's spelling to
+  **"Side Projects"** (capital P), confirmed against the `I8_SongType` dump per INT8-008's own
+  instruction to reconfirm at build time.
 - **2026-07-07** — Song = **node** content type; Song type = **taxonomy**; video = **Core Media remote
   video** (oEmbed); rich text = **Restricted HTML**. (Operator decisions, Milestone 3.)
 - **2026-07-07** — `Song_Live` becomes **`field_exclude_from_list`** — the rename away from the "live"

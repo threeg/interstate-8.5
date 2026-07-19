@@ -1,0 +1,23 @@
+uuid: 7a69fd36-095e-4519-b181-b026afb4406c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_legacy_id
+    - taxonomy.vocabulary.song_type
+id: taxonomy_term.song_type.field_legacy_id
+field_name: field_legacy_id
+entity_type: taxonomy_term
+bundle: song_type
+label: 'Legacy ID'
+description: 'Permanent v2 primary key (I8_SongType.PK_SongType_ID).'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer
