@@ -73,6 +73,7 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 |---|----|-------|------|-------|-------|--------|------------|
 | C1 | INT8-022 | Broaden the dependency-rule boundary check to the full architecture rule | task | tooling | cleanup | todo | INT8-006 |
 | C2 | INT8-023 | Reconcile the INT8-001 record (and its BOARD title) from DDEV to Lando | task | docs | cleanup | todo | INT8-001 |
+| C3 | INT8-024 | Pin lyrics/notes/quotes fields to the Restricted HTML format | task | content-model | cleanup | todo | INT8-010 |
 
 > **INT8-022** is a **promotion candidate**: work it (or promote it into the main sequence) **before
 > INT8-012**, when the first migration/services custom modules land — until then NFR-5 has nothing to
