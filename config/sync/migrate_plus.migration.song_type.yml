@@ -1,0 +1,45 @@
+uuid: bdbded25-04d4-48b8-ae0e-8c874009f9e2
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: abXfRSSdYPKEKnU2p3FXIadck0os0LBmtKWkKLnClNk
+id: song_type
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Interstate-8 v2 import'
+migration_group: i8
+label: 'Song type (I8_SongType → taxonomy terms)'
+source:
+  plugin: table
+  key: migrate
+  table_name: I8_SongType
+  track_changes: true
+  id_fields:
+    PK_SongType_ID:
+      type: integer
+  fields:
+    PK_SongType_ID: PK_SongType_ID
+    SongType_Name: SongType_Name
+    SongType_Order: SongType_Order
+    SongType_Active: SongType_Active
+process:
+  tid:
+    plugin: entity_lookup
+    source: PK_SongType_ID
+    entity_type: taxonomy_term
+    value_key: field_legacy_id
+    bundle_key: vid
+    bundle: song_type
+  field_legacy_id: PK_SongType_ID
+  name: SongType_Name
+  weight: SongType_Order
+  status: SongType_Active
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: song_type
+idMap: {  }
+migration_dependencies: {  }
+include: null

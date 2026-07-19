@@ -1,0 +1,7 @@
+id: i8
+label: 'Interstate-8 v2 import'
+description: 'Migrations importing content from the v2 (interstate-8.com) MySQL dump (the sole migration source, Path A).'
+source_type: 'MySQL (v2 dump)'
+shared_configuration:
+  source:
+    key: migrate

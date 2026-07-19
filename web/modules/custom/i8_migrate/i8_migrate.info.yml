@@ -1,0 +1,10 @@
+name: 'Interstate-8 Migrations'
+type: module
+description: 'Migrate API source/process config importing content from the v2 (interstate-8.com) MySQL dump.'
+core_version_requirement: ^11
+package: Interstate-8
+dependencies:
+  - drupal:migrate
+  - drupal:taxonomy
+  - migrate_plus:migrate_plus
+  - migrate_tools:migrate_tools

@@ -147,7 +147,13 @@ Either way the content model carries **no sort field**.
 | `Song_Live` | `field_exclude_from_list` |
 | `Song_Active` | node `status` (published/unpublished): 1 → published, 0 → unpublished; all 492 dump rows are 1 |
 | `Song_Download` | — (dropped; defunct iTunes referral) |
-| `I8_SongType` row | `song_type` term (weight ← `SongType_Order`) |
+| `I8_SongType` row | `song_type` term, keyed on `PK_SongType_ID` |
+| `PK_SongType_ID` | `field_legacy_id` on the term (see §3) |
+| `SongType_Name` | term name |
+| `SongType_Order` | term weight, **verbatim** (not reindexed) |
+| `SongType_Active` | term `status` (published/unpublished), mirroring the `Song_Active` → node `status`
+  pattern above — taxonomy terms carry the same core published/unpublished base field. All 4
+  `I8_SongType` dump rows are `1`. |
 
 Migration is idempotent and rollbackable (FR-4); imported count is verified against the source (FR-5).
 

@@ -1,0 +1,14 @@
+uuid: 10e0b689-0302-4259-8667-1a087824d67b
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: fjnZIq9oFFNd9CnCshdqyyYmiF_oXYuaaVlz6_Izs8U
+id: i8
+label: 'Interstate-8 v2 import'
+description: 'Migrations importing content from the v2 (interstate-8.com) MySQL dump (the sole migration source, Path A).'
+source_type: 'MySQL (v2 dump)'
+module: null
+shared_configuration:
+  source:
+    key: migrate

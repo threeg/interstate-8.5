@@ -1,0 +1,36 @@
+id: song_type
+label: 'Song type (I8_SongType → taxonomy terms)'
+migration_group: i8
+migration_tags:
+  - 'Interstate-8 v2 import'
+source:
+  plugin: table
+  key: migrate
+  table_name: I8_SongType
+  track_changes: true
+  id_fields:
+    PK_SongType_ID:
+      type: integer
+  fields:
+    PK_SongType_ID: PK_SongType_ID
+    SongType_Name: SongType_Name
+    SongType_Order: SongType_Order
+    SongType_Active: SongType_Active
+process:
+  # Reconcile against any pre-existing term (e.g. the INT8-008 working set) by legacy id,
+  # rather than blind-creating a duplicate; falls back to creating a new term when none matches.
+  tid:
+    plugin: entity_lookup
+    source: PK_SongType_ID
+    entity_type: taxonomy_term
+    value_key: field_legacy_id
+    bundle_key: vid
+    bundle: song_type
+  field_legacy_id: PK_SongType_ID
+  name: SongType_Name
+  weight: SongType_Order
+  status: SongType_Active
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: song_type
+migration_dependencies: {  }

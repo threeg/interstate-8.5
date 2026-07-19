@@ -14,6 +14,7 @@ module:
   file: 0
   filter: 0
   gin_toolbar: 0
+  i8_migrate: 0
   image: 0
   link: 0
   media: 0
