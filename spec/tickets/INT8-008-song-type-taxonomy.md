@@ -2,7 +2,7 @@
 id: INT8-008
 title: Song type taxonomy (vocabulary + terms)
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: content-model
 layer: content-model
