@@ -1,0 +1,11 @@
+uuid: 63f7d04a-eb31-49e2-9ee6-fbbcac508630
+langcode: en
+status: true
+dependencies: {  }
+name: Song
+type: song
+description: 'A song, imported from the v2 Interstate-8 archive or created natively.'
+help: null
+new_revision: false
+preview_mode: 1
+display_submitted: false

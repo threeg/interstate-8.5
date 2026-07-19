@@ -1,0 +1,24 @@
+uuid: 94d5263e-3391-491d-861f-a1040238d389
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_song_type
+    - node.type.song
+    - taxonomy.vocabulary.song_type
+id: node.song.field_song_type
+field_name: field_song_type
+entity_type: node
+bundle: song
+label: 'Song type'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      song_type: song_type
+field_type: entity_reference

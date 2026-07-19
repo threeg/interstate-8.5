@@ -1,0 +1,22 @@
+uuid: 0e0c669d-78b9-4fc5-9ee2-4d5c46486cea
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_lyrics
+    - node.type.song
+  module:
+    - text
+id: node.song.field_lyrics
+field_name: field_lyrics
+entity_type: node
+bundle: song
+label: Lyrics
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

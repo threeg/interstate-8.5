@@ -1,0 +1,24 @@
+uuid: ae239794-8d43-4251-8e15-53ba1aea47d6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_video
+    - media.type.remote_video
+    - node.type.song
+id: node.song.field_video
+field_name: field_video
+entity_type: node
+bundle: song
+label: 'Music video'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      remote_video: remote_video
+field_type: entity_reference

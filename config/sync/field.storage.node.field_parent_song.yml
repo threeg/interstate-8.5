@@ -1,0 +1,19 @@
+uuid: 3de4e755-4747-4afc-8bd8-c3a74384de72
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_parent_song
+field_name: field_parent_song
+entity_type: node
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

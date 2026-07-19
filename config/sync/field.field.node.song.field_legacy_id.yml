@@ -1,0 +1,23 @@
+uuid: adb92426-5703-4ac7-994b-3e3edbd28b31
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_legacy_id
+    - node.type.song
+id: node.song.field_legacy_id
+field_name: field_legacy_id
+entity_type: node
+bundle: song
+label: 'Legacy ID'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

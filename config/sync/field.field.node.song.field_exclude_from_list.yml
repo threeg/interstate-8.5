@@ -1,0 +1,21 @@
+uuid: 4235cd0b-0893-4d1c-b5c4-8741a65f4254
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_exclude_from_list
+    - node.type.song
+id: node.song.field_exclude_from_list
+field_name: field_exclude_from_list
+entity_type: node
+bundle: song
+label: 'Exclude from song list'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

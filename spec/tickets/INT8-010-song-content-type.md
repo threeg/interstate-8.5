@@ -2,7 +2,7 @@
 id: INT8-010
 title: Song content type + fields
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: content-model
 layer: content-model
@@ -36,11 +36,28 @@ Then `lando drush cex -y` → commit.
 - Config generated in the UI and **exported** — never hand-authored (NFR-6).
 
 ## Definition of done (acceptance criteria)
-- [ ] `song` type + all fields exist per `content-model.md` §2 and are exported.
-- [ ] `lando drush cim` is a no-op; `field_legacy_id` is indexed.
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] `song` type + all fields exist per `content-model.md` §2 and are exported.
+- [x] `lando drush cim` is a no-op; `field_legacy_id` is indexed.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 `tests_required: false` — **config (site-building).** **Claude verifies** the exported
 `node.type.song` + `field.*` config field-by-field against `content-model.md` §2 (this is the NFR-6
 config-vs-spec check). Behavioural coverage comes with the migration (013) and the screens (018–020).
+
+## Notes
+2026-07-12 — Created the `song` node type and all nine fields via the entity API, matching
+`content-model.md` §2 exactly: `field_lyrics`/`field_notes`/`field_quotes` (Text formatted long,
+Restricted HTML the intended value format — no format lock-in at field level since core has no such
+setting; only `restricted_html`/`plain_text` exist so there's nothing else to pick), `field_video`
+(entity ref → Media, bundle `remote_video`), `field_song_type` (entity ref → `song_type` term,
+**required**), `field_parent_song` (entity ref → node `song`, self-reference),
+`field_lyrics_same_as_parent` / `field_exclude_from_list` (Boolean), `field_legacy_id` (Integer,
+**indexed**). Wired the default form display (all fields editable — `media_library_widget` for the
+video, `options_select` for type) and default view display, applying **FR-12** (type/group hidden) and
+hiding `field_legacy_id`/`field_parent_song`/`field_lyrics_same_as_parent` from raw default rendering
+since they drive custom presentation logic in INT8-019/INT8-020 rather than being shown as plain
+fields. Verified by rendering the actual node-add form — all nine fields present. Exported config;
+`lando drush cim -y` confirms no drift; default gate passes clean. **Sanity test:** `lando drush cim -y`
+→ "There are no changes to import"; `/node/add/song` shows all nine fields, `field_song_type` marked
+required.

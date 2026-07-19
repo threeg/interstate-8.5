@@ -1,0 +1,22 @@
+uuid: 22c68442-d2a5-4aba-a422-67702e9614c4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_notes
+    - node.type.song
+  module:
+    - text
+id: node.song.field_notes
+field_name: field_notes
+entity_type: node
+bundle: song
+label: Notes
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

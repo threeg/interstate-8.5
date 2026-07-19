@@ -1,0 +1,23 @@
+uuid: e85a78c5-f4a7-457e-b3be-73cfaf7bd6ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_parent_song
+    - node.type.song
+id: node.song.field_parent_song
+field_name: field_parent_song
+entity_type: node
+bundle: song
+label: 'Parent song'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      song: song
+field_type: entity_reference
