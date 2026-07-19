@@ -1,0 +1,23 @@
+uuid: 1fe557b1-5249-48a4-8bd7-3a1fe8222c2a
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.song
+  module:
+    - node
+id: song
+label: Song
+type: 'canonical_entities:node'
+pattern: '/songs/[node:title]'
+selection_criteria:
+  b402306f-9c63-48b9-a0d8-b6ad13eab680:
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: node
+    bundles:
+      song: song
+selection_logic: and
+weight: 0
+relationships: {  }
