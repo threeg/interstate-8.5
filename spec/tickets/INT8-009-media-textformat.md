@@ -53,3 +53,9 @@ confirms no drift. Default gate passes clean. **Sanity test:** `lando drush cim 
 changes to import"; `/media/add/remote_video` shows the oEmbed URL field;
 `/admin/config/content/formats/manage/restricted_html` shows the four filters enabled in the stated
 order.
+
+2026-07-12 (cross-reference, `sfk-verify`) — this ticket's `restricted_html` format was later completed
+by **INT8-010**, which found it had **no text editor** attached and added a **CKEditor 5** toolbar
+(bold/italic/link, matching the allow-list). The editor config (`editor.editor.restricted_html.yml`) and
+the `content-model.md` §5 "Authoring UI" paragraph both landed in INT8-010's commit, not here — noted so
+this ticket's record reflects that its deliverable was amended downstream. See INT8-010's Notes.

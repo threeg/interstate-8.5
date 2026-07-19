@@ -47,3 +47,11 @@ enabled via `lando drush theme:enable gin` and set as admin theme via `lando dru
 system.theme admin gin`. Exported 68 new config files to `config/sync/`. `lando drush cim -y`
 reports "There are no changes to import". **Sanity test:** `lando drush cim -y` → "There are no
 changes to import".
+
+2026-07-12 (retroactive note, `sfk-verify` on the content-model batch) — the core **`field_ui`** module
+belongs in this baseline admin setup (it provides Manage fields / form-display / display, needed by
+every content-model ticket) but was **not** enabled here. The gap surfaced in INT8-008 ("no Manage
+fields tab") and `field_ui` was enabled there instead. Note it is a **core** module, not contrib, so it
+sits slightly outside this ticket's "essential *contrib*" framing — but it is part of the baseline this
+ticket establishes, and enabling it here from the start would have been correct. Recorded for honesty of
+the scaffolding record; no re-work needed (it is enabled and exported as of INT8-008).

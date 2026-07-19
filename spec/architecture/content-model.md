@@ -155,6 +155,10 @@ Migration is idempotent and rollbackable (FR-4); imported count is verified agai
 
 ## 9. Decisions log
 
+- **2026-07-12** — **CKEditor 5 attached to the Restricted HTML format** (§5 "Authoring UI"): toolbar
+  limited to bold / italic / link, matching the `filter_html` allow-list exactly so the editor and the
+  filter cannot drift. Discovered during INT8-010 (the format from INT8-009 had no editor, leaving a
+  bare-HTML textarea); the editor is part of the format's spec, not optional.
 - **2026-07-12** — **`field_legacy_id` extended to the Song type taxonomy term** (§3), closing a gap
   where the cross-cutting convention (architecture.md §3.3, "every migrated content entity") wasn't
   reflected here — only Song had the field listed. Also corrected the working term set's spelling to
