@@ -1,0 +1,23 @@
+uuid: a7200794-60ff-49ac-aae9-e0e4e7842c09
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.song_type.field_legacy_id
+    - taxonomy.vocabulary.song_type
+  module:
+    - text
+id: taxonomy_term.song_type.default
+targetEntityType: taxonomy_term
+bundle: song_type
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_legacy_id: true

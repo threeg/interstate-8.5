@@ -35,6 +35,8 @@ Maps v2 `I8_SongType`. See `content-model.md` §3.
 - [x] `song_type` vocabulary + the working term set exist and are exported.
 - [x] Exported config matches `content-model.md` §3; `lando drush cim` is a no-op.
 - [x] `field_legacy_id` exists on the term bundle and is populated with the correct v2 PK on every term.
+- [x] `field_legacy_id` is wired into the term's default form + view displays (visible/editable in the
+      admin UI, not just present in storage).
 - [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
@@ -72,3 +74,26 @@ or it will produce 4 duplicate terms. Flagging this now so INT8-012 is scoped co
 picked up. **Updated sanity test:** `lando drush php:eval` dumping
 `loadTree('song_type')` + `field_legacy_id` shows Modest Mouse=1, Ugly Casanova=2, Side Projects=4,
 Covers=3.
+
+2026-07-12 (revision 2, user feedback) — User reported the field invisible in the admin UI and no
+"Manage fields" tab under Structure → Taxonomy at all. Two real gaps, both fixed: (1) core module
+**`field_ui`** was never enabled — a scaffolding gap (INT8-003 enabled the essential *contrib* list but
+missed this core module), so no vocabulary had field/display management UI; enabled it
+(`lando drush pm:enable field_ui -y`), which now provides Manage fields/form display/display for every
+future content-model ticket, not just this one. (2) Creating `field_legacy_id` via
+`FieldConfig::create()` alone does **not** place it on any display — Drupal only auto-wires a new field
+into the default form/view displays when added *through* Field UI (or when explicitly done in code, as
+here). Added it to `entity_form_display.taxonomy_term.song_type.default` (widget: `number`) and
+explicitly removed it from `entity_view_display.taxonomy_term.song_type.default` (kept hidden from
+public view — it's an internal bookkeeping field, nothing in the wireframes calls for showing it;
+editable in the admin form). Verified by rendering the actual term-1 edit form
+(`entity.form_builder`) and confirming `field_legacy_id` is present with default value `1`. Re-exported
+config (`core.entity_form_display.taxonomy_term.song_type.default`,
+`core.entity_view_display.taxonomy_term.song_type.default`, `field_ui.settings`, `core.extension`
+update); `lando drush cim -y` no-op; default gate re-run clean.
+
+**On deleting the manually-added terms:** no — leave them. INT8-010/011 need the vocabulary populated
+to build and test `field_song_type` and the landing's default filter before INT8-012 exists, and
+INT8-012 (already noted above) is scoped to reconcile against these same 4 terms via `field_legacy_id`
+rather than delete-and-recreate. Deleting now would just make the next few tickets untestable for no
+benefit.
