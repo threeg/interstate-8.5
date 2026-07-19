@@ -2,7 +2,7 @@
 id: INT8-022
 title: Broaden the dependency-rule boundary check to the full architecture rule
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: tooling
