@@ -61,3 +61,19 @@ fields. Verified by rendering the actual node-add form — all nine fields prese
 `lando drush cim -y` confirms no drift; default gate passes clean. **Sanity test:** `lando drush cim -y`
 → "There are no changes to import"; `/node/add/song` shows all nine fields, `field_song_type` marked
 required.
+
+2026-07-12 (revision, user feedback) — User asked whether lyrics/notes/quotes were meant to be rich
+text. They should be, and weren't yet: `restricted_html` (INT8-009) had no **text editor** attached, so
+the widget was a bare textarea requiring hand-typed HTML. Enabled core `editor` + `ckeditor5` modules
+and attached a CKEditor 5 toolbar (bold, italic, link) to `restricted_html` — matching the format's
+allow-list exactly, so the editor's toolbar and the filter's allow-list can never drift apart. Updated
+`content-model.md` §5 to document the editor as part of the format's spec (this closes the gap for
+INT8-009 too, since the format itself was already `done`). Verified two ways: (1) the CKEditor5 plugin
+validator (`$editor->getTypedData()->validate()`) reports **0 violations** against the format; (2) with
+the account switcher set to **uid 1** (the actual admin session, not the anonymous context my first
+check mistakenly used) the field's format widget defaults to `restricted_html` — confirmed the earlier
+"only plain_text available" reading was an artifact of testing as anonymous, not a real permissions
+gap for the site owner. **Known, deliberately out-of-scope limitation:** no non-uid-1 role has been
+granted "use text format restricted_html" — fine today since the site has no separate editor role yet;
+revisit when one is introduced. Exported config (`editor.editor.restricted_html`, `core.extension`);
+`lando drush cim -y` no-op; default gate re-run clean.

@@ -86,8 +86,14 @@ rows it can't parse are reported, not silently dropped). Alt/label handling foll
 
 A dedicated **Restricted HTML** format is the target for `field_lyrics` / `field_notes` /
 `field_quotes` and the destination of the FR-21 cleanup: legacy inline markup is stripped to a small
-allowed set while line/paragraph breaks are preserved. Indicative allowed tags: `<p> <br> <em>
-<strong> <a>` (final allow-list is a small build-time config decision). No image or script tags.
+allowed set while line/paragraph breaks are preserved. Allowed tags: `<p> <br> <em> <strong> <a href
+hreflang>`. No image or script tags. Composition: `filter_html` (the allow-list) + `filter_autop`
+(line-break conversion) + `filter_url` (link-ify plain URLs) + `filter_htmlcorrector` (malformed-markup
+correction).
+
+**Authoring UI.** A **CKEditor 5** text editor is attached to the format (toolbar: bold, italic, link
+only — exactly the tags the allow-list permits, so the editor and the filter never disagree) so
+editors get a WYSIWYG experience rather than hand-typed HTML in a plain textarea.
 
 ---
 

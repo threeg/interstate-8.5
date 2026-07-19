@@ -1,0 +1,19 @@
+uuid: 21ee00af-833d-4028-bdca-e19914e4a8c4
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.restricted_html
+  module:
+    - ckeditor5
+format: restricted_html
+editor: ckeditor5
+settings:
+  toolbar:
+    items:
+      - bold
+      - italic
+      - link
+  plugins: {  }
+image_upload:
+  status: false
