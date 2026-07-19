@@ -2,7 +2,7 @@
 id: INT8-009
 title: Remote-video media type + Restricted HTML text format
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: content-model
 layer: content-model
