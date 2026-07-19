@@ -48,16 +48,17 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 9 | INT8-009 | Remote-video media type + Restricted HTML format | task | content-model | 9 / content-model | E02 | site-building | done | INT8-003 |
 | 10 | INT8-010 | Song content type + fields | task | content-model | 9 / content-model | E02 | site-building | done | INT8-008, INT8-009 |
 | 11 | INT8-011 | Pathauto pattern for songs | task | config | 9 / config | E02 | site-building | done | INT8-010 |
-| 12 | INT8-012 | Song type migration (`I8_SongType` → terms) | task | migration | 9 / migration | E02 | code | todo | INT8-004, INT8-008 |
-| 13 | INT8-013 | Songs migration (`I8_Songs` → nodes) | task | migration | 9 / migration | E02 | code | todo | INT8-010, INT8-011, INT8-012 |
-| 14 | INT8-014 | Migration verification | task | migration | 9 / migration | E02 | code | todo | INT8-013 |
-| 15 | INT8-015 | Base layout + header + footer (SDC) | task | theme | 9 / theme | E03 | code | todo | INT8-005 |
-| 16 | INT8-016 | Shared atoms / molecules | task | theme | 9 / theme | E03 | code | todo | INT8-005 |
-| 17 | INT8-017 | Primary nav + front-page/route wiring | task | theme | 9 / theme | E03 | code + site-building | todo | INT8-015 |
-| 18 | INT8-018 | Songs landing (View + filters + ledger) | story | theme | 9 / theme | E04 | code + site-building | todo | INT8-013, INT8-015, INT8-016 |
-| 19 | INT8-019 | Song page (view mode + Twig + video) | story | theme | 9 / theme | E04 | code | todo | INT8-013, INT8-015, INT8-016 |
-| 20 | INT8-020 | Song versions (side-by-side lyrics + links) | story | theme | 9 / theme | E04 | code | todo | INT8-019 |
-| 21 | INT8-021 | E2E capstone (Playwright + Axe) | task | tooling | 9 / theme | E04 | code | todo | INT8-018, INT8-019, INT8-020 |
+| 12 | INT8-022 | Broaden the dependency-rule boundary check to the full architecture rule | task | tooling | 9 / cleanup | — | code | in-review | INT8-006 |
+| 13 | INT8-012 | Song type migration (`I8_SongType` → terms) | task | migration | 9 / migration | E02 | code | todo | INT8-004, INT8-008 |
+| 14 | INT8-013 | Songs migration (`I8_Songs` → nodes) | task | migration | 9 / migration | E02 | code | todo | INT8-010, INT8-011, INT8-012 |
+| 15 | INT8-014 | Migration verification | task | migration | 9 / migration | E02 | code | todo | INT8-013 |
+| 16 | INT8-015 | Base layout + header + footer (SDC) | task | theme | 9 / theme | E03 | code | todo | INT8-005 |
+| 17 | INT8-016 | Shared atoms / molecules | task | theme | 9 / theme | E03 | code | todo | INT8-005 |
+| 18 | INT8-017 | Primary nav + front-page/route wiring | task | theme | 9 / theme | E03 | code + site-building | todo | INT8-015 |
+| 19 | INT8-018 | Songs landing (View + filters + ledger) | story | theme | 9 / theme | E04 | code + site-building | todo | INT8-013, INT8-015, INT8-016 |
+| 20 | INT8-019 | Song page (view mode + Twig + video) | story | theme | 9 / theme | E04 | code | todo | INT8-013, INT8-015, INT8-016 |
+| 21 | INT8-020 | Song versions (side-by-side lyrics + links) | story | theme | 9 / theme | E04 | code | todo | INT8-019 |
+| 22 | INT8-021 | E2E capstone (Playwright + Axe) | task | tooling | 9 / theme | E04 | code | todo | INT8-018, INT8-019, INT8-020 |
 
 > **Frontend independence (CONVENTIONS §4.5):** the theme foundation (E03, 015–017) builds against the
 > design/contract in parallel with the content model + migration (E02, 008–014); the Songs-section
@@ -71,13 +72,11 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 
 | # | id | title | type | layer | batch | status | depends_on |
 |---|----|-------|------|-------|-------|--------|------------|
-| C1 | INT8-022 | Broaden the dependency-rule boundary check to the full architecture rule | task | tooling | cleanup | todo | INT8-006 |
 | C2 | INT8-023 | Reconcile the INT8-001 record (and its BOARD title) from DDEV to Lando | task | docs | cleanup | todo | INT8-001 |
 | C3 | INT8-024 | Pin lyrics/notes/quotes fields to the Restricted HTML format | task | content-model | cleanup | todo | INT8-010 |
 
-> **INT8-022** is a **promotion candidate**: work it (or promote it into the main sequence) **before
-> INT8-012**, when the first migration/services custom modules land — until then NFR-5 has nothing to
-> enforce, but from INT8-012 on, the narrowed check is a real gap (`sfk-verify`, scaffolding batch).
+> **INT8-022** was promoted into the main execution-order table above (row 12, before INT8-012) — its
+> own DoD required it be worked before the first migration module landed.
 
 ---
 

@@ -1,8 +1,18 @@
 #!/usr/bin/env bash
-# Boundary check — enforces the architecture dependency rule:
+# Boundary check — enforces the full architecture dependency rule (architecture.md §2.1):
 #   content-model → services → theme
 #   migration → content-model
+#   content-model imports nothing project-internal
 #   NOTHING imports theme (Drupal\interstate_85\*)
+#
+# Module → layer convention (custom modules, machine-name suffix):
+#   *_migrate  => migration layer  (may depend only on content-model: forbidden from importing
+#                 services or theme namespaces)
+#   *_services => services layer   (may depend only on content-model: forbidden from importing
+#                 migration or theme namespaces)
+# content-model is pure Drupal config in this project — no custom-module code exists for it yet,
+# so "content-model imports nothing project-internal" has nothing to check today. Revisit this
+# script if a content-model custom module is ever added.
 #
 # Run via: lando test  (included in the default gate)
 # Returns exit 1 on any violation, 0 on clean.
@@ -22,6 +32,36 @@ if [ -d "$CUSTOM_MODULES" ]; then
     echo "$HITS"
     VIOLATIONS=$((VIOLATIONS + 1))
   fi
+fi
+
+# Rule: migration modules (*_migrate) may depend only on content-model — forbidden from
+# importing a services-layer namespace.
+if [ -d "$CUSTOM_MODULES" ]; then
+  for dir in "$CUSTOM_MODULES"/*_migrate; do
+    [ -d "$dir" ] || continue
+    HITS=$(grep -rE 'use Drupal\\[A-Za-z0-9_]*_services\\' "$dir" 2>/dev/null \
+      | grep -v '^\s*//' || true)
+    if [ -n "$HITS" ]; then
+      echo "BOUNDARY VIOLATION: migration module '$dir' imports a services namespace:"
+      echo "$HITS"
+      VIOLATIONS=$((VIOLATIONS + 1))
+    fi
+  done
+fi
+
+# Rule: services modules (*_services) may depend only on content-model — forbidden from
+# importing a migration-layer namespace.
+if [ -d "$CUSTOM_MODULES" ]; then
+  for dir in "$CUSTOM_MODULES"/*_services; do
+    [ -d "$dir" ] || continue
+    HITS=$(grep -rE 'use Drupal\\[A-Za-z0-9_]*_migrate\\' "$dir" 2>/dev/null \
+      | grep -v '^\s*//' || true)
+    if [ -n "$HITS" ]; then
+      echo "BOUNDARY VIOLATION: services module '$dir' imports a migration namespace:"
+      echo "$HITS"
+      VIOLATIONS=$((VIOLATIONS + 1))
+    fi
+  done
 fi
 
 if [ "$VIOLATIONS" -eq 0 ]; then
