@@ -2,7 +2,7 @@
 id: INT8-015
 title: Base layout + header + footer (SDC)
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: theme
 layer: theme
