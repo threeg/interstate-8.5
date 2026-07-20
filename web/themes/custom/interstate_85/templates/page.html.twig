@@ -14,12 +14,11 @@
     {% block nav %}{{ page.primary_menu }}{% endblock %}
   {% endembed %}
 
-  {{ page.breadcrumb }}
-
   <main class="site-main">
     <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
 
     <div class="layout-content">
+      {{ page.breadcrumb }}
       {{ page.content }}
     </div>{# /.layout-content #}
 

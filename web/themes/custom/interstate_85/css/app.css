@@ -61,3 +61,14 @@
 .site-main {
   flex: 1 0 auto;
 }
+
+/* Content column: header/footer span the full --sheet-max width (see
+   site-header.css / site-footer.css), but readable content stays capped at
+   --content-max with white gutters either side — 1B.dc.html's Songs Landing
+   extra-wide note: "column/filter layout capped at content width, only the
+   hero and gutter respond to the extra space." */
+.layout-content {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}

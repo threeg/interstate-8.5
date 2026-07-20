@@ -130,6 +130,21 @@ Re-verified after all five fixes: default gate green (10 PHPUnit, PHPCS/PHPStan 
 0 violations); Playwright 40/40 across all 5 browser projects, including Axe at desktop and 320px with
 the real test menu links in place.
 
+2026-07-20 — **Round 3, from review feedback:** the round-2 "content sheet" fix was itself incomplete.
+I'd confined `.layout-container` to `--sheet-max` (1440px), which correctly matches `1B.dc.html`'s
+outer structure — but missed that within that sheet, the hi-fi caps *readable content* further to
+`--content-max` (980px, white gutters either side, still inside the white sheet) while the header/hero/
+footer stay at the full sheet width. Confirmed by rendering the hi-fi's own `SONGS LANDING ·
+EXTRA-WIDE` block directly (screenshotted, not just read as markup) and by its caption: "column/filter
+layout capped at content width, only the hero and gutter respond to the extra space." `--content-max`
+already existed in `tokens.css` — I'd defined it but never applied it anywhere. Fixed by moving
+`page.breadcrumb` inside `.layout-content` (previously it sat directly in `.layout-container`, at the
+full sheet width) and adding `max-width: var(--content-max); margin-inline: auto; padding-inline:
+var(--space-6);` to `.layout-content` in `app.css`. Header/footer are unaffected — they still correctly
+span the full `--sheet-max` width. Re-verified visually (header/footer edge-to-edge in the sheet,
+content column narrower with white gutters, at a 1920px viewport) and re-ran both suites: default gate
+green, Playwright 40/40.
+
 **Not fixed here — spun out as `INT8-026`:** the footer's About/Contact/Support/Legal/Privacy row is
 still hardcoded static text, not a real Drupal menu. That was a deliberate choice at the time (the
 hi-fi itself renders them as inert spans, and those pages are wireframe-deferred, so real links would
