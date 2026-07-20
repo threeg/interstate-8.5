@@ -1,0 +1,82 @@
+id: song
+label: 'Songs (I8_Songs → Song nodes)'
+migration_group: i8
+migration_tags:
+  - 'Interstate-8 v2 import'
+source:
+  plugin: table
+  key: migrate
+  table_name: I8_Songs
+  track_changes: true
+  id_fields:
+    PK_Song_ID:
+      type: integer
+  fields:
+    PK_Song_ID: PK_Song_ID
+    FK_SongType_ID: FK_SongType_ID
+    Song_Name: Song_Name
+    Song_Lyrics: Song_Lyrics
+    Song_Notes: Song_Notes
+    Song_Quotes: Song_Quotes
+    FK_Song_ID: FK_Song_ID
+    Song_Live: Song_Live
+    Song_LyricsSameAsNormal: Song_LyricsSameAsNormal
+    Song_Active: Song_Active
+process:
+  # Reconcile against any pre-existing node by legacy id, same pattern as song_type (INT8-012).
+  nid:
+    plugin: entity_lookup
+    source: PK_Song_ID
+    entity_type: node
+    value_key: field_legacy_id
+    bundle_key: type
+    bundle: song
+  field_legacy_id: PK_Song_ID
+  title: Song_Name
+  'field_lyrics/value':
+    - plugin: skip_on_empty
+      method: process
+      source: Song_Lyrics
+    - plugin: i8_clean_rich_text
+  'field_lyrics/format':
+    plugin: default_value
+    default_value: restricted_html
+  'field_notes/value':
+    - plugin: skip_on_empty
+      method: process
+      source: Song_Notes
+    - plugin: i8_clean_rich_text
+  'field_notes/format':
+    plugin: default_value
+    default_value: restricted_html
+  'field_quotes/value':
+    - plugin: skip_on_empty
+      method: process
+      source: Song_Quotes
+    - plugin: i8_clean_rich_text
+  'field_quotes/format':
+    plugin: default_value
+    default_value: restricted_html
+  field_song_type:
+    plugin: migration_lookup
+    migration: song_type
+    source: FK_SongType_ID
+  # Self-reference (FR-3): relies on Migrate's stub mechanism for the same
+  # migration — a parent not yet processed is stubbed on demand, then
+  # updated in place when its own row comes up in the normal source order.
+  field_parent_song:
+    - plugin: skip_on_empty
+      method: process
+      source: FK_Song_ID
+    - plugin: migration_lookup
+      migration: song
+      source: FK_Song_ID
+  field_lyrics_same_as_parent: Song_LyricsSameAsNormal
+  field_exclude_from_list: Song_Live
+  status: Song_Active
+destination:
+  plugin: 'entity:node'
+  default_bundle: song
+migration_dependencies:
+  required:
+    - song_type

@@ -82,7 +82,7 @@ behaviours follow, confirmed against v2 `songlist.php`:
 | Lyrics | `Song_Lyrics` | Rich text; legacy markup normalized on import (FR-21); may be empty. |
 | Notes | `Song_Notes` | Rich text; legacy markup normalized on import (FR-21); may be empty. |
 | Quotes | `Song_Quotes` | Rich text; legacy markup normalized on import (FR-21); may be empty. |
-| Music video | `Song_Video` | Video embed for the song (v2 stored embed HTML, rendered in a "Video" box); see FR-17. |
+| Music video | `Song_Video` | **Not imported** (decided at the migration milestone, INT8-013): only ~15 of 492 songs have a video, all clean `<iframe>` embeds — not worth automated extraction risk for that volume. `field_video` is populated by **manual entry pre-launch**. Once set, renders per FR-17. |
 | Hide-from-list flag | `Song_Live` | When set, excludes the song from the landing (§2.2). A v2 misnomer — not a studio/live indicator; rename in v5. |
 | Lyrics same-as-parent | `Song_LyricsSameAsNormal` | When set on an alternate version, its page shows "[same as normal version]" instead of repeating the parent's lyrics (FR-20). |
 | Type | `FK_SongType_ID` | §2.1. |
@@ -115,7 +115,8 @@ behaviours follow, confirmed against v2 `songlist.php`:
 - **FR-1** The system MUST import every active song (`I8_Songs` where the v2 active flag is set) from
   the v2 MySQL dump into the Song content type.
 - **FR-2** The import MUST preserve each song's slice-1 fields (§2.3): name, lyrics, notes, quotes,
-  music-video reference, hide-from-list flag (`Song_Live`), and type.
+  hide-from-list flag (`Song_Live`), and type. **Music video excluded** — see §2.3 (deferred to manual
+  entry, decided at the migration milestone).
 - **FR-3** The import MUST preserve the song-version self-reference (§2.2), linking each child song to
   its parent.
 - **FR-4** The migration MUST be **idempotent and re-runnable**: re-running it MUST NOT create

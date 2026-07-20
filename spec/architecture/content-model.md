@@ -76,9 +76,15 @@ remodelling.
 ## 4. Media: Remote video (oEmbed)
 
 Videos are **Core Media "Remote video"** entities (YouTube/Vimeo via oEmbed URL), referenced by
-`field_video`. **Migration note:** v2 `Song_Video` stored raw **embed markup**, not a bare URL — the
-migration MUST extract the video URL/ID from that markup to create the Media entity (a process step;
-rows it can't parse are reported, not silently dropped). Alt/label handling follows the Media defaults.
+`field_video`. Alt/label handling follows the Media defaults.
+
+**Migration note (revised at INT8-013).** v2 `Song_Video` stored raw **embed markup**, not a bare URL.
+Automated extraction was originally planned but **descoped**: only 15 of 492 `I8_Songs` rows have a
+video (14 YouTube, 1 Vimeo, all clean `<iframe src="...">` markup, one row with two videos), too small
+a volume to justify parser complexity/risk. `field_video` is left empty by the migration; populating it
+is a **manual, pre-launch task** — create a Remote video Media entity per song from the source
+`Song_Video` markup (the video URL is trivially readable from the `src` attribute) and set `field_video`
+via the admin UI. Not modelled as its own ticket given the small, one-time, manual nature of the work.
 
 ---
 
@@ -140,7 +146,7 @@ Either way the content model carries **no sort field**.
 | `PK_Song_ID` | `field_legacy_id` (permanent; join-repair + redirects) |
 | `Song_Name` | `title` |
 | `Song_Lyrics` / `_Notes` / `_Quotes` | `field_lyrics` / `field_notes` / `field_quotes` (Restricted HTML, FR-21 cleanup) |
-| `Song_Video` (embed markup) | `field_video` → Remote video Media (URL extracted, §4) |
+| `Song_Video` (embed markup) | **not imported** — `field_video` populated manually, pre-launch (§4) |
 | `FK_SongType_ID` | `field_song_type` (→ `song_type` term) |
 | `FK_Song_ID` | `field_parent_song` |
 | `Song_LyricsSameAsNormal` | `field_lyrics_same_as_parent` |
@@ -161,6 +167,11 @@ Migration is idempotent and rollbackable (FR-4); imported count is verified agai
 
 ## 9. Decisions log
 
+- **2026-07-19** — **`Song_Video` import descoped to manual entry** (§4, §8; supersedes the original
+  "migration MUST extract the video URL" plan and `requirements.md` FR-2's inclusion of music video).
+  Checked the real dump at INT8-013: only 15 of 492 songs have a video, all clean `<iframe>` embeds
+  (14 YouTube, 1 Vimeo) — too small and low-risk a set to justify an automated markup parser. Populate
+  `field_video` by hand pre-launch instead. (Operator decision.)
 - **2026-07-12** — **CKEditor 5 attached to the Restricted HTML format** (§5 "Authoring UI"): toolbar
   limited to bold / italic / link, matching the `filter_html` allow-list exactly so the editor and the
   filter cannot drift. Discovered during INT8-010 (the format from INT8-009 had no editor, leaving a
