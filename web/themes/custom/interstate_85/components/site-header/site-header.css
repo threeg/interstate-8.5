@@ -28,6 +28,11 @@
   text-decoration: none;
 }
 
+.site-branding__text {
+  display: flex;
+  flex-direction: column;
+}
+
 .site-header .site-branding__name {
   font-family: var(--font-display);
   font-weight: 700;
@@ -37,22 +42,26 @@
   color: var(--color-fg);
 }
 
-.site-branding__link:hover .site-branding__name {
-  color: var(--color-accent);
-}
-
-.site-branding__link:hover .site-badge {
-  border-color: var(--color-accent);
-}
-
 .site-header--transparent .site-branding__name {
   color: var(--color-surface);
   text-shadow: 0 1px 5px rgba(0, 0, 0, .5);
 }
 
-.site-header--transparent .site-branding__link:hover .site-branding__name {
+.site-branding__slogan {
+  font-family: var(--font-meta);
+  font-size: var(--fs-meta);
+  letter-spacing: var(--ls-nav);
   color: var(--color-surface);
-  text-decoration: underline;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .5);
+}
+
+/* 1B.dc.html shows the slogan only in the transparent (hero) header — the
+   solid variant, used everywhere real today, omits it in every instance
+   in the file (homepage, homepage-extra-wide, songs-landing, songs-landing-
+   extra-wide, songs-landing-desktop all agree). */
+.site-header--solid .site-branding__slogan,
+.site-header--transparent.is-scrolled .site-branding__slogan {
+  display: none;
 }
 
 .site-header__nav {
@@ -100,9 +109,7 @@
 }
 
 .site-header--transparent .site-header__nav a:hover {
-  color: var(--color-surface);
   text-decoration: underline;
-  text-decoration-color: var(--color-accent-alt);
 }
 
 /* Active/current-section marking (FR-16 framing) — styles whichever active

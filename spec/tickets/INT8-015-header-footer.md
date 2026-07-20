@@ -192,15 +192,57 @@ change, active-link marking) and extended the existing header test to assert the
 wordmark link. Re-verified: default gate green, Playwright 55/55 across all 5 browser projects
 (including Axe at desktop and 320px).
 
+2026-07-20 — **Round 5, from review feedback.** The user's core point: I hadn't read
+`Interstate-8 1B.dc.html` end-to-end, so I was inventing states instead of finding them. Read all 721
+lines this time, including a "DESIGN TOKENS" panel near the end (~line 666–709) I'd skipped past
+before — it has an explicit **LINK STATES** example with real values (`Default: color:#3f7ca0, no
+underline` · `Hover: color:#3f7ca0, text-decoration:underline` · `Inline text: color:#3d4442,
+underline in a *different* colour #5e6b68`). Four fixes:
+
+- **Badge/wordmark hover removed.** Round 4 added a border-colour change on the badge and a text-colour
+  change on the wordmark on hover — neither has any basis anywhere in the file (grepped the whole file
+  for "hover"; the only matches are the generic Button/Link states panel and the header's own nav,
+  nothing badge/logo-related). Reverted both; the branding link now has no hover treatment, matching
+  what's actually specified (nothing).
+- **Site slogan was never rendered at all.** `block--system-branding-block.html.twig` only ever printed
+  `site_name`, dropping `site_slogan` entirely (a variable Drupal already provides to this template,
+  confirmed against core's own default `block--system-branding-block.html.twig`). Added it, styled per
+  the hi-fi's transparent-header instances (11px system-ui, `--ls-nav` letter-spacing, white +
+  text-shadow) — and confirmed by checking **every** header instance in the file that the slogan line
+  appears **only** in the transparent variant (homepage, homepage-extra-wide) and is absent from all
+  five solid-header instances (secondary-page solid, songs-landing solid ×3 variants) — so
+  `.site-branding__slogan` is hidden via CSS on `.site-header--solid`. Verified by temporarily setting
+  a real slogan value via `drush config:set` and simulating the transparent variant in a throwaway
+  Playwright check (screenshotted, reverted the config value after).
+- **Nav hover underline corrected to match the file's own example.** Round 4's transparent-variant hover
+  used an invented two-tone underline (`text-decoration-color: var(--color-accent-alt)`, different from
+  the text colour) with no basis in the file — the actual "Hover link" example uses a single colour for
+  both text and underline. Removed the two-tone override; the solid-variant hover (already
+  `color:#3f7ca0` + plain underline) already matched the example exactly and didn't need changing.
+- **Footer-overflow scroll: not reproduced.** Tried to reproduce the "short pages scroll a little more
+  than they should" report directly: measured `document.documentElement.scrollHeight` vs
+  `window.innerHeight` on `/user/login` at nine viewport widths (320–1440px), and again with a
+  scrollbar forcibly reserved via `overflow-y:scroll`. Every measurement came back with **zero**
+  overflow — the `flex:1 0 auto` main region absorbs the remaining space exactly regardless of
+  header/footer height changes (nav wrapping, footer wrapping, etc.), which is what the sticky-footer
+  pattern is supposed to do. Genuinely couldn't reproduce it in headless testing, so left this alone
+  rather than bolt on a speculative fix (e.g. `scrollbar-gutter: stable`) I can't verify actually
+  addresses it — asked the user for the exact page/viewport/browser to pin it down.
+
+Re-verified: default gate green, Playwright 55/55 across all 5 browser projects.
+
 ## QA steps
 1. `lando playwright` (or `cd tests/playwright && npx playwright test tests/page-shell.spec.ts`) — all
    pass, including Axe at desktop and 320px.
 2. Visit any page (e.g. `/user/login`) at a desktop width: confirm the solid header (white background,
-   shield badge, uppercase styled wordmark, subtle bottom shadow) and the footer (label row, © line,
-   disclaimer) render and match `spec/design/interstate-8-design-refinement/project/Interstate-8
-   1B.dc.html`'s HEADER · SOLID / FOOTER components. With a menu placed in the primary-nav region, its
-   links render as an uppercase horizontal row in the header's nav slot, not stacked, and hover over a
-   link shows a teal/underline change.
+   shield badge, uppercase styled wordmark, subtle bottom shadow, **no** slogan line) and the footer
+   (label row, © line, disclaimer) render and match `spec/design/interstate-8-design-refinement/project/
+   Interstate-8 1B.dc.html`'s HEADER · SOLID / FOOTER components. With a menu placed in the primary-nav
+   region, its links render as an uppercase horizontal row in the header's nav slot, not stacked, and
+   hover over a link shows the exact teal/underline from the file's LINK STATES example — no hover
+   effect on the badge or wordmark.
+3. With a real site slogan configured, only the (not-yet-built) transparent/homepage header would show
+   it beneath the wordmark; the solid header never does.
 3. Click the shield/badge — it navigates home, same as the wordmark text.
 4. Add an internal menu link pointing at the current page: it picks up the accent-teal/underline
    "current section" styling once the page finishes loading (client-side, via `core/drupal.active-link`).

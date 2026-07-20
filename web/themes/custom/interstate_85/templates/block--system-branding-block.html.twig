@@ -2,9 +2,14 @@
 <div{{ attributes.addClass('site-branding') }}>
   <a class="site-branding__link" href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home">
     {{ include('interstate_85:site-badge') }}
-    {% if site_name %}
-      <span class="site-branding__name">{{ site_name }}</span>
-    {% endif %}
+    <span class="site-branding__text">
+      {% if site_name %}
+        <span class="site-branding__name">{{ site_name }}</span>
+      {% endif %}
+      {% if site_slogan %}
+        <span class="site-branding__slogan">{{ site_slogan }}</span>
+      {% endif %}
+    </span>
   </a>
 </div>
 {% endblock %}
