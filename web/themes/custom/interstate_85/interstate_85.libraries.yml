@@ -3,3 +3,16 @@ base:
   css:
     theme:
       css/build/app.css: {}
+  dependencies:
+    - interstate_85/fonts
+
+# Oswald + Lora — 1B.dc.html loads these the same way (line 18: a Google
+# Fonts stylesheet link); referenced by name in tokens.css/app.css but never
+# actually fetched anywhere, so every page has been silently falling back to
+# the browser's generic sans-serif.
+fonts:
+  version: VERSION
+  css:
+    theme:
+      https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap:
+        type: external

@@ -46,7 +46,12 @@
 .layout-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  /* core/drupal.displace (loaded automatically whenever the admin toolbar is
+     active) keeps --drupal-displace-offset-top/-bottom in sync with however
+     much space the toolbar reserves; it's unset (falls back to 0px) for
+     anonymous visitors. Plain 100vh here overflowed by exactly the
+     toolbar's height for any logged-in user. */
+  min-height: calc(100vh - var(--drupal-displace-offset-top, 0px) - var(--drupal-displace-offset-bottom, 0px));
   max-width: var(--sheet-max);
   margin-inline: auto;
   background: var(--color-surface);

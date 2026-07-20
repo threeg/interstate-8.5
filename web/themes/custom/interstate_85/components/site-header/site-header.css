@@ -97,31 +97,30 @@
 .site-header__nav a {
   color: var(--color-nav);
   text-decoration: none;
-}
-
-.site-header__nav a:hover {
-  color: var(--color-accent);
-  text-decoration: underline;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 3px;
 }
 
 .site-header--transparent .site-header__nav a {
   color: var(--color-surface);
 }
 
-.site-header--transparent .site-header__nav a:hover {
-  text-decoration: underline;
-}
-
-/* Active/current-section marking (FR-16 framing) — styles whichever active
-   indicator Drupal's menu render emits: core's .is-active class, or the
-   accessible aria-current="page" attribute. */
+/* Hover and current-section (FR-16 framing) share the one nav-specific
+   indicator style 1B.dc.html actually shows — a border-bottom accent bar
+   (every "current" SONGS instance in the file: solid = teal text + teal
+   border, transparent = unchanged white text + polo-blue border). The file
+   has no separate nav-hover example; its "Hover link" (text-decoration:
+   underline) is a different component (inline Lora body links), not this
+   one, so hover reuses the nav's own accent-bar language instead of
+   borrowing that unrelated style. */
+.site-header__nav a:hover,
 .site-header__nav .is-active,
 .site-header__nav a[aria-current="page"] {
   color: var(--color-accent);
-  border-bottom: 2px solid var(--color-accent-alt);
-  padding-bottom: 3px;
+  border-bottom-color: var(--color-accent);
 }
 
+.site-header--transparent .site-header__nav a:hover,
 .site-header--transparent .site-header__nav .is-active,
 .site-header--transparent .site-header__nav a[aria-current="page"] {
   color: var(--color-surface);
@@ -145,7 +144,9 @@
 /* --- Solid variant (default): secondary pages, and the homepage post-scroll --- */
 .site-header--solid {
   position: sticky;
-  top: 0;
+  /* Docks just below the admin toolbar (0px for anonymous visitors) rather
+     than the true viewport top — see .layout-container's min-height. */
+  top: var(--drupal-displace-offset-top, 0px);
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-line);
   box-shadow: var(--shadow-header);
@@ -159,7 +160,7 @@
 .site-header--transparent {
   position: absolute;
   inset-inline: 0;
-  top: 0;
+  top: var(--drupal-displace-offset-top, 0px);
   background: linear-gradient(180deg, rgba(20, 26, 28, .68) 0%, rgba(20, 26, 28, .12) 100%);
   color: var(--color-surface);
 }

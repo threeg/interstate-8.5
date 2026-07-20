@@ -231,29 +231,84 @@ underline in a *different* colour #5e6b68`). Four fixes:
 
 Re-verified: default gate green, Playwright 55/55 across all 5 browser projects.
 
+2026-07-20 — **Round 6, from review feedback.** The user pressed again on "what's actually missing
+from the file" and was right that round 5's answer (a generic Link-states example) was still the wrong
+frame. Grepping every `border-bottom:2px solid` in the file shows the nav's *own* current-state
+indicator, present consistently across all 9 header/nav instances in the file (solid: teal text + teal
+2px border-bottom; transparent: unchanged white text + polo-blue 2px border-bottom) — a completely
+different visual language from the unrelated "Hover link" (Lora body text, native
+`text-decoration:underline`) I'd copied onto it in round 5. **The real gap:** the file has no
+dedicated, separately-labelled nav-hover example the way it has separate "HEADER · TRANSPARENT" /
+"HEADER · SOLID" boxes — the only nav-specific state it ever shows is "current" (baked into the
+default snapshot via the underlined SONGS item). Any nav interaction state not already in one of those
+two static boxes has to be inferred from what nav-specific styling **is** shown, not borrowed from a
+different component's example. Fixed nav hover to reuse the nav's own border-bottom accent-bar
+language instead (hover and current now render identically, since that's the only nav-specific
+indicator style the file actually demonstrates) — also fixing a latent bug in the process: the
+solid-variant "current" state was using `--color-accent-alt` (polo blue) for its border, but every
+solid instance in the file uses plain `--color-accent` (teal); polo blue is only correct for the
+transparent variant.
+
+Two more, larger findings from continuing to dig on the footer-scroll report after being told it was
+still happening:
+
+- **Oswald/Lora were never actually loaded, anywhere, by anyone.** Grepped the whole theme for
+  `@font-face`/`googleapis` — nothing. Every page, in every browser, has been silently falling back to
+  system-ui the entire time (tokens.css's `--font-display`/`--font-body` stacks list Oswald/Lora first
+  but nothing ever fetched them). Added a `fonts` library to `interstate_85.libraries.yml` loading the
+  same Google Fonts stylesheet URL `1B.dc.html` itself uses (line 18), as a dependency of the theme's
+  `base` library. Confirmed via real network requests that `fonts.gstatic.com` now serves both
+  families. (This turned out not to be the scroll bug's cause — re-measured overflow with fonts loading
+  and still got 0px — but it's a real, independent visual-fidelity gap worth having fixed regardless.)
+- **The footer-scroll bug: found it.** All my previous reproduction attempts were as an anonymous
+  visitor. Logged in as the site owner would actually be while testing (`drush user:login`) and
+  measured again: **53px of overflow**, present only when authenticated. Root cause: Drupal's admin
+  Toolbar reserves space at the top of the viewport for any user with toolbar access; `.layout-container`'s
+  `min-height: 100vh` didn't know or care about that, so total page height became "whatever the toolbar
+  reserved" + "100% of the viewport" — necessarily taller than the viewport by exactly the toolbar's
+  height. Anonymous visitors never see it because the toolbar doesn't exist for them, which is exactly
+  why nine widths of anonymous headless testing kept coming back clean. Drupal core ships the fix
+  mechanism for precisely this: `core/drupal.displace` (auto-loaded whenever the toolbar is active)
+  keeps `--drupal-displace-offset-top`/`-bottom` CSS custom properties on `<html>` in sync with however
+  much space the toolbar reserves, defaulting to unset (→ `0px` via the fallback) for anonymous
+  visitors. Used it in the one place that needed it: `.layout-container`'s `min-height` now subtracts
+  both offsets, and the sticky/fixed header variants dock at `var(--drupal-displace-offset-top, 0px)`
+  instead of a hardcoded `top: 0`, so the header docks just below the toolbar instead of sliding
+  underneath it on scroll. Re-verified logged in as admin: overflow dropped from 53px to 1px (sub-pixel
+  rounding noise, not the toolbar).
+
+Re-verified: default gate green, Playwright 55/55 across all 5 browser projects. The toolbar-offset fix
+specifically needed an authenticated session to exercise, which this project's Playwright suite doesn't
+have infrastructure for yet (only ever runs anonymous) — verified manually via `drush user:login`
+rather than adding auth scaffolding to this ticket; noted as a manual QA step below.
+
 ## QA steps
 1. `lando playwright` (or `cd tests/playwright && npx playwright test tests/page-shell.spec.ts`) — all
    pass, including Axe at desktop and 320px.
 2. Visit any page (e.g. `/user/login`) at a desktop width: confirm the solid header (white background,
-   shield badge, uppercase styled wordmark, subtle bottom shadow, **no** slogan line) and the footer
-   (label row, © line, disclaimer) render and match `spec/design/interstate-8-design-refinement/project/
-   Interstate-8 1B.dc.html`'s HEADER · SOLID / FOOTER components. With a menu placed in the primary-nav
-   region, its links render as an uppercase horizontal row in the header's nav slot, not stacked, and
-   hover over a link shows the exact teal/underline from the file's LINK STATES example — no hover
-   effect on the badge or wordmark.
+   shield badge, uppercase styled wordmark, subtle bottom shadow, **no** slogan line, real Oswald/Lora
+   rendering) and the footer (label row, © line, disclaimer) render and match
+   `spec/design/interstate-8-design-refinement/project/Interstate-8 1B.dc.html`'s HEADER · SOLID /
+   FOOTER components. With a menu placed in the primary-nav region, its links render as an uppercase
+   horizontal row, not stacked; hovering one shows the nav's own teal-text + teal-border-bottom
+   treatment (not an underline) — no hover effect on the badge or wordmark.
 3. With a real site slogan configured, only the (not-yet-built) transparent/homepage header would show
    it beneath the wordmark; the solid header never does.
-3. Click the shield/badge — it navigates home, same as the wordmark text.
-4. Add an internal menu link pointing at the current page: it picks up the accent-teal/underline
-   "current section" styling once the page finishes loading (client-side, via `core/drupal.active-link`).
-5. Scroll the page: the header stays pinned to the top of the viewport.
-6. Widen the browser past ~1440px: the whole page (header/content/footer) centres into a shadowed
+4. Click the shield/badge — it navigates home, same as the wordmark text.
+5. Add an internal menu link pointing at the current page: it picks up the same teal-text +
+   teal-border-bottom "current section" styling as hover, once the page finishes loading (client-side,
+   via `core/drupal.active-link`).
+6. Scroll the page: the header stays pinned to the top of the viewport.
+7. Widen the browser past ~1440px: the whole page (header/content/footer) centres into a shadowed
    white sheet with the canvas colour visible on both sides; within the sheet, the header/footer content
    shares the same left/right edges as the main content column (not the sheet's own edges).
-7. On a short page, the footer sits flush with the bottom of the viewport rather than floating directly
+8. On a short page, the footer sits flush with the bottom of the viewport rather than floating directly
    under the content.
-8. Resize below 760px (or use device emulation at 320px): the primary-nav area collapses behind a ☰
-   button in the header's top-right; click/Enter on it toggles `aria-expanded` and reveals the nav panel
-   (now stacked vertically) below the header. Footer's label row wraps onto a second line.
-7. Tab through the page from the top: focus should visibly land on the wordmark link, then (below
-   760px) the ☰ toggle, in a logical order.
+9. **Log in as an admin/toolbar-access user** and repeat step 8 — the footer should still sit flush with
+   no extra scroll past the bottom of the viewport, and the sticky header should dock just below the
+   admin toolbar (not underneath it) when scrolling.
+10. Resize below 760px (or use device emulation at 320px): the primary-nav area collapses behind a ☰
+    button in the header's top-right; click/Enter on it toggles `aria-expanded` and reveals the nav
+    panel (now stacked vertically) below the header. Footer's label row wraps onto a second line.
+11. Tab through the page from the top: focus should visibly land on the wordmark link, then (below
+    760px) the ☰ toggle, in a logical order.
