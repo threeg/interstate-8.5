@@ -18,19 +18,56 @@
   gap: var(--space-3);
 }
 
+.site-header .site-branding__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-h4);
+  letter-spacing: var(--ls-display);
+  color: var(--color-fg);
+  text-decoration: none;
+}
+
+.site-header--transparent .site-branding__name {
+  color: var(--color-surface);
+  text-shadow: 0 1px 5px rgba(0, 0, 0, .5);
+}
+
 .site-header__nav {
-  display: flex;
-  align-items: center;
-  gap: var(--space-7);
   font-family: var(--font-display);
   font-weight: 600;
   font-size: var(--fs-nav);
   letter-spacing: var(--ls-nav);
 }
 
-.site-header__nav a,
-.site-header__nav span {
+/* The placed block (system_menu_block) wraps its <ul> in its own block
+   markup + <nav>; collapse those wrapper boxes so the <ul> lays out
+   directly in this component's flex context, without losing their
+   landmark/heading semantics. */
+.site-header__nav > div,
+.site-header__nav > div > nav {
+  display: contents;
+}
+
+.site-header__nav ul {
+  display: flex;
+  align-items: center;
+  gap: var(--space-7);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-header__nav li {
+  display: flex;
+}
+
+.site-header__nav a {
+  color: var(--color-nav);
   text-decoration: none;
+}
+
+.site-header--transparent .site-header__nav a {
+  color: var(--color-surface);
 }
 
 /* Active/current-section marking (FR-16 framing) — styles whichever active
@@ -65,13 +102,11 @@
 
 /* --- Solid variant (default): secondary pages, and the homepage post-scroll --- */
 .site-header--solid {
+  position: sticky;
+  top: 0;
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-line);
   box-shadow: var(--shadow-header);
-}
-
-.site-header--solid .site-header__nav {
-  color: var(--color-nav);
 }
 
 .site-header--solid .site-header__toggle {
@@ -84,10 +119,6 @@
   inset-inline: 0;
   top: 0;
   background: linear-gradient(180deg, rgba(20, 26, 28, .68) 0%, rgba(20, 26, 28, .12) 100%);
-  color: var(--color-surface);
-}
-
-.site-header--transparent .site-header__nav {
   color: var(--color-surface);
 }
 
@@ -105,9 +136,11 @@
   color: inherit;
 }
 
-.site-header--transparent.is-scrolled .site-header__nav,
-.site-header--transparent.is-scrolled .site-header__toggle {
+.site-header--transparent.is-scrolled .site-header__nav a,
+.site-header--transparent.is-scrolled .site-header__toggle,
+.site-header--transparent.is-scrolled .site-branding__name {
   color: var(--color-nav);
+  text-shadow: none;
 }
 
 /* --- Responsive: nav collapses behind the ☰ toggle below --bp-nav --- */
@@ -118,20 +151,22 @@
     top: 100%;
     left: 0;
     right: 0;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-4);
-    padding: var(--space-5) var(--space-6);
     background: var(--color-surface);
     box-shadow: var(--shadow-header);
+    padding: var(--space-5) var(--space-6);
   }
 
   .site-header__nav.is-open {
-    display: flex;
+    display: block;
   }
 
-  .site-header--solid .site-header__nav,
-  .site-header--transparent.is-scrolled .site-header__nav {
+  .site-header__nav ul {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .site-header__nav a {
     color: var(--color-nav);
   }
 
@@ -142,6 +177,6 @@
 
 @media (min-width: 760px) {
   .site-header__nav {
-    display: flex !important;
+    display: block;
   }
 }

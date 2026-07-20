@@ -36,3 +36,28 @@
     color: var(--color-accent);
   }
 }
+
+/* 4. Page shell layout (unlayered — takes precedence over @layer base/utilities)
+   - centres the whole page into a --sheet-max "content sheet" on very wide
+     viewports, matching 1B.dc.html's extra-wide (1920px viewport / 1440px
+     sheet) composition;
+   - sticky footer: pins the footer to the viewport bottom when page content
+     is shorter than the viewport, without affecting normal (taller) pages. */
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: var(--sheet-max);
+  margin-inline: auto;
+  background: var(--color-surface);
+}
+
+@media (min-width: 1441px) {
+  .layout-container {
+    box-shadow: var(--shadow-sheet);
+  }
+}
+
+.site-main {
+  flex: 1 0 auto;
+}

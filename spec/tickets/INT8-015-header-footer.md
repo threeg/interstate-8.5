@@ -89,15 +89,70 @@ against the un-implemented shell, then green after implementation), including Ax
 ABOUT/CONTACT/SUPPORT/LEGAL/PRIVACY POLICY row, © line and disclaimer all render per `1B.dc.html`'s
 FOOTER/HEADER·SOLID components.
 
+2026-07-20 — **Round 2, from review feedback** (user placed a real menu block + test links to exercise
+the nav end-to-end). Five fixes, all in the same components touched above — no scope change, no new
+files besides the CSS/markup already in this ticket:
+
+- **Nav items stacked vertically / wrong colour:** the placed `system_menu_block` renders its own
+  `<div>` block wrapper + inner `<nav>` + a bare `<ul><li><a>` (no `.menu`/`.menu-item` classes in this
+  Drupal version's default markup). `.site-header__nav`'s `display:flex` only laid out that one wrapper
+  `<div>` as a single flex item — the `<ul>` two levels down never joined the row. Fixed by collapsing
+  the two wrapper levels with `display: contents` and moving the flex-row declaration onto the actual
+  `<ul>`. Separately, nav link colour was losing to the global `a { color: var(--color-accent-hover) }`
+  rule added in round 1 — a rule that directly targets `<a>` beats a colour that only reaches the link
+  by inheritance, regardless of the parent selector's specificity. Fixed with an explicit
+  `.site-header__nav a { color: var(--color-nav); }` rule, which — because it also directly targets
+  `<a>` — wins on specificity instead.
+- **Site name (wordmark) unstyled:** `.site-header__branding`'s CSS only laid out its container; no
+  rule ever touched `.site-branding__name` (the actual text). Added Oswald/700/`--fs-h4`/`--color-fg`
+  (white + text-shadow on the transparent variant), matching `1B.dc.html`'s solid-header wordmark spec.
+- **Not centred to the 1440px sheet on extra-wide viewports:** `1B.dc.html`'s "EXTRA-WIDE" mockups
+  (1920px viewport) wrap the *entire page* — not just the header — in `max-width:1440px;margin:0 auto`
+  with the `--shadow-sheet` shadow. `page.html.twig`'s `.layout-container` never had that constraint,
+  so header/main/footer all stretched full-bleed at any width. Added the max-width/centring (plus the
+  shadow only above 1441px, so it doesn't show as a flush-edge artefact below the sheet width) to
+  `.layout-container` in `app.css` — this incidentally fixed the "badge+wordmark flush left" symptom
+  too, since they're now positioned relative to the centred sheet, not the raw viewport.
+- **Header not sticky on scroll:** the transparent variant already pins itself on scroll
+  (`.is-scrolled { position: fixed }`, part of the original solidify mechanism), but the **solid**
+  variant — what every real page actually uses today — had no positioning beyond the base
+  `position: relative`. Added `position: sticky; top: 0;` to `.site-header--solid`. (Checked the spec
+  first: no doc states the header must be sticky — the only "sticky" mention anywhere is the Songs-
+  ledger letter-rail, a different, later component — so this was a plain missing implementation, not a
+  spec reinterpretation.)
+- **Footer not pinned to the viewport bottom on short pages:** `.layout-container` had no height rules
+  at all. Added the standard sticky-footer pattern — `.layout-container` as a `min-height: 100vh` flex
+  column, `.site-main { flex: 1 0 auto; }` — so the footer sits at the bottom of the viewport on short
+  pages (verified: footer's `getBoundingClientRect().bottom` now equals `window.innerHeight` on
+  `/user/login`) while behaving normally (pushed down by content, not fixed) on taller pages.
+
+Re-verified after all five fixes: default gate green (10 PHPUnit, PHPCS/PHPStan clean, boundary check
+0 violations); Playwright 40/40 across all 5 browser projects, including Axe at desktop and 320px with
+the real test menu links in place.
+
+**Not fixed here — spun out as `INT8-026`:** the footer's About/Contact/Support/Legal/Privacy row is
+still hardcoded static text, not a real Drupal menu. That was a deliberate choice at the time (the
+hi-fi itself renders them as inert spans, and those pages are wireframe-deferred, so real links would
+404 today) but wasn't called out as a tracked decision in the original ticket text — raised in review
+and moved to its own cleanup ticket rather than folded in here, since making it menu-driven has its own
+dependency (the destination pages, or at least a real menu to point nowhere-safely) that INT8-015's
+components don't otherwise need.
+
 ## QA steps
 1. `lando playwright` (or `cd tests/playwright && npx playwright test tests/page-shell.spec.ts`) — all
    pass, including Axe at desktop and 320px.
 2. Visit any page (e.g. `/user/login`) at a desktop width: confirm the solid header (white background,
-   shield badge, wordmark, subtle bottom shadow) and the footer (label row, © line, disclaimer) render
-   and match `spec/design/interstate-8-design-refinement/project/Interstate-8 1B.dc.html`'s HEADER ·
-   SOLID / FOOTER components.
-3. Resize below 760px (or use device emulation at 320px): the primary-nav area collapses behind a ☰
-   button in the header's top-right; click/Enter on it toggles `aria-expanded` and reveals the (currently
-   empty, pending INT8-017) nav panel below the header. Footer's label row wraps onto a second line.
-4. Tab through the page from the top: focus should visibly land on the wordmark link, then (below
+   shield badge, styled wordmark, subtle bottom shadow) and the footer (label row, © line, disclaimer)
+   render and match `spec/design/interstate-8-design-refinement/project/Interstate-8 1B.dc.html`'s
+   HEADER · SOLID / FOOTER components. With a menu placed in the primary-nav region, its links render
+   as a horizontal row in the header's nav slot, not stacked.
+3. Scroll the page: the header stays pinned to the top of the viewport.
+4. Widen the browser past ~1440px: the whole page (header/content/footer) centres into a shadowed
+   white sheet with the canvas colour visible on both sides, instead of stretching edge-to-edge.
+5. On a short page, the footer sits flush with the bottom of the viewport rather than floating directly
+   under the content.
+6. Resize below 760px (or use device emulation at 320px): the primary-nav area collapses behind a ☰
+   button in the header's top-right; click/Enter on it toggles `aria-expanded` and reveals the nav panel
+   (now stacked vertically) below the header. Footer's label row wraps onto a second line.
+7. Tab through the page from the top: focus should visibly land on the wordmark link, then (below
    760px) the ☰ toggle, in a logical order.
