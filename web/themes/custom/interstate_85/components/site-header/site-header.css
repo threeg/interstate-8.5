@@ -9,7 +9,10 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  padding: var(--space-5) var(--space-6);
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-block: var(--space-5);
+  padding-inline: var(--space-6);
 }
 
 .site-header__branding {
@@ -18,13 +21,28 @@
   gap: var(--space-3);
 }
 
+.site-branding__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+}
+
 .site-header .site-branding__name {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: var(--fs-h4);
   letter-spacing: var(--ls-display);
+  text-transform: uppercase;
   color: var(--color-fg);
-  text-decoration: none;
+}
+
+.site-branding__link:hover .site-branding__name {
+  color: var(--color-accent);
+}
+
+.site-branding__link:hover .site-badge {
+  border-color: var(--color-accent);
 }
 
 .site-header--transparent .site-branding__name {
@@ -32,11 +50,17 @@
   text-shadow: 0 1px 5px rgba(0, 0, 0, .5);
 }
 
+.site-header--transparent .site-branding__link:hover .site-branding__name {
+  color: var(--color-surface);
+  text-decoration: underline;
+}
+
 .site-header__nav {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: var(--fs-nav);
   letter-spacing: var(--ls-nav);
+  text-transform: uppercase;
 }
 
 /* The placed block (system_menu_block) wraps its <ul> in its own block
@@ -66,8 +90,19 @@
   text-decoration: none;
 }
 
+.site-header__nav a:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
 .site-header--transparent .site-header__nav a {
   color: var(--color-surface);
+}
+
+.site-header--transparent .site-header__nav a:hover {
+  color: var(--color-surface);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent-alt);
 }
 
 /* Active/current-section marking (FR-16 framing) — styles whichever active

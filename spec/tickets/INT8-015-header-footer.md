@@ -153,20 +153,64 @@ and moved to its own cleanup ticket rather than folded in here, since making it 
 dependency (the destination pages, or at least a real menu to point nowhere-safely) that INT8-015's
 components don't otherwise need.
 
+2026-07-20 — **Round 4, from review feedback** (five more points, once a real internal link was
+available to test against):
+
+- **Header/footer inner content not aligned to the content column:** round 2/3 got the *outer*
+  `--sheet-max` sizing right, but `.site-header__inner`/the new `.site-footer__inner` still used their
+  own padding, not the same `--content-max`/`margin-inline:auto` box as `.layout-content` — so at wide
+  viewports the badge/nav/footer content sat closer to the sheet's edges than the content column's
+  edges instead of sharing them. `1B.dc.html` confirms this explicitly: both the homepage and Songs
+  Landing extra-wide header rows wrap their badge+nav in their own `max-width:980px` div. Fixed by
+  giving `.site-header__inner` and the new `.site-footer__inner` the identical
+  `max-width:var(--content-max);margin-inline:auto;padding-inline:var(--space-6)` treatment as
+  `.layout-content`, so all three now share the same left/right edges at any width.
+- **Wordmark and nav not uppercase:** added `text-transform: uppercase` to `.site-branding__name` and
+  `.site-header__nav` (CSS-level, not a Twig `|upper` on the data, since both are real Drupal values —
+  site name, menu link titles — that shouldn't be rewritten, only presented differently). The footer's
+  labels already used `|upper` and were already correct.
+- **No hover state:** none had been written for nav links or the wordmark — worse, the round-1 global
+  `a:hover` rule couldn't reach them anyway, beaten by the same higher-specificity direct rules that
+  fixed the round-2 color bug. Added explicit `:hover` rules: nav links → accent teal + underline
+  (matching design-system §3's Link component: "nav/action (teal, underline on hover)"); wordmark →
+  accent teal text + intensified badge border.
+- **No active/current-section state:** the `.is-active`/`[aria-current="page"]` CSS built in round 1
+  had nothing to ever attach those to. Checked core's actual `menu.html.twig` — it does **no**
+  active-trail marking server-side at all (no class, no `aria-current`); that's done entirely
+  client-side by the `core/drupal.active-link` JS library reading `data-drupal-link-system-path`
+  attributes after page load, and that library was never attached anywhere. Added it to
+  `site-header.component.yml`'s `libraryOverrides.dependencies`. Verified end-to-end: with a menu link
+  added pointing at `/` (the current front page), it now genuinely receives `.is-active` client-side —
+  confirmed both manually and with a new permanent Playwright test (using the login page's own
+  always-present "Log in" tab as a stable proof rather than depending on ad-hoc nav test data).
+- **Shield not clickable:** `block--system-branding-block.html.twig` had the badge *outside* the
+  wordmark's `<a>`. Restructured so a single `.site-branding__link` anchor wraps both the badge and the
+  wordmark (now a `<span>` inside it, since the outer element is now the link).
+
+Added three permanent regression tests to `page-shell.spec.ts` (uppercase, nav-link hover colour
+change, active-link marking) and extended the existing header test to assert the badge sits inside the
+wordmark link. Re-verified: default gate green, Playwright 55/55 across all 5 browser projects
+(including Axe at desktop and 320px).
+
 ## QA steps
 1. `lando playwright` (or `cd tests/playwright && npx playwright test tests/page-shell.spec.ts`) — all
    pass, including Axe at desktop and 320px.
 2. Visit any page (e.g. `/user/login`) at a desktop width: confirm the solid header (white background,
-   shield badge, styled wordmark, subtle bottom shadow) and the footer (label row, © line, disclaimer)
-   render and match `spec/design/interstate-8-design-refinement/project/Interstate-8 1B.dc.html`'s
-   HEADER · SOLID / FOOTER components. With a menu placed in the primary-nav region, its links render
-   as a horizontal row in the header's nav slot, not stacked.
-3. Scroll the page: the header stays pinned to the top of the viewport.
-4. Widen the browser past ~1440px: the whole page (header/content/footer) centres into a shadowed
-   white sheet with the canvas colour visible on both sides, instead of stretching edge-to-edge.
-5. On a short page, the footer sits flush with the bottom of the viewport rather than floating directly
+   shield badge, uppercase styled wordmark, subtle bottom shadow) and the footer (label row, © line,
+   disclaimer) render and match `spec/design/interstate-8-design-refinement/project/Interstate-8
+   1B.dc.html`'s HEADER · SOLID / FOOTER components. With a menu placed in the primary-nav region, its
+   links render as an uppercase horizontal row in the header's nav slot, not stacked, and hover over a
+   link shows a teal/underline change.
+3. Click the shield/badge — it navigates home, same as the wordmark text.
+4. Add an internal menu link pointing at the current page: it picks up the accent-teal/underline
+   "current section" styling once the page finishes loading (client-side, via `core/drupal.active-link`).
+5. Scroll the page: the header stays pinned to the top of the viewport.
+6. Widen the browser past ~1440px: the whole page (header/content/footer) centres into a shadowed
+   white sheet with the canvas colour visible on both sides; within the sheet, the header/footer content
+   shares the same left/right edges as the main content column (not the sheet's own edges).
+7. On a short page, the footer sits flush with the bottom of the viewport rather than floating directly
    under the content.
-6. Resize below 760px (or use device emulation at 320px): the primary-nav area collapses behind a ☰
+8. Resize below 760px (or use device emulation at 320px): the primary-nav area collapses behind a ☰
    button in the header's top-right; click/Enter on it toggles `aria-expanded` and reveals the nav panel
    (now stacked vertically) below the header. Footer's label row wraps onto a second line.
 7. Tab through the page from the top: focus should visibly land on the wordmark link, then (below

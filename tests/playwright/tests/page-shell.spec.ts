@@ -15,14 +15,46 @@ test.describe('page shell — header + footer', () => {
     await expect(header).toBeVisible();
     await expect(header).toHaveAttribute('data-header-variant', 'solid');
 
-    await expect(header.locator('.site-badge')).toBeVisible();
     const wordmark = header.locator('a[rel="home"]');
     await expect(wordmark).toBeVisible();
+    // The badge is inside the same link as the wordmark, so it's clickable
+    // through to the front page too, not just the text.
+    await expect(wordmark.locator('.site-badge')).toBeVisible();
 
     // The nav landmark is always in the DOM; it's only visually collapsed
     // behind the ☰ toggle below --bp-nav (760px), so check attachment, not
     // role-query visibility (hidden elements aren't exposed to getByRole).
     await expect(header.locator('nav.site-header__nav[aria-label="Primary"]')).toBeAttached();
+  });
+
+  test('wordmark and nav render uppercase', async ({ page }) => {
+    await page.goto('/user/login');
+    const header = page.locator('header.site-header');
+    await expect(header.locator('.site-branding__name')).toHaveCSS('text-transform', 'uppercase');
+    await expect(header.locator('nav.site-header__nav')).toHaveCSS('text-transform', 'uppercase');
+  });
+
+  test('nav links change colour on hover', async ({ page }) => {
+    await page.goto('/user/login');
+    // Login's own always-present local-task link is a stable, non-test-data
+    // link to exercise general <a> hover, independent of whatever's placed
+    // in the primary-nav region.
+    const link = page.locator('a[data-drupal-link-system-path="user/password"]').first();
+    const before = await link.evaluate((el) => getComputedStyle(el).color);
+    await link.hover();
+    const after = await link.evaluate((el) => getComputedStyle(el).color);
+    expect(after).not.toBe(before);
+  });
+
+  test('the active-link mechanism marks the current-page link', async ({ page }) => {
+    await page.goto('/user/login');
+    // core/drupal.active-link adds .is-active/aria-current="page" to links
+    // matching the current path client-side; Drupal's own "Log in" local
+    // task on the login page is a stable, always-present link to prove the
+    // library is actually loaded and firing (core's default menu.html.twig
+    // does no active-trail marking server-side at all).
+    const loginTab = page.locator('a[data-drupal-link-system-path="user/login"]').first();
+    await expect(loginTab).toHaveClass(/is-active/);
   });
 
   test('footer renders the secondary labels, copyright and disclaimer', async ({ page }) => {

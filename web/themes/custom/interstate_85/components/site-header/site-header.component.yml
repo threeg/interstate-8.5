@@ -25,10 +25,17 @@ slots:
     title: Primary navigation
     description: 'The rendered primary_menu region markup.'
 libraryOverrides:
-  # Auto-discovered css/js stay as-is; this only exists to force core/drupal
-  # as a dependency, which Drupal\Core\Theme\ComponentPluginManager only adds
-  # when libraryOverrides is present — without it, Drupal.behaviors in
-  # site-header.js could run before core/drupal defines the Drupal global.
+  # Auto-discovered css/js stay as-is; this only exists to force dependencies,
+  # which Drupal\Core\Theme\ComponentPluginManager only adds when
+  # libraryOverrides is present:
+  # - core/drupal: without it, Drupal.behaviors in site-header.js could run
+  #   before core/drupal defines the Drupal global.
+  # - core/drupal.active-link: the JS that actually adds .is-active /
+  #   aria-current="page" to the current nav link client-side (core's
+  #   default menu.html.twig doesn't mark active-trail links server-side at
+  #   all) — without this dependency nothing ever attaches the class the
+  #   .is-active / [aria-current="page"] CSS below is styling.
   dependencies:
     - core/drupal
+    - core/drupal.active-link
 
