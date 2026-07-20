@@ -1,0 +1,11 @@
+$schema: 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/metadata.schema.json'
+name: Site footer
+status: experimental
+description: >-
+  The Interstate-8 footer. One variant, identical on every page: the
+  secondary label row (About/Contact/Support/Legal/Privacy — deferred
+  sections, shown for design continuity only, not linked), the copyright
+  line and the fan-site disclaimer.
+props:
+  type: object
+  properties: {}

@@ -1,0 +1,14 @@
+{% set variant = variant|default('solid') %}
+<header{{ attributes.addClass('site-header', 'site-header--' ~ variant) }} data-header-variant="{{ variant }}">
+  <div class="site-header__inner">
+    <div class="site-header__branding">
+      {% block branding %}{% endblock %}
+    </div>
+    <nav id="site-header-nav" class="site-header__nav" aria-label="{{ 'Primary'|t }}">
+      {% block nav %}{% endblock %}
+    </nav>
+    <button type="button" class="site-header__toggle" aria-expanded="false" aria-controls="site-header-nav" aria-label="{{ 'Menu'|t }}">
+      <span class="site-header__toggle-icon" aria-hidden="true">&#9776;</span>
+    </button>
+  </div>
+</header>

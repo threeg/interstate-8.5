@@ -1,0 +1,35 @@
+{#
+/**
+ * @file
+ * Interstate-8 page template — wires the site-header and site-footer SDC
+ * components (INT8-015) around the regions declared in interstate_85.info.yml.
+ *
+ * @see html.html.twig
+ */
+#}
+<div class="layout-container">
+
+  {% embed 'interstate_85:site-header' with { variant: header_variant|default('solid'), page: page } only %}
+    {% block branding %}{{ page.header }}{% endblock %}
+    {% block nav %}{{ page.primary_menu }}{% endblock %}
+  {% endembed %}
+
+  {{ page.breadcrumb }}
+
+  <main class="site-main">
+    <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
+
+    <div class="layout-content">
+      {{ page.content }}
+    </div>{# /.layout-content #}
+
+    {% if page.sidebar_first %}
+      <aside class="layout-sidebar-first">
+        {{ page.sidebar_first }}
+      </aside>
+    {% endif %}
+  </main>
+
+  {{ include('interstate_85:site-footer', {}, with_context: false) }}
+
+</div>{# /.layout-container #}

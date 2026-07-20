@@ -101,4 +101,8 @@
   --content-max: 980px;   /* text content column */
   --sheet-max:   1440px;  /* content sheet on very wide viewports */
   --viewport-min: 320px;  /* responsive floor (NFR-2) */
+  --bp-nav:      760px;   /* header nav collapses to the ☰ toggle below this width */
+
+  /* --- Header/footer chrome --- */
+  --z-header: 100; /* sticky header stacking context */
 }

@@ -25,10 +25,14 @@
   }
 
   a {
-    color: var(--color-accent);
+    /* --color-accent clears 4.5:1 (NFR-1) on --color-surface but not on
+       --color-canvas/--color-tint (3.99:1 / 3.84:1) — the darker "hover" shade
+       is the one safe as default body-text link colour on every background;
+       axe's static color-contrast check doesn't evaluate :hover. */
+    color: var(--color-accent-hover);
   }
 
   a:hover {
-    color: var(--color-accent-hover);
+    color: var(--color-accent);
   }
 }

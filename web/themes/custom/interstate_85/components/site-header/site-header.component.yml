@@ -1,0 +1,34 @@
+$schema: 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/metadata.schema.json'
+name: Site header
+status: experimental
+description: >-
+  The Interstate-8 page header. Two variants: solid (default — secondary
+  pages, and the homepage once scrolled) and transparent (over the homepage
+  hero, pre-scroll). Branding and primary nav are passed in as slots so the
+  component stays decoupled from block/menu configuration.
+props:
+  type: object
+  properties:
+    variant:
+      type: string
+      title: Variant
+      description: 'solid (default) or transparent.'
+      enum:
+        - solid
+        - transparent
+      default: solid
+slots:
+  branding:
+    title: Branding
+    description: 'The site branding block markup (badge + wordmark).'
+  nav:
+    title: Primary navigation
+    description: 'The rendered primary_menu region markup.'
+libraryOverrides:
+  # Auto-discovered css/js stay as-is; this only exists to force core/drupal
+  # as a dependency, which Drupal\Core\Theme\ComponentPluginManager only adds
+  # when libraryOverrides is present — without it, Drupal.behaviors in
+  # site-header.js could run before core/drupal defines the Drupal global.
+  dependencies:
+    - core/drupal
+
