@@ -74,6 +74,7 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 |---|----|-------|------|-------|-------|--------|------------|
 | C2 | INT8-023 | Reconcile the INT8-001 record (and its BOARD title) from DDEV to Lando | task | docs | cleanup | todo | INT8-001 |
 | C3 | INT8-024 | Pin lyrics/notes/quotes fields to the Restricted HTML format | task | content-model | cleanup | todo | INT8-010 |
+| C4 | INT8-025 | Harden the migration count-parity check to verify FR-5 literally (published == active source) | task | migration | cleanup | todo | INT8-014 |
 
 > **INT8-022** was promoted into the main execution-order table above (row 12, before INT8-012) — its
 > own DoD required it be worked before the first migration module landed.
