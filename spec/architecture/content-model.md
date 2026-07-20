@@ -142,7 +142,7 @@ Either way the content model carries **no sort field**.
 
 | v2 | v5 |
 |----|----|
-| `I8_Songs` row where `Song_Active = 1` | `song` node, keyed on `PK_Song_ID` (FR-4) |
+| every `I8_Songs` row | `song` node, keyed on `PK_Song_ID` (FR-4). The migration does **not** filter on `Song_Active`; it imports every row and maps `Song_Active → status` (see below), so an inactive row is imported **unpublished** rather than dropped. All 492 dump rows are active, so this is equivalent to importing the active set today (FR-1/FR-5). |
 | `PK_Song_ID` | `field_legacy_id` (permanent; join-repair + redirects) |
 | `Song_Name` | `title` |
 | `Song_Lyrics` / `_Notes` / `_Quotes` | `field_lyrics` / `field_notes` / `field_quotes` (Restricted HTML, FR-21 cleanup) |
@@ -167,6 +167,14 @@ Migration is idempotent and rollbackable (FR-4); imported count is verified agai
 
 ## 9. Decisions log
 
+- **2026-07-19** — **Migration imports every `I8_Songs` row and maps `Song_Active → status`** (§8),
+  reconciling the earlier "row where `Song_Active = 1` → node" phrasing (which implied a source filter)
+  with the `Song_Active → status` mapping row directly below it. The `song` migration deliberately runs
+  **unfiltered** and lets `Song_Active` set published/unpublished — lossless (a future inactive row
+  becomes an unpublished node, recoverable, not a dropped song). All 492 dump rows are active, so this
+  equals importing the active set today (FR-1 satisfied; FR-5 count parity holds). Surfaced by
+  `sfk-verify` on the migration batch; the FR-5 count check is hardened to assert *published* count ==
+  active-source count in **INT8-025** so it verifies FR-5 literally rather than total==total.
 - **2026-07-19** — **`Song_Video` import descoped to manual entry** (§4, §8; supersedes the original
   "migration MUST extract the video URL" plan and `requirements.md` FR-2's inclusion of music video).
   Checked the real dump at INT8-013: only 15 of 492 songs have a video, all clean `<iframe>` embeds
