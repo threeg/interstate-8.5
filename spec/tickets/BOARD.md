@@ -49,7 +49,7 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 10 | INT8-010 | Song content type + fields | task | content-model | 9 / content-model | E02 | site-building | done | INT8-008, INT8-009 |
 | 11 | INT8-011 | Pathauto pattern for songs | task | config | 9 / config | E02 | site-building | done | INT8-010 |
 | 12 | INT8-022 | Broaden the dependency-rule boundary check to the full architecture rule | task | tooling | 9 / cleanup | — | code | done | INT8-006 |
-| 13 | INT8-012 | Song type migration (`I8_SongType` → terms) | task | migration | 9 / migration | E02 | code | in-review | INT8-004, INT8-008 |
+| 13 | INT8-012 | Song type migration (`I8_SongType` → terms) | task | migration | 9 / migration | E02 | code | done | INT8-004, INT8-008 |
 | 14 | INT8-013 | Songs migration (`I8_Songs` → nodes) | task | migration | 9 / migration | E02 | code | todo | INT8-010, INT8-011, INT8-012 |
 | 15 | INT8-014 | Migration verification | task | migration | 9 / migration | E02 | code | todo | INT8-013 |
 | 16 | INT8-015 | Base layout + header + footer (SDC) | task | theme | 9 / theme | E03 | code | todo | INT8-005 |

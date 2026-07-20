@@ -2,7 +2,7 @@
 id: INT8-012
 title: Song type migration (I8_SongType → terms)
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: migration
 layer: migration
