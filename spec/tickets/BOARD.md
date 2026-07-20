@@ -24,7 +24,7 @@ spec (no hand-authored config YAML); everything else is code.
 | id | title | milestone | status |
 |----|-------|-----------|--------|
 | INT8-E01 | Foundation & tooling (scaffolding) | 8 | done |
-| INT8-E02 | Songs content model & migration | 9 | todo |
+| INT8-E02 | Songs content model & migration | 9 | done |
 | INT8-E03 | Theme foundation | 9 | todo |
 | INT8-E04 | Songs section (landing + song page) | 9 | todo |
 
@@ -51,7 +51,7 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 12 | INT8-022 | Broaden the dependency-rule boundary check to the full architecture rule | task | tooling | 9 / cleanup | — | code | done | INT8-006 |
 | 13 | INT8-012 | Song type migration (`I8_SongType` → terms) | task | migration | 9 / migration | E02 | code | done | INT8-004, INT8-008 |
 | 14 | INT8-013 | Songs migration (`I8_Songs` → nodes) | task | migration | 9 / migration | E02 | code | done | INT8-010, INT8-011, INT8-012 |
-| 15 | INT8-014 | Migration verification | task | migration | 9 / migration | E02 | code | in-review | INT8-013 |
+| 15 | INT8-014 | Migration verification | task | migration | 9 / migration | E02 | code | done | INT8-013 |
 | 16 | INT8-015 | Base layout + header + footer (SDC) | task | theme | 9 / theme | E03 | code | todo | INT8-005 |
 | 17 | INT8-016 | Shared atoms / molecules | task | theme | 9 / theme | E03 | code | todo | INT8-005 |
 | 18 | INT8-017 | Primary nav + front-page/route wiring | task | theme | 9 / theme | E03 | code + site-building | todo | INT8-015 |

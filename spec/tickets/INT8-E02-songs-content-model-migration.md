@@ -2,7 +2,7 @@
 id: INT8-E02
 title: Songs content model & migration
 type: epic
-status: todo
+status: done
 milestone: 9
 batch: content-model
 layer: content-model

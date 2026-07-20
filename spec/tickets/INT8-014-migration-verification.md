@@ -2,7 +2,7 @@
 id: INT8-014
 title: Migration verification (counts / spot-checks / rollback)
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: migration
 layer: migration
