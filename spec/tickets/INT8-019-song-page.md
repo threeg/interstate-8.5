@@ -46,7 +46,11 @@ so that I have the song's full record in one place.
 
 ## Design references
 - Wireframe: spec/wireframes/03-song-page.md (standard variant, missing-fields)
-- Design system: song page layout, video, quote block; `1B.dc.html` SONG PAGE
+- Design system: song page layout, video, quote block; `1B.dc.html` SONG PAGE (now includes a
+  **SONG PAGE MOBILE** composition — the 2026-07-21 export refresh added a genuine 375px mockup where
+  slice 1 previously only had desktop/tablet/extra-wide) plus the **SONG PAGE — MISSING FIELDS**
+  precision panel (design-system.md §3, decisions log 2026-07-21) — confirms lyrics move up to sit
+  directly under the title strip when quote/notes/video are all absent, no empty gap left behind
 
 ## Tests
 - Playwright: renders name/quote/lyrics/notes/video; omits absent fields (FR-15); no type/release/live

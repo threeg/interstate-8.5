@@ -18,7 +18,12 @@ labels — once, so the song screens just assemble them.
 
 ## Background
 Design-system §3 (Button/CTA, Link, Filter bar controls, Hero, section labels) + the token panel; the
-canonical `1B.dc.html` COMPONENTS section.
+canonical `1B.dc.html` COMPONENTS section. The 2026-07-21 design-export refresh (design-system.md
+decisions log) added precise reference panels worth building straight from: **FILTER BAR — HOVER /
+FOCUS / OPEN** (exact hover/focus colours for the Type select, Show/Hide toggle, APPLY button),
+**"COMING SOON" STUB — precision reference** (exact border/opacity/label spec, reusable wherever a
+not-yet-built field renders), and the universal **FOCUS RING** panel (governs every control this
+ticket builds, not just nav — see design-system.md §4).
 
 ## Technical requirements
 - SDC components with states from design-system §3: **Button/CTA** (primary teal, polo-blue CTA;

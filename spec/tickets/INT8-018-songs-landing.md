@@ -57,7 +57,11 @@ so that I can find any song and see the whole body of work at once.
 
 ## Design references
 - Wireframe: spec/wireframes/02-songs-landing.md (populated / empty states)
-- Design system: filter bar, song ledger, alt badge; `1B.dc.html` SONGS LANDING
+- Design system: filter bar, song ledger, alt badge; `1B.dc.html` SONGS LANDING (now includes a
+  **SONGS LANDING MOBILE** composition — the 2026-07-21 export refresh added a genuine 375px mockup
+  where slice 1 previously only had desktop/tablet/extra-wide) plus the **SONG LEDGER ROW —
+  DEFAULT / ALT / HOVER / FOCUS** and **SONGS LANDING — EMPTY / NO RESULTS** precision panels
+  (design-system.md §3, decisions log 2026-07-21)
 
 ## Tests
 - Playwright: list completeness + exclusion (FR-6/7), sort (FR-8), type default + narrowing (FR-9/18),

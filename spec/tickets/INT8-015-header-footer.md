@@ -282,6 +282,25 @@ specifically needed an authenticated session to exercise, which this project's P
 have infrastructure for yet (only ever runs anonymous) — verified manually via `drush user:login`
 rather than adding auth scaffolding to this ticket; noted as a manual QA step below.
 
+2026-07-21 — **Design-sync review** (documentation only, ticket stays `done`, no code touched here).
+The user sent `1B.dc.html` back to Claude Design after this ticket's review cycle and re-exported it
+with the missing context identified along the way. Reviewed the diff against this ticket's shipped
+output:
+- **Layout widths — confirmed correct as built.** The refresh added an explicit **LAYOUT WIDTHS** panel
+  stating the footer follows the 980px content column, not the sheet's own edges — exactly what Round 3
+  landed on. No action needed.
+- **Real gaps found**, all against this ticket's already-shipped `site-header`/branding-block code, now
+  spun into **`INT8-027`** rather than reopening this ticket: (a) the slogan should show on the solid
+  header too (this ticket hid it there entirely — the export refresh corrects the earlier read), hidden
+  only below the mobile breakpoint; (b) nav hover must render visibly differently from current-section
+  (this ticket's Round 6 fix made them intentionally identical, which the new HEADER NAV — HOVER panels
+  now show is wrong — hover keeps a distinct underline colour); (c) no focus-visible ring exists
+  anywhere in the theme, and the export refresh's new universal FOCUS RING panel makes the NFR-1
+  obligation (already in design-system.md §4 before this refresh) concrete enough to implement against;
+  (d) the mobile nav open panel's visual language (full-width divided rows + left-border current
+  marker) wasn't in the file when this ticket was built and doesn't match what was shipped (a plain
+  gap-separated column).
+
 ## QA steps
 1. `lando playwright` (or `cd tests/playwright && npx playwright test tests/page-shell.spec.ts`) — all
    pass, including Axe at desktop and 320px.

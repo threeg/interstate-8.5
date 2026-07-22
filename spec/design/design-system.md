@@ -52,6 +52,7 @@ panel.)
 | `--color-accent` | `#3f7ca0` (teal) | primary actions, active nav, section labels, links |
 | `--color-accent-hover` | `#336585` | accent hover (−12%) |
 | `--color-accent-alt` | `#98b9d0` (Polo Blue) | primary CTA (SUBMIT IT), shield outline, hero nav underline |
+| `--color-nav-hover-on-transparent` | `#cfe3ee` (Ice) | hero/transparent header nav-hover text only — distinguishes hover from the unchanged-white "current" state; solid header hover uses `--color-accent` instead |
 | `--color-tint` | `#e4edf2` | section fills (Contribute, ledger group headers, alt-version header) |
 | `--color-line` / `--color-disabled` | `#d3d6d5` (Pumice) | dividers, borders, disabled fills |
 | `--color-surface` | `#ffffff` | content sheet |
@@ -85,20 +86,22 @@ values.
 
 | Component | Variants | States | Notes |
 |-----------|----------|--------|-------|
-| **Header / nav** | transparent (over hero, homepage pre-scroll) · solid (scrolled + all secondary pages) | default · current-section (accent underline) · focus · mobile (☰) | wordmark + "8" shield + primary nav; hero nav underline uses Polo Blue, solid uses teal |
-| **Footer** | one, identical everywhere | — | secondary menu (About/Contact/Support/Legal/Privacy) + © + disclaimer |
+| **Header / nav** | transparent (over hero, homepage pre-scroll) · solid (scrolled + all secondary pages) | default · **hover** (distinct from current — see below) · current-section (accent underline) · focus · mobile (☰, closed/open) | wordmark + "8" shield + slogan + primary nav. Nav-item **hover** and **current** are *not* the same treatment: solid header — current = teal text + teal underline, hover = teal text + **Polo Blue** underline; transparent header — current = unchanged white text + Polo Blue underline, hover = **Ice `#cfe3ee`** text + Polo Blue underline. Hover previews the current look but with a different underline colour so the two remain visually distinguishable. Governs nav item labels only — see the separate Link row for inline/prose links. |
+| **Site slogan** | "A Modest Mouse Fan Collaborative" | shown / hidden | Shown under the wordmark on **both** transparent and solid headers, at every desktop/tablet width. Hidden **only** on the mobile (☰) header bar — there's no room for it there. (Corrects the original slice-1 read, which showed it solid-header-hidden at every width.) |
+| **Header · mobile menu** | closed (☰) · open (✕, nav panel below the bar) | current-section (left-border accent) | Open panel: full-width rows, `padding:14px 24px`, `border-bottom:1px solid` divider between rows (not a gap-separated column). Current item gets a `3px solid` **left border** accent instead of the desktop underline. |
+| **Footer** | one, identical everywhere | — | secondary menu (About/Contact/Support/Legal/Privacy) + © + disclaimer. Confirmed: follows the 980px content column, not the full sheet width, even though the two read as equal at most viewports. |
 | **Hero** | band hero (home, full, "TAKE AN EXIT") · page-title hero (secondary, short) | — | photo + darkening scrim for legibility |
 | **News card** | — | — | 4:3 photo · Oswald headline · date · Lora excerpt |
 | **Latest News** | 3-up grid of News Cards | — | homepage; "SHOW MORE →" |
 | **Home module** | upcoming tour · recently-passed · this-week-in-history · song-spotlight · from-discography | — | label (teal) + Lora list + "MORE →" |
 | **Contribute block** | — | — | tint panel + Polo-Blue CTA |
-| **Filter bar** | — | default · disabled (Released/Played-live "coming soon") | Type select, Alt-titles Show/Hide segmented toggle, APPLY (teal) |
-| **Song ledger** | letter-rail + group header + row | row default · **alt** (teal chip) · hover · focus | 3-col, sticky rail; "412 results" |
+| **Filter bar** | — | default · **hover** (select/toggle/APPLY darken, `#336585`) · **focus** (2px teal outline, 2px offset) · **open** (native select expanded) · disabled (Released/Played-live "coming soon") | Type select, Alt-titles Show/Hide segmented toggle, APPLY (teal) |
+| **Song ledger** | letter-rail + group header + row | row default · **zebra** (alternating row fill `#fafbfb`, cosmetic) · **alt-title** (teal chip, FR-10 marking) · **hover** (Tint `#e4edf2` fill, full row width) · **focus** (2px inset ring, no fill change) | 3-col, sticky rail; "412 results". Note: "zebra" (cosmetic alternating-row shading) and "alt-title" (the FR-10 alternate-version marker chip) are two independent states — don't conflate them. |
 | **Lyric pair** | side-by-side (desktop) · stacked (mobile) | — | "THIS VERSION" \| "NORMAL VERSION →"; "[same as normal version]" (FR-20) |
-| **"Coming soon" stub** | — | disabled | reserves rail for deferred releases/last-played/tour-stats (FR-14 spirit) |
+| **"Coming soon" stub** | — | disabled | reserves rail for deferred releases/last-played/tour-stats (FR-14 spirit). Precise spec: `1.5px dashed #d3d6d5` border, `4px` radius, container `opacity:.65` (whole block, not per-text); label Oswald 700 10px `.07em`, `#9aa4a1`; value Lora 13px, `#9aa4a1`. |
 | **Quote block** | — | — | left-rule, italic Lora |
-| **Button / CTA** | primary teal · CTA polo-blue | default · hover (−12%) · disabled (Pumice, 70%) | see token panel |
-| **Link** | nav/action (teal, underline on hover) · inline text (slate, pumice underline) | default · hover | — |
+| **Button / CTA** | primary teal · CTA polo-blue | default · hover (−12%) · disabled (Pumice, 70%) | see token panel. Governs solid CTA buttons only (e.g. "SUBMIT IT", "APPLY") |
+| **Link** | nav/action (teal, underline on hover) · inline **prose** text (slate, pumice underline) | default · hover | Governs inline/prose links only (e.g. "setlist" refs, cross-links to other songs) — does **not** govern header nav, which has its own hover/current states (see Header/nav row above) |
 
 ---
 
@@ -107,8 +110,10 @@ values.
 - **Empty (landing no-results, FR-19):** explicit message + reset; never a blank area.
 - **Loading:** server-rendered; unobtrusive (no heavy skeletons in slice 1).
 - **Error:** the site's standard error page; inline messages sparing, accent-toned.
-- **Focus / keyboard (NFR-1):** a visible focus ring on every interactive element; logical tab order;
-  filter controls labelled.
+- **Focus / keyboard (NFR-1):** a visible focus ring on **every** interactive element — nav links,
+  buttons, form controls (select/input), the logo link. `2px solid` outline, offset 2–3px, colour
+  `--focus-ring-color` (teal) on light surfaces / `--focus-ring-color-on-dark` (white) on dark/hero
+  surfaces. Never `outline: none` without a replacement. Logical tab order; filter controls labelled.
 - **Motion:** minimal — header solidifies on scroll; link/button hover transitions. No large motion.
 
 ---
@@ -122,3 +127,13 @@ values.
   resolved into this refined muted+teal direction rather than a separate scheme.
 - **2026-07-11** — **Serif is Lora** (was Georgia in the wires); display stays Oswald.
 - **2026-07-11** — **"Coming soon" rail** on the song page kept (FR-14 spirit — no real data shown).
+- **2026-07-21** — **Design export refreshed** (`Interstate-8 1B.dc.html`, requested back from Claude
+  Design to close gaps found while building INT8-015). Adds: explicit HEADER NAV hover/focus panels
+  (nav hover ≠ current — see Header/nav row), mobile header closed/open states, a universal FOCUS RING
+  panel, a LAYOUT WIDTHS panel (confirms full-sheet-vs-content-column split as built), FILTER BAR
+  hover/focus/open states, SONG LEDGER ROW states, SONGS LANDING EMPTY and SONG PAGE MISSING FIELDS
+  precision panels, a "COMING SOON" STUB precision spec, an explicit nav-vs-inline-link disambiguation,
+  and full SONGS LANDING MOBILE / SONG PAGE MOBILE compositions (previously missing from slice 1's
+  mobile reference). **Correction:** the site slogan is shown on both header variants at desktop/tablet
+  widths (previously read as solid-header-hidden); only the mobile ☰ bar drops it. See `INT8-027` for
+  the resulting fix to INT8-015's already-shipped header.

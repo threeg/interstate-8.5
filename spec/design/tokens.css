@@ -26,6 +26,7 @@
   --i8-surface:    #ffffff; /* content sheet */
   --i8-canvas:     #eef0ef; /* page background outside the sheet */
   --i8-scrim:      rgba(20, 26, 28, .70); /* hero-photo darkening gradient base */
+  --i8-ice:        #cfe3ee; /* light-blue: nav-hover text on the transparent/hero header only */
 
   /* --- Semantic colour aliases (use these in components) --- */
   --color-fg:            var(--i8-ink);
@@ -34,6 +35,7 @@
   --color-fg-body:       var(--i8-body);
   --color-meta:          var(--i8-meta);
   --color-nav:           var(--i8-nav);
+  --color-nav-hover-on-transparent: var(--i8-ice); /* hero/transparent header nav hover text only — solid header hover uses --color-accent */
   --color-accent:        var(--i8-teal);
   --color-accent-hover:  var(--i8-teal-hover);
   --color-accent-alt:    var(--i8-polo);   /* the polo-blue CTA / shield */
@@ -105,4 +107,10 @@
 
   /* --- Header/footer chrome --- */
   --z-header: 100; /* sticky header stacking context */
+
+  /* --- Focus ring (NFR-1, universal — every interactive element) --- */
+  --focus-ring-width:  2px;
+  --focus-ring-offset: 2px;   /* 2–3px in the hi-fi depending on the control; 2px is the safe default */
+  --focus-ring-color:  var(--i8-teal); /* light surfaces: nav links, buttons, form controls, the logo link */
+  --focus-ring-color-on-dark: var(--i8-surface); /* dark/hero surfaces: same ring, drawn in white */
 }

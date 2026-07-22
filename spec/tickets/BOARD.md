@@ -55,14 +55,21 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 16 | INT8-015 | Base layout + header + footer (SDC) | task | theme | 9 / theme | E03 | code | done | INT8-005 |
 | 17 | INT8-016 | Shared atoms / molecules | task | theme | 9 / theme | E03 | code | todo | INT8-005 |
 | 18 | INT8-017 | Primary nav + front-page/route wiring | task | theme | 9 / theme | E03 | code + site-building | todo | INT8-015 |
-| 19 | INT8-018 | Songs landing (View + filters + ledger) | story | theme | 9 / theme | E04 | code + site-building | todo | INT8-013, INT8-015, INT8-016 |
-| 20 | INT8-019 | Song page (view mode + Twig + video) | story | theme | 9 / theme | E04 | code | todo | INT8-013, INT8-015, INT8-016 |
-| 21 | INT8-020 | Song versions (side-by-side lyrics + links) | story | theme | 9 / theme | E04 | code | todo | INT8-019 |
-| 22 | INT8-021 | E2E capstone (Playwright + Axe) | task | tooling | 9 / theme | E04 | code | todo | INT8-018, INT8-019, INT8-020 |
+| 19 | INT8-027 | Header nav hover/focus states, slogan visibility, mobile-menu styling (design-sync corrections) | task | theme | 9 / theme | E03 | code | todo | INT8-015 |
+| 20 | INT8-018 | Songs landing (View + filters + ledger) | story | theme | 9 / theme | E04 | code + site-building | todo | INT8-013, INT8-015, INT8-016 |
+| 21 | INT8-019 | Song page (view mode + Twig + video) | story | theme | 9 / theme | E04 | code | todo | INT8-013, INT8-015, INT8-016 |
+| 22 | INT8-020 | Song versions (side-by-side lyrics + links) | story | theme | 9 / theme | E04 | code | todo | INT8-019 |
+| 23 | INT8-021 | E2E capstone (Playwright + Axe) | task | tooling | 9 / theme | E04 | code | todo | INT8-018, INT8-019, INT8-020 |
 
 > **Frontend independence (CONVENTIONS §4.5):** the theme foundation (E03, 015–017) builds against the
 > design/contract in parallel with the content model + migration (E02, 008–014); the Songs-section
 > screens (018–020) depend on **both**, and INT8-021 is the e2e reconcile.
+
+> **INT8-027** was slotted into the main sequence (row 19, after INT8-017) rather than the cleanup
+> backlog — it corrects already-shipped INT8-015 output against a 2026-07-21 design-export refresh, and
+> genuinely implements FR-16/NFR-1 more correctly rather than improving internal quality of unchanged
+> behaviour (CONVENTIONS §6.6 excludes real spec-gap fixes from the cleanup category). Placed before
+> INT8-018/019 so the Songs screens render the corrected header/nav from the start.
 
 ---
 
@@ -104,13 +111,13 @@ Derived from each ticket's `implements` field. Every `FR`/`NFR` appears against 
 | FR-13 | INT8-020 |
 | FR-14 | INT8-019 |
 | FR-15 | INT8-019 |
-| FR-16 | INT8-011, INT8-015, INT8-017, INT8-018 |
+| FR-16 | INT8-011, INT8-015, INT8-017, INT8-018, INT8-027 |
 | FR-17 | INT8-009, INT8-019 |
 | FR-18 | INT8-018 |
 | FR-19 | INT8-018 |
 | FR-20 | INT8-020 |
 | FR-21 | INT8-009, INT8-013 |
-| NFR-1 | INT8-015, INT8-018, INT8-019, INT8-020, INT8-021 |
+| NFR-1 | INT8-015, INT8-018, INT8-019, INT8-020, INT8-021, INT8-027 |
 | NFR-2 | INT8-015, INT8-021 |
 | NFR-3 | INT8-014 |
 | NFR-4 | *(deferred — pre-launch performance pass; no slice-1 ticket)* |
