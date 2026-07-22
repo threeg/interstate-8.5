@@ -2,7 +2,7 @@
 id: INT8-016
 title: Shared atoms / molecules
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: theme
 layer: theme
