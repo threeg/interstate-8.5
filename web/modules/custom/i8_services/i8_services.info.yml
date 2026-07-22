@@ -1,0 +1,5 @@
+name: 'Interstate-8 Services'
+type: module
+description: 'Custom services-layer logic: routes and controllers with no direct data-model or theme ownership (architecture.md §2.1).'
+core_version_requirement: ^11
+package: Interstate-8

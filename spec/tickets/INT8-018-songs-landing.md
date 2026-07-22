@@ -49,6 +49,11 @@ so that I can find any song and see the whole body of work at once.
 ## Technical approach
 - A **View** (page at `/songs`) with exposed **Type** + **Alt-titles** filters; *Released/Played-live*
   rendered disabled. Excludes `field_exclude_from_list = 1` (FR-6); no pager (FR-7).
+- **Route collision to resolve first:** INT8-017 placed a temporary stub controller at `/songs`
+  (`i8_services.songs_stub`, `web/modules/custom/i8_services/i8_services.routing.yml`) so the primary
+  nav's Songs link had somewhere real to resolve to before this ticket existed. Remove that route (or
+  disable/uninstall the parts of `i8_services` that own it) when wiring the real View to the same path —
+  two routes can't both claim `/songs`.
 - **FR-8 sort:** implement the article-insensitive sort — **Views Sort Expression** (verify D11) or a
   small owned Views sort handler (content-model §6). Decide here; record in Notes.
 - Render via the ledger/letter-rail **SDC** (INT8-016) matching `1B.dc.html` (SONGS LANDING); alt badge

@@ -1,0 +1,18 @@
+i8_services.front:
+  path: '/home'
+  defaults:
+    _controller: '\Drupal\i8_services\Controller\PageController::front'
+    _title: 'Interstate-8'
+  requirements:
+    _access: 'TRUE'
+
+# Temporary stand-in for the Songs landing page (FR-16) — the real /songs
+# View lands in INT8-018, which must remove or take priority over this
+# route since both claim the same path.
+i8_services.songs_stub:
+  path: '/songs'
+  defaults:
+    _controller: '\Drupal\i8_services\Controller\PageController::songsStub'
+    _title: 'Songs'
+  requirements:
+    _access: 'TRUE'

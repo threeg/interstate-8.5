@@ -54,7 +54,7 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 15 | INT8-014 | Migration verification | task | migration | 9 / migration | E02 | code | done | INT8-013 |
 | 16 | INT8-015 | Base layout + header + footer (SDC) | task | theme | 9 / theme | E03 | code | done | INT8-005 |
 | 17 | INT8-016 | Shared atoms / molecules | task | theme | 9 / theme | E03 | code | done | INT8-005 |
-| 18 | INT8-017 | Primary nav + front-page/route wiring | task | theme | 9 / theme | E03 | code + site-building | todo | INT8-015 |
+| 18 | INT8-017 | Primary nav + front-page/route wiring | task | theme | 9 / theme | E03 | code + site-building | in-review | INT8-015 |
 | 19 | INT8-027 | Header nav hover/focus states, slogan visibility, mobile-menu styling (design-sync corrections) | task | theme | 9 / theme | E03 | code | todo | INT8-015 |
 | 20 | INT8-018 | Songs landing (View + filters + ledger) | story | theme | 9 / theme | E04 | code + site-building | todo | INT8-013, INT8-015, INT8-016 |
 | 21 | INT8-019 | Song page (view mode + Twig + video) | story | theme | 9 / theme | E04 | code | todo | INT8-013, INT8-015, INT8-016 |
