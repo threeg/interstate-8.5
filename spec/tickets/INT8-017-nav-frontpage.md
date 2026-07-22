@@ -2,7 +2,7 @@
 id: INT8-017
 title: Primary nav + front-page/route wiring
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: theme
 layer: theme
