@@ -95,7 +95,10 @@
         <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:20px 28px;pointer-events:none">
           <div style="display:flex;align-items:center;gap:10px">
             <div style="width:32px;height:36px;border:2px solid #fff;border-radius:6px 6px 14px 14px;display:flex;align-items:center;justify-content:center;font:700 14px Oswald;color:#fff;flex:none">8</div>
-            <div style="color:#fff;font:700 17px Oswald;letter-spacing:.02em;text-shadow:0 1px 5px rgba(0,0,0,.5)">INTERSTATE-8</div>
+            <div>
+              <div style="color:#fff;font:700 17px Oswald;letter-spacing:.02em;text-shadow:0 1px 5px rgba(0,0,0,.5)">INTERSTATE-8</div>
+              <div style="color:#eef3f6;font:10px system-ui,sans-serif;letter-spacing:.03em;text-shadow:0 1px 4px rgba(0,0,0,.5)">A MODEST MOUSE FAN COLLABORATIVE</div>
+            </div>
           </div>
           <div style="display:flex;gap:18px;font:600 12px Oswald;letter-spacing:.03em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5)">
             <span>HOME</span><span>TOUR</span><span style="border-bottom:2px solid #98b9d0;padding-bottom:2px">SONGS</span><span>DISCOG.</span><span>BAND</span><span>NEWS</span>
@@ -304,7 +307,10 @@
           <div style="width:100%;max-width:980px;display:flex;align-items:center;justify-content:space-between;padding:20px 0">
             <div style="display:flex;align-items:center;gap:14px">
               <div style="width:42px;height:46px;background:#fff;border:2.5px solid #98b9d0;border-radius:8px 8px 18px 18px;display:flex;align-items:center;justify-content:center;font:700 18px Oswald;color:#5e6b68">8</div>
-              <div style="color:#2b302f;font:700 23px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+              <div>
+                <div style="color:#2b302f;font:700 23px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+                <div style="color:#5e6b68;font:11px system-ui,sans-serif;letter-spacing:.04em">A MODEST MOUSE FAN COLLABORATIVE</div>
+              </div>
             </div>
             <div style="display:flex;gap:36px;font:600 15px Oswald;letter-spacing:.04em;color:#454e4c">
               <span>HOME</span><span>TOUR DATES</span><span style="border-bottom:2px solid #3f7ca0;padding-bottom:3px;color:#3f7ca0">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
@@ -335,7 +341,10 @@
     <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 36px;border-bottom:1px solid #d3d6d5;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)">
       <div style="display:flex;align-items:center;gap:12px">
         <div style="width:38px;height:42px;background:#fff;border:2.5px solid #98b9d0;border-radius:7px 7px 17px 17px;display:flex;align-items:center;justify-content:center;font:700 17px Oswald;color:#5e6b68">8</div>
-        <div style="color:#2b302f;font:700 21px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+        <div>
+          <div style="color:#2b302f;font:700 21px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+          <div style="color:#5e6b68;font:11px system-ui,sans-serif;letter-spacing:.04em">A MODEST MOUSE FAN COLLABORATIVE</div>
+        </div>
       </div>
       <div style="display:flex;gap:30px;font:600 14px Oswald;letter-spacing:.04em;color:#454e4c">
         <span>HOME</span><span>TOUR DATES</span><span style="border-bottom:2px solid #3f7ca0;padding-bottom:3px;color:#3f7ca0">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
@@ -390,12 +399,58 @@
     </div>
   </div>
 
+  <!-- SONGS LANDING MOBILE -->
+  <div style="width:375px;background:#fff;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #d3d6d5;background:#fff">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:26px;height:30px;background:#fff;border:2px solid #98b9d0;border-radius:5px 5px 12px 12px;display:flex;align-items:center;justify-content:center;font:700 12px Oswald;color:#5e6b68">8</div>
+        <div style="color:#2b302f;font:700 15px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+      </div>
+      <div style="font:700 20px Oswald;color:#454e4c">☰</div>
+    </div>
+    <div style="height:110px;position:relative;overflow:hidden">
+      <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="songs-hero-m" shape="rect" placeholder="Highway band photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-hobiphotography-36346406.jpg"></x-import>
+      <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(20,26,28,.78),rgba(20,26,28,.25))"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;padding:14px 20px">
+        <h2 style="font:700 24px Oswald;color:#fff;margin:0;text-shadow:0 1px 4px rgba(0,0,0,.4)">Songs</h2>
+      </div>
+    </div>
+    <div style="padding:20px 20px 4px">
+      <div style="text-align:right;margin-bottom:12px"><span style="font:11px system-ui,sans-serif;color:#5e6b68">412 results</span></div>
+      <div style="display:flex;flex-direction:column;gap:14px;background:#fff;border:1px solid #ccd0ce;border-radius:5px;padding:14px;margin-bottom:16px">
+        <div><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#5e6b68;margin-bottom:5px">TYPE</label><select style="width:100%;font:13px system-ui,sans-serif;padding:6px 9px;border:1px solid #3f7ca0;border-radius:3px;color:#2b302f"><option>All</option><option selected>Modest Mouse</option></select></div>
+        <div><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#5e6b68;margin-bottom:5px">ALTERNATE TITLES</label><div style="display:flex;border:1px solid #3f7ca0;border-radius:3px;overflow:hidden;font:13px system-ui,sans-serif"><div style="flex:1;text-align:center;padding:6px 0;background:#3f7ca0;color:#fff;font-weight:600">Show</div><div style="flex:1;text-align:center;padding:6px 0;color:#5e6b68">Hide</div></div></div>
+        <div style="font:600 13px Oswald;letter-spacing:.05em;background:#3f7ca0;color:#fff;padding:10px;border-radius:3px;text-align:center">APPLY</div>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <div style="font:700 12px Oswald;letter-spacing:.06em;color:#3d4442;background:#e4edf2;padding:4px 10px;border-radius:2px;margin-bottom:3px">A</div>
+        <div style="font:13px/2 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">A Life Of Arctic Sounds</div>
+        <div style="font:13px/2 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">A Different City</div>
+        <div style="font:13px/2 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">A Song</div>
+        <div style="font:700 12px Oswald;letter-spacing:.06em;color:#3d4442;background:#e4edf2;padding:4px 10px;border-radius:2px;margin:10px 0 3px">B</div>
+        <div style="font:13px/2 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">Baby Blue Sedan</div>
+        <div style="font:13px/2 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">Bukowski</div>
+        <div style="font:12px Lora,Georgia,serif;color:#3f7ca0;padding:14px 10px 0">… 406 more songs, through W …</div>
+      </div>
+    </div>
+    <div style="text-align:center;padding:16px 18px 10px;border-top:1px solid #d3d6d5">
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px 14px;font:600 10px Oswald;letter-spacing:.04em;color:#5e6b68;margin-bottom:9px">
+        <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY POLICY</span>
+      </div>
+      <div style="font:11px system-ui,sans-serif;color:#6d766f">© Interstate-8 · a Modest Mouse fan collaborative</div>
+      <div style="font:10px system-ui,sans-serif;color:#6d766f;margin-top:4px;padding:0 16px">Interstate-8.com is in no way associated with or authorized by Modest Mouse or any of their agents.</div>
+    </div>
+  </div>
+
   <!-- SONG PAGE DESKTOP -->
   <div style="width:1040px;background:#fff;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 34px;border-bottom:1px solid #d3d6d5;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)">
       <div style="display:flex;align-items:center;gap:9px">
         <div style="width:30px;height:34px;background:#fff;border:2.5px solid #98b9d0;border-radius:6px 6px 14px 14px;display:flex;align-items:center;justify-content:center;font:700 14px Oswald;color:#5e6b68">8</div>
-        <div style="color:#2b302f;font:700 18px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+        <div>
+          <div style="color:#2b302f;font:700 18px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+          <div style="color:#5e6b68;font:10px system-ui,sans-serif;letter-spacing:.03em">A MODEST MOUSE FAN COLLABORATIVE</div>
+        </div>
       </div>
       <div style="display:flex;gap:22px;font:600 12px Oswald;letter-spacing:.03em;color:#454e4c">
         <span>HOME</span><span>TOUR DATES</span><span style="border-bottom:2px solid #3f7ca0;padding-bottom:3px;color:#3f7ca0">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
@@ -461,6 +516,63 @@
     </div>
   </div>
 
+  <!-- SONG PAGE MOBILE -->
+  <div style="width:375px;background:#fff;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #d3d6d5;background:#fff">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:26px;height:30px;background:#fff;border:2px solid #98b9d0;border-radius:5px 5px 12px 12px;display:flex;align-items:center;justify-content:center;font:700 12px Oswald;color:#5e6b68">8</div>
+        <div style="color:#2b302f;font:700 15px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+      </div>
+      <div style="font:700 20px Oswald;color:#454e4c">☰</div>
+    </div>
+    <div style="height:150px;position:relative;overflow:hidden">
+      <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="song-hero-m" shape="rect" placeholder="Song hero photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-tomverdoot-3444649.jpg"></x-import>
+      <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(20,26,28,.8),rgba(20,26,28,.2));display:flex;align-items:flex-end;padding:14px 20px 16px">
+        <h2 style="font:700 24px Oswald;color:#fff;margin:0;text-shadow:0 1px 4px rgba(0,0,0,.4)">Ocean Breathes Salty</h2>
+      </div>
+    </div>
+    <div style="padding:24px 20px">
+      <blockquote style="margin:0 0 20px;padding:10px 0 10px 16px;border-left:3px solid #3f7ca0;font:italic 14px/1.6 Lora,Georgia,serif;color:#455250">"I wrote it in about ten minutes, on a ferry, looking at the water." — Isaac Brock</blockquote>
+      <div style="font:10px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:8px">LYRICS</div>
+      <div style="font:15px/1.9 Lora,Georgia,serif;color:#3d4442;margin-bottom:8px">The ocean breathes salty, well, today<br>I could hardly hear the words you were saying<br>I hear ya' but barely, this is my only chance</div>
+      <div style="font:15px/1.9 Lora,Georgia,serif;color:#3d4442;margin-bottom:22px">And your smile was the only thing<br>That should've made my day, but it just made me sadder still</div>
+      <div style="font:10px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:8px">NOTES</div>
+      <div style="font:13px/1.6 Lora,Georgia,serif;color:#556361;margin-bottom:22px">Written for a friend who died in a car accident; the b-side "Whenever You Breathe Out, I Breathe In" is its companion piece.</div>
+      <div style="font:10px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:8px">VIDEO</div>
+      <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="song-video-m" shape="rect" radius="3" placeholder="Embedded video (oEmbed)" style="width:100%;aspect-ratio:16/9;margin-bottom:22px"></x-import>
+      <div style="font:10px Oswald;letter-spacing:.1em;color:#9aa4a1;margin-bottom:10px">MORE ABOUT THIS SONG</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="border:1.5px dashed #d3d6d5;border-radius:4px;padding:14px;opacity:.65">
+          <div style="font:700 10px Oswald;letter-spacing:.07em;color:#9aa4a1;margin-bottom:6px">RELEASES</div>
+          <div style="font:12px Lora,Georgia,serif;color:#9aa4a1">Coming soon</div>
+        </div>
+        <div style="border:1.5px dashed #d3d6d5;border-radius:4px;padding:14px;opacity:.65">
+          <div style="font:700 10px Oswald;letter-spacing:.07em;color:#9aa4a1;margin-bottom:6px">LAST PLAYED LIVE</div>
+          <div style="font:12px Lora,Georgia,serif;color:#9aa4a1">Coming soon</div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:0 20px 24px">
+      <div style="font:11px system-ui,sans-serif;color:#6d766f;margin-bottom:14px;padding-top:14px;border-top:1px solid #d3d6d5">Alternate version, side-by-side lyrics</div>
+      <div style="border:1px solid #ccd0ce;border-radius:5px;overflow:hidden">
+        <div style="background:#e4edf2;padding:12px 16px"><h3 style="font:700 17px Oswald;color:#3d4442;margin:0">King Rat (Live Version)</h3><div style="font:12px Lora,Georgia,serif;color:#5e6b68;margin-top:3px">alt for → <u>King Rat</u></div></div>
+        <div style="padding:16px">
+          <div style="font:10px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:8px">THIS VERSION</div>
+          <div style="font:14px/1.8 Lora,Georgia,serif;color:#3d4442;margin-bottom:16px">Well I'm a king rat, and you're a bucket of shit<br>You're not big enough for me</div>
+          <div style="font:10px Oswald;letter-spacing:.1em;color:#5e6b68;margin-bottom:8px">NORMAL VERSION — <u>King Rat</u></div>
+          <div style="font:14px/1.8 Lora,Georgia,serif;color:#3d4442">Well I'm a king rat, and you're a bucket of shit<br>You're not big enough to hold what's in you</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;padding:16px 18px 10px;border-top:1px solid #d3d6d5">
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px 14px;font:600 10px Oswald;letter-spacing:.04em;color:#5e6b68;margin-bottom:9px">
+        <span>ABOUT</span><span>CONTACT</span><span>SUPPORT</span><span>LEGAL</span><span>PRIVACY POLICY</span>
+      </div>
+      <div style="font:11px system-ui,sans-serif;color:#6d766f">© Interstate-8 · a Modest Mouse fan collaborative</div>
+      <div style="font:10px system-ui,sans-serif;color:#6d766f;margin-top:4px;padding:0 16px">Interstate-8.com is in no way associated with or authorized by Modest Mouse or any of their agents.</div>
+    </div>
+  </div>
+
   <!-- ============================================================ COMPONENTS ============================================================ -->
   <div style="width:100%;max-width:1160px;text-align:center;padding-top:16px">
     <div style="font:700 20px Oswald;letter-spacing:.04em;color:#3d4442;border-bottom:2px solid #3f7ca0;display:inline-block;padding-bottom:6px">COMPONENTS</div>
@@ -468,7 +580,7 @@
 
   <!-- HEADER — TRANSPARENT -->
   <div>
-    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">HEADER · TRANSPARENT — over hero photo, homepage only, before scroll</div>
+    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">HEADER · TRANSPARENT — over hero photo, homepage only, before scroll · slogan visible</div>
     <div style="width:1160px;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
       <div style="height:140px;position:relative;overflow:hidden">
         <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="hdr-transparent-bg" shape="rect" placeholder="Hero photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-jack-redgate-333633-3014002.jpg"></x-import>
@@ -491,16 +603,169 @@
 
   <!-- HEADER — SOLID -->
   <div>
-    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">HEADER · SOLID — homepage after scroll, and default on all secondary pages</div>
+    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">HEADER · SOLID — homepage after scroll, and default on all secondary pages · slogan shown (desktop/tablet), hidden on mobile only</div>
     <div style="width:1160px;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 36px;border-bottom:1px solid #d3d6d5;background:#fff">
         <div style="display:flex;align-items:center;gap:12px">
           <div style="width:38px;height:42px;background:#fff;border:2.5px solid #98b9d0;border-radius:7px 7px 17px 17px;display:flex;align-items:center;justify-content:center;font:700 17px Oswald;color:#5e6b68">8</div>
-          <div style="color:#2b302f;font:700 21px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+          <div>
+            <div style="color:#2b302f;font:700 21px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+            <div style="color:#5e6b68;font:11px system-ui,sans-serif;letter-spacing:.04em">A MODEST MOUSE FAN COLLABORATIVE</div>
+          </div>
         </div>
         <div style="display:flex;gap:30px;font:600 14px Oswald;letter-spacing:.04em;color:#454e4c">
           <span>HOME</span><span>TOUR DATES</span><span style="border-bottom:2px solid #3f7ca0;padding-bottom:3px;color:#3f7ca0">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
         </div>
+      </div>
+    </div>
+    <div style="font:13px Lora,Georgia,serif;color:#556361;text-align:center;max-width:700px;margin:10px auto 0">Correction: the slogan stays visible under the wordmark on both transparent and solid headers, at every desktop/tablet width — it's only dropped on the mobile header (☰ bar), where there isn't room for it.</div>
+  </div>
+
+  <!-- HEADER NAV — HOVER (SOLID) -->
+  <div>
+    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">HEADER NAV — HOVER · solid header — governs only the nav item labels, not the generic link states below</div>
+    <div style="width:1160px;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 36px;border-bottom:1px solid #d3d6d5;background:#fff">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:38px;height:42px;background:#fff;border:2.5px solid #98b9d0;border-radius:7px 7px 17px 17px;display:flex;align-items:center;justify-content:center;font:700 17px Oswald;color:#5e6b68">8</div>
+          <div>
+            <div style="color:#2b302f;font:700 21px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+            <div style="color:#5e6b68;font:11px system-ui,sans-serif;letter-spacing:.04em">A MODEST MOUSE FAN COLLABORATIVE</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:30px;font:600 14px Oswald;letter-spacing:.04em;color:#454e4c">
+          <span>HOME</span><span>TOUR DATES</span><span style="border-bottom:2px solid #3f7ca0;padding-bottom:3px;color:#3f7ca0">SONGS</span><span style="color:#3f7ca0;border-bottom:2px solid #98b9d0;padding-bottom:3px">DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+        </div>
+      </div>
+    </div>
+    <div style="font:13px Lora,Georgia,serif;color:#556361;text-align:center;max-width:700px;margin:10px auto 0">Hovered item (DISCOGRAPHY): text turns Accent #3f7ca0 + gains a Polo-Blue #98b9d0 underline. Same visual treatment as "current section" (SONGS) — hover previews the current-page look, it does not invent a new one.</div>
+  </div>
+
+  <!-- HEADER NAV — HOVER (TRANSPARENT) -->
+  <div>
+    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">HEADER NAV — HOVER · transparent header, over hero photo</div>
+    <div style="width:1160px;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
+      <div style="height:140px;position:relative;overflow:hidden">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="hdr-nav-hover-t-bg" shape="rect" placeholder="Hero photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-jack-redgate-333633-3014002.jpg"></x-import>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,26,28,.68) 0%,rgba(20,26,28,.12) 100%);pointer-events:none"></div>
+        <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:24px 40px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:38px;height:42px;border:2.5px solid #fff;border-radius:7px 7px 17px 17px;display:flex;align-items:center;justify-content:center;font:700 17px Oswald;color:#fff;flex:none">8</div>
+            <div>
+              <div style="color:#fff;font:700 21px Oswald;letter-spacing:.02em;text-shadow:0 1px 5px rgba(0,0,0,.5)">INTERSTATE-8</div>
+              <div style="color:#eef3f6;font:11px system-ui,sans-serif;letter-spacing:.04em;text-shadow:0 1px 4px rgba(0,0,0,.5)">A MODEST MOUSE FAN COLLABORATIVE</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:30px;font:600 14px Oswald;letter-spacing:.04em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5)">
+            <span>HOME</span><span style="border-bottom:2px solid #cfe3ee;padding-bottom:3px;color:#cfe3ee">TOUR</span><span style="border-bottom:2px solid #98b9d0;padding-bottom:3px">SONGS</span><span>DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="font:13px Lora,Georgia,serif;color:#556361;text-align:center;max-width:700px;margin:10px auto 0">Hovered item (TOUR): white → light-blue #cfe3ee text + underline (Polo Blue #98b9d0 at reduced opacity reads on photo backgrounds). Same convention as solid: hover = preview of "current."</div>
+  </div>
+
+  <!-- HEADER NAV — FOCUS -->
+  <div>
+    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">HEADER NAV — FOCUS (keyboard) · solid header shown; transparent header uses the same ring, drawn in white</div>
+    <div style="width:1160px;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 36px;border-bottom:1px solid #d3d6d5;background:#fff">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:38px;height:42px;background:#fff;border:2.5px solid #98b9d0;border-radius:7px 7px 17px 17px;display:flex;align-items:center;justify-content:center;font:700 17px Oswald;color:#5e6b68">8</div>
+          <div>
+            <div style="color:#2b302f;font:700 21px Oswald;letter-spacing:.02em">INTERSTATE-8</div>
+            <div style="color:#5e6b68;font:11px system-ui,sans-serif;letter-spacing:.04em">A MODEST MOUSE FAN COLLABORATIVE</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:30px;font:600 14px Oswald;letter-spacing:.04em;color:#454e4c">
+          <span>HOME</span><span>TOUR DATES</span><span style="border-bottom:2px solid #3f7ca0;padding-bottom:3px;color:#3f7ca0">SONGS</span><span style="outline:2px solid #3f7ca0;outline-offset:4px;border-radius:2px;color:#3f7ca0">DISCOGRAPHY</span><span>BAND</span><span>NEWS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER · MOBILE — CLOSED -->
+  <div>
+    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">HEADER · MOBILE — CLOSED · ☰ button, default resting state</div>
+    <div style="width:375px;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
+      <div style="height:110px;position:relative;overflow:hidden">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="hdr-mobile-closed-bg" shape="rect" placeholder="Hero photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-jack-redgate-333633-3014002.jpg"></x-import>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,26,28,.68) 0%,rgba(20,26,28,.12) 100%);pointer-events:none"></div>
+        <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 18px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:26px;height:30px;border:2px solid #fff;border-radius:5px 5px 12px 12px;display:flex;align-items:center;justify-content:center;font:700 12px Oswald;color:#fff">8</div>
+            <div style="color:#fff;font:700 15px Oswald;text-shadow:0 1px 4px rgba(0,0,0,.5)">INTERSTATE-8</div>
+          </div>
+          <div style="font:700 20px Oswald;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5)">☰</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER · MOBILE — OPEN -->
+  <div>
+    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">HEADER · MOBILE — OPEN · nav panel drops below the bar, solid surface, ☰ becomes ✕</div>
+    <div style="width:375px;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
+      <div style="height:110px;position:relative;overflow:hidden">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="hdr-mobile-open-bg" shape="rect" placeholder="Hero photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-jack-redgate-333633-3014002.jpg"></x-import>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,26,28,.68) 0%,rgba(20,26,28,.12) 100%);pointer-events:none"></div>
+        <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 18px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:26px;height:30px;border:2px solid #fff;border-radius:5px 5px 12px 12px;display:flex;align-items:center;justify-content:center;font:700 12px Oswald;color:#fff">8</div>
+            <div style="color:#fff;font:700 15px Oswald;text-shadow:0 1px 4px rgba(0,0,0,.5)">INTERSTATE-8</div>
+          </div>
+          <div style="font:700 20px Oswald;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5)">✕</div>
+        </div>
+      </div>
+      <div style="background:#fff;padding:8px 0;border-bottom:1px solid #d3d6d5">
+        <div style="display:flex;flex-direction:column;font:600 15px Oswald;letter-spacing:.04em;color:#454e4c">
+          <span style="padding:14px 24px;border-bottom:1px solid #eef0ef">HOME</span>
+          <span style="padding:14px 24px;border-bottom:1px solid #eef0ef">TOUR DATES</span>
+          <span style="padding:14px 24px;border-bottom:1px solid #eef0ef;color:#3f7ca0;border-left:3px solid #3f7ca0">SONGS</span>
+          <span style="padding:14px 24px;border-bottom:1px solid #eef0ef">DISCOGRAPHY</span>
+          <span style="padding:14px 24px;border-bottom:1px solid #eef0ef">BAND</span>
+          <span style="padding:14px 24px">NEWS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOCUS RING — universal, all interactive elements -->
+  <div>
+    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">FOCUS RING — governs ALL interactive elements: nav links, buttons, form controls (select/input), the logo link. NFR-1.</div>
+    <div style="width:1160px;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
+      <div style="padding:32px 40px;background:#fff;display:flex;align-items:center;gap:48px;flex-wrap:wrap">
+        <div style="text-align:center">
+          <div style="font:700 12px Oswald;letter-spacing:.05em;background:#3f7ca0;color:#fff;padding:10px 20px;border-radius:3px;outline:2px solid #3f7ca0;outline-offset:2px">SUBMIT IT →</div>
+          <div style="font:10px system-ui,sans-serif;color:#5e6b68;margin-top:8px">button (on light)</div>
+        </div>
+        <div style="text-align:center">
+          <select style="font:13px system-ui,sans-serif;padding:6px 9px;border:1px solid #3f7ca0;border-radius:3px;color:#2b302f;outline:2px solid #3f7ca0;outline-offset:2px"><option>All</option></select>
+          <div style="font:10px system-ui,sans-serif;color:#5e6b68;margin-top:8px">form control</div>
+        </div>
+        <div style="text-align:center">
+          <span style="font:600 14px Oswald;letter-spacing:.04em;color:#454e4c;outline:2px solid #3f7ca0;outline-offset:3px;border-radius:2px;padding:2px 4px">SONGS</span>
+          <div style="font:10px system-ui,sans-serif;color:#5e6b68;margin-top:8px">nav link (on light)</div>
+        </div>
+        <div style="background:#2b302f;padding:14px 18px;border-radius:4px;text-align:center">
+          <span style="font:600 14px Oswald;letter-spacing:.04em;color:#fff;outline:2px solid #fff;outline-offset:3px;border-radius:2px;padding:2px 4px">SONGS</span>
+          <div style="font:10px system-ui,sans-serif;color:#c7cbca;margin-top:8px">nav link (on dark/hero)</div>
+        </div>
+      </div>
+      <div style="padding:0 40px 24px;font:13px Lora,Georgia,serif;color:#556361">2px solid outline, Accent #3f7ca0 on light surfaces / white on dark (hero) surfaces, 2–3px offset, never <code>outline:none</code> without a replacement. Applies identically to the logo link.</div>
+    </div>
+  </div>
+
+  <!-- LAYOUT WIDTHS -->
+  <div>
+    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">LAYOUT WIDTHS — full-sheet vs. content-column elements, at any viewport ≥ the 1440px sheet cap</div>
+    <div style="width:1160px;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
+      <div style="padding:28px 36px;background:#fff">
+        <div style="display:flex;flex-direction:column;gap:14px;font:14px/1.5 Lora,Georgia,serif;color:#3d4442">
+          <div style="display:flex;gap:16px;align-items:center"><div style="width:120px;flex:none;font:700 11px Oswald;letter-spacing:.06em;color:#3f7ca0">FULL SHEET</div><div>Band Hero / Page Title Hero background photo only — the only element allowed to touch the sheet's own edges (max 1440px).</div></div>
+          <div style="display:flex;gap:16px;align-items:center"><div style="width:120px;flex:none;font:700 11px Oswald;letter-spacing:.06em;color:#3f7ca0">CONTENT COLUMN</div><div>Header bar, footer, Latest News, tour/history modules, spotlight/discography, song lyrics/ledger/filter bar — everything caps at 980px, centered, same column as body copy.</div></div>
+        </div>
+        <div style="margin-top:18px;padding:14px 18px;background:#e4edf2;border-radius:4px;font:13px Lora,Georgia,serif;color:#3d4442">Confirmed: the footer follows the 980px content column (see both EXTRA-WIDE compositions above) — it does not span the sheet's own edges, even though it visually reads as "full width" at desktop/tablet sizes where content column ≈ viewport.</div>
       </div>
     </div>
   </div>
@@ -663,6 +928,114 @@
     </div>
   </div>
 
+  <!-- FILTER BAR — HOVER / FOCUS / OPEN -->
+  <div>
+    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">FILTER BAR — governs the Songs Landing filter row's select controls, Show/Hide toggle, and Apply button</div>
+    <div style="width:1160px;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
+      <div style="padding:28px 36px;background:#fff;display:flex;flex-direction:column;gap:22px">
+        <div>
+          <div style="font:700 11px Oswald;letter-spacing:.07em;color:#3f7ca0;margin-bottom:10px">HOVER — TYPE select, Show/Hide toggle, APPLY button</div>
+          <div style="display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap">
+            <div><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#5e6b68;margin-bottom:5px">TYPE</label><select style="font:13px system-ui,sans-serif;padding:6px 9px;border:1px solid #336585;border-radius:3px;color:#2b302f;background:#f4f8fa"><option>All</option><option selected>Modest Mouse</option></select></div>
+            <div><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#5e6b68;margin-bottom:5px">ALTERNATE TITLES</label><div style="display:flex;border:1px solid #3f7ca0;border-radius:3px;overflow:hidden;font:13px system-ui,sans-serif"><div style="padding:6px 14px;background:#3f7ca0;color:#fff;font-weight:600">Show</div><div style="padding:6px 14px;color:#fff;background:#c7cbca">Hide</div></div></div>
+            <div><div style="font:600 13px Oswald;letter-spacing:.05em;background:#336585;color:#fff;padding:9px 20px;border-radius:3px">APPLY</div></div>
+          </div>
+        </div>
+        <div>
+          <div style="font:700 11px Oswald;letter-spacing:.07em;color:#3f7ca0;margin-bottom:10px">FOCUS — TYPE select (keyboard)</div>
+          <select style="font:13px system-ui,sans-serif;padding:6px 9px;border:1px solid #3f7ca0;border-radius:3px;color:#2b302f;outline:2px solid #3f7ca0;outline-offset:2px"><option>All</option></select>
+        </div>
+        <div>
+          <div style="font:700 11px Oswald;letter-spacing:.07em;color:#3f7ca0;margin-bottom:10px">OPEN — TYPE select expanded (native OS control; options styled to match where the browser allows)</div>
+          <div style="width:200px;border:1px solid #3f7ca0;border-radius:3px;overflow:hidden;font:13px system-ui,sans-serif">
+            <div style="padding:6px 9px;color:#2b302f;border-bottom:1px solid #e3e6e5">All</div>
+            <div style="padding:6px 9px;background:#e4edf2;color:#2b302f;font-weight:600;border-bottom:1px solid #e3e6e5">Modest Mouse</div>
+            <div style="padding:6px 9px;color:#2b302f;border-bottom:1px solid #e3e6e5">Ugly Casanova</div>
+            <div style="padding:6px 9px;color:#2b302f;border-bottom:1px solid #e3e6e5">Side projects</div>
+            <div style="padding:6px 9px;color:#2b302f">Covers</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SONG LEDGER ROW — DEFAULT / ALT / HOVER / FOCUS -->
+  <div>
+    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">SONG LEDGER ROW — governs each title row in the Songs Landing A–Z list</div>
+    <div style="width:600px;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
+      <div style="padding:24px 28px;background:#fff;display:flex;flex-direction:column;gap:0">
+        <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5">A Life Of Arctic Sounds <span style="font:10px Oswald;color:#9aa4a1;margin-left:8px">default</span></div>
+        <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5;background:#fafbfb">A Manic Depressive Named Laughing Boy <span style="font:10px Oswald;color:#9aa4a1;margin-left:8px">alt (zebra)</span></div>
+        <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;border-bottom:1px solid #e3e6e5;background:#e4edf2;padding-left:8px;margin-left:-8px;padding-right:8px;margin-right:-8px">A Different City <span style="font:10px Oswald;color:#3f7ca0;margin-left:8px">hover — Tint #e4edf2 fill, full row width</span></div>
+        <div style="font:14px/2.1 Lora,Georgia,serif;color:#3d4442;outline:2px solid #3f7ca0;outline-offset:-2px;padding-left:8px;margin-left:-8px;padding-right:8px;margin-right:-8px">A Song <span style="font:10px Oswald;color:#3f7ca0;margin-left:8px">focus — inset ring, no fill change</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SONGS LANDING — EMPTY / NO RESULTS -->
+  <div>
+    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">SONGS LANDING — EMPTY / NO RESULTS (FR-19) · filters return zero matches</div>
+    <div style="width:1160px;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
+      <div style="padding:28px 40px;background:#fff">
+        <div style="text-align:right;margin-bottom:16px"><span style="font:13px system-ui,sans-serif;color:#5e6b68">0 results</span></div>
+        <div style="display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;background:#fff;border:1px solid #ccd0ce;border-radius:5px;padding:14px 18px;margin-bottom:18px">
+          <div><label style="display:block;font:10px Oswald;letter-spacing:.07em;color:#5e6b68;margin-bottom:5px">TYPE</label><select style="font:13px system-ui,sans-serif;padding:6px 9px;border:1px solid #3f7ca0;border-radius:3px;color:#2b302f"><option selected>Covers</option></select></div>
+          <div style="margin-left:auto"><div style="font:600 13px Oswald;letter-spacing:.05em;background:#3f7ca0;color:#fff;padding:9px 20px;border-radius:3px">APPLY</div></div>
+        </div>
+        <div style="text-align:center;padding:64px 20px">
+          <div style="font:700 20px Oswald;color:#3d4442;margin-bottom:8px">No songs match these filters</div>
+          <div style="font:14px Lora,Georgia,serif;color:#556361;margin-bottom:20px">Try a different type, or clear the filters to see all 412 songs.</div>
+          <div style="display:inline-block;font:600 13px Oswald;letter-spacing:.05em;color:#3f7ca0;border:1px solid #3f7ca0;padding:9px 20px;border-radius:3px">CLEAR FILTERS</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SONG PAGE — MISSING FIELDS -->
+  <div>
+    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">SONG PAGE — MISSING FIELDS (FR-15) · no quote, no notes, no video: layout collapses, no empty gaps</div>
+    <div style="width:1040px;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
+      <div style="height:190px;position:relative;overflow:hidden">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="cmp-missingfield-hero" shape="rect" placeholder="Song hero photo" style="position:absolute;inset:0;width:100%;height:100%" src="uploads/pexels-tomverdoot-3444649.jpg"></x-import>
+        <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(20,26,28,.8),rgba(20,26,28,.2));display:flex;align-items:flex-end;padding:18px 44px 22px">
+          <h2 style="font:700 38px Oswald;color:#fff;margin:0;text-shadow:0 1px 4px rgba(0,0,0,.4)">3 Inch Horses</h2>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 260px;gap:0;padding:32px 44px">
+        <div style="padding-right:36px;border-right:2px dashed #b9d3e3">
+          <div style="font:11px Oswald;letter-spacing:.11em;color:#5e6b68;margin-bottom:10px">LYRICS</div>
+          <div style="font:18px/2.05 Lora,Georgia,serif;color:#3d4442;margin-bottom:10px">Well he built a wall so high<br>Around the yard so no one could see</div>
+          <div style="font:12px system-ui,sans-serif;color:#6d766f;margin-top:20px">No quote, no notes, and no video were entered for this song — those sections don't render, and lyrics move up to sit directly under the title strip.</div>
+        </div>
+        <div style="padding-left:32px;display:flex;flex-direction:column;gap:18px">
+          <div style="font:10px Oswald;letter-spacing:.11em;color:#9aa4a1;margin-bottom:-6px">MORE ABOUT THIS SONG</div>
+          <div style="border:1.5px dashed #d3d6d5;border-radius:4px;padding:16px;opacity:.65">
+            <div style="font:700 10px Oswald;letter-spacing:.07em;color:#9aa4a1;margin-bottom:7px">RELEASES</div>
+            <div style="font:13px Lora,Georgia,serif;color:#9aa4a1">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #d3d6d5;border-radius:4px;padding:16px;opacity:.65">
+            <div style="font:700 10px Oswald;letter-spacing:.07em;color:#9aa4a1;margin-bottom:7px">LAST PLAYED LIVE</div>
+            <div style="font:13px Lora,Georgia,serif;color:#9aa4a1">Coming soon</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- "COMING SOON" STUB — precision reference -->
+  <div>
+    <div style="font:600 12px Oswald;letter-spacing:.06em;color:#5e6b68;margin-bottom:10px;text-align:center">"COMING SOON" STUB — governs any not-yet-built field/module (right-rail cards, RELEASED/PLAYED LIVE filters, etc.)</div>
+    <div style="width:340px;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
+      <div style="padding:24px;background:#fff">
+        <div style="border:1.5px dashed #d3d6d5;border-radius:4px;padding:16px;opacity:.65">
+          <div style="font:700 10px Oswald;letter-spacing:.07em;color:#9aa4a1;margin-bottom:7px">FIELD LABEL</div>
+          <div style="font:13px Lora,Georgia,serif;color:#9aa4a1">Coming soon</div>
+        </div>
+        <div style="font:12px system-ui,sans-serif;color:#556361;margin-top:14px">Border: 1.5px dashed #d3d6d5, radius 4px. Container opacity: 65% (not per-text — the whole block, so the dashed border reads as "not active" too). Label: Oswald 700 10px, letter-spacing .07em, color #9aa4a1. Value: Lora 13px, color #9aa4a1. This is the complete spec — no further precision needed to build it.</div>
+      </div>
+    </div>
+  </div>
+
   <!-- DESIGN TOKENS -->
   <div style="width:1040px;background:#fff;box-shadow:0 3px 18px rgba(0,0,0,.1);border-radius:3px;overflow:hidden">
     <div style="padding:32px 40px;background:#ffffff">
@@ -695,14 +1068,14 @@
         </div>
 
         <div>
-          <div style="font:700 11px Oswald;letter-spacing:.1em;color:#3f7ca0;margin-bottom:14px">BUTTON STATES</div>
+          <div style="font:700 11px Oswald;letter-spacing:.1em;color:#3f7ca0;margin-bottom:14px">BUTTON STATES — governs solid CTA buttons only (e.g. "SUBMIT IT", "APPLY")</div>
           <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:26px">
             <div style="display:flex;align-items:center;gap:12px"><div style="font:700 12px Oswald;letter-spacing:.05em;background:#3f7ca0;color:#fff;padding:10px 20px;border-radius:3px;width:100px;text-align:center">DEFAULT</div><div style="font:11px system-ui,sans-serif;color:#5e6b68">background #3f7ca0, white text</div></div>
             <div style="display:flex;align-items:center;gap:12px"><div style="font:700 12px Oswald;letter-spacing:.05em;background:#336585;color:#fff;padding:10px 20px;border-radius:3px;width:100px;text-align:center">HOVER</div><div style="font:11px system-ui,sans-serif;color:#5e6b68">background #336585 (darkened 12%)</div></div>
             <div style="display:flex;align-items:center;gap:12px"><div style="font:700 12px Oswald;letter-spacing:.05em;background:#d3d6d5;color:#5e6b68;padding:10px 20px;border-radius:3px;width:100px;text-align:center;opacity:.7">DISABLED</div><div style="font:11px system-ui,sans-serif;color:#5e6b68">background #d3d6d5, 70% opacity, no pointer</div></div>
           </div>
 
-          <div style="font:700 11px Oswald;letter-spacing:.1em;color:#3f7ca0;margin-bottom:14px">LINK STATES</div>
+          <div style="font:700 11px Oswald;letter-spacing:.1em;color:#3f7ca0;margin-bottom:14px">INLINE TEXT LINK STATES — governs prose links only (e.g. "setlist" refs, "King Rat" cross-link). Does NOT govern header nav — see HEADER NAV panels above.</div>
           <div style="display:flex;flex-direction:column;gap:8px;font:14px Lora,Georgia,serif">
             <div><span style="color:#3f7ca0">Default link</span> <span style="font:11px system-ui,sans-serif;color:#5e6b68">— #3f7ca0, no underline</span></div>
             <div><span style="color:#3f7ca0;text-decoration:underline">Hover link</span> <span style="font:11px system-ui,sans-serif;color:#5e6b68">— underline on hover</span></div>
