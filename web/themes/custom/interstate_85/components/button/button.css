@@ -1,0 +1,67 @@
+.btn {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-label);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+  padding: var(--space-3) var(--space-5);
+  border: 0;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.btn--primary {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.btn--primary:hover {
+  background: var(--color-accent-hover);
+}
+
+.btn--cta {
+  background: var(--color-accent-alt);
+  color: var(--color-on-accent-alt);
+}
+
+/* No CTA-specific hover swatch exists anywhere in 1B.dc.html (only the
+   primary/teal variant has one, reused generically by APPLY) — rather than
+   invent an un-sourced hex, the documented "hover darkens ~12%" rule is
+   applied mechanically via a brightness filter instead of a guessed colour. */
+.btn--cta:hover {
+  filter: brightness(.88);
+}
+
+/* Outline variant — the SONGS LANDING · EMPTY state's "CLEAR FILTERS" is the
+   only instance in the file: 1px teal border, transparent fill, 600 weight
+   (not 700 like the solid variants). No hover swatch exists for it either;
+   --color-tint is the file's own established "hover = light fill" idiom
+   (used identically by the Song Ledger row's hover state), reused here
+   rather than inventing an unsourced colour. */
+.btn--outline {
+  background: transparent;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  font-weight: 600;
+}
+
+.btn--outline:hover {
+  background: var(--color-tint);
+}
+
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  background: var(--color-disabled);
+  color: var(--color-fg-muted);
+  opacity: .7;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}

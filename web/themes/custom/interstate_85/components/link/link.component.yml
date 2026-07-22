@@ -1,0 +1,31 @@
+$schema: 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/metadata.schema.json'
+name: Link
+status: experimental
+description: >-
+  A discrete action or cross-reference link (e.g. "MORE →", "CLEAR FILTERS",
+  "alternate title/lyrics for → parent") — not header nav (site-header owns
+  its own hover/current styling) and not links embedded inside rendered
+  prose, which read the theme's base `a` styles directly.
+props:
+  type: object
+  properties:
+    variant:
+      type: string
+      title: Variant
+      description: >-
+        action (teal, no underline, underline on hover — default) or inline
+        (slate text, Corduroy-coloured underline, always underlined — e.g.
+        setlist cross-refs).
+      enum:
+        - action
+        - inline
+      default: action
+    href:
+      type: string
+      title: Href
+  required:
+    - href
+slots:
+  label:
+    title: Label
+    description: 'Link text, e.g. "MORE →" or "King Rat".'

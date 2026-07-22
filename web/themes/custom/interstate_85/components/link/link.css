@@ -1,0 +1,24 @@
+.link--action {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.link--action:hover {
+  text-decoration: underline;
+}
+
+.link--inline {
+  font-family: var(--font-body);
+  color: var(--color-fg-slate);
+  text-decoration: underline;
+  text-decoration-color: var(--color-fg-muted);
+}
+
+.link:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}

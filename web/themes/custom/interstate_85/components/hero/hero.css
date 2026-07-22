@@ -1,0 +1,85 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__image,
+.hero__image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero__title {
+  position: relative;
+}
+
+/* --- Band hero: homepage only, centred title, built ready but unexercised
+   until the homepage ships (site-header's transparent variant is the same
+   status) --- */
+.hero--band {
+  height: var(--hero-height-band);
+}
+
+.hero--band .hero__scrim {
+  background: linear-gradient(180deg, rgba(20, 26, 28, .68) 0%, rgba(20, 26, 28, .12) 24%, rgba(20, 26, 28, .22) 76%, rgba(20, 26, 28, .7) 100%);
+}
+
+.hero--band .hero__title {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero--band .hero__title :is(h1, h2) {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-display-1);
+  color: var(--color-surface);
+  letter-spacing: var(--ls-display);
+  text-shadow: 0 3px 14px rgba(0, 0, 0, .5);
+  margin: 0;
+}
+
+/* --- Page-title hero: secondary pages, bottom-left title --- */
+.hero--page-title {
+  height: var(--hero-height-page);
+}
+
+.hero--page-title .hero__scrim {
+  background: linear-gradient(0deg, rgba(20, 26, 28, .78), rgba(20, 26, 28, .25));
+}
+
+.hero--page-title .hero__title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--space-5) var(--space-9);
+}
+
+.hero--page-title .hero__title :is(h1, h2) {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-h2);
+  color: var(--color-surface);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .4);
+  margin: 0;
+}
+
+@media (max-width: 759px) {
+  .hero--page-title .hero__title {
+    padding: var(--space-4) var(--space-5);
+  }
+}

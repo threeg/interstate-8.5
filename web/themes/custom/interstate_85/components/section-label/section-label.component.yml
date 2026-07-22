@@ -1,0 +1,26 @@
+$schema: 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/metadata.schema.json'
+name: Section label
+status: experimental
+description: >-
+  A small uppercase Oswald label above a block of content (e.g. "LYRICS",
+  "NOTES", "VIDEO", "TYPE"). The muted variant is the dimmed, bolder label
+  used inside disabled/"coming soon" content (e.g. "MORE ABOUT THIS SONG",
+  the "coming soon" stub's field label).
+props:
+  type: object
+  properties:
+    variant:
+      type: string
+      title: Variant
+      enum:
+        - default
+        - muted
+      default: default
+    tag:
+      type: string
+      title: HTML tag
+      description: 'Defaults to a <div> — set to h3/h4 etc. where the label is a real heading.'
+      default: div
+slots:
+  label:
+    title: Label

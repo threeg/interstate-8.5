@@ -1,0 +1,28 @@
+$schema: 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/metadata.schema.json'
+name: Select field
+status: experimental
+description: >-
+  A labelled native <select> styled per the FILTER BAR panel (Type filter,
+  etc.) — default/hover/focus/disabled from tokens; the browser owns the
+  open/expanded option list, styled as far as the platform allows.
+props:
+  type: object
+  properties:
+    name:
+      type: string
+      title: Name
+    label:
+      type: string
+      title: Label
+      description: 'Visible label above the control, e.g. "TYPE".'
+    disabled:
+      type: boolean
+      title: Disabled
+      default: false
+  required:
+    - name
+    - label
+slots:
+  options:
+    title: Options
+    description: 'The <option> elements.'

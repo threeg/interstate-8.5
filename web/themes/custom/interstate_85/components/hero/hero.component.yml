@@ -1,0 +1,29 @@
+$schema: 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/metadata.schema.json'
+name: Hero
+status: experimental
+description: >-
+  A full-width photo hero with a darkening scrim. Two variants: band (the
+  homepage-only hero, centred title, unexercised until the homepage ships —
+  same "built but not live yet" status as site-header's transparent variant)
+  and page-title (secondary pages, bottom-left title). The image itself is a
+  slot so this component stays decoupled from how the image is rendered
+  (raw <img>, Drupal responsive image, etc). Height is set by
+  --hero-height-band / --hero-height-page (tokens.css); callers needing a
+  non-default height override the custom property on the wrapping element.
+props:
+  type: object
+  properties:
+    variant:
+      type: string
+      title: Variant
+      enum:
+        - band
+        - page-title
+      default: page-title
+slots:
+  image:
+    title: Image
+    description: 'The photo (an <img> or Drupal responsive image render array).'
+  title:
+    title: Title
+    description: 'The hero heading markup (an <h1> or <h2> depending on page context).'

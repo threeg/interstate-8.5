@@ -1,0 +1,36 @@
+.segmented-toggle {
+  display: flex;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius);
+  overflow: hidden;
+  font-family: var(--font-meta);
+  font-size: var(--fs-body-sm);
+}
+
+.segmented-toggle__option {
+  flex: 1;
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  background: transparent;
+  color: var(--color-fg-muted);
+  cursor: pointer;
+}
+
+.segmented-toggle__option.is-selected {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: 600;
+}
+
+/* No swatch shows a selected-option hover — only the unselected option gets
+   one (the FILTER BAR — HOVER panel's "Hide" cell, previewing what clicking
+   it would activate). */
+.segmented-toggle__option:not(.is-selected):hover {
+  background: var(--color-toggle-hover);
+  color: var(--color-on-accent);
+}
+
+.segmented-toggle__option:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: calc(var(--focus-ring-offset) * -1);
+}

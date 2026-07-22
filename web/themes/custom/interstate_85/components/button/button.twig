@@ -1,0 +1,3 @@
+{% set variant = variant|default('primary') %}
+{% set is_link = href and not disabled %}
+{% if is_link %}<a href="{{ href }}" class="btn btn--{{ variant }}">{% else %}<button type="{{ button_type|default('submit') }}" class="btn btn--{{ variant }}"{% if disabled %} disabled aria-disabled="true"{% endif %}>{% endif %}{% block label %}{% endblock %}{% if is_link %}</a>{% else %}</button>{% endif %}

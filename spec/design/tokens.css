@@ -27,6 +27,10 @@
   --i8-canvas:     #eef0ef; /* page background outside the sheet */
   --i8-scrim:      rgba(20, 26, 28, .70); /* hero-photo darkening gradient base */
   --i8-ice:        #cfe3ee; /* light-blue: nav-hover text on the transparent/hero header only */
+  --i8-ash:        #9aa4a1; /* muted grey: "coming soon" stub label/value, disabled section labels */
+  --i8-frost:      #f4f8fa; /* pale blue-white: select/field hover fill (filter bar) */
+  --i8-dove:       #c7cbca; /* mid-grey: unselected segmented-toggle option on hover */
+  --i8-quote:      #455250; /* quote-block text, both breakpoints */
 
   /* --- Semantic colour aliases (use these in components) --- */
   --color-fg:            var(--i8-ink);
@@ -46,6 +50,10 @@
   --color-tint:          var(--i8-tint);
   --color-line:          var(--i8-pumice);
   --color-disabled:      var(--i8-pumice);
+  --color-fg-disabled:   var(--i8-ash); /* "coming soon" stub text, disabled section labels */
+  --color-field-hover:   var(--i8-frost); /* select/field hover fill */
+  --color-toggle-hover:  var(--i8-dove); /* unselected segmented-toggle option, hovered */
+  --color-fg-quote:      var(--i8-quote); /* quote-block text */
 
   /* --- Typography --- */
   --font-display: "Oswald", system-ui, sans-serif; /* headings, nav, labels, buttons */
@@ -107,6 +115,12 @@
 
   /* --- Header/footer chrome --- */
   --z-header: 100; /* sticky header stacking context */
+
+  /* --- Hero (band + page-title variants; callers override per breakpoint via
+     a CSS custom-property override on the wrapping element, e.g.
+     style="--hero-height-page: 190px") --- */
+  --hero-height-band: 400px; /* homepage-only, unexercised until the homepage ships */
+  --hero-height-page: 140px; /* secondary-page title hero, generic reference height */
 
   /* --- Focus ring (NFR-1, universal — every interactive element) --- */
   --focus-ring-width:  2px;

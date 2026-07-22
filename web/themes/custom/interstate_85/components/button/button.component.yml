@@ -1,0 +1,40 @@
+$schema: 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/metadata.schema.json'
+name: Button
+status: experimental
+description: >-
+  A solid CTA button — primary teal (default actions like APPLY) or the
+  polo-blue cta variant (SUBMIT IT). Renders as a link when href is set,
+  otherwise a real <button>.
+props:
+  type: object
+  properties:
+    variant:
+      type: string
+      title: Variant
+      description: 'primary (teal, default), cta (polo-blue), or outline (teal border, transparent fill — e.g. CLEAR FILTERS).'
+      enum:
+        - primary
+        - cta
+        - outline
+      default: primary
+    href:
+      type: string
+      title: Href
+      description: 'If set, renders as an <a> styled as a button.'
+    button_type:
+      type: string
+      title: Button type
+      description: 'HTML type attribute when no href is set.'
+      enum:
+        - button
+        - submit
+        - reset
+      default: submit
+    disabled:
+      type: boolean
+      title: Disabled
+      default: false
+slots:
+  label:
+    title: Label
+    description: 'Button text, e.g. "SUBMIT IT →" or "APPLY".'

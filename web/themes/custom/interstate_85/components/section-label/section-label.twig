@@ -1,0 +1,2 @@
+{% set tag = tag|default('div') %}
+<{{ tag }} class="section-label section-label--{{ variant|default('default') }}">{% block label %}{% endblock %}</{{ tag }}>

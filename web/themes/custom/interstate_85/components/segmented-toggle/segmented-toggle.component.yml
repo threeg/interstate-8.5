@@ -1,0 +1,31 @@
+$schema: 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/metadata.schema.json'
+name: Segmented toggle
+status: experimental
+description: >-
+  A two-option segmented control (e.g. Alternate Titles Show/Hide). Renders
+  as a labelled button group; the consuming form wires the actual value
+  (Views exposed filter, etc.) — this is presentation only.
+props:
+  type: object
+  properties:
+    label:
+      type: string
+      title: Group label
+      description: 'Accessible label for the group, e.g. "Alternate titles".'
+    selected:
+      type: string
+      title: Selected option
+      description: 'Which option is currently active: a or b.'
+      enum:
+        - a
+        - b
+      default: a
+  required:
+    - label
+slots:
+  option_a:
+    title: Option A label
+    description: 'e.g. "Show".'
+  option_b:
+    title: Option B label
+    description: 'e.g. "Hide".'

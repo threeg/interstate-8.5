@@ -1,0 +1,14 @@
+$schema: 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/metadata.schema.json'
+name: Quote block
+status: experimental
+description: >-
+  A left-rule italic pull quote (e.g. the song-page artist quote). The
+  attribution is set as part of the quote text itself, matching every
+  instance in 1B.dc.html (a single line ending "— Isaac Brock").
+props:
+  type: object
+  properties: {}
+slots:
+  quote:
+    title: Quote
+    description: 'The quote text, including its trailing "— Attribution".'

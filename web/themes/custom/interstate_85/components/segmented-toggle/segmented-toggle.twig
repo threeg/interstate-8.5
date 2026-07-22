@@ -1,0 +1,9 @@
+{% set selected = selected|default('a') %}
+<div class="segmented-toggle" role="group" aria-label="{{ label }}">
+  <button type="button" class="segmented-toggle__option{{ selected == 'a' ? ' is-selected' : '' }}" aria-pressed="{{ selected == 'a' ? 'true' : 'false' }}">
+    {% block option_a %}{% endblock %}
+  </button>
+  <button type="button" class="segmented-toggle__option{{ selected == 'b' ? ' is-selected' : '' }}" aria-pressed="{{ selected == 'b' ? 'true' : 'false' }}">
+    {% block option_b %}{% endblock %}
+  </button>
+</div>

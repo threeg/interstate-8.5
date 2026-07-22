@@ -1,0 +1,7 @@
+{% set field_id = 'select-field--' ~ name %}
+<div class="select-field">
+  <label class="select-field__label" for="{{ field_id }}">{{ label }}</label>
+  <select id="{{ field_id }}" name="{{ name }}" class="select-field__control"{% if disabled %} disabled{% endif %}>
+    {% block options %}{% endblock %}
+  </select>
+</div>

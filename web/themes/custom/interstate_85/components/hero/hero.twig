@@ -1,0 +1,10 @@
+{% set variant = variant|default('page-title') %}
+<div class="hero hero--{{ variant }}">
+  <div class="hero__image">
+    {% block image %}{% endblock %}
+  </div>
+  <div class="hero__scrim"></div>
+  <div class="hero__title">
+    {% block title %}{% endblock %}
+  </div>
+</div>
