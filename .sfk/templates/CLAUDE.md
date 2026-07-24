@@ -12,11 +12,18 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 ## Project & kit
 
 - **Project code:** `<PRJ>` — the ticket prefix (`<PRJ>-001`). Set by `sfk-init`.
-- **Spec-First Kit version applied:** `1.1.0` — the *kit* version this project is on (set by
+- **Spec-First Kit version applied:** `1.2.0` — the *kit* version this project is on (set by
   `sfk-init`, raised by `sfk-update-kit`). This is **not** your software's release version (that
   is chosen by the project and tracked in `spec/milestone-plan.md`). The kit's own version,
   changelog and pristine templates live in `.sfk/` (read-only — never edit it by hand; skills
   copy templates *out* of it).
+- **Models.** By default one model does everything. For **independent test authorship** — the failing
+  test written by a *different, stronger* model than the implementer, so the test isn't shaped to fit
+  the code that must pass it (grader ≠ graded) — name two:
+  - `implementation: <model>` — the builder run day to day (e.g. the cheaper/faster one).
+  - `tests: <model, or "same">` — writes the failing test from the ticket + spec, independently.
+  `sfk-next-ticket` acts on the `tests` model; `same` (or a single model) keeps the default single-model
+  behaviour. Set by `sfk-init`.
 
 ## What this project is
 

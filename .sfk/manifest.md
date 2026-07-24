@@ -10,7 +10,7 @@ the authoring skills; only `sfk-update-kit` refreshes this folder from a newer k
 
 ```yaml
 kit_name: spec-first-starter-kit
-kit_version: 1.1.0        # the kit version these files shipped from
+kit_version: 1.2.0        # the kit version these files shipped from
 author: Gregg Seymour
 ```
 

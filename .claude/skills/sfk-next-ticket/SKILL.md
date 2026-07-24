@@ -44,6 +44,19 @@ rules in `spec/tickets/CLAUDE.md` and the definition of done in the root `CLAUDE
    Characterisation tests for probabilistic/external layers. New or changed numbered-requirement
    behaviour ships with its tests **in the same commit**.
 
+   **Independent test authorship (only if configured).** If the root `CLAUDE.md` *Project & kit* ›
+   *Models* names a **`tests`** model distinct from the implementation model, the failing test must be
+   written by that model, **independently of the implementation** — grader ≠ graded, so the test is not
+   shaped to fit the code that must pass it. In Claude Code: at the test-first step, **spawn a subagent
+   pinned to the `tests` model** and have it write the failing test(s) from the **ticket + the spec
+   only** — no implementation sketch, no hints about how you intend to pass it. Bring the test back,
+   confirm it is red for the right reason, then implement to green in **this** (implementation) session.
+   The test-writer and the implementer must **not** collaborate on the same ticket — they hand off
+   through the test and the spec, nothing else. It is still **one ticket, one commit**: the test is
+   authored inside the ticket's work, not a separate commit. **Degrade gracefully:** if no distinct
+   `tests` model is configured, or the runtime cannot pin a model to a subagent, write the test in this
+   session as usual — at minimum, author it from the spec *before* sketching the implementation.
+
 6. **Run the gates.** The default gate must pass with zero warnings; run the heavier gate the ticket
    names (model / perf / e2e) where it applies; hold the core coverage gate for core-touching work.
 

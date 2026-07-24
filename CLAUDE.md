@@ -8,11 +8,18 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 ## Project & kit
 
 - **Project code:** `INT8` — the ticket prefix (`INT8-001`). Set by `sfk-init`.
-- **Spec-First Kit version applied:** `1.1.0` — the *kit* version this project is on (set by
+- **Spec-First Kit version applied:** `1.2.0` — the *kit* version this project is on (set by
   `sfk-init`, raised by `sfk-update-kit`). This is **not** the software's release version (that is
   chosen by the project and tracked in `spec/milestone-plan.md`). The kit's own version, changelog
   and pristine templates live in `.sfk/` (read-only — never edit it by hand; skills copy templates
   *out* of it).
+- **Models.** Independent test authorship is **on**: the failing test is written by a *different,
+  stronger* model than the implementer, so the test isn't shaped to fit the code that must pass it
+  (grader ≠ graded).
+  - `implementation: claude-sonnet-5` — the builder run day to day (the cheaper/faster one).
+  - `tests: claude-opus-4-8` — writes the failing test from the ticket + spec, independently.
+  `sfk-next-ticket` acts on the `tests` model; set `tests: same` (or a single model) to revert to the
+  default single-model behaviour. Set by `sfk-init`.
 
 ## What this project is
 

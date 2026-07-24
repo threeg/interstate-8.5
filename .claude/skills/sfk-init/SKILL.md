@@ -32,13 +32,19 @@ optional: if an argument is supplied, use it without asking; otherwise ask for i
    - the architecture layers and the one-line dependency rule (offer the kit default
      `core → domain → services → interface, storage beneath services` and let them adjust);
    - the command runner and the default-gate command (e.g. `make test`);
-   - whether there is a UI (if not, note the wireframes and design-system milestones will be dropped).
+   - whether there is a UI (if not, note the wireframes and design-system milestones will be dropped);
+   - **models (optional):** whether the failing test should be written by a *different, stronger* model
+     than the implementer — **independent test authorship** (the test isn't shaped to fit the code that
+     must pass it). Default **no** — one model does everything. If yes, take the *implementation* model
+     and the *tests* model.
 
 3. **Copy the environment templates out of `.sfk/templates/`** to their working locations, then
    fill the copies (replace every `<PLACEHOLDER>`):
    - `.sfk/templates/CLAUDE.md` → `./CLAUDE.md` (root). Fill it, and in its *Project & kit*
-     section record the **project code** and set **Spec-First Kit version applied** to the
-     `kit_version` from `.sfk/manifest.md`. (This is where project state lives — not in `.sfk`.)
+     section record the **project code**, set **Spec-First Kit version applied** to the
+     `kit_version` from `.sfk/manifest.md`, and fill the **Models** line from the interview (one model,
+     or a distinct `tests` model for independent test authorship). (This is where project state lives —
+     not in `.sfk`.)
    - `.sfk/templates/spec/milestone-plan.md` → `spec/milestone-plan.md`. Leave the
      milestone table **empty** with a *Current position* line "Environment bootstrapped; run
      `sfk-version` to start the first version." — the table is laid down by `sfk-version`.

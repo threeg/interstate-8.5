@@ -15,6 +15,29 @@ are told to.
 
 ---
 
+## v1.2.0 — independent test authorship (optional)
+
+Optional **model split for tests vs code**: a test written by the same model that writes the code it
+must pass is a weak check (shared blind spots; a misread requirement embodied in both). You can now have
+a *different, stronger* model write the failing test — *grader ≠ graded* — before a cheaper model
+implements to green. **Off by default; single-model behaviour is unchanged.**
+
+- **A `Models` line in the root `CLAUDE.md` (*Project & kit*).** Records the `implementation` model and,
+  optionally, a distinct `tests` model. **Apply:** add — insert the `Models` entry into the project's
+  root `CLAUDE.md` *Project & kit* section; **interview** — ask whether the failing test should be
+  written by a different, stronger model than the implementer, and if so record both models (default:
+  one model, `tests: same`).
+- **`sfk-next-ticket` writes the failing test with the `tests` model when one is configured** — in
+  Claude Code, via a subagent pinned to that model, from the ticket + spec only, then implements to
+  green in the driving session. Test-writer and implementer do not collaborate on a ticket; still one
+  ticket, one commit; degrades to single-model where unconfigured or unsupported. **Apply:** refresh —
+  `sfk-next-ticket`.
+- **`sfk-init` asks the model question** and fills the `Models` line. **Apply:** refresh — `sfk-init`.
+- Method guide gains an *Independent test authorship* note (Test discipline). **Apply:** refresh — the
+  guide.
+
+---
+
 ## v1.1.0 — two-folder payload, neutral verifier, copy-then-migrate updates
 
 > ### ⚠ Pre-copy — back up your filled-in `sfk-verify` **before** copying this kit over your project

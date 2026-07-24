@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Kit version** | v1.0.1 |
+| **Kit version** | v1.2.0 |
 | **Author** | Gregg Seymour |
 | **Kit identity** | `.sfk/manifest.md` (read-only); changes in `.sfk/CHANGELOG.md` |
 | **A project's applied kit version** | recorded in the project's root `CLAUDE.md` (*Project & kit*) |
@@ -276,7 +276,7 @@ wireframe deltas → design deltas → test-strategy delta + ticket generation �
 `sfk-next-milestone` / `sfk-signoff` / `sfk-next-ticket` loop. There is no second `sfk-init`.
 
 > Note the two distinct "version" concepts. A **project version** (`v0.1.0`, `v0.2.0`) is *your
-> software's* release, scoped by `sfk-version`. A **kit version** (this kit's `v1.0.1`) is *the
+> software's* release, scoped by `sfk-version`. A **kit version** (this kit's `v1.2.0`) is *the
 > method's* release, applied by `sfk-update-kit`. They are independent.
 
 ---
@@ -345,6 +345,16 @@ and **characterisation tests** for probabilistic/external layers (seeded/recorde
 properties). Supporting practices: layered gates (a fast default gate every ticket, heavier gates per
 type); a coverage gate on the pure core; golden-file snapshots taken *before* any risky refactor; and
 the **`sfk-verify` pass** at batch boundaries, which turns spec-audit findings into cleanup tickets.
+
+**Independent test authorship (optional).** A test written by the same model that writes the code it
+must pass is a weak check — the two share blind spots, and a misread requirement can be embodied in
+both, going green for the wrong reason. If you configure a distinct **`tests`** model in the root
+`CLAUDE.md` (*Project & kit* › *Models*), `sfk-next-ticket` has that model write the failing test —
+from the ticket and spec alone — before a cheaper model implements to green. It's the same
+*grader ≠ graded* separation SFK already applies to spec-vs-code, now applied to test-vs-code; the
+verifier becomes the guard against the implementer teaching to the test. It catches *model-specific*
+blind spots (a shared, *ambiguous* spec still misleads both — spec clarity and the human gate remain
+the bigger levers). Off by default; single-model behaviour is unchanged.
 
 The **definition of done** for an implementation ticket lives in the root `CLAUDE.md` and the ticket
 template: the default gate passes with zero warnings; new/changed numbered-requirement behaviour has
