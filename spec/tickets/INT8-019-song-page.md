@@ -47,6 +47,15 @@ so that I have the song's full record in one place.
   the page's one `<h1>` (per `1B.dc.html`), same as the Songs landing. Add the song route's path(s) to
   `block.block.interstate_85_page_title`'s existing `request_path` visibility condition (currently just
   `/songs`) rather than introducing a second exclusion mechanism.
+- **If INT8-028 has landed when this ticket is picked up, use its hero block — do not build a second
+  hero mechanism.** INT8-028 moves the hero out of page templates into an `i8_page_hero` block placed in
+  a new full-width `page_header` region. Where it exists, supply this page's hero by extending that
+  block's visibility condition to the song route (or placing a second instance of the same plugin with
+  the song hero photo), instead of embedding `interstate_85:hero` in the song page's own template.
+  INT8-028 is deliberately **not** in this ticket's `depends_on`: ids are allocated in execution order
+  and forward dependencies are a defect (CONVENTIONS §4.3). This is a sequencing recommendation only —
+  this ticket remains buildable on its own if INT8-028 has not landed yet, but building INT8-028 first
+  avoids writing hero-in-template code that INT8-028 would then delete.
 
 ## Design references
 - Wireframe: spec/wireframes/03-song-page.md (standard variant, missing-fields)

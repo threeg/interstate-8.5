@@ -60,6 +60,8 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 21 | INT8-019 | Song page (view mode + Twig + video) | story | theme | 9 / theme | E04 | code | todo | INT8-013, INT8-015, INT8-016 |
 | 22 | INT8-020 | Song versions (side-by-side lyrics + links) | story | theme | 9 / theme | E04 | code | todo | INT8-019 |
 | 23 | INT8-021 | E2E capstone (Playwright + Axe) | task | tooling | 9 / theme | E04 | code | todo | INT8-018, INT8-019, INT8-020 |
+| 24 | INT8-028 | Hero as a page-header block in a new full-width region | story | theme | 9 / theme | E04 | code + site-building | todo | INT8-015, INT8-016, INT8-018 |
+| 25 | INT8-029 | Bucket the song ledger's letter rail and groups, with a `#` catch-all | task | theme | 9 / theme | E04 | code | todo | INT8-018 |
 
 > **Frontend independence (CONVENTIONS §4.5):** the theme foundation (E03, 015–017) builds against the
 > design/contract in parallel with the content model + migration (E02, 008–014); the Songs-section
@@ -70,6 +72,20 @@ on a higher-numbered one. Epics close when their children are all `done`.
 > genuinely implements FR-16/NFR-1 more correctly rather than improving internal quality of unchanged
 > behaviour (CONVENTIONS §6.6 excludes real spec-gap fixes from the cleanup category). Placed before
 > INT8-018/019 so the Songs screens render the corrected header/nav from the start.
+
+> **INT8-028 and INT8-029** both came out of the INT8-018 review and are placed in the main sequence,
+> not the cleanup backlog. **INT8-028** is genuine new capability (a new theme region plus a real block
+> plugin, replacing hero markup embedded in a page template), which CONVENTIONS §6.6 excludes from the
+> cleanup category outright. **INT8-029** corrects already-shipped INT8-018 output, but it changes the
+> FR-8 ordering expression itself and adds the ledger's missing non-letter bucket — implementing the
+> requirement *more correctly* rather than improving internal quality of unchanged behaviour, exactly
+> the reasoning that placed INT8-027 here.
+
+> **Sequencing — INT8-028 before INT8-019, despite the ids.** INT8-019 (Song page) needs the same
+> hero-per-route mechanism INT8-028 introduces. Ids are permanent and allocated in execution order, so
+> INT8-019 cannot depend on INT8-028 (no forward edges, CONVENTIONS §4.3) and its `depends_on` is
+> unchanged — but building INT8-028 first avoids INT8-019 writing a second hero mechanism that
+> INT8-028 would delete. Noted in both ticket files.
 
 ---
 
@@ -103,7 +119,7 @@ Derived from each ticket's `implements` field. Every `FR`/`NFR` appears against 
 | FR-5 | INT8-014 |
 | FR-6 | INT8-018 |
 | FR-7 | INT8-018 |
-| FR-8 | INT8-018 |
+| FR-8 | INT8-018, INT8-029 |
 | FR-9 | INT8-008, INT8-018 |
 | FR-10 | INT8-018 |
 | FR-11 | INT8-018 |
