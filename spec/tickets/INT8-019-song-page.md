@@ -43,6 +43,10 @@ so that I have the song's full record in one place.
 - The "coming soon" right-rail stubs (releases / last-played / tour-stats) reserve space (FR-14 spirit;
   no real data). Type/group omitted (FR-12).
 - Route `/songs/<slug>` (api-contract §2.2). Version side-by-side is **INT8-020**.
+- **Page-title block to exclude, matching INT8-018:** the song hero's own overlaid title is meant to be
+  the page's one `<h1>` (per `1B.dc.html`), same as the Songs landing. Add the song route's path(s) to
+  `block.block.interstate_85_page_title`'s existing `request_path` visibility condition (currently just
+  `/songs`) rather than introducing a second exclusion mechanism.
 
 ## Design references
 - Wireframe: spec/wireframes/03-song-page.md (standard variant, missing-fields)

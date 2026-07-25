@@ -1,0 +1,213 @@
+uuid: bf665431-3995-4d7d-a330-0f0279db3fd8
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.song
+  module:
+    - i8_services
+    - node
+    - user
+id: songs
+label: Songs
+module: views
+description: 'The Songs landing (FR-6–FR-11, FR-16, FR-18, FR-19).'
+tag: default
+base_table: node_field_data
+base_field: nid
+display:
+  default:
+    id: default
+    display_title: Default
+    display_plugin: default
+    position: 0
+    display_options:
+      title: Songs
+      fields:
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          entity_type: node
+          entity_field: title
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+          element_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          type: string
+          settings:
+            link_to_entity: true
+      pager:
+        type: none
+        options:
+          offset: 0
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: false
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      access:
+        type: perm
+        options:
+          perm: 'access content'
+      cache:
+        type: none
+        options: {  }
+      empty: {  }
+      sorts:
+        title_alpha:
+          id: title_alpha
+          table: node_field_data
+          field: title_alpha
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: title
+          plugin_id: i8_article_insensitive_title
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: title_alpha
+          exposed: false
+      arguments: {  }
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          operator: in
+          value:
+            song: song
+          group: 1
+          exposed: false
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+            reduce: false
+        field_exclude_from_list_value:
+          id: field_exclude_from_list_value
+          table: node__field_exclude_from_list
+          field: field_exclude_from_list_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: field_exclude_from_list
+          plugin_id: boolean
+          operator: '='
+          value: '0'
+          group: 1
+          exposed: false
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+        i8_song_type_filter:
+          id: i8_song_type_filter
+          table: node__field_song_type
+          field: field_song_type_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: field_song_type
+          plugin_id: i8_song_type_filter
+          operator: '='
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+        i8_alternate_titles_filter:
+          id: i8_alternate_titles_filter
+          table: node__field_parent_song
+          field: field_parent_song_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: field_parent_song
+          plugin_id: i8_alternate_titles_filter
+          operator: '='
+          value: {  }
+          group: 1
+          exposed: false
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      style:
+        type: default
+        options:
+          row_class: ''
+          default_row_class: true
+      row:
+        type: fields
+      query:
+        type: views_query
+        options: {  }
+      relationships: {  }
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'url.query_args:alt'
+        - 'url.query_args:type'
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {  }
+  page_1:
+    id: page_1
+    display_title: Page
+    display_plugin: page
+    position: 1
+    display_options:
+      display_extenders: {  }
+      path: songs
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'url.query_args:alt'
+        - 'url.query_args:type'
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {  }

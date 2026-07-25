@@ -1,0 +1,29 @@
+$schema: 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/metadata.schema.json'
+name: Song ledger
+status: experimental
+description: >-
+  The Songs landing's A–Z list: a sticky letter rail plus grouped title
+  columns (design-system.md §3 "Song ledger"). The caller supplies rows
+  already sorted (article-insensitively, FR-8) and grouped by the same rule
+  — this component only renders them, it does not sort or group.
+props:
+  type: object
+  properties:
+    results_count:
+      type: integer
+      title: Results count
+      description: 'The number of songs shown, for the "N results" line.'
+    rail_letters:
+      type: array
+      title: Rail letters
+      description: 'A–Z, each { letter, present } — present letters are linkable/emphasised, absent ones muted.'
+    groups:
+      type: array
+      title: Groups
+      description: >-
+        Ordered groups, each { letter, songs }; each song is
+        { title, url, is_alt }. is_alt marks an alternate-title version
+        (FR-10) with the small "alt" cue.
+  required:
+    - rail_letters
+    - groups

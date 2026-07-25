@@ -77,3 +77,54 @@
   margin-inline: auto;
   padding-inline: var(--space-6);
 }
+
+.layout-content__inner {
+  padding-block: var(--space-7);
+}
+
+/* Songs landing — filter bar (design-system.md §3 "Filter bar"). Assembled
+   from atoms (select-field, segmented-toggle, button) directly in
+   views-view--songs.html.twig rather than its own SDC component — see that
+   template's file comment for why. */
+.filter-bar {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.filter-bar__form {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-6);
+}
+
+.filter-bar__stub {
+  opacity: .5;
+}
+
+/* Songs landing — empty state (FR-19) */
+.songs-empty {
+  text-align: center;
+  padding: var(--space-9) var(--space-5);
+}
+
+.songs-empty__heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-h4);
+  color: var(--color-fg-slate);
+  margin: 0 0 var(--space-2);
+}
+
+.songs-empty__body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-sm);
+  color: var(--color-fg-body);
+  margin: 0 0 var(--space-5);
+}

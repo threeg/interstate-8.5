@@ -3,8 +3,11 @@ name: Segmented toggle
 status: experimental
 description: >-
   A two-option segmented control (e.g. Alternate Titles Show/Hide). Renders
-  as a labelled button group; the consuming form wires the actual value
-  (Views exposed filter, etc.) — this is presentation only.
+  as a labelled button group by default (presentation only — the consumer
+  wires the actual value). If href_a/href_b are set, renders as a pair of
+  links instead (each carrying an accessible "<group label>: <option>" name,
+  and the active one marked aria-current) — for a control whose two states
+  are two real pages, reached without JS or form submission.
 props:
   type: object
   properties:
@@ -20,6 +23,20 @@ props:
         - a
         - b
       default: a
+    href_a:
+      type: string
+      title: Option A href
+      description: 'If set (with href_b), renders as links rather than buttons.'
+    href_b:
+      type: string
+      title: Option B href
+    option_a_label:
+      type: string
+      title: Option A accessible name
+      description: 'Plain text used for the link variant''s aria-label (e.g. "Show"); ignored in button mode.'
+    option_b_label:
+      type: string
+      title: Option B accessible name
   required:
     - label
 slots:

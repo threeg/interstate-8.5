@@ -1,0 +1,90 @@
+{#
+/**
+ * @file
+ * The Songs landing (INT8-018) — fully custom output; see
+ * interstate_85_preprocess_views_view__songs() for song_groups/rail_letters/
+ * filter_bar/results_count/is_empty. The page-title block is excluded from
+ * this route (block.block.interstate_85_page_title visibility) so the hero
+ * below supplies the page's one <h1>.
+ *
+ * Two Drupal/SDC quirks worth recording, both found building this template:
+ *
+ * 1. The filter bar's controls are embedded directly here as sibling atoms,
+ *    not wrapped in their own SDC component — nesting one component's embed
+ *    inside another component's own template trips a core bug where the
+ *    outer component's prop validation receives the inner embed's context
+ *    instead of its own (reproduced while building this ticket: a
+ *    `filter-bar` wrapper component failed prop validation for props it was
+ *    demonstrably given, only once its template embedded select-field/
+ *    button/segmented-toggle internally). Flattening to one level avoids it.
+ * 2. `{% embed %} ... only %}` here restricts block content to the `with`
+ *    hash too, not just the component's own top-level render — a loop over
+ *    `filter_bar.type_options` inside an `options` block silently saw
+ *    nothing until `only` was dropped. This is narrower than plain Twig's
+ *    documented "blocks always run in the caller's scope" behaviour;
+ *    apparently SDC's own compiler pass tightens it. Every embed below that
+ *    references an outer variable from within a block omits `only`.
+ */
+#}
+{% embed 'interstate_85:hero' with {variant: 'page-title'} only %}
+  {% block image %}<img src="{{ base_path ~ directory }}/images/songs-hero.jpg" alt="">{% endblock %}
+  {% block title %}<h1>{{ 'Songs'|t }}</h1>{% endblock %}
+{% endembed %}
+
+<div class="layout-content__inner">
+  <div class="filter-bar">
+    <form method="get" action="{{ filter_bar.action }}" class="filter-bar__form">
+      {% embed 'interstate_85:select-field' with {name: 'type', label: 'Type'|t} %}
+        {% block options %}
+          {% for option in filter_bar.type_options %}
+            <option value="{{ option.value }}"{{ option.selected ? ' selected' : '' }}>{{ option.label }}</option>
+          {% endfor %}
+        {% endblock %}
+      {% endembed %}
+      <input type="hidden" name="alt" value="{{ filter_bar.alt_value }}">
+      {% embed 'interstate_85:button' with {variant: 'primary', button_type: 'submit'} only %}
+        {% block label %}{{ 'Apply'|t }}{% endblock %}
+      {% endembed %}
+    </form>
+
+    {% embed 'interstate_85:segmented-toggle' with {
+      label: 'Alternate titles'|t,
+      selected: filter_bar.alt_selected,
+      href_a: filter_bar.alt_show_url,
+      href_b: filter_bar.alt_hide_url,
+      option_a_label: 'Show'|t,
+      option_b_label: 'Hide'|t,
+    } only %}
+      {% block option_a %}{{ 'Show'|t }}{% endblock %}
+      {% block option_b %}{{ 'Hide'|t }}{% endblock %}
+    {% endembed %}
+
+    <div class="filter-bar__stub">
+      {% embed 'interstate_85:select-field' with {name: 'released', label: 'Released'|t, disabled: true} only %}
+        {% block options %}<option>{{ 'Coming soon'|t }}</option>{% endblock %}
+      {% endembed %}
+    </div>
+
+    <div class="filter-bar__stub">
+      {% embed 'interstate_85:select-field' with {name: 'playedlive', label: 'Played live'|t, disabled: true} only %}
+        {% block options %}<option>{{ 'Coming soon'|t }}</option>{% endblock %}
+      {% endembed %}
+    </div>
+  </div>
+
+  {% if is_empty %}
+    <div class="songs-empty">
+      <p class="songs-empty__heading">{{ 'No songs match these filters'|t }}</p>
+      <p class="songs-empty__body">{{ 'Try a different type, or clear the filters to see all songs.'|t }}</p>
+      {% embed 'interstate_85:button' with {variant: 'outline', href: reset_url} only %}
+        {% block label %}{{ 'Clear filters'|t }}{% endblock %}
+      {% endembed %}
+    </div>
+  {% else %}
+    {% include 'interstate_85:song-ledger' with {
+      results_count: results_count,
+      rail_letters: rail_letters,
+      groups: song_groups,
+    } only %}
+  {% endif %}
+</div>

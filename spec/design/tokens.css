@@ -31,6 +31,7 @@
   --i8-frost:      #f4f8fa; /* pale blue-white: select/field hover fill (filter bar) */
   --i8-dove:       #c7cbca; /* mid-grey: unselected segmented-toggle option on hover */
   --i8-quote:      #455250; /* quote-block text, both breakpoints */
+  --i8-mist:       #e3e6e5; /* song ledger row dividers — lighter than --i8-pumice */
 
   /* --- Semantic colour aliases (use these in components) --- */
   --color-fg:            var(--i8-ink);
@@ -54,6 +55,7 @@
   --color-field-hover:   var(--i8-frost); /* select/field hover fill */
   --color-toggle-hover:  var(--i8-dove); /* unselected segmented-toggle option, hovered */
   --color-fg-quote:      var(--i8-quote); /* quote-block text */
+  --color-line-subtle:   var(--i8-mist); /* song ledger row dividers */
 
   /* --- Typography --- */
   --font-display: "Oswald", system-ui, sans-serif; /* headings, nav, labels, buttons */
@@ -95,6 +97,7 @@
   --radius-sm: 2px; /* ledger group headers, small chips */
   --radius:    3px; /* cards, controls, buttons */
   --radius-md: 4px; /* filter bar, "coming soon" stubs */
+  --radius-pill: 8px; /* the song ledger's "alt" badge chip */
   --radius-shield: 7px 7px 17px 17px; /* the "8" route-shield mark */
 
   /* --- Site-badge component --- */

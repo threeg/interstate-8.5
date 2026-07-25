@@ -1,0 +1,21 @@
+<div class="song-ledger">
+  <div class="song-ledger__count">{{ results_count }} {{ results_count == 1 ? 'result'|t : 'results'|t }}</div>
+  <div class="song-ledger__layout">
+    <div class="song-ledger__rail" aria-hidden="true">
+      {% for letter in rail_letters %}
+        <span class="song-ledger__rail-letter{{ letter.present ? ' is-present' : '' }}">{{ letter.letter }}</span>
+      {% endfor %}
+    </div>
+    <div class="song-ledger__grid">
+      {% for group in groups %}
+        <div class="song-ledger__group-header">{{ group.letter }}</div>
+        {% for song in group.songs %}
+          <div class="song-ledger__row">
+            <a href="{{ song.url }}">{{ song.title }}</a>
+            {% if song.is_alt %}<span class="song-ledger__alt-badge">{{ 'alt'|t }}</span>{% endif %}
+          </div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</div>

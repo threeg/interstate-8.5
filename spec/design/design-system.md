@@ -137,3 +137,13 @@ values.
   mobile reference). **Correction:** the site slogan is shown on both header variants at desktop/tablet
   widths (previously read as solid-header-hidden); only the mobile ☰ bar drops it. See `INT8-027` for
   the resulting fix to INT8-015's already-shipped header.
+- **2026-07-25** — **Built the Songs landing (INT8-018).** Two tokens added: `--color-line-subtle`
+  (`#e3e6e5`, ledger row dividers — lighter than `--color-line`) and `--radius-pill` (`8px`, the alt
+  badge chip). New `song-ledger` SDC (letter-rail + grouped rows + alt badge). The **Filter bar is not
+  its own SDC component** — its atoms (select-field, segmented-toggle, button) are assembled directly in
+  the Songs landing's page template instead, because nesting one component's `{% embed %}` inside
+  another component's own template trips a Drupal core bug (the outer component's prop validation
+  receives the inner embed's context instead of its own — see INT8-018's Notes for the reproduction).
+  `segmented-toggle` gained an optional link mode (`href_a`/`href_b`) so the Alternate-titles Show/Hide
+  control can be two real links instead of JS-driven buttons, matching this project's "server-rendered,
+  a filter change reloads the page" pattern.

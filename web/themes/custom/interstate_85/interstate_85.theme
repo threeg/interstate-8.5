@@ -4,3 +4,85 @@
  * @file
  * Interstate 8 theme hooks.
  */
+
+declare(strict_types=1);
+
+use Drupal\Core\Url;
+use Drupal\i8_services\Plugin\views\sort\ArticleInsensitiveTitle;
+
+/**
+ * Implements hook_preprocess_HOOK() for views-view--songs.html.twig.
+ *
+ * Takes the Songs landing (INT8-018) fully over from Views' default field
+ * rendering: builds the letter-rail/grouped ledger and the filter bar's
+ * current state from the raw result set and the request, matching
+ * `1B.dc.html`'s SONGS LANDING composition. The View itself only has to
+ * select, filter and sort the right rows (see i8_services' custom sort/
+ * filter plugins) — none of its own field/row markup is used here.
+ */
+function interstate_85_preprocess_views_view__songs(array &$variables): void {
+  $view = $variables['view'];
+  $request = \Drupal::request();
+  $type = $request->query->get('type', 'Modest Mouse');
+  $alt = $request->query->get('alt', '1');
+
+  $songs = [];
+  foreach ($view->result as $row) {
+    $node = $row->_entity;
+    if (!$node) {
+      continue;
+    }
+    $title = $node->label();
+    $sort_key = ArticleInsensitiveTitle::stripLeadingArticle($title);
+    $songs[] = [
+      'title' => $title,
+      'url' => $node->toUrl()->toString(),
+      'is_alt' => !$node->get('field_parent_song')->isEmpty(),
+      'letter' => mb_strtoupper(mb_substr($sort_key, 0, 1)),
+    ];
+  }
+
+  $groups = [];
+  foreach ($songs as $song) {
+    $last_key = array_key_last($groups);
+    if ($last_key === NULL || $groups[$last_key]['letter'] !== $song['letter']) {
+      $groups[] = ['letter' => $song['letter'], 'songs' => []];
+      $last_key = array_key_last($groups);
+    }
+    $groups[$last_key]['songs'][] = $song;
+  }
+
+  $present_letters = array_unique(array_column($songs, 'letter'));
+  $rail_letters = [];
+  foreach (range('A', 'Z') as $letter) {
+    $rail_letters[] = ['letter' => $letter, 'present' => in_array($letter, $present_letters, TRUE)];
+  }
+
+  $type_options = [
+    ['value' => 'All', 'label' => t('All'), 'selected' => $type === 'All'],
+  ];
+  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['vid' => 'song_type']);
+  uasort($terms, fn ($a, $b) => $a->getWeight() <=> $b->getWeight());
+  foreach ($terms as $term) {
+    $type_options[] = [
+      'value' => $term->label(),
+      'label' => $term->label(),
+      'selected' => mb_strtolower($term->label()) === mb_strtolower((string) $type),
+    ];
+  }
+
+  $current_route_query = ['type' => $type];
+  $variables['results_count'] = count($songs);
+  $variables['song_groups'] = $groups;
+  $variables['rail_letters'] = $rail_letters;
+  $variables['is_empty'] = empty($songs);
+  $variables['reset_url'] = Url::fromRoute('view.songs.page_1')->toString();
+  $variables['filter_bar'] = [
+    'action' => Url::fromRoute('view.songs.page_1')->toString(),
+    'type_options' => $type_options,
+    'alt_value' => $alt,
+    'alt_show_url' => Url::fromRoute('view.songs.page_1', [], ['query' => $current_route_query + ['alt' => '1']])->toString(),
+    'alt_hide_url' => Url::fromRoute('view.songs.page_1', [], ['query' => $current_route_query + ['alt' => '0']])->toString(),
+    'alt_selected' => $alt === '0' ? 'b' : 'a',
+  ];
+}

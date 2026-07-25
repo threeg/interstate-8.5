@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Hooks for the Interstate-8 services module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Implements hook_views_data_alter().
+ *
+ * The Songs landing (INT8-018) needs the `type`/`alt` query parameters to
+ * mean exactly what api-contract.md §2.1 says (a Song type *name*; `1`/`0`
+ * for alternates) — the stock handlers Drupal registers for these fields
+ * don't give that: taxonomy module registers `taxonomy_index_tid` for any
+ * taxonomy-referencing field (term-*ID*-keyed, not name-keyed), and the
+ * generic `numeric` handler for field_parent_song has no "just show
+ * everything" state without a form widget. Swapping in the owned handlers
+ * here (rather than only setting `plugin_id` on the View's own filter
+ * config, which Views ignores in favour of this registration —
+ * ViewsHandlerManager::getHandler() resolves the plugin from the field's
+ * views-data entry, not from the View's own config) is the correct
+ * extension point for "the stock handler isn't shaped right for this field".
+ */
+function i8_services_views_data_alter(array &$data): void {
+  $data['node__field_song_type']['field_song_type_target_id']['filter']['id'] = 'i8_song_type_filter';
+  $data['node__field_parent_song']['field_parent_song_target_id']['filter']['id'] = 'i8_alternate_titles_filter';
+}
+
+/**
+ * Implements hook_views_data().
+ *
+ * Registers a sort-only pseudo-field for the article-insensitive title
+ * order (FR-8). This is deliberately a *new* field ('title_alpha'), not an
+ * override of `node_field_data.title`'s own sort handler: `title` is a base
+ * field shared by every node type, and node_field_data.title.sort.id is
+ * global Views-Data registration (see i8_services_views_data_alter()) — any
+ * View using it would inherit the article-stripping behaviour, not just the
+ * Songs landing. A separate pseudo-field keeps the effect scoped to views
+ * that explicitly opt in.
+ */
+function i8_services_views_data(): array {
+  $data['node_field_data']['title_alpha'] = [
+    'title' => t('Title (article-insensitive)'),
+    'help' => t('Sorts by title, ignoring a leading "A"/"An"/"The" (FR-8).'),
+    'real field' => 'title',
+    'sort' => ['id' => 'i8_article_insensitive_title'],
+  ];
+  return $data;
+}

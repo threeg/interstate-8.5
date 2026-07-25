@@ -24,15 +24,4 @@ class PageController extends ControllerBase {
     ];
   }
 
-  /**
-   * A temporary stand-in for the Songs landing page.
-   *
-   * Replaced by the real /songs View in INT8-018 (see i8_services.routing.yml).
-   */
-  public function songsStub(): array {
-    return [
-      '#markup' => '<p>' . $this->t('The complete song catalogue is coming soon.') . '</p>',
-    ];
-  }
-
 }
