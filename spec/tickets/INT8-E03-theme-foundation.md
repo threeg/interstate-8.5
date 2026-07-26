@@ -23,7 +23,8 @@ shared SDC atoms/molecules, primary navigation and a minimal navigable front pag
 
 ## Scope
 - **In scope:** header/footer SDC, shared atoms/molecules (buttons, links, filter controls, hero,
-  section labels), primary nav, a minimal front page.
+  section labels), the full-width **page-header hero region + block** (route-aware; placed per page),
+  primary nav, a minimal front page.
 - **Out of scope:** the homepage composition (design-only this slice); the Songs-section screens (E04).
 
 ## Success criteria
@@ -34,6 +35,7 @@ clean); components consume `tokens.css` (no hardcoded values).
 - INT8-015 — Base layout + header + footer (SDC)
 - INT8-016 — Shared atoms / molecules
 - INT8-017 — Primary nav + front-page/route wiring
+- INT8-028 — Secondary-page hero block (random media background) + full-width page-header region (re-homed from E04; Songs is its first placement)
 
 ## References
 - spec/design/design-system.md §1 (build-from), §3 (components)
