@@ -35,7 +35,7 @@ clean); components consume `tokens.css` (no hardcoded values).
 - INT8-015 — Base layout + header + footer (SDC)
 - INT8-016 — Shared atoms / molecules
 - INT8-017 — Primary nav + front-page/route wiring
-- INT8-028 — Secondary-page hero block (random media background) + full-width page-header region (re-homed from E04; Songs is its first placement)
+- INT8-028 — Page-title hero block in a full-width page-header region (random media background) (re-homed from E04; replaces the core page-title block site-wide except the homepage)
 
 ## References
 - spec/design/design-system.md §1 (build-from), §3 (components)

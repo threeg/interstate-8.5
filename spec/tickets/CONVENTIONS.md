@@ -164,7 +164,37 @@ Reactive tickets discovered by post-batch review rather than planned up front.
 
 ---
 
-## 7. Relationship to the other index files
+## 7. Component-first decomposition (how pages are broken into tickets)
+
+The Songs-landing review surfaced a decomposition error worth preventing in **every future
+ticket-generation pass** (this slice and all later versions): a page ticket built a reusable component
+(its hero) inline instead of placing a pre-existing one, forcing a later extraction ticket (INT8-028).
+The rule:
+
+1. **Reusable SDC components get their own ticket(s), before the pages that use them.** An SDC — or a
+   small cluster of tightly-related atoms — is ticketed ahead of any page that assembles it. Use
+   judgement on granularity: a handful of trivial, related atoms may share one ticket; a substantial or
+   independently-reusable component gets its own. Do **not** create a ticket per tiny SDC (avoid ticket
+   sprawl), and do **not** fold a real component into a page ticket.
+
+2. **Blocks and block-like components get their own ticket.** Any custom block plugin, reusable render
+   component, or piece of chrome placed via the block/layout system (header, footer, hero/page-title,
+   menus, teasers) is its own ticket — never built inline inside a page/screen ticket.
+
+3. **A page/screen may not be built until every SDC and block it assembles already exists.** Page
+   tickets *assemble* pre-built components and contain only page-specific glue (a View, a route, a
+   template composing existing components — not new components). Every SDC/block a page uses is a
+   `depends_on` prerequisite of that page ticket. *(Cautionary example: the Songs landing embedded its
+   hero in the View template; the hero should have been a pre-existing block ticket the landing
+   depended on — INT8-028 is the corrective extraction.)*
+
+4. **Ordering consequence.** Components precede their pages, so component tickets take lower ids /
+   earlier execution slots and the page ticket lists them in `depends_on`. This is §4's dependency rule
+   applied to the UI layer: **components → pages, never the reverse.**
+
+---
+
+## 8. Relationship to the other index files
 
 - `TICKET-TEMPLATE.md` — the canonical per-ticket format. Authoritative for shape.
 - `CONVENTIONS.md` (this file) — how the ticket *system* works. Authoritative for process.
