@@ -62,6 +62,7 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 23 | INT8-021 | E2E capstone (Playwright + Axe) | task | tooling | 9 / theme | E04 | code | todo | INT8-018, INT8-019, INT8-020 |
 | 24 | INT8-028 | Page-title hero block in a full-width page-header region (random media background) | story | theme | 9 / theme | E03 | code + site-building | todo | INT8-015, INT8-016, INT8-018 |
 | 25 | INT8-029 | Bucket the song ledger's letter rail and groups, with a `#` catch-all | task | theme | 9 / theme | E04 | code | in-review | INT8-018 |
+| 26 | INT8-030 | Make the song ledger's letter rail a real jump-to-letter navigation | task | theme | 9 / theme | E04 | code | todo | INT8-029 |
 
 > **Frontend independence (CONVENTIONS §4.5):** the theme foundation (E03, 015–017) builds against the
 > design/contract in parallel with the content model + migration (E02, 008–014); the Songs-section
@@ -80,6 +81,13 @@ on a higher-numbered one. Epics close when their children are all `done`.
 > FR-8 ordering expression itself and adds the ledger's missing non-letter bucket — implementing the
 > requirement *more correctly* rather than improving internal quality of unchanged behaviour, exactly
 > the reasoning that placed INT8-027 here.
+
+> **INT8-030** is in the main sequence too, despite `implements: []`. It is genuine new capability —
+> the letter rail becomes real, keyboard-operable in-page navigation, which no `FR` asks for and
+> `design-system.md` §3 does not document — and CONVENTIONS §6.6 reserves the cleanup backlog for
+> internal-quality improvements to already-shipped behaviour, not new capability (the same reasoning as
+> INT8-028, which is likewise new capability rather than a requirement fix). It was triaged out of
+> INT8-029 during the INT8-018 review and is stated as out of scope in INT8-029's own body.
 
 > **Sequencing — INT8-028 before INT8-019, despite the ids.** INT8-019 (Song page) needs the same
 > hero-per-route mechanism INT8-028 introduces. Ids are permanent and allocated in execution order, so
