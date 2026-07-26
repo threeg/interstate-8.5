@@ -2,7 +2,7 @@
 id: INT8-018
 title: Songs landing (View + filters + ledger)
 type: story
-status: in-review
+status: done
 milestone: 9
 batch: theme
 layer: theme
