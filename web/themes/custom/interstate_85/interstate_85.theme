@@ -14,36 +14,34 @@ use Drupal\i8_services\Plugin\views\sort\ArticleInsensitiveTitle;
 /**
  * Implements hook_preprocess_HOOK() for menu--main.html.twig.
  *
- * Marks the current *section* in the primary nav (INT8-031, FR-16/NFR-1).
+ * Renders the active trail as a current-section marking (INT8-031, FR-16/NFR-1).
  *
- * Core marks active links — both in `ActiveLinkResponseFilter` server-side and
- * in `core/misc/active-link.js` client-side, which are two implementations of
- * one rule — by comparing the link's `data-drupal-link-query` against the
- * request's query string, *exactly*. That is right for a pager or an exposed
- * filter, where a link to one filtered URL should only light up on that exact
- * URL. It is wrong for a section-level nav item: the Songs menu link is
- * `internal:/songs` and carries no query at all, so the moment the Songs
- * filters put `?type=…` in the URL, nothing can match and the "you are here"
- * marking silently vanishes while the user is still in the Songs section.
+ * Core knows which section we are in — `in_active_trail`, from the route match
+ * — but never renders it here: this theme is `base theme: false`, so it gets
+ * core's bare `system/templates/menu.html.twig` rather than starterkit's, which
+ * would have added `menu-item--active-trail`. The only thing that does mark
+ * links is `ActiveLinkResponseFilter` (and its client-side twin
+ * `active-link.js`), which matches the link's `data-drupal-link-query` against
+ * the request's query *exactly* — right for a pager, wrong for a section, so
+ * the marking vanished the moment the Songs filters added `?type=…`.
  *
- * `in_active_trail` is derived from the *route match* (MenuLinkTree::
- * buildItems()), which ignores query parameters by construction — so it is
- * the correct signal, and it needs no cache context of its own because the
- * menu block is already cached per `route.menu_active_trails:main`.
+ * So: take the signal core already has and put it in the markup. Setting both
+ * `is-active` and `aria-current` is what lets the existing CSS and the
+ * accessibility contract stay untouched — they are exactly what core's own
+ * marker sets, on the same element.
  *
- * The front page is deliberately NOT special-cased here. Its Home link is
- * `route:<front>` while `/` route-matches `i8_services.front`, so the active
- * trail does not cover it — but `ActiveLinkResponseFilter` has its own
- * `isFrontPage()` branch that already marks it correctly, and it runs as a
- * response filter, i.e. *after* render caching and per request. Re-doing that
- * work here would need a `url.path.is_front` cache context to stay correct,
- * which a theme cannot bubble (`ThemeManager::render()` takes `$variables` by
- * value, and `block_build` is not one of the alters that reach themes) — so
- * leaving the front page to core is both simpler and safer.
+ * Two things this deliberately leaves to others:
+ * - **Descendant paths** (`/songs/<song>`) come from `menu_trail_by_path`,
+ *   which extends the trail down the URL hierarchy. Core's trail is *route*-
+ *   based, so a song page (`entity.node.canonical`) never matches the Songs
+ *   link (`view.songs.page_1`) however much the URLs nest.
+ * - **The front page**, which `ActiveLinkResponseFilter` already handles via
+ *   `isFrontPage()` — and being a response filter it runs after render caching,
+ *   per request, so it needs no cache context. Re-doing it here would.
  *
- * Only top-level items are marked, and that is the point: `in_active_trail`
- * is true for the ancestor of an active child, so the top level is precisely
- * "which section am I in".
+ * Only top-level items are marked, and that is the point: `in_active_trail` is
+ * true for an active child's ancestor, so the top level is exactly "which
+ * section am I in".
  */
 function interstate_85_preprocess_menu__main(array &$variables): void {
   foreach ($variables['items'] as &$item) {

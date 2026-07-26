@@ -293,3 +293,75 @@ test.describe('primary nav current-section marking is server-rendered', () => {
     expect(await markedNavItems(page), 'expected exactly one current nav item').toEqual(['Home']);
   });
 });
+
+/* ---------------------------------------------------------------------------
+ * A song page is still the Songs section (INT8-031, review round 2).
+ *
+ * Raised by the site owner reviewing the query-string fix: clicking through to
+ * a song loses the SONGS marking. Same visible symptom as the filter bug, a
+ * different cause — core's active trail matches on the *route*, and a song page
+ * is `entity.node.canonical` while the Songs menu link is `view.songs.page_1`.
+ * The URLs nest, the routes do not, and core has no notion of one URL sitting
+ * under another (MenuActiveTrail::doGetActiveTrailIds(): "If a link in the
+ * given menu indeed matches the route").
+ *
+ * The song URL is read out of the ledger rather than hardcoded, so the test
+ * keeps working as the migrated dataset changes — the suite runs against real
+ * content, and no individual slug is a contract.
+ * ------------------------------------------------------------------------ */
+
+/** The href of the first song in the ledger, e.g. `/songs/3rd-planet`. */
+async function firstSongPath(page: Page): Promise<string> {
+  await page.goto(songsUrl());
+  const href = await page.locator('a[href^="/songs/"]').first().getAttribute('href');
+  expect(href, 'no song links found in the ledger — cannot test the song page').toBeTruthy();
+  return href!;
+}
+
+test.describe('primary nav current-section marking on a song page', () => {
+  test('a song page keeps Songs marked as the current section', async ({ page }) => {
+    const path = await firstSongPath(page);
+    const response = await page.goto(path);
+    expect(response?.status(), `${path} did not return 200`).toBe(200);
+
+    // Deliberately asserted through the same helper as the filter cases: to a
+    // visitor this is one behaviour — "the nav says which section I'm in" — so
+    // it gets one standard, including that Home is not marked instead.
+    await expectOnlySongsMarked(page);
+  });
+
+  test('a song page draws the same current-section underline as the landing page', async ({ page }) => {
+    // The attribute assertions above prove the markup; this proves the markup
+    // actually reaches the eye, i.e. the CSS keys off what was set. Compared
+    // against the landing page rather than a hardcoded colour so it tracks
+    // whatever tokens.css currently says.
+    const treatment = async (): Promise<{ color: string; borderBottomColor: string }> =>
+      page.locator(NAV_LINK, { hasText: 'Songs' }).evaluate((el) => {
+        const cs = getComputedStyle(el);
+        return { color: cs.color, borderBottomColor: cs.borderBottomColor };
+      });
+
+    await page.goto(songsUrl());
+    const onLanding = await treatment();
+
+    const path = await firstSongPath(page);
+    await page.goto(path);
+    const onSong = await treatment();
+
+    expect(onSong, `song page treatment ${JSON.stringify(onSong)} differs from landing ${JSON.stringify(onLanding)}`).toEqual(onLanding);
+  });
+
+  test('a song page marks Songs with JavaScript disabled', async ({ browser }) => {
+    // Server-rendered, like the filtered case: the marking must not depend on
+    // a client-side library, and must not flicker in after load.
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    try {
+      const path = await firstSongPath(page);
+      await page.goto(path);
+      await expectOnlySongsMarked(page);
+    } finally {
+      await context.close();
+    }
+  });
+});

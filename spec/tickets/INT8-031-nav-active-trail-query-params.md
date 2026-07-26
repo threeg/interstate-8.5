@@ -1,6 +1,6 @@
 ---
 id: INT8-031
-title: Keep the primary nav's current-section marking when query-string filters are active
+title: Keep the primary nav's current-section marking across the whole Songs section
 type: task
 status: in-review
 milestone: 9
@@ -14,9 +14,15 @@ estimate: 2
 
 ## In plain English
 On the Songs page the word "SONGS" in the top menu is underlined so you can see which section of the
-site you are in. The moment you use the filters, that underline vanishes and the menu looks as though
-you are nowhere — even though you are still on the Songs page. This makes the "you are here" marker
-stay put whatever filters are applied.
+site you are in. That underline vanishes the moment you use the filters — and again as soon as you
+click through to an individual song — so the menu looks as though you are nowhere, even though you are
+still in the Songs section. This makes the "you are here" marker stay put anywhere in Songs.
+
+> **Scope widened 2026-07-26 (review round 2).** As filed, this ticket covered only the query-string
+> case. The site owner reviewing the fix found the same symptom on song pages (`/songs/<song>`) and
+> asked whether Drupal ought to handle that already. It doesn't — see the round-2 note — and since it
+> is one behaviour to a visitor ("the nav says which section I'm in"), it is fixed here rather than
+> split off. The title was broadened to match.
 
 ## Background
 Reported by the site owner during manual QA of INT8-028: *"When the filters are being used on the
@@ -156,6 +162,10 @@ its filters, or `views-view--songs.html.twig`.
       preprocess/alter hooks, boundary check 0 violations.
 - [x] `lando playwright` green (same known Firefox `pw`-service gap recorded in INT8-018/027).
 - [x] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] **(round 2)** A song page (`/songs/<song>`) marks SONGS and only SONGS, with the same underline
+      as the landing page, and with JavaScript disabled.
+- [x] **(round 2)** `/user/login` and other unrelated routes still mark nothing — the descendant-path
+      trail must not leak beyond the section.
 
 ## Tests / verification
 
@@ -198,6 +208,9 @@ One-line sanity test once implemented:
       left-border accent.
 - [x] The marking is in the page source, so it survives with JavaScript off and does not flicker in
       after load.
+- [x] **Click through from the list into an individual song** → SONGS stays underlined there too, and
+      keeps the underline if you then go back and re-filter. Check a non-Songs page (`/user/login`)
+      still shows nothing marked.
 
 ## Notes
 - 2026-07-26 — created. Raised by the site owner during manual QA of INT8-028. Root cause confirmed by
@@ -272,3 +285,57 @@ One-line sanity test once implemented:
   `curl -s 'http://interstate-8-5.lndo.site/songs?type=All' | grep -c 'aria-current="page"'`. Firefox
   remains unrunnable in the `pw` container (`ENOENT … /ms-playwright/firefox-1532/firefox/lock`) for
   every spec in the repo — a pre-existing environment gap, unchanged by this work.
+
+- 2026-07-26 — **review round 2: song pages, and a fair challenge to the whole approach.** The site
+  owner asked two things after reading the code: why any custom code was needed when "Drupal handles
+  the active trail pretty well by default", and why SONGS goes unmarked on `/songs/<song>` when songs
+  live under `/songs/*`. Both were verified rather than answered from memory.
+
+  **On the amount of custom code — the challenge was justified, and the answer is not flattering.**
+  Core *does* ship this: `starterkit_theme`'s `menu.html.twig` (line 43) adds
+  `item.in_active_trail ? 'menu-item--active-trail'` to the `<li>`, route-based and therefore immune to
+  query strings by construction. This theme was generated from starterkit (INT8-005) but did not keep
+  that template, and `interstate_85.info.yml` declares `base theme: false`, so nothing supplies it — we
+  fall through to core's bare `system/templates/menu.html.twig`, which renders `<li{{ item.attributes }}>`
+  with no classes at all (confirmed in the response: plain `<li>`). So the original defect existed
+  because the theme had *lost* a standard core class, and round 1 re-created its effect in PHP instead
+  of restoring it.
+
+  Kept the preprocess anyway, for one concrete reason: `menu-item--active-trail` is a class only. The
+  `aria-current="page"` NFR-1 wants comes solely from `ActiveLinkResponseFilter`, which is the
+  query-exact mechanism that was broken — so restoring the template would fix the underline and leave
+  the *programmatic* current-ness still missing on filtered URLs, while also needing new CSS selectors
+  in two places. The preprocess sets exactly what core's own marker sets, on the same element, so no
+  CSS moved at all. Decision confirmed with the site owner. The round-1 comment was ~30 lines against
+  ~15 lines of code; trimmed to the essentials, since several of those lines were justifying
+  alternatives that are now recorded here instead.
+
+  **On song pages — real defect, and core genuinely does not handle it.** `/songs/aeiou-and-sometimes-why`
+  had zero `aria-current="page"`. The intuition that `/songs/*` nesting should be enough is reasonable
+  but wrong: core's active trail is **route**-based, not path-based —
+  `MenuActiveTrail::doGetActiveTrailIds()` says *"If a link in the given menu indeed matches the
+  route"*. A song page is `entity.node.canonical`; the Songs menu link is `view.songs.page_1`. The URLs
+  nest, the routes do not, and core has no concept of one URL sitting beneath another. This is a
+  long-standing gap, which is why `drupal/menu_trail_by_path` exists.
+
+  Installed `drupal/menu_trail_by_path` 2.2.0 (D11-ready) at its defaults (`trail_source: path`,
+  `max_path_parts: 0`) and exported its config. Chosen over adding a path-prefix check to the
+  preprocess because it fixes the problem at the **trail** level rather than the marking level: the
+  preprocess needed no change at all, anything else that consumes the trail (breadcrumbs, any future
+  menu block) is correct too, and every future section — discography, tour dates, news — is covered
+  without its own hand-rolled rule. The alternative would have been URL-string matching, which this
+  ticket's own rule 1 deliberately rejected.
+
+  **Tests first, as usual, but self-authored this round** — three new Playwright tests, confirmed red
+  before installing the module. The independent-authorship split was skipped deliberately: the
+  implementation here is "install a contrib module", so there is no logic of mine for a self-written
+  test to be shaped around, and the assertions are purely behavioural. They reuse the existing
+  `expectOnlySongsMarked()` helper, so the song page is held to the same standard as the filtered
+  URLs including "Home is not marked instead"; the song URL is read out of the ledger rather than
+  hardcoded, since no individual slug is a contract. The third asserts the marking survives with
+  JavaScript disabled, and a fourth angle — that `/user/login` still marks nothing — guards against the
+  descendant-path trail leaking beyond the section.
+
+  **Verification.** Default gate green. Full Playwright suite **72/72 on chromium** (up 3). Verified
+  live across all four cases: song page marked, `?type=All` marked, `/` marks Home, `/user/login` marks
+  nothing. `composer.json`/`composer.lock` now carry `drupal/menu_trail_by_path`; config exported.

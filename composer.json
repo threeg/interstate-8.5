@@ -18,6 +18,7 @@
         "drupal/core-recommended": "^11",
         "drupal/focal_point": "^2.1",
         "drupal/gin": "^5.0",
+        "drupal/menu_trail_by_path": "^2.2",
         "drupal/migrate_plus": "^6.0",
         "drupal/migrate_tools": "^6.1",
         "drupal/pathauto": "^1.15",
