@@ -144,6 +144,16 @@ mobile-safari (Firefox fails across every spec file in the suite, not just this 
 `pw`-service binary gap noted in INT8-018, unrelated to this ticket). Config exported
 (`system.site.yml`); `lando drush cim -y` no-op.
 
+2026-07-25 (revision, user feedback) — The slogan rendered in its natural case
+("A Modest Mouse Fan Collaborative") rather than the all-caps treatment the hi-fi actually uses (its
+markup types the string in caps directly, e.g. `A MODEST MOUSE FAN COLLABORATIVE`). Added
+`text-transform: uppercase` to `.site-branding__slogan` — the underlying `system.site.slogan` config
+value stays natural-case; this is a display transform only, the same split `.site-branding__name`/
+`.site-header__nav` already use one rule above it. Extended the existing "wordmark and nav render
+uppercase" Playwright test (now also asserting the slogan) rather than adding a parallel test, and
+pinned it to a desktop viewport since the slogan is hidden below 760px. Default gate and
+`lando playwright` re-run clean (128/128, same Firefox gap as before, unaffected).
+
 **Summary:** the header now matches the refreshed hi-fi on all four points — the slogan shows
 everywhere it should (and now has real text to show), hovering a nav item no longer looks identical to
 being on that page, every keyboard-focusable header control shows a real focus ring, and the mobile

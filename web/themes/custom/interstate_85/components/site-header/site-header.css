@@ -51,6 +51,13 @@
   font-family: var(--font-meta);
   font-size: var(--fs-meta);
   letter-spacing: var(--ls-nav);
+  /* The hi-fi types this string in caps directly in its markup (no
+     text-transform is visible there) — the config value itself stays
+     natural-case ("A Modest Mouse Fan Collaborative", set via
+     system.site.slogan) and this transforms it for display, the same
+     underlying-data-vs-display split .site-branding__name/.site-header__nav
+     already use one rule above. */
+  text-transform: uppercase;
   /* Corrected 2026-07-21 (INT8-027): this was white unconditionally, correct
      only for the transparent variant it was originally scoped to (a dark
      photo behind it). Now that the slogan also shows on the solid (white)

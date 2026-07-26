@@ -184,11 +184,16 @@ test.describe('page shell — header + footer', () => {
     await expect(header.locator('nav.site-header__nav[aria-label="Primary"]')).toBeAttached();
   });
 
-  test('wordmark and nav render uppercase', async ({ page }) => {
+  test('wordmark, nav and slogan render uppercase', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto('/user/login');
     const header = page.locator('header.site-header');
     await expect(header.locator('.site-branding__name')).toHaveCSS('text-transform', 'uppercase');
     await expect(header.locator('nav.site-header__nav')).toHaveCSS('text-transform', 'uppercase');
+    // The hi-fi types the slogan in caps directly in its markup; the config
+    // value itself stays natural-case, so this is a display transform, not
+    // stored data (INT8-027 revision, user feedback).
+    await expect(header.locator('.site-branding__slogan')).toHaveCSS('text-transform', 'uppercase');
   });
 
   test('the slogan shows on the solid header at desktop width', async ({ page }) => {
