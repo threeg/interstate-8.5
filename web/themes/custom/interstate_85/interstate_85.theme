@@ -7,8 +7,46 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\i8_services\Plugin\views\sort\ArticleInsensitiveTitle;
+
+/**
+ * Implements hook_preprocess_HOOK() for page.html.twig.
+ *
+ * Composes the page-header region's blocks into the hero SDC's two slots
+ * (INT8-028): core's own page-title block supplies the `<h1>`, and the
+ * `page_hero` content block supplies the background photo. Neither block
+ * knows about the other — the hero is assembled here, in the theme, which is
+ * where composition belongs.
+ *
+ * Why here and not in a `region--page-header.html.twig`: a region is rendered
+ * through `#theme_wrappers`, so by the time its template runs its blocks have
+ * already been flattened into one `#children` string and can no longer be
+ * addressed individually. `page` is rendered through `#theme`, which hands the
+ * template its regions *unrendered* — so the individual blocks are still there
+ * to pick apart. (See Renderer::doRender(): the `#theme` branch is called
+ * before children are rendered, the `#theme_wrappers` branch after.)
+ *
+ * Blocks are routed by plugin, not by placement ID, so re-placing or renaming
+ * either block cannot silently empty a slot.
+ */
+function interstate_85_preprocess_page(array &$variables): void {
+  $region = $variables['page']['page_header'] ?? [];
+  $hero = ['image' => [], 'title' => []];
+
+  foreach (Element::children($region) as $key) {
+    $slot = ($region[$key]['#base_plugin_id'] ?? '') === 'page_title_block' ? 'title' : 'image';
+    $hero[$slot][] = $region[$key];
+  }
+
+  $variables['page_hero'] = ($hero['image'] || $hero['title']) ? $hero : [];
+
+  // The region's blocks are rendered through the hero above, so the region
+  // must not render itself as well — that would output every one of them
+  // twice. Dropping it also removes the redundant region wrapper div.
+  unset($variables['page']['page_header']);
+}
 
 /**
  * Implements hook_preprocess_HOOK() for views-view--songs.html.twig.

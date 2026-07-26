@@ -1,0 +1,8 @@
+uuid: 443b9ec3-9937-4d95-b42c-3293ccf99375
+langcode: en
+status: true
+dependencies: {  }
+id: page_hero
+label: 'Page hero'
+revision: false
+description: 'The site-wide page-header banner: the page title over a background photo, chosen at random from the images selected here.'

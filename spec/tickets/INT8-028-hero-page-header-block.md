@@ -134,7 +134,10 @@ hero mechanism at all — the block already covers `/songs/<slug>`. Pointer reco
   assertions first.
 
 ## QA steps
-- [x] Configure the block with **3+ media images** → refresh `/songs` several times: background changes,
+- [x] Edit the **Page hero background** block at `/admin/content/block` → its *Background images* field
+      is core's stock media-library widget (thumbnail grid, **Add media** button opening the library
+      modal, **Remove** per item), identical to any other media field on the site.
+- [x] Configure it with **3+ media images** → refresh `/songs` several times: background changes,
       title stays "Songs". (Seeded with 2 real images; rotation confirmed via cache-busted requests —
       see Notes.)
 - [x] Visit `/user/login` → the hero shows "Log in" (proves it's the page title, not a Songs hero).
@@ -147,10 +150,16 @@ hero mechanism at all — the block already covers `/songs/<slug>`. Pointer reco
 ## Definition of done
 - [x] Acceptance criteria met (page-title-from-route site-wide-except-homepage; random media background;
       graceful empty; page cache preserved)
-- [x] Core `page_title_block` placement removed; the hero block is the single page-title source
+- [x] Exactly one page-title source, and it is core's own `page_title_block` — placed in `page_header`
+      and composed into the hero by the theme (no duplicate `<h1>`, no custom title resolution).
+      *Amended 2026-07-26: the original wording ("placement removed") described the first design, in
+      which a custom block plugin took the title over via `TitleBlockPluginInterface`. That plugin is
+      gone — see the round-4 note.*
 - [x] Playwright + kernel + Axe tests added/updated and passing; `lando playwright` green
 - [x] Tokens-only styling; no hardcoded hex/px; the `hero` SDC's own CSS unchanged
-- [x] Block placement + image selection generated via UI/API and exported (NFR-6)
+- [x] Block type, field, displays and both placements generated via the entity API and exported (NFR-6).
+      The image **selection** is deliberately no longer config — it lives on a `block_content` entity,
+      i.e. content. See the round-4 note for what that means for a fresh environment.
 - [x] The boundary check passes; no custom module imports `Drupal\interstate_85\*`
 - [x] QA steps recorded and repeated in the chat completion report
 - [x] Ticket status + notes and BOARD.md row updated in the same commit
@@ -336,3 +345,89 @@ carrying both candidates' styled URLs). Re-exported config (`focal_point`/`crop`
 `media_library` view display, the new responsive image style, the updated image styles and form
 display); `drush cim -y` is a no-op. `composer.json`/`composer.lock` now carry `drupal/focal_point`
 (and its `drupal/crop` dependency).
+
+**2026-07-26 — review round 4: the picker is now a stock core media field, and the images are content.**
+
+Two pieces of feedback, one of which invalidated round 3 entirely.
+
+1. **Round 3's 220×220 crop was the wrong fix, and has been reverted** (`git revert`, then `drush cim`
+   to drop `image.style.hero_picker_thumbnail` from the site). Core's own bundled style is *labelled*
+   "Media Library thumbnail (220×220)" but its only effect is `image_scale` — it fits a photo *within*
+   220×220 and deliberately does **not** crop. The square tiles you see on a real media field come from
+   CSS, not from the image style: Gin sets `.media-library-item__preview { padding-block-end: 100% }`
+   with the image absolutely positioned at `object-fit: cover`, and Claro's grid gives each item
+   `width: 25%`. So a bespoke cropping style was never the answer — matching core's *markup* was, which
+   is what item 2 delivers. Lesson worth keeping: when something "doesn't look like core", check
+   whether core achieves the look in CSS before inventing config to force it.
+
+2. **The hand-rolled media widget is gone. The hero is now a `block_content` type with a plain media
+   reference field, edited with core's own `media_library_widget`.**
+
+   First, the finding that forced the choice: **core ships no field-free media form element.**
+   `media_library/src/` has no `Element/` directory at all; the only implementation is the
+   `media_library_widget` *field widget*, which is marked `@internal`, and its opener
+   (`MediaLibraryFieldWidgetOpener::checkAccess()`) hard-requires a real `entity_type_id` + `bundle` +
+   `field_name` on a fieldable entity before it will even open the modal. A block *plugin's*
+   configuration form has none of those, which is exactly why core exposes `MediaLibraryOpenerInterface`
+   as a tagged extension point — the custom opener was the right hook, but everything built around it
+   was a re-typing of core's widget, and that is what had to go.
+
+   So the block plugin was replaced wholesale:
+
+   - **Deleted:** `PageHeroBlock` (the custom block plugin), `PageHeroMediaLibraryOpener` (the custom
+     opener), `i8_services.services.yml` (it existed only to register that opener), and
+     `templates/block--i8-page-hero.html.twig`. Roughly 150 lines mirroring core's widget — the open /
+     remove / update / addItems AJAX callbacks, the form-state working set, the hand-built selection
+     list — are simply gone, replaced by core's widget doing its own job.
+   - **Added:** a `page_hero` **block content type** with `field_background_images` (entity reference →
+     media, `image` bundle, unlimited), its form display using core's stock `media_library_widget` and
+     its view display using one small new formatter, `i8_hero_background`. Generated via the entity API
+     and exported, per the never-hand-author rule.
+   - **`HeroBackgroundFormatter`** is now the only custom code in the path, and it owns exactly one
+     thing: turning the selected media into *one* responsive-image render plus the client-side reroll
+     payload. Test-first (`HeroBackgroundFormatterTest`, 6 tests — confirmed red with "class not found"
+     before implementing): empty/unusable selections render nothing rather than an `<img>` with no src,
+     the output is `#type => responsive_image` at `i8_hero` with `alt=""`, every candidate (not just the
+     rendered one) appears in the reroll payload and in the cache tags, and missing image styles degrade
+     to a non-rotating hero instead of a fatal.
+
+   **The title.** With the custom plugin gone, `TitleBlockPluginInterface` is no longer available — a
+   `block_content` block cannot implement it. Rather than reinvent title resolution, **core's own
+   `page_title_block` is now placed** in `page_header` alongside the hero background block, and the
+   *theme* composes the two into the existing hero SDC's two slots. This is strictly better than what it
+   replaces: core keeps doing the title (including the subtle part — `BlockPageVariant::build()` unsets
+   `#cache['keys']` on title blocks so they are never render-cached and therefore never freeze across
+   routes), and no custom title code exists at all.
+
+   **Why the composition lives in `interstate_85_preprocess_page()` and not a
+   `region--page-header.html.twig`** — this cost some digging and is worth recording. A region is
+   rendered through `#theme_wrappers`, and `Renderer::doRender()` runs the `#theme_wrappers` branch
+   *after* children have been flattened into a single `#children` string; by the time a region template
+   executes, its individual blocks are unaddressable, and re-rendering them is impossible anyway because
+   `doRender()` returns `''` for anything already marked `#printed`. `page`, by contrast, is rendered
+   through `#theme`, whose branch runs *before* children are rendered — so `page.html.twig` and its
+   preprocess receive their regions still intact. Blocks are routed to slots by `#base_plugin_id`, not
+   by placement ID, so re-placing or renaming either block cannot silently empty a slot.
+
+   **The trade-off you accepted, restated for the record:** the image selection is now **content**, not
+   configuration. It no longer travels in `config/sync`, so a fresh environment gets the block type, the
+   field, the displays and both placements from config but **not** the two seeded images — the
+   `block_content` entity has to be created there (or shipped later via `default_content`, if that ever
+   earns a concrete trigger). `drush cim` does not fail without it; the hero simply renders its title
+   over a plain background, which is the ticket's own valid Scenario 3 state.
+
+**Verification.** Default gate green (58 PHPUnit tests — up 6 — PHPCS clean, PHPStan clean, boundary
+check 0 violations). Full Playwright suite green: **50/50 on chromium**, including all 13 page-hero
+specs, which are behaviour-based and were never told how the block is implemented — they passed
+unchanged across a complete rewrite of the mechanism, which is the strongest evidence available that
+behaviour is preserved. Verified live: `/songs` shows "Songs", `/user/login` shows "Log in", `/` shows
+no hero, exactly one `<h1>` on each, `X-Drupal-Cache` MISS→HIT→HIT on repeats, and both candidates
+present in `drupalSettings.i8PageHero`. The admin form was fetched over a real authenticated request and
+confirmed to render core's genuine widget markup — `media-library-item--grid`, `media-library-selection`,
+`js-media-library-open-button`, `data-media-library-widget-value`, the **Add media** button — with core's
+own `styles/media_library/` thumbnails (220×147 landscape, 176×220 portrait, i.e. core's real
+uncropped behaviour). Config exported; `drush cim -y` is a no-op. The one-shot build script was deleted
+after running, per convention.
+
+Firefox remains unrunnable in the `pw` container (`ENOENT … /ms-playwright/firefox-1532/firefox/lock`)
+for every spec in the repo — a pre-existing environment gap, unchanged by this work.

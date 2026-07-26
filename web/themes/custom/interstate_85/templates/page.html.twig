@@ -14,11 +14,22 @@
     {% block nav %}{{ page.primary_menu }}{% endblock %}
   {% endembed %}
 
-  {# INT8-028: the page-header hero region — a sibling of header/footer, so
-     it spans the full --sheet-max width like they do, rather than the
-     --content-max cap inside .layout-content below. Empty on any route the
-     i8_page_hero block isn't placed/visible on (the homepage). #}
-  {{ page.page_header }}
+  {# INT8-028: the page-header hero — a sibling of header/footer, so it spans
+     the full --sheet-max width like they do, rather than the --content-max cap
+     inside .layout-content below. Its two halves are two ordinary blocks
+     placed in the page_header region (core's page-title block, and the
+     `page_hero` content block holding the background images); the theme just
+     drops each into the matching hero slot. `page_hero` is empty on any route
+     neither block is visible on — the homepage — so no hero renders there.
+     @see interstate_85_preprocess_page() #}
+  {% if page_hero %}
+    {# No `only`: it would also cut the blocks below off from the outer scope,
+       not just the component's own render (the INT8-018 quirk). #}
+    {% embed 'interstate_85:hero' with { variant: 'page-title' } %}
+      {% block image %}{{ page_hero.image }}{% endblock %}
+      {% block title %}{{ page_hero.title }}{% endblock %}
+    {% endembed %}
+  {% endif %}
 
   <main class="site-main">
     <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}

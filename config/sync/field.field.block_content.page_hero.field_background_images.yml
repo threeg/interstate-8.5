@@ -1,0 +1,27 @@
+uuid: 612016a3-5102-44ef-a822-11855deea3ee
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.page_hero
+    - field.storage.block_content.field_background_images
+    - media.type.image
+id: block_content.page_hero.field_background_images
+field_name: field_background_images
+entity_type: block_content
+bundle: page_hero
+label: 'Background images'
+description: 'One is shown at random on each page load. Leave empty for a plain background with no photo.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+    auto_create: false
+field_type: entity_reference

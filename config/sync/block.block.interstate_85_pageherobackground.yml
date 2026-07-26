@@ -1,0 +1,29 @@
+uuid: bd424c46-4ddd-4a76-84c4-8287a4eef77f
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:page_hero:16d241ee-b7df-4e54-bb54-19e5608c201c'
+  module:
+    - block_content
+    - system
+  theme:
+    - interstate_85
+id: interstate_85_pageherobackground
+theme: interstate_85
+region: page_header
+weight: 0
+provider: null
+plugin: 'block_content:16d241ee-b7df-4e54-bb54-19e5608c201c'
+settings:
+  id: 'block_content:16d241ee-b7df-4e54-bb54-19e5608c201c'
+  label: 'Page hero background'
+  label_display: '0'
+  provider: block_content
+  view_mode: default
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    context_mapping: {  }
+    pages: '<front>'

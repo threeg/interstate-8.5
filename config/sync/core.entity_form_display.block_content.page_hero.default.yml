@@ -1,0 +1,30 @@
+uuid: e91f6ac2-b8a8-42c9-bbf2-d502b9e25348
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.page_hero
+    - field.field.block_content.page_hero.field_background_images
+  module:
+    - media_library
+id: block_content.page_hero.default
+targetEntityType: block_content
+bundle: page_hero
+mode: default
+content:
+  field_background_images:
+    type: media_library_widget
+    weight: 1
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }

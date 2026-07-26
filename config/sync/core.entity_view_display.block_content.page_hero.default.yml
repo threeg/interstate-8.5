@@ -1,0 +1,23 @@
+uuid: 826c05fe-5c8e-4923-b0ab-7ef84484f3b6
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.page_hero
+    - field.field.block_content.page_hero.field_background_images
+  module:
+    - i8_services
+id: block_content.page_hero.default
+targetEntityType: block_content
+bundle: page_hero
+mode: default
+content:
+  field_background_images:
+    type: i8_hero_background
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  info: true
