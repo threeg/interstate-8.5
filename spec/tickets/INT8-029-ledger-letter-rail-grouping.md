@@ -2,7 +2,7 @@
 id: INT8-029
 title: Bucket the song ledger's letter rail and groups, with a `#` catch-all for numbers and symbols
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: theme
 layer: theme
