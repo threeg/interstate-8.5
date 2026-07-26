@@ -22,14 +22,29 @@
   color: var(--color-line);
   position: sticky;
   /* Docks below the real (site-header.js-measured) header height, plus the
-     admin-toolbar displace offset the header itself docks below — a bare
-     `top: 0` put the rail underneath the sticky header entirely. */
-  top: calc(var(--i8-header-height, 89px) + var(--drupal-displace-offset-top, 0px));
+     admin-toolbar displace offset the header itself docks below, plus a
+     little breathing room (--space-2) so the rail doesn't sit flush against
+     the header edge while scrolled — a bare `top: 0` originally put the
+     rail underneath the sticky header entirely. */
+  top: calc(var(--i8-header-height, 89px) + var(--drupal-displace-offset-top, 0px) + var(--space-2));
   /* INT8-029: `.song-ledger__layout` is a grid, and a grid item defaults to
      `align-self: stretch` — the rail's box was as tall as the ledger beside
      it, leaving sticky positioning no room to travel. `start` makes it
      content-height instead. */
   align-self: start;
+}
+
+/* The hi-fi's SONGS LANDING MOBILE composition has no rail column at all —
+   a plain single-column flex list, group headers and rows edge to edge —
+   not a narrower version of the desktop 2-column layout. */
+@media (max-width: 759px) {
+  .song-ledger__layout {
+    display: block;
+  }
+
+  .song-ledger__rail {
+    display: none;
+  }
 }
 
 .song-ledger__rail-letter {

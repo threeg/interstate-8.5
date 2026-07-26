@@ -300,12 +300,36 @@ scrolls beside it.
 'song-ledger__group-header">[^<]*'` → ends `…Z</div>` then `#</div>`, with no repeated letter and no
 group headed `(` or `.`.
 
+2026-07-26 (revision, user feedback) — Two fixes, both in `song-ledger.css`:
+
+- **The sticky rail sat flush against the header on scroll.** `top` was exactly
+  `--i8-header-height + --drupal-displace-offset-top` with no breathing room. Added `+ var(--space-2)`
+  for a small, tokens-only gap.
+- **The rail is supposed to be absent on mobile, not just present-but-narrow.** The hi-fi's SONGS
+  LANDING MOBILE composition has no rail column at all — a plain single-column flex list, not a
+  narrower version of the desktop 2-column grid. Missed this on first pass (I'd made the rail sticky
+  and reworked its scroll offset without checking the mobile composition at all). Added
+  `@media (max-width: 759px) { .song-ledger__layout { display: block; } .song-ledger__rail { display:
+  none; } }`, matching the `--bp-nav` breakpoint used everywhere else in this theme.
+
+`lando playwright` re-run clean (148/148, same pre-existing Firefox gap). No existing test depended on
+the rail's presence below 760px, so nothing needed updating there — INT8-030 (new, see below) will add
+proper coverage for the rail's interactive behaviour at the widths where it exists.
+
+**A missing ticket, found via the same review:** the user asked "which ticket now is going to make this
+clickable?" — this ticket's own body says the rail-click/anchor feature "gets its own ticket," but no
+such ticket was ever actually created (a real gap, not a deliberate deferral). Created **INT8-030**
+("Make the song ledger's letter rail a real jump-to-letter navigation"), `depends_on: [INT8-029]`, in
+the main sequence (E04) alongside this ticket.
+
 ## QA steps
 - [x] Open `/songs?type=All` — scroll to the end of the list: the last group is headed `#` and contains
       `(8)copy` and similar titles, not scattered one-song groups headed `(` or `.`.
 - [x] Find `(No Song)` — it's inside the `N` group, in alphabetical position among other N-titles (e.g.
       after "Never Ending Math Equation").
 - [x] Scroll down the page at desktop width — the A–Z (`#`) letter rail on the left stays in view,
-      docked just below the site header, instead of scrolling away.
+      docked just below the site header with a small gap, instead of scrolling away or sitting flush
+      against it.
 - [x] The rail shows every letter A–Z plus a trailing `#`; letters/`#` with no songs (e.g. `X`) are
       muted, present ones are teal.
+- [x] At 320px, the letter rail is not present at all — the ledger is a single-column list.
