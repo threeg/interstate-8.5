@@ -1,0 +1,23 @@
+uuid: f629ddfd-6d31-4899-a8df-015080dd0218
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: hero_picker_thumbnail
+label: 'Hero picker thumbnail (220×220)'
+effects:
+  3467b105-0ba6-4863-b64f-ba43873780b8:
+    uuid: 3467b105-0ba6-4863-b64f-ba43873780b8
+    id: focal_point_scale_and_crop
+    weight: null
+    data:
+      width: 220
+      height: 220
+      crop_type: focal_point
+  919d753b-9066-4acf-ac75-47228c42cf57:
+    uuid: 919d753b-9066-4acf-ac75-47228c42cf57
+    id: image_convert_avif
+    weight: null
+    data:
+      extension: webp

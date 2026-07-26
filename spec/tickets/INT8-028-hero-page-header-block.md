@@ -336,3 +336,24 @@ carrying both candidates' styled URLs). Re-exported config (`focal_point`/`crop`
 `media_library` view display, the new responsive image style, the updated image styles and form
 display); `drush cim -y` is a no-op. `composer.json`/`composer.lock` now carry `drupal/focal_point`
 (and its `drupal/crop` dependency).
+
+**2026-07-26 — third round: the picker thumbnail itself.** The `media_library`-view-mode fix above
+(round 2) pointed the block form's preview at core's own *shared* `image.style.media_library`
+(220×220) — but that style's only effect is `image_scale`, which **fits the photo within** 220×220
+preserving aspect ratio (e.g. a landscape photo becomes ~220×139), not a true square crop. Nothing then
+constrained the resulting non-square derivative to a fixed box, so it rendered larger than intended and,
+once any surrounding layout stretched it, visibly soft. Root cause confirmed by inspecting the generated
+file directly (`identify` in the appserver container) — genuinely 220×139-ish, not 220×220.
+
+Fixed with a dedicated `hero_picker_thumbnail` image style (220×220, `focal_point_scale_and_crop`,
+reusing the *same* focal point already set for the hero itself — the admin thumbnail preview now shows
+the same framing the actual hero uses), and pointed `media.image.media_library`'s `field_media_image`
+component at it instead of the shared core style. Verified the generated derivative is a genuine
+220×220 file (`identify`: `AVIF 220x220`), not merely a `width`/`height` attribute claim. Left the
+shared `image.style.media_library` untouched — it's an enforced module dependency other things may rely
+on being "fit within," so a dedicated style for this one use is the correct scope, not a shared-style
+edit.
+
+Default gate re-run (green); front-end hero rendering is untouched by this round (only the admin
+picker's own style changed), so the Playwright suite wasn't re-run. Config re-exported
+(`image.style.hero_picker_thumbnail`, the updated view display); `drush cim -y` is a no-op.
