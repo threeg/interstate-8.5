@@ -2,7 +2,7 @@
 id: INT8-031
 title: Keep the primary nav's current-section marking across the whole Songs section
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: theme
 layer: theme

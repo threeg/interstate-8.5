@@ -25,7 +25,7 @@ spec (no hand-authored config YAML); everything else is code.
 |----|-------|-----------|--------|
 | INT8-E01 | Foundation & tooling (scaffolding) | 8 | done |
 | INT8-E02 | Songs content model & migration | 9 | done |
-| INT8-E03 | Theme foundation | 9 | todo |
+| INT8-E03 | Theme foundation | 9 | done |
 | INT8-E04 | Songs section (landing + song page) | 9 | todo |
 
 ---
@@ -63,7 +63,7 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 24 | INT8-028 | Page-title hero block in a full-width page-header region (random media background) | story | theme | 9 / theme | E03 | code + site-building | done | INT8-015, INT8-016, INT8-018 |
 | 25 | INT8-029 | Bucket the song ledger's letter rail and groups, with a `#` catch-all | task | theme | 9 / theme | E04 | code | done | INT8-018 |
 | 26 | INT8-030 | Make the song ledger's letter rail a real jump-to-letter navigation | task | theme | 9 / theme | E04 | code | done | INT8-029 |
-| 27 | INT8-031 | Keep the primary nav's current-section marking across the whole Songs section | task | theme | 9 / theme | E03 | code | in-review | INT8-017, INT8-018 |
+| 27 | INT8-031 | Keep the primary nav's current-section marking across the whole Songs section | task | theme | 9 / theme | E03 | code | done | INT8-017, INT8-018 |
 
 > **Frontend independence (CONVENTIONS §4.5):** the theme foundation (E03, 015–017) builds against the
 > design/contract in parallel with the content model + migration (E02, 008–014); the Songs-section

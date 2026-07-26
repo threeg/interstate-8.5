@@ -2,7 +2,7 @@
 id: INT8-E03
 title: Theme foundation
 type: epic
-status: todo
+status: done
 milestone: 9
 batch: theme
 layer: theme
@@ -35,7 +35,13 @@ clean); components consume `tokens.css` (no hardcoded values).
 - INT8-015 — Base layout + header + footer (SDC)
 - INT8-016 — Shared atoms / molecules
 - INT8-017 — Primary nav + front-page/route wiring
+- INT8-027 — Header nav hover/focus states, slogan visibility, mobile-menu styling (design-sync corrections)
 - INT8-028 — Page-title hero block in a full-width page-header region (random media background) (re-homed from E04; replaces the core page-title block site-wide except the homepage)
+- INT8-031 — Keep the primary nav's current-section marking across the whole Songs section
+
+> **2026-07-26 — closed.** INT8-027 and INT8-031 were both added to this epic after it was written
+> (each raised during review of an earlier ticket) and are recorded here now so the child list is a
+> complete record rather than the original plan. All six children are `done`.
 
 ## References
 - spec/design/design-system.md §1 (build-from), §3 (components)
