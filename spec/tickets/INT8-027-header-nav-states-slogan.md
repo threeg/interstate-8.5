@@ -2,7 +2,7 @@
 id: INT8-027
 title: Header nav hover/focus states, slogan visibility, and mobile-menu styling (design-sync corrections)
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: theme
 layer: theme
