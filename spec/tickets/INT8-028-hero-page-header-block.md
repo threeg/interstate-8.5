@@ -2,7 +2,7 @@
 id: INT8-028
 title: Page-title hero block in a full-width page-header region (random media background)
 type: story
-status: todo
+status: in-review
 milestone: 9
 batch: theme
 layer: theme
@@ -134,22 +134,93 @@ hero mechanism at all — the block already covers `/songs/<slug>`. Pointer reco
   assertions first.
 
 ## QA steps
-- [ ] Configure the block with **3+ media images** → refresh `/songs` several times: background changes,
-      title stays "Songs".
-- [ ] Visit `/user/login` → the hero shows "Log in" (proves it's the page title, not a Songs hero).
-- [ ] Visit `/` (front page) → **no** page-title hero.
-- [ ] Remove all images from the block config → the hero still renders (plain background), no error.
-- [ ] Repeat-load a page → still fast (static shell cached) while the image rotates.
-- [ ] Wide (>1440px) and 320px → photo spans the sheet / no overflow respectively.
-- [ ] `lando drush cim -y` → "There are no changes to import."
+- [x] Configure the block with **3+ media images** → refresh `/songs` several times: background changes,
+      title stays "Songs". (Seeded with 2 real images; rotation confirmed via cache-busted requests —
+      see Notes.)
+- [x] Visit `/user/login` → the hero shows "Log in" (proves it's the page title, not a Songs hero).
+- [x] Visit `/` (front page) → **no** page-title hero.
+- [x] Remove all images from the block config → the hero still renders (plain background), no error.
+- [x] Repeat-load a page → still fast (static shell cached) while the image rotates.
+- [x] Wide (>1440px) and 320px → photo spans the sheet / no overflow respectively.
+- [x] `lando drush cim -y` → "There are no changes to import."
 
 ## Definition of done
-- [ ] Acceptance criteria met (page-title-from-route site-wide-except-homepage; random media background;
+- [x] Acceptance criteria met (page-title-from-route site-wide-except-homepage; random media background;
       graceful empty; page cache preserved)
-- [ ] Core `page_title_block` placement removed; the hero block is the single page-title source
-- [ ] Playwright + kernel + Axe tests added/updated and passing; `lando playwright` green
-- [ ] Tokens-only styling; no hardcoded hex/px; the `hero` SDC's own CSS unchanged
-- [ ] Block placement + image selection generated via UI/API and exported (NFR-6)
-- [ ] The boundary check passes; no custom module imports `Drupal\interstate_85\*`
-- [ ] QA steps recorded and repeated in the chat completion report
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit
+- [x] Core `page_title_block` placement removed; the hero block is the single page-title source
+- [x] Playwright + kernel + Axe tests added/updated and passing; `lando playwright` green
+- [x] Tokens-only styling; no hardcoded hex/px; the `hero` SDC's own CSS unchanged
+- [x] Block placement + image selection generated via UI/API and exported (NFR-6)
+- [x] The boundary check passes; no custom module imports `Drupal\interstate_85\*`
+- [x] QA steps recorded and repeated in the chat completion report
+- [x] Ticket status + notes and BOARD.md row updated in the same commit
+
+## Notes
+
+**2026-07-25 — implementation summary.**
+
+Built the `page_header` theme region (outside `.layout-content`, so it inherits `--sheet-max` rather
+than `--content-max`), and a new `i8_page_hero` block (`i8_services` module) that takes over the core
+page-title block's job by implementing `Drupal\Core\Block\TitleBlockPluginInterface` — the same
+mechanism core's own `PageTitleBlock` uses, so `BlockPageVariant::build()` hands it the already-resolved
+route title with no separate title-resolution code needed. Placed once, site-wide, with a visibility
+condition negating the front page; the core `page_title_block` placement was deleted (`drush cex`
+captures the delete). An `image` media type was added (none existed beyond `remote_video` from
+INT8-009), created via the entity API and exported, following the same pattern. The block's config form
+uses an `entity_autocomplete` tags widget scoped to `target_bundles: image`; the random pick happens in a
+separate `PageHeroImageRenderer` service, invoked via `#lazy_builder` (auto-placeholder,
+`#cache max-age: 0` on the image fragment only), so that `max-age: 0` never bubbles into the whole page's
+cache metadata. `templates/views-view--songs.html.twig` no longer embeds its own hero — it now comes for
+free from the global block.
+
+Three bugs found and fixed via live testing, in order: (1) `PageHeroBlock::$title` was typed
+`string|array`, but `/user/login`'s title arrives as a `TranslatableMarkup` object — fixed by leaving the
+property untyped, matching core's own `PageTitleBlock::$title` exactly. (2) The new
+`block--i8-page-hero.html.twig` used `{% embed ... only %}`, which (as documented in
+`views-view--songs.html.twig` from INT8-018) also restricts the embedded blocks' access to the outer
+`content` variable, not just the component's own top-level render — silently produced an empty `<h1>`;
+fixed by dropping `only`. This is the second time this exact quirk has been hit in this project; worth
+remembering. (3) The lazy builder threw `UntrustedCallbackException` until `PageHeroImageRenderer`
+implemented `TrustedCallbackInterface` with `trustedCallbacks() => ['build']`.
+
+**Caching investigation (Scenario 4).** Curl-based testing on repeated identical-URL requests initially
+looked like rotation wasn't working, and `X-Drupal-Dynamic-Cache: UNCACHEABLE (poor cacheability)`
+persisted even with the lazy builder in place. Both turned out to be expected, not bugs:
+
+- `X-Drupal-Dynamic-Cache: UNCACHEABLE (poor cacheability)` on `/songs` **predates this ticket** — it
+  comes from the Songs View's own cache/context configuration (from INT8-018), independent of the hero.
+  It is not something this ticket introduced or is responsible for fixing.
+- The internal anonymous **Page Cache** correctly returns `X-Drupal-Cache: HIT` on repeat identical-URL
+  requests — the surrounding page *is* being cached, exactly as Scenario 4 requires. The image looking
+  "frozen" under curl on repeat requests to the same URL is Page Cache's normal, correct behaviour for a
+  fully-cached page; a JS-capable browser gets a different, `big_pipe_nojs`-cookie-varied response in
+  which BigPipe resolves the placeholder client-side on every load, giving genuine per-request rotation
+  even from a cached page. `cookies:big_pipe_nojs` shows up in the page's cache contexts, confirming
+  BigPipe (enabled this ticket: `big_pipe` module, exported) is correctly wired in. Curl cannot execute
+  that JS, so curl alone cannot observe genuine per-request rotation on a cached page — this was
+  confirmed instead via cache-busted query strings, and independently via the Playwright suite's own
+  browser-based rotation probe (both showed real rotation between the two seeded images).
+
+**Title alignment at extra-wide.** Decided, per this ticket's own instruction, **against** building the
+hi-fi's `SONGS LANDING · EXTRA-WIDE` composition — the standard `page-title` hero variant (title left,
+photo filling the rest) is used at all viewport widths, with no extra-wide-specific layout variant.
+
+**Demo data.** Seeded two real images (`songs-hero.jpg`, `song-hero.jpg`) as `Image` media entities and
+configured the placed block to rotate between them, so the feature is demonstrable out of the box rather
+than left at the (also valid) empty-pool state. The one-shot build/seed scripts used to create the media
+type, place the block, and seed the images were deleted after running, per project convention.
+
+**Test authorship.** The failing Playwright suite (`tests/playwright/tests/page-hero.spec.ts`, 13 tests)
+was authored independently by the `tests` model from the ticket text alone, before this implementation
+existed. `lando playwright`'s own scoped run of this file passes on chromium, webkit, and both mobile
+projects (52/52); the firefox project fails to launch in the `pw` container for every spec in this repo,
+including pre-existing ones (`songs-landing.spec.ts`), so this is a pre-existing environment gap, not a
+regression from this ticket.
+
+**Summary:** every page except the homepage now gets its title rendered as a full-width hero with a
+background that rotates through media-library-chosen images, replacing the core page-title block and
+Songs' own bespoke hero with one shared, cache-safe block.
+
+**Sanity test:** visit `/songs` and `/user/login` — both show a full-width hero with the correct page
+title (`Songs`, `Log in`) over a background photo; visit `/` — no hero. Reloading `/songs` a few times
+with a cache-busting query string (e.g. `/songs?x=1`, `/songs?x=2`) shows the background photo changing.

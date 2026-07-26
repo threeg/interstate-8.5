@@ -14,6 +14,12 @@
     {% block nav %}{{ page.primary_menu }}{% endblock %}
   {% endembed %}
 
+  {# INT8-028: the page-header hero region — a sibling of header/footer, so
+     it spans the full --sheet-max width like they do, rather than the
+     --content-max cap inside .layout-content below. Empty on any route the
+     i8_page_hero block isn't placed/visible on (the homepage). #}
+  {{ page.page_header }}
+
   <main class="site-main">
     <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
 

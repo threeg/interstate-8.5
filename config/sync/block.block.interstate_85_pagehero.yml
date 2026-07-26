@@ -1,0 +1,29 @@
+uuid: c6fe1f45-d199-4982-9291-734e02a7f6d1
+langcode: en
+status: true
+dependencies:
+  module:
+    - i8_services
+    - system
+  theme:
+    - interstate_85
+id: interstate_85_pagehero
+theme: interstate_85
+region: page_header
+weight: 0
+provider: null
+plugin: i8_page_hero
+settings:
+  id: i8_page_hero
+  label: 'Page hero'
+  label_display: '0'
+  provider: i8_services
+  media_ids:
+    - 1
+    - 2
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    context_mapping: {  }
+    pages: '<front>'

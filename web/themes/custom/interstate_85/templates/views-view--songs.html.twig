@@ -3,9 +3,10 @@
  * @file
  * The Songs landing (INT8-018) — fully custom output; see
  * interstate_85_preprocess_views_view__songs() for song_groups/rail_letters/
- * filter_bar/results_count/is_empty. The page-title block is excluded from
- * this route (block.block.interstate_85_page_title visibility) so the hero
- * below supplies the page's one <h1>.
+ * filter_bar/results_count/is_empty. The page's hero (its one <h1>) is
+ * supplied by the global i8_page_hero block (INT8-028), placed once in the
+ * page_header region — this template no longer embeds its own copy of
+ * interstate_85:hero the way it did when this ticket was built.
  *
  * Two Drupal/SDC quirks worth recording, both found building this template:
  *
@@ -26,11 +27,6 @@
  *    references an outer variable from within a block omits `only`.
  */
 #}
-{% embed 'interstate_85:hero' with {variant: 'page-title'} only %}
-  {% block image %}<img src="{{ base_path ~ directory }}/images/songs-hero.jpg" alt="">{% endblock %}
-  {% block title %}<h1>{{ 'Songs'|t }}</h1>{% endblock %}
-{% endembed %}
-
 <div class="layout-content__inner">
   <div class="filter-bar">
     <form method="get" action="{{ filter_bar.action }}" id="songs-filter-form" class="filter-bar__form">

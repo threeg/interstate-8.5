@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * The page-header hero block (INT8-028) — embeds the existing
+ * interstate_85:hero SDC (page-title variant, unchanged by this ticket).
+ * `content.title` is the current route's title (PageHeroBlock implements
+ * TitleBlockPluginInterface, the same mechanism core's page_title_block
+ * uses); `content.image` is the lazy-builder-rendered random background,
+ * which may be an empty render array (no images configured — a valid
+ * state, not an error).
+ */
+#}
+{# No `only` here — the blocks below reference the outer `content` variable,
+   and `only` on this embed restricts block content to the `with` hash too,
+   not just the component's own top-level render (the exact INT8-018 quirk
+   documented in views-view--songs.html.twig; repeated here, now fixed). #}
+{% embed 'interstate_85:hero' with {variant: 'page-title'} %}
+  {% block image %}{{ content.image }}{% endblock %}
+  {% block title %}<h1>{{ content.title }}</h1>{% endblock %}
+{% endembed %}

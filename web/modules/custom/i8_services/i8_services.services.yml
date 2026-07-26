@@ -1,0 +1,4 @@
+services:
+  i8_services.page_hero_image_renderer:
+    class: Drupal\i8_services\PageHeroImageRenderer
+    arguments: ['@entity_type.manager']
