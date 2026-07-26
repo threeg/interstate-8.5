@@ -114,9 +114,18 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 | C3 | INT8-024 | Pin lyrics/notes/quotes fields to the Restricted HTML format | task | content-model | cleanup | todo | INT8-010 |
 | C4 | INT8-025 | Harden the migration count-parity check to verify FR-5 literally (published == active source) | task | migration | cleanup | todo | INT8-014 |
 | C5 | INT8-026 | Hook the footer's secondary label row up to a real Drupal menu | task | theme | cleanup | todo | INT8-015 |
+| C6 | INT8-032 | Reconcile the "Side Projects" song-type name across the spec, and pin the filter's case-sensitivity | task | docs | cleanup | todo | INT8-008, INT8-018 |
+| C7 | INT8-033 | Drop the inert border-style clauses Tailwind's preflight makes vacuous in the Playwright suite | task | tooling | cleanup | todo | INT8-015, INT8-027 |
 
 > **INT8-022** was promoted into the main execution-order table above (row 12, before INT8-012) — its
 > own DoD required it be worked before the first migration module landed.
+
+> **INT8-032 and INT8-033** were both surfaced by the *independent test author* while writing
+> INT8-031's tests — a side-effect of the grader≠graded split worth noting: a model reading the spec
+> without the implementer's assumptions found two drifts nobody had looked for. Both are cleanup
+> backlog rather than main sequence because each improves the internal consistency of behaviour that
+> is already shipped and already correct, changing nothing a user can see (CONVENTIONS §6.6) — the
+> opposite of the reasoning that placed INT8-027/029/031 in the main sequence. Neither blocks anything.
 
 ---
 
