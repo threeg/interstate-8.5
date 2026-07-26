@@ -1,20 +1,22 @@
 uuid: 396fbd52-6759-4ae2-b0f0-ff3f6f7c67f5
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - focal_point
 name: hero_mobile
 label: 'Hero (mobile, 760w)'
 effects:
-  ac2fc2b0-7df7-45fc-9153-fabfbd95097d:
-    uuid: ac2fc2b0-7df7-45fc-9153-fabfbd95097d
-    id: image_scale
+  b3cc490f-ebbd-4eaa-9548-5b185e6bcb01:
+    uuid: b3cc490f-ebbd-4eaa-9548-5b185e6bcb01
+    id: focal_point_scale_and_crop
     weight: null
     data:
       width: 760
-      height: null
-      upscale: false
-  0d21834b-c9c0-48c1-969b-3fdfed8415cc:
-    uuid: 0d21834b-c9c0-48c1-969b-3fdfed8415cc
+      height: 140
+      crop_type: focal_point
+  d9f06d0c-2c0b-4964-94a3-71629f1dcb0f:
+    uuid: d9f06d0c-2c0b-4964-94a3-71629f1dcb0f
     id: image_convert_avif
     weight: null
     data:

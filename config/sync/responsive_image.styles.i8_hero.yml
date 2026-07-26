@@ -1,0 +1,24 @@
+uuid: 3d0cd1e7-3da4-4445-a70b-672e1a348894
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.hero_desktop
+    - image.style.hero_mobile
+  theme:
+    - interstate_85
+id: i8_hero
+label: 'Page hero'
+image_style_mappings:
+  -
+    image_mapping_type: image_style
+    image_mapping: hero_mobile
+    breakpoint_id: interstate_85.mobile
+    multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: hero_desktop
+    breakpoint_id: interstate_85.desktop
+    multiplier: 1x
+breakpoint_group: interstate_85
+fallback_image_style: hero_desktop

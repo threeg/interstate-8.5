@@ -18,8 +18,18 @@
 
       once('i8-page-hero', '.hero__image-picture', context).forEach((img) => {
         const pick = alternates[Math.floor(Math.random() * alternates.length)];
-        img.setAttribute('src', pick.src);
-        img.setAttribute('srcset', pick.srcset);
+        const picture = img.closest('picture');
+
+        (picture ? picture.querySelectorAll('source') : []).forEach((source) => {
+          if (source.media.includes('max-width')) {
+            source.setAttribute('srcset', `${pick.mobile} 1x`);
+          }
+          else if (source.media.includes('min-width')) {
+            source.setAttribute('srcset', `${pick.desktop} 1x`);
+          }
+        });
+
+        img.setAttribute('src', pick.desktop);
       });
     },
   };

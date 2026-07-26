@@ -1,0 +1,12 @@
+interstate_85.mobile:
+  label: Mobile
+  mediaQuery: 'all and (max-width: 759px)'
+  weight: 0
+  multipliers:
+    - 1x
+interstate_85.desktop:
+  label: Desktop
+  mediaQuery: 'all and (min-width: 760px)'
+  weight: 1
+  multipliers:
+    - 1x

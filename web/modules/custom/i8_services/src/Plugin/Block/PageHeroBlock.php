@@ -137,35 +137,44 @@ class PageHeroBlock extends BlockBase implements ContainerFactoryPluginInterface
     $wrapper_id = 'i8-page-hero-media-wrapper';
 
     $form['media_ids'] = [
-      '#type' => 'container',
+      '#type' => 'fieldset',
+      '#title' => $this->t('Background images'),
       '#tree' => TRUE,
-      '#attributes' => ['id' => $wrapper_id],
+      '#attributes' => ['id' => $wrapper_id, 'class' => ['js-media-library-widget']],
+      '#theme_wrappers' => ['fieldset__media_library_widget'],
     ];
 
     $entities = $media_ids ? $this->entityTypeManager->getStorage('media')->loadMultiple($media_ids) : [];
     $view_builder = $this->entityTypeManager->getViewBuilder('media');
 
+    $form['media_ids']['#attached']['library'][] = 'media_library/widget';
     $form['media_ids']['selection'] = [
       '#type' => 'container',
-      '#attributes' => ['class' => ['i8-page-hero-selection']],
+      '#theme_wrappers' => ['container__media_library_widget_selection'],
+      '#attributes' => ['class' => ['js-media-library-selection']],
     ];
     if (!$entities) {
       $form['media_ids']['selection']['empty'] = [
         '#markup' => $this->t('No background images are selected. One is shown at random on each page load; leave empty to show a plain background with no photo (a valid, not-yet-configured state — no error).'),
       ];
     }
+    $delta = 0;
     foreach ($entities as $id => $media) {
       $form['media_ids']['selection'][$id] = [
-        '#type' => 'container',
-        '#attributes' => ['class' => ['i8-page-hero-selection__item']],
-        'preview' => $media->access('view')
-          ? $view_builder->view($media, 'media_library')
-          : ['#markup' => $media->label()],
-        'remove' => [
+        '#theme' => 'media_library_item__widget',
+        '#attributes' => [
+          'class' => ['js-media-library-item'],
+          'tabindex' => '-1',
+          'data-media-library-item-delta' => $delta++,
+        ],
+        'remove_button' => [
           '#type' => 'submit',
           '#name' => 'i8-page-hero-remove-' . $id,
           '#value' => $this->t('Remove'),
           '#media_id' => $id,
+          '#attributes' => [
+            'aria-label' => $media->access('view label') ? $this->t('Remove @label', ['@label' => $media->label()]) : $this->t('Remove media'),
+          ],
           '#submit' => [[static::class, 'removeItem']],
           '#ajax' => [
             'callback' => [static::class, 'updateWidget'],
@@ -173,6 +182,9 @@ class PageHeroBlock extends BlockBase implements ContainerFactoryPluginInterface
           ],
           '#limit_validation_errors' => [],
         ],
+        'rendered_entity' => $media->access('view')
+          ? $view_builder->view($media, 'media_library')
+          : ['#markup' => $media->label()],
       ];
     }
 
@@ -284,11 +296,10 @@ class PageHeroBlock extends BlockBase implements ContainerFactoryPluginInterface
       }
       $uri = $file->getFileUri();
       $image_styles = $this->entityTypeManager->getStorage('image_style');
-      $mobile = $image_styles->load('hero_mobile')->buildUrl($uri);
-      $desktop = $image_styles->load('hero_desktop')->buildUrl($uri);
       $candidates[] = [
-        'src' => $desktop,
-        'srcset' => "$mobile 760w, $desktop 1440w",
+        'uri' => $uri,
+        'mobile' => $image_styles->load('hero_mobile')->buildUrl($uri),
+        'desktop' => $image_styles->load('hero_desktop')->buildUrl($uri),
       ];
     }
 
@@ -296,21 +307,23 @@ class PageHeroBlock extends BlockBase implements ContainerFactoryPluginInterface
     if ($candidates) {
       $shown = $candidates[0];
       $image = [
-        '#type' => 'html_tag',
-        '#tag' => 'img',
-        '#attributes' => [
-          'class' => ['hero__image-picture'],
-          'src' => $shown['src'],
-          'srcset' => $shown['srcset'],
-          'sizes' => '(max-width: 1440px) 100vw, 1440px',
-          // Decorative — the hero's title carries the meaning (INT8-018's
-          // established rule for this hero, unchanged here).
-          'alt' => '',
-        ],
+        '#type' => 'responsive_image',
+        '#responsive_image_style_id' => 'i8_hero',
+        '#uri' => $shown['uri'],
+        '#attributes' => ['class' => ['hero__image-picture']],
+        // Decorative — the hero's title carries the meaning (INT8-018's
+        // established rule for this hero, unchanged here).
+        '#alt' => '',
       ];
       if (count($candidates) > 1) {
         $image['#attached']['library'][] = 'i8_services/page_hero';
-        $image['#attached']['drupalSettings']['i8PageHero']['alternates'] = $candidates;
+        $image['#attached']['drupalSettings']['i8PageHero']['alternates'] = array_map(
+          static fn (array $candidate): array => [
+            'mobile' => $candidate['mobile'],
+            'desktop' => $candidate['desktop'],
+          ],
+          $candidates,
+        );
       }
     }
 

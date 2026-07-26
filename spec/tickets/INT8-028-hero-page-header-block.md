@@ -287,3 +287,52 @@ config (the two image styles, `big_pipe` removed from `core.extension.yml`); `dr
 Separately, the user reported a second, unrelated bug found during this same review: the primary nav's
 current-section marking disappears on `/songs` once filter query-string params are present. Filed as
 **INT8-031** (not fixed here — out of scope for this ticket, which only touches the hero).
+
+**2026-07-26 — second round of review feedback (items 3 and 4 revisited).**
+
+The user accepted the title-alignment and background-rotation fixes but flagged two follow-ups on the
+first pass at items 3 and 4:
+
+3. **Media browser preview was wrong** — the block form's "already selected" list showed the system's
+   tiny auto-generated `thumbnail` field *and* the full, unstyled original photo side by side. Cause:
+   the `image` media type (built via the entity API in the first pass, mirroring INT8-009's
+   `remote_video`) only ever got a `default` view display — real media types built through the add-type
+   UI wizard also get a dedicated `media_library` view mode (a small, single-field, styled display),
+   which is what `$view_builder->view($media, 'media_library')` actually needs; without it, Drupal fell
+   back to `default`, which shows both the `thumbnail` field and the unstyled `field_media_image`.
+   Fixed by creating `core.entity_view_display.media.image.media_library` (one field,
+   `image.style.media_library` — core's own bundled 220×220 media-library thumbnail style — everything
+   else hidden). Also rebuilt the "already selected" list to use core's own
+   `#theme => 'media_library_item__widget'` per-item structure (remove button, `js-media-library-item`
+   class, `data-media-library-item-delta`) and attached the `media_library/widget` library, matching how
+   core's real field widget builds the same list, rather than a bespoke container — the closest a
+   non-field-widget consumer of the media library can get to the stock look or the admin theme is
+   opted to define.
+
+4. **Not using the standard `responsive_image` module, and most of the photo was being cropped off by
+   plain CSS `object-fit: cover`.** The first pass hand-built a `srcset`/`sizes` pair on a plain
+   `#theme => image` element — functional, but not the module Drupal ships for exactly this. Fixed:
+   enabled `responsive_image` (core) and `focal_point` (contrib, pulling in `crop`); added
+   `interstate_85.breakpoints.yml` (the theme's one real breakpoint, `--bp-nav: 760px`, mirrored as
+   `interstate_85.mobile` / `interstate_85.desktop`); created the `i8_hero` `ResponsiveImageStyle`
+   mapping those breakpoints 1x to `hero_mobile`/`hero_desktop`; and switched both image styles from
+   `image_scale` (width-only, aspect-ratio-preserving — the source photo's full height was still being
+   sent to the browser, which is why `object-fit: cover` was cropping most of it away centred on
+   whatever the naive scale produced) to `focal_point_scale_and_crop`, cropping to the hero's *actual*
+   displayed box (1440×140 desktop, 760×140 mobile — the `--hero-height-page` token) around each photo's
+   stored focal point, defaulting to centre (50/50) until an editor sets one. Also switched
+   `field_media_image`'s form widget to `image_focal_point` so an editor can click to set that point per
+   photo. `PageHeroBlock::build()` now renders `#type => responsive_image` /
+   `#responsive_image_style_id => i8_hero` instead of the hand-rolled `srcset`; the client-side reroll
+   script (`page-hero.js`, still needed — Page Cache's permanent caching, see the earlier correction, is
+   unrelated to which image module renders the markup) now targets the `<picture>`'s two `<source>`
+   elements by their `media` attribute plus the fallback `<img>`, rather than a single `srcset` string.
+
+Re-ran the default gate (green), the independent Playwright suite (26/26 on chromium + webkit), and a
+manual check of both the block form (confirmed via direct HTTP request: exactly one
+`styles/media_library/...` thumbnail per selected item, no unstyled original, no PHP warnings) and the
+front end (`<picture>` with two correctly-cropped `<source>` elements, `drupalSettings.i8PageHero`
+carrying both candidates' styled URLs). Re-exported config (`focal_point`/`crop` module config, the new
+`media_library` view display, the new responsive image style, the updated image styles and form
+display); `drush cim -y` is a no-op. `composer.json`/`composer.lock` now carry `drupal/focal_point`
+(and its `drupal/crop` dependency).
