@@ -2,7 +2,7 @@
 id: INT8-030
 title: Make the song ledger's letter rail a real jump-to-letter navigation
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: theme
 layer: theme
