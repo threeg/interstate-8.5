@@ -27,7 +27,7 @@
   --i8-canvas:     #eef0ef; /* page background outside the sheet */
   --i8-scrim:      rgba(20, 26, 28, .70); /* hero-photo darkening gradient base */
   --i8-ice:        #cfe3ee; /* light-blue: nav-hover text on the transparent/hero header only */
-  --i8-ash:        #9aa4a1; /* muted grey: "coming soon" stub label/value, disabled section labels */
+  --i8-ash:        #9aa4a1; /* muted grey: 2.56:1 on white — a genuinely disabled native form control's own rendering only (e.g. select-field's [disabled] state); fails NFR-1 (4.5:1) on any real text and must not be used for text that merely *looks* disabled (corrected 2026-07-26, INT8-019 — see design-system.md §5) */
   --i8-frost:      #f4f8fa; /* pale blue-white: select/field hover fill (filter bar) */
   --i8-dove:       #c7cbca; /* mid-grey: unselected segmented-toggle option on hover */
   --i8-quote:      #455250; /* quote-block text, both breakpoints */
@@ -51,7 +51,7 @@
   --color-tint:          var(--i8-tint);
   --color-line:          var(--i8-pumice);
   --color-disabled:      var(--i8-pumice);
-  --color-fg-disabled:   var(--i8-ash); /* "coming soon" stub text, disabled section labels */
+  --color-fg-disabled:   var(--i8-ash); /* a genuinely disabled native form control only — see --i8-ash */
   --color-field-hover:   var(--i8-frost); /* select/field hover fill */
   --color-toggle-hover:  var(--i8-dove); /* unselected segmented-toggle option, hovered */
   --color-fg-quote:      var(--i8-quote); /* quote-block text */

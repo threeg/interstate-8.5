@@ -1,0 +1,75 @@
+{#
+/**
+ * @file
+ * The song page (INT8-019) — FR-12, FR-14, FR-15, FR-17.
+ *
+ * The page's one <h1> is supplied site-wide by INT8-028's page-header hero
+ * block, not by this template — core's own node.html.twig already omits the
+ * in-page title heading whenever `page` is true (the canonical-route case),
+ * so nothing here needs to suppress it a second time.
+ *
+ * FR-12's negative half (no type/group) and FR-14 (no releases, setlist,
+ * tabs, studio) are satisfied by OMISSION: `field_song_type`,
+ * `field_parent_song` and friends are hidden on the `full` view display
+ * (core.entity_view_display.node.song.full.yml) and nothing below prints
+ * them by name. There is no suppression logic to get wrong.
+ *
+ * Field ORDER is controlled here, not by the display's field weights: the
+ * hi-fi's SONG PAGE composition puts the quote ABOVE the lyrics, which a
+ * plain field-order render can't express without reordering every other
+ * field's weight to match — the quote is the one field genuinely out of
+ * document order relative to the rest.
+ *
+ * `content.field_x|render|trim` (not `node.field_x.isEmpty()`) is the
+ * emptiness check throughout: it asks "would this actually render
+ * something", which also respects field access — a field an anonymous
+ * visitor cannot see is correctly treated as absent, not merely unset.
+ */
+#}
+{% set has_quote = content.field_quotes|render|trim %}
+{% set has_lyrics = content.field_lyrics|render|trim %}
+{% set has_notes = content.field_notes|render|trim %}
+{% set has_video = content.field_video|render|trim %}
+
+<div class="song-detail">
+  <div class="song-detail__main">
+    {% if has_quote %}
+      {% embed 'interstate_85:quote-block' %}
+        {% block quote %}{{ content.field_quotes }}{% endblock %}
+      {% endembed %}
+    {% endif %}
+
+    {% if has_lyrics %}
+      {% embed 'interstate_85:section-label' %}
+        {% block label %}{{ 'Lyrics'|t }}{% endblock %}
+      {% endembed %}
+      <div class="song-detail__lyrics">{{ content.field_lyrics }}</div>
+    {% endif %}
+
+    {% if has_notes %}
+      {% embed 'interstate_85:section-label' %}
+        {% block label %}{{ 'Notes'|t }}{% endblock %}
+      {% endembed %}
+      <div class="song-detail__notes">{{ content.field_notes }}</div>
+    {% endif %}
+
+    {% if has_video %}
+      {% embed 'interstate_85:section-label' %}
+        {% block label %}{{ 'Video'|t }}{% endblock %}
+      {% endembed %}
+      <div class="song-detail__video">{{ content.field_video }}</div>
+    {% endif %}
+  </div>
+
+  {# The "more about this song" rail — reserved space, no real data
+     (FR-14 spirit), unconditional: it carries no field content, so there is
+     nothing for it to omit. #}
+  <div class="song-detail__rail">
+    {% embed 'interstate_85:section-label' with {variant: 'muted'} %}
+      {% block label %}{{ 'More about this song'|t }}{% endblock %}
+    {% endembed %}
+    {% embed 'interstate_85:coming-soon-stub' with {label: 'Releases'|t} %}{% endembed %}
+    {% embed 'interstate_85:coming-soon-stub' with {label: 'Last played live'|t} %}{% endembed %}
+    {% embed 'interstate_85:coming-soon-stub' with {label: 'Times played / tour stats'|t} %}{% endembed %}
+  </div>
+</div>

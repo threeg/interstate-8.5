@@ -1,0 +1,61 @@
+uuid: dbf9526a-701e-47b4-a9d6-2bb6826bac29
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.full
+    - field.field.node.song.field_exclude_from_list
+    - field.field.node.song.field_legacy_id
+    - field.field.node.song.field_lyrics
+    - field.field.node.song.field_lyrics_same_as_parent
+    - field.field.node.song.field_notes
+    - field.field.node.song.field_parent_song
+    - field.field.node.song.field_quotes
+    - field.field.node.song.field_song_type
+    - field.field.node.song.field_video
+    - node.type.song
+  module:
+    - text
+    - user
+id: node.song.full
+targetEntityType: node
+bundle: song
+mode: full
+content:
+  field_lyrics:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_notes:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_quotes:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_video:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: oembed_embed
+      link: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  field_exclude_from_list: true
+  field_legacy_id: true
+  field_lyrics_same_as_parent: true
+  field_parent_song: true
+  field_song_type: true
+  links: true

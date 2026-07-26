@@ -98,7 +98,7 @@ values.
 | **Filter bar** | — | default · **hover** (select/toggle/APPLY darken, `#336585`) · **focus** (2px teal outline, 2px offset) · **open** (native select expanded) · disabled (Released/Played-live "coming soon") | Type select, Alt-titles Show/Hide segmented toggle, APPLY (teal) |
 | **Song ledger** | letter-rail + group header + row | row default · **zebra** (alternating row fill `#fafbfb`, cosmetic) · **alt-title** (teal chip, FR-10 marking) · **hover** (Tint `#e4edf2` fill, full row width) · **focus** (2px inset ring, no fill change) | 3-col, sticky rail; "412 results". Note: "zebra" (cosmetic alternating-row shading) and "alt-title" (the FR-10 alternate-version marker chip) are two independent states — don't conflate them. **Rail/grouping (INT8-029):** the rail runs `A`–`Z` then a trailing **`#`** catch-all for any title that doesn't bucket to a letter (a leading digit, symbol, or a script with no ASCII-letter equivalent) — a slice-1 addition with no hi-fi precedent (see decisions log). |
 | **Lyric pair** | side-by-side (desktop) · stacked (mobile) | — | "THIS VERSION" \| "NORMAL VERSION →"; "[same as normal version]" (FR-20) |
-| **"Coming soon" stub** | — | disabled | reserves rail for deferred releases/last-played/tour-stats (FR-14 spirit). Precise spec: `1.5px dashed var(--color-line)` border, `var(--radius-md)` radius, container `opacity:.65` (whole block, not per-text); label Oswald 700 10px `.07em` `var(--color-fg-disabled)`; value Lora 13px `var(--color-fg-disabled)`. |
+| **"Coming soon" stub** | — | disabled | reserves rail for deferred releases/last-played/tour-stats (FR-14 spirit). Precise spec: `1.5px dashed var(--color-line)` border, `var(--radius-md)` radius; label Oswald 700 10px `.07em`; value Lora 13px. Label and value are `--color-fg-muted`, with **no container opacity** — *corrected 2026-07-26 (INT8-019)*, see decisions log: the hi-fi's own literal choices (`--color-fg-disabled` at whole-block `opacity:.65`) measure 1.77:1 on white, and the colour alone (no opacity) is still only 2.56:1 — both fail NFR-1's 4.5:1 on real text. `--color-fg-disabled` remains correct for a genuinely disabled native form control (e.g. the filter bar's Released/Played-live selects), where the browser's own disabled rendering applies; it is no longer used for text that merely *looks* disabled. |
 | **Quote block** | — | — | left-rule, italic Lora |
 | **Button / CTA** | primary teal · CTA polo-blue | default · hover (−12%) · disabled (Pumice, 70%) | see token panel. Governs solid CTA buttons only (e.g. "SUBMIT IT", "APPLY") |
 | **Link** | action (teal, underline on hover — "MORE →", "CLEAR FILTERS", cross-refs like "alternate title/lyrics for → parent") · inline prose text (slate `#3d4442`, Corduroy-coloured underline `#5e6b68` — always underlined, e.g. "setlist" refs) | default · hover | Governs discrete action/prose links only — does **not** govern header nav, which has its own hover/current states (see Header/nav row above). *Correction: the token panel's own "Inline text link" swatch uses Corduroy `#5e6b68` for the underline, not Pumice as originally logged here on 2026-07-11.* |
@@ -158,3 +158,16 @@ values.
   digit or anything else goes to a single **`#`** bucket sorted after `Z`. The canonical implementation
   is `i8_services`' `ArticleInsensitiveTitle::comparisonKey()`/`bucket()` — the theme's rendered grouping
   and ordering both call it, nothing re-implements the rule.
+- **2026-07-26** — **"Coming soon" stub's colour/opacity corrected (INT8-019, NFR-1).** The hi-fi's
+  literal spec for this component — `--color-fg-disabled` text inside a container at whole-block
+  `opacity:.65` — measures 1.77:1 against white (and only 2.56:1 even with the opacity removed),
+  failing the 4.5:1 AA floor outright once the component was actually built and Axe ran against it: the
+  same failure hit the "MORE ABOUT THIS SONG" muted section label, which used the identical colour. Both
+  now use `--color-fg-muted` (5.56:1) with no container opacity; the bold weight (already specified for
+  the muted section-label variant, and matched here) is what still reads as more emphasised/dimmed than
+  ordinary text at the same size, rather than a second shade of grey. `--color-fg-disabled` keeps its
+  narrower, correct use: a genuinely disabled native form control (the filter bar's Released/Played-live
+  selects), where the browser's own disabled-state rendering applies and Axe's contrast check does not
+  evaluate it the same way. Recorded as a spec correction (root CLAUDE.md's non-negotiable: fix the spec
+  first, never silently diverge) rather than an implementation-only tweak, since the wrong values were
+  written here, not just used here.

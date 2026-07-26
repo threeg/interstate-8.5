@@ -1,0 +1,36 @@
+/* design-system.md §3, "Coming soon" stub. The dashed border is the "not
+   active" signal; NO container opacity, unlike the hi-fi's original literal
+   spec — see the file comment below and design-system.md §5, 2026-07-26. */
+.coming-soon-stub {
+  border: 1.5px dashed var(--color-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+/* Literal sizes, matching the design system's own literal spec for this
+   component (see the component's file comment) rather than the nearest
+   --fs-* token.
+
+   Colour is --color-fg-muted, not --color-fg-disabled as design-system.md
+   originally specified, and there is no whole-block opacity: --color-fg-
+   disabled measures 2.56:1 on white even at full opacity, and the spec's own
+   "opacity:.65 on the whole block" made it worse (1.77:1) — both fail
+   NFR-1's 4.5:1 outright on real text. Found building INT8-019; the spec's
+   colour/opacity values were corrected rather than silently diverged from
+   (design-system.md §5). The 700 weight is what still reads as more
+   emphasised/dimmed than ordinary body text at this size. */
+.coming-soon-stub__label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+  margin-bottom: var(--space-2);
+}
+
+.coming-soon-stub__value {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-fg-muted);
+}

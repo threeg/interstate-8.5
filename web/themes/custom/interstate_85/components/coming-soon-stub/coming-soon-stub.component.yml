@@ -1,0 +1,22 @@
+$schema: 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/metadata.schema.json'
+name: '"Coming soon" stub'
+status: experimental
+description: >-
+  A reserved rail card for a not-yet-built field or module (e.g. the song
+  page's releases / last-played-live / tour-stats rows, INT8-019, FR-14
+  spirit). design-system.md §3 gives this an exact spec: 1.5px dashed border,
+  var(--radius-md) radius; label Oswald 700 10px .07em; value Lora 13px. The
+  two sizes are literal in the spec, unlike every other row in that table, so
+  they are literal here too rather than approximated to the nearest token.
+  The spec's original colour (--color-fg-disabled) and whole-block opacity
+  (.65) were both corrected during INT8-019 — see design-system.md §5,
+  2026-07-26 — for failing NFR-1's 4.5:1 contrast on real text.
+props:
+  type: object
+  properties:
+    label:
+      type: string
+      title: Label
+      description: 'e.g. "RELEASES", "LAST PLAYED LIVE".'
+  required:
+    - label

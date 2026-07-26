@@ -132,3 +132,76 @@
   color: var(--color-fg-body);
   margin: 0 0 var(--space-5);
 }
+
+/* Song page (INT8-019) — main column + "coming soon" rail. Page-level
+   composition classes rather than an SDC wrapper, matching the Songs
+   landing's own precedent (see views-view--songs.html.twig's file comment):
+   nesting a wrapper SDC around the quote-block/section-label/coming-soon-stub
+   embeds below would hit the same core prop-validation bug that pattern
+   avoids by staying flat. 260px is a fixed layout dimension, not a design
+   token — the same kind of literal already used for song-ledger's own rail
+   column (song-ledger.css: `grid-template-columns: 36px 1fr`). The dashed
+   main/rail divider reuses --color-line (the filter bar's own border colour)
+   rather than the hi-fi's unnamed one-off blue (#b9d3e3) — design-system.md
+   §3 doesn't name that colour as a token, and inventing one for a single
+   divider would violate the "never hardcode hex" rule from the other
+   direction. */
+.song-detail {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 0 var(--space-8);
+  padding-block: var(--space-8);
+}
+
+.song-detail__main {
+  padding-right: var(--space-8);
+  border-right: 2px dashed var(--color-line);
+}
+
+.song-detail__rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (max-width: 759px) {
+  .song-detail {
+    display: block;
+    padding-block: var(--space-6);
+  }
+
+  .song-detail__main {
+    padding-right: 0;
+    border-right: none;
+    margin-bottom: var(--space-6);
+  }
+}
+
+.song-detail__lyrics {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-lyrics);
+  color: var(--color-fg-slate);
+  margin: var(--space-2) 0 var(--space-7);
+}
+
+.song-detail__notes {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-body);
+  color: var(--color-fg-body);
+  margin: var(--space-2) 0 var(--space-7);
+}
+
+.song-detail__video {
+  margin: var(--space-2) 0 var(--space-7);
+}
+
+.song-detail__video iframe,
+.song-detail__video video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: var(--radius-sm);
+}

@@ -13,5 +13,10 @@
 
 .section-label--muted {
   font-weight: 700;
-  color: var(--color-fg-disabled);
+  /* Not --color-fg-disabled: on real (non-form-control) text that token is
+     2.56:1 on white, failing NFR-1's 4.5:1 outright — found building
+     INT8-019's "coming soon" rail, see design-system.md §5, 2026-07-26. The
+     bold weight is what still reads as more emphasised/label-like than the
+     --default variant, which uses the same colour at 400. */
+  color: var(--color-fg-muted);
 }
