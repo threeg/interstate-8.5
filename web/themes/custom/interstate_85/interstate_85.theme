@@ -96,11 +96,24 @@ function interstate_85_preprocess_views_view__songs(array &$variables): void {
     return [$rank($a['letter']), $a['comparison_key']] <=> [$rank($b['letter']), $b['comparison_key']];
   });
 
+  // INT8-030: the anchor id for a bucket. Computed here, once, and handed to
+  // *both* the group headers and the rail entries below, so the link and its
+  // target cannot drift apart — song-ledger.twig only ever prints an id it
+  // was given, and never builds one by string-mangling in Twig.
+  //
+  // The "#" bucket gets an explicitly non-"#" slug: a literal "#" in a
+  // fragment identifier has to be percent-encoded and is a needless trap.
+  $bucket_id = static fn (string $letter): string => 'songs-' . ($letter === '#' ? 'other' : mb_strtolower($letter));
+
   $groups = [];
   foreach ($songs as $song) {
     $last_key = array_key_last($groups);
     if ($last_key === NULL || $groups[$last_key]['letter'] !== $song['letter']) {
-      $groups[] = ['letter' => $song['letter'], 'songs' => []];
+      $groups[] = [
+        'letter' => $song['letter'],
+        'id' => $bucket_id($song['letter']),
+        'songs' => [],
+      ];
       $last_key = array_key_last($groups);
     }
     $groups[$last_key]['songs'][] = $song;
@@ -112,7 +125,14 @@ function interstate_85_preprocess_views_view__songs(array &$variables): void {
   $present_letters = array_unique(array_column($songs, 'letter'));
   $rail_letters = [];
   foreach (array_merge(range('A', 'Z'), ['#']) as $letter) {
-    $rail_letters[] = ['letter' => $letter, 'present' => in_array($letter, $present_letters, TRUE)];
+    $rail_letters[] = [
+      'letter' => $letter,
+      'present' => in_array($letter, $present_letters, TRUE),
+      // INT8-030: same derivation as the group header's own id above, so a
+      // present letter's link always resolves. Absent letters carry one too
+      // and simply never render it — nothing to point at.
+      'id' => $bucket_id($letter),
+    ];
   }
 
   $type_options = [

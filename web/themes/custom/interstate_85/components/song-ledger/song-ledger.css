@@ -1,3 +1,19 @@
+/* INT8-030: the one definition of "how far down the page the sticky chrome
+   reaches". Two things must agree on it — the rail docks *at* it, and an
+   anchor jump must stop *below* it or the group header the user just asked
+   for lands underneath the sticky site header. Before this they were two
+   copies of the same calc() and free to drift.
+
+   --i8-header-height is published on :root by site-header.js (INT8-029) from
+   the header's real measured height and updated on resize; the 89px fallback
+   is the measured desktop height, used only before JS runs.
+   --drupal-displace-offset-top is the admin toolbar's own displacement,
+   which the site header itself docks below. --space-2 is breathing room so
+   neither the rail nor a jumped-to header sits flush against the header. */
+.song-ledger {
+  --i8-sticky-top: calc(var(--i8-header-height, 89px) + var(--drupal-displace-offset-top, 0px) + var(--space-2));
+}
+
 .song-ledger__count {
   text-align: right;
   margin-bottom: var(--space-4);
@@ -21,12 +37,9 @@
   font-size: var(--fs-label);
   color: var(--color-line);
   position: sticky;
-  /* Docks below the real (site-header.js-measured) header height, plus the
-     admin-toolbar displace offset the header itself docks below, plus a
-     little breathing room (--space-2) so the rail doesn't sit flush against
-     the header edge while scrolled — a bare `top: 0` originally put the
-     rail underneath the sticky header entirely. */
-  top: calc(var(--i8-header-height, 89px) + var(--drupal-displace-offset-top, 0px) + var(--space-2));
+  /* Docks below the sticky site header — a bare `top: 0` originally put the
+     rail underneath it entirely. See --i8-sticky-top above. */
+  top: var(--i8-sticky-top);
   /* INT8-029: `.song-ledger__layout` is a grid, and a grid item defaults to
      `align-self: stretch` — the rail's box was as tall as the ledger beside
      it, leaving sticky positioning no room to travel. `start` makes it
@@ -53,6 +66,24 @@
 
 .song-ledger__rail-letter.is-present {
   color: var(--color-accent);
+}
+
+/* INT8-030: present letters are real anchors now. Strip the UA's link
+   styling so the rail keeps the hi-fi's flat A–Z column, and give it back
+   on hover/focus as the affordance that it *is* clickable. */
+a.song-ledger__rail-letter {
+  display: block;
+  text-decoration: none;
+}
+
+a.song-ledger__rail-letter:hover {
+  text-decoration: underline;
+}
+
+a.song-ledger__rail-letter:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
 }
 
 .song-ledger__grid {
@@ -84,6 +115,12 @@
      (reported as "the hover pushes out beyond the section above it").
      --space-2 keeps the same dense feel while staying clearly legible. */
   margin: var(--space-3) 0 var(--space-2);
+  /* INT8-030: the whole reason the jump works. A bare `#anchor` scrolls the
+     target to the very top of the viewport — which on this page is
+     *underneath* two layers of sticky chrome, hiding the very header the
+     user clicked to see. Stopping short by exactly the offset the rail
+     already docks at puts the header just below them, visible. */
+  scroll-margin-top: var(--i8-sticky-top);
 }
 
 .song-ledger__group-header:first-child {
@@ -128,4 +165,21 @@
   border-radius: var(--radius-pill);
   padding: 0 5px;
   margin-left: var(--space-2);
+}
+
+/* INT8-030: animate the jump rather than teleporting to it.
+   scroll-behavior only takes effect on the element that actually scrolls,
+   which for a fragment jump is the document itself — so it has to be set on
+   the root, not on the ledger. `:has()` is what keeps it scoped anyway: it
+   applies only on a page that actually renders a ledger, so this component's
+   stylesheet cannot change scrolling anywhere else.
+
+   Gated on prefers-reduced-motion because scroll animation is a recognised
+   vestibular trigger; anyone who has asked their OS for reduced motion gets
+   the instant jump. This project had no reduced-motion convention before —
+   this establishes it. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.song-ledger) {
+    scroll-behavior: smooth;
+  }
 }

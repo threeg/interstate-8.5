@@ -1,14 +1,29 @@
 <div class="song-ledger">
   <div class="song-ledger__count">{{ results_count }} {{ results_count == 1 ? 'result'|t : 'results'|t }}</div>
   <div class="song-ledger__layout">
-    <div class="song-ledger__rail" aria-hidden="true">
+    {# INT8-030: a real jump-to-letter navigation, not decoration. The
+       landmark's label is what makes single-character link text acceptable
+       under WCAG 2.4.4 (link purpose *in context*), so the links themselves
+       stay as short as the hi-fi draws them.
+
+       Absent letters stay plain <span>s — alphabet filler with nothing to
+       jump to, so not links, not focusable, not in the tab order. They are
+       individually aria-hidden because they carry no information the present
+       links don't, which keeps the hi-fi's deliberate muted/teal contrast
+       between "has songs" and "doesn't" without exposing --color-line text
+       (~1.5:1 on the white sheet) to a contrast check it would fail. #}
+    <nav class="song-ledger__rail" aria-label="{{ 'Jump to letter'|t }}">
       {% for letter in rail_letters %}
-        <span class="song-ledger__rail-letter{{ letter.present ? ' is-present' : '' }}">{{ letter.letter }}</span>
+        {% if letter.present %}
+          <a class="song-ledger__rail-letter is-present" href="#{{ letter.id }}">{{ letter.letter }}</a>
+        {% else %}
+          <span class="song-ledger__rail-letter" aria-hidden="true">{{ letter.letter }}</span>
+        {% endif %}
       {% endfor %}
-    </div>
+    </nav>
     <div class="song-ledger__grid">
       {% for group in groups %}
-        <div class="song-ledger__group-header">{{ group.letter }}</div>
+        <div class="song-ledger__group-header" id="{{ group.id }}">{{ group.letter }}</div>
         {% for song in group.songs %}
           <div class="song-ledger__row">
             <a href="{{ song.url }}">{{ song.title }}</a>

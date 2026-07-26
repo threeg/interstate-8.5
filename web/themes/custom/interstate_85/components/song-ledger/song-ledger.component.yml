@@ -16,14 +16,19 @@ props:
     rail_letters:
       type: array
       title: Rail letters
-      description: 'A–Z, each { letter, present } — present letters are linkable/emphasised, absent ones muted.'
+      description: >-
+        A–Z then a trailing "#", each { letter, present, id }. Present letters
+        render as links to `#id`; absent ones are muted, inert text. `id` is
+        the same value the matching group carries, computed once by the
+        caller (INT8-030) so the link and its target cannot drift.
     groups:
       type: array
       title: Groups
       description: >-
-        Ordered groups, each { letter, songs }; each song is
+        Ordered groups, each { letter, id, songs }; each song is
         { title, url, is_alt }. is_alt marks an alternate-title version
-        (FR-10) with the small "alt" cue.
+        (FR-10) with the small "alt" cue. `id` becomes the group header's
+        anchor target for the rail (INT8-030).
   required:
     - rail_letters
     - groups
