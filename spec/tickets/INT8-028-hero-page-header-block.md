@@ -2,7 +2,7 @@
 id: INT8-028
 title: Page-title hero block in a full-width page-header region (random media background)
 type: story
-status: in-review
+status: done
 milestone: 9
 batch: theme
 layer: theme

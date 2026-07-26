@@ -60,7 +60,7 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 21 | INT8-019 | Song page (view mode + Twig + video) | story | theme | 9 / theme | E04 | code | todo | INT8-013, INT8-015, INT8-016 |
 | 22 | INT8-020 | Song versions (side-by-side lyrics + links) | story | theme | 9 / theme | E04 | code | todo | INT8-019 |
 | 23 | INT8-021 | E2E capstone (Playwright + Axe) | task | tooling | 9 / theme | E04 | code | todo | INT8-018, INT8-019, INT8-020 |
-| 24 | INT8-028 | Page-title hero block in a full-width page-header region (random media background) | story | theme | 9 / theme | E03 | code + site-building | in-review | INT8-015, INT8-016, INT8-018 |
+| 24 | INT8-028 | Page-title hero block in a full-width page-header region (random media background) | story | theme | 9 / theme | E03 | code + site-building | done | INT8-015, INT8-016, INT8-018 |
 | 25 | INT8-029 | Bucket the song ledger's letter rail and groups, with a `#` catch-all | task | theme | 9 / theme | E04 | code | done | INT8-018 |
 | 26 | INT8-030 | Make the song ledger's letter rail a real jump-to-letter navigation | task | theme | 9 / theme | E04 | code | todo | INT8-029 |
 | 27 | INT8-031 | Keep the primary nav's current-section marking when query-string filters are active | task | theme | 9 / theme | E03 | code | todo | INT8-017, INT8-018 |
