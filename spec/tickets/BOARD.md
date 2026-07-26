@@ -63,6 +63,7 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 24 | INT8-028 | Page-title hero block in a full-width page-header region (random media background) | story | theme | 9 / theme | E03 | code + site-building | in-review | INT8-015, INT8-016, INT8-018 |
 | 25 | INT8-029 | Bucket the song ledger's letter rail and groups, with a `#` catch-all | task | theme | 9 / theme | E04 | code | done | INT8-018 |
 | 26 | INT8-030 | Make the song ledger's letter rail a real jump-to-letter navigation | task | theme | 9 / theme | E04 | code | todo | INT8-029 |
+| 27 | INT8-031 | Keep the primary nav's current-section marking when query-string filters are active | task | theme | 9 / theme | E03 | code | todo | INT8-017, INT8-018 |
 
 > **Frontend independence (CONVENTIONS §4.5):** the theme foundation (E03, 015–017) builds against the
 > design/contract in parallel with the content model + migration (E02, 008–014); the Songs-section
@@ -88,6 +89,12 @@ on a higher-numbered one. Epics close when their children are all `done`.
 > internal-quality improvements to already-shipped behaviour, not new capability (the same reasoning as
 > INT8-028, which is likewise new capability rather than a requirement fix). It was triaged out of
 > INT8-029 during the INT8-018 review and is stated as out of scope in INT8-029's own body.
+
+> **INT8-031** is in the main sequence, not the cleanup backlog, on the same reasoning as INT8-027 and
+> INT8-029: it corrects already-shipped INT8-017 output, but it implements FR-16/NFR-1 *more correctly*
+> (the nav's current-section state is lost whenever the Songs filters put query parameters in the URL)
+> rather than improving the internal quality of behaviour that is already right — which CONVENTIONS §6.6
+> reserves the cleanup backlog for. Raised by the site owner during manual QA of INT8-028.
 
 > **Sequencing — INT8-028 before INT8-019, despite the ids.** INT8-019 (Song page) needs the same
 > hero-per-route mechanism INT8-028 introduces. Ids are permanent and allocated in execution order, so
