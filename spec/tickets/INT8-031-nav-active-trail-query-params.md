@@ -2,7 +2,7 @@
 id: INT8-031
 title: Keep the primary nav's current-section marking when query-string filters are active
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: theme
 layer: theme
@@ -23,13 +23,34 @@ Reported by the site owner during manual QA of INT8-028: *"When the filters are 
 /songs page, the main nav active trail disappears when there are query string params."*
 
 `/songs` shows the current-section treatment on the SONGS nav item; `/songs?type=Modest%20Mouse` does
-not. The cause is confirmed, not assumed — it is core's client-side active-link library, which is the
-**only** thing marking the nav today:
+not. The cause is confirmed, not assumed — core's active-link matching is **query-exact**, and the
+Songs menu link carries no query to match against:
+
+> **Corrected 2026-07-26, during implementation.** As originally written this section claimed core's
+> *client-side* `active-link.js` was "the only thing marking the nav today". That is wrong, and the
+> independent test author caught it: the marking is already present in the raw `curl` output on
+> `/songs`, i.e. server-side. It comes from
+> `web/core/lib/Drupal/Core/EventSubscriber/ActiveLinkResponseFilter.php`, whose own docblock calls it
+> *"a PHP implementation of the drupal.active-link JavaScript library"* — it post-processes the
+> response HTML with the identical query-exact rule (`::setLinkActiveClass()`, ~line 208:
+> `$node->getAttribute('data-drupal-link-query') !== Json::encode($query)`), plus the same
+> `pathMatcher->isFrontPage()` special case (~line 103). **The diagnosis and the prescribed fix below
+> are unaffected** — the query-exactness that breaks section-level marking is identical in both
+> implementations, and marking from the route-based active trail is still the answer. But two
+> consequences follow: the `libraryOverrides` comment must name *both* mechanisms, not just the JS
+> one; and the `javaScriptEnabled: false` test, while still a valid mechanism pin (it is red today and
+> rules out a JS-only fix), is **not** the server-vs-client discriminator this ticket implied — both
+> the JS-enabled and JS-disabled cases are red for the same reason and will go green together.
+
+The chain, as verified in core:
 
 1. `web/themes/custom/interstate_85/components/site-header/site-header.component.yml` (`libraryOverrides.dependencies`)
    pulls in `core/drupal.active-link`, because core's default `menu.html.twig` does not mark
    active-trail links server-side at all. That comment is accurate about *today*; this ticket makes
    part of it obsolete and it must be corrected as part of the work.
+1b. `ActiveLinkResponseFilter::setLinkActiveClass()` applies the same rule server-side, on every
+   response, whether or not any JS runs. This is what actually marks the nav on `/` and `/songs`
+   today.
 2. `web/core/misc/active-link.js` builds its selector from `drupalSettings.path`. When a query string
    is present it appends `[data-drupal-link-query="<exact JSON of the current query>"]` to every
    selector; only when the current query is **empty** does it use `:not([data-drupal-link-query])`
@@ -79,20 +100,29 @@ Rules the implementation must honour:
    `$item['url']->getOption('attributes')`, add `is-active` to `class` and `aria-current` = `page`,
    then `setOption('attributes', …)`. `LinkGenerator` renders those onto the `<a>`, exactly where
    active-link.js puts them today.
-3. **Handle the front page.** The Home link is `route:<front>` (INT8-017 Notes) while the route match
-   on `/` is `i8_services.front` (the configured front page is `/home`), so `in_active_trail` is
-   **false** for Home on `/` — this is precisely why active-link.js carries its own `isFront` special
-   case. Treat a `<front>`-routed item as current when
-   `\Drupal::service('path.matcher')->isFrontPage()` is true, or the existing front-page assertion in
-   `front-page-nav.spec.ts` regresses.
-4. **Cacheability — the front-page branch needs a new cache context.** The menu block is render-cached
-   with `route.menu_active_trails:main`, which already varies by rule 1, so rule 1 costs nothing. Rule
-   3 adds a dimension no existing context covers (two different routes can both have an empty active
-   trail and would share a cache entry). Add `url.path.is_front`. It must be added somewhere it
-   actually bubbles — cache metadata set on `$variables` inside a preprocess function does **not**
-   bubble, because `ThemeManager::render()` takes `$variables` by value. A theme implementation of
-   `hook_block_build_alter()` (guarded to the `system_menu_block:main` plugin) adding
-   `$build['#cache']['contexts'][] = 'url.path.is_front';` is the expected place.
+3. **Do NOT re-implement the front page.** *(Rules 3 and 4 rewritten 2026-07-26 during implementation
+   — see the Background correction. As originally written they instructed the implementer to
+   special-case `<front>` in the preprocess and bubble a `url.path.is_front` cache context via a theme
+   `hook_block_build_alter()`. Both instructions were consequences of the same wrong premise, and both
+   were dropped.)*
+
+   The Home link is `route:<front>` (INT8-017 Notes) while the route match on `/` is
+   `i8_services.front`, so `in_active_trail` is indeed **false** for Home on `/`. But
+   `ActiveLinkResponseFilter` already handles that with its own `isFrontPage()` branch (~line 103), it
+   already works today, and — being a **response filter** — it runs *after* render caching, per
+   request, so it needs no cache context at all. Re-doing that work in the preprocess would create a
+   correctness problem that core does not have. Mark from `in_active_trail` only, and leave `/` to
+   core.
+4. **No new cache context is needed.** The menu block is render-cached with
+   `route.menu_active_trails:main`, which already varies by exactly the signal rule 1 uses — so rule 1
+   is free. With rule 3 gone there is no remaining dimension to cover.
+
+   Recorded because it cost real investigation: a theme **cannot** implement `hook_block_build_alter()`
+   at all. `BlockViewBuilder` invokes it through `ModuleHandler::alter()` (BlockViewBuilder.php ~line
+   91), which is modules-only; the only alters that reach themes are those explicitly routed through
+   `ThemeManager::alter()` — `css`, `js`, `js_settings`, `library_info`, `form`/`form_FORM_ID`,
+   `element_info`, `page_attachments`, and two `views_ui` ones. So had a cache context genuinely been
+   required, the mechanism this ticket originally prescribed would have failed silently.
 5. **Keep `core/drupal.active-link` as a component dependency.** It becomes redundant for the main nav
    but stays harmless: on a query-less URL it targets the same `<a>` and `classList.add()` /
    `setAttribute()` are idempotent, and it still serves any other menu rendered with
@@ -109,23 +139,23 @@ matching is the right behaviour for them; the footer menu (INT8-026); any change
 its filters, or `views-view--songs.html.twig`.
 
 ## Definition of done (acceptance criteria)
-- [ ] `/songs?type=Modest%20Mouse` renders the SONGS nav link with `class` containing `is-active` and
+- [x] `/songs?type=Modest%20Mouse` renders the SONGS nav link with `class` containing `is-active` and
       `aria-current="page"`, and it shows the teal current-section underline.
-- [ ] The same holds for `/songs?type=All&alt=0` (both documented parameters at once) and for
+- [x] The same holds for `/songs?type=All&alt=0` (both documented parameters at once) and for
       `/songs?type=NoSuchType` (the no-results state — still the Songs section).
-- [ ] `/songs` with no query string is unchanged: still marked, still exactly one marked nav item.
-- [ ] `/` still marks Home and only Home (the `<front>` case, rule 3) — the existing assertion in
+- [x] `/songs` with no query string is unchanged: still marked, still exactly one marked nav item.
+- [x] `/` still marks Home and only Home (the `<front>` case, rule 3) — the existing assertion in
       `front-page-nav.spec.ts` keeps passing.
-- [ ] On `/songs?type=…` the Home link is **not** marked — no `is-active`, no `aria-current`.
-- [ ] The marking is present in the server response, i.e. it holds with JavaScript disabled.
-- [ ] At 320px the mobile open panel shows the left-border accent on SONGS on a filtered URL
+- [x] On `/songs?type=…` the Home link is **not** marked — no `is-active`, no `aria-current`.
+- [x] The marking is present in the server response, i.e. it holds with JavaScript disabled.
+- [x] At 320px the mobile open panel shows the left-border accent on SONGS on a filtered URL
       (`li:has(a[aria-current="page"])`, site-header.css).
-- [ ] The `site-header.component.yml` `libraryOverrides` comment no longer claims the JS library is
+- [x] The `site-header.component.yml` `libraryOverrides` comment no longer claims the JS library is
       what marks the nav.
-- [ ] The default gate (`lando test`) passes with zero warnings — PHPCS/PHPStan clean on the new
+- [x] The default gate (`lando test`) passes with zero warnings — PHPCS/PHPStan clean on the new
       preprocess/alter hooks, boundary check 0 violations.
-- [ ] `lando playwright` green (same known Firefox `pw`-service gap recorded in INT8-018/027).
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] `lando playwright` green (same known Firefox `pw`-service gap recorded in INT8-018/027).
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 
@@ -156,6 +186,19 @@ One-line sanity test once implemented:
 `curl -s 'http://interstate-8-5.lndo.site/songs?type=All' | grep -c 'aria-current="page"'` → `1`
 (non-zero; it is `0` before the fix, which is the bug).
 
+## QA steps
+- [x] Open `/songs` → **SONGS** in the top menu carries the teal underline. Now use the **type filter**
+      (or the Alternate-titles Show/Hide toggle) → the underline **stays**. Before this fix it vanished
+      the moment any filter was applied.
+- [x] Try `/songs?type=All&alt=0` (both filters at once) and a type with no matches → still underlined;
+      you are still visibly in the Songs section even on the "no songs match" screen.
+- [x] Check **HOME** is *not* underlined on any of those filtered Songs URLs, and that `/` still
+      underlines **HOME** and only Home.
+- [x] At **320px**, open the mobile menu on a filtered Songs URL → the SONGS row shows the teal
+      left-border accent.
+- [x] The marking is in the page source, so it survives with JavaScript off and does not flicker in
+      after load.
+
 ## Notes
 - 2026-07-26 — created. Raised by the site owner during manual QA of INT8-028. Root cause confirmed by
   reading `web/core/misc/active-link.js`, `LinkGenerator::generate()` and `SystemHooks` rather than
@@ -169,3 +212,63 @@ One-line sanity test once implemented:
   Home link this ticket must special-case) and INT8-018 (introduced the `type`/`alt` query parameters
   that expose the defect). Both are `done`, so the start rule (CONVENTIONS §4.2) is already satisfied;
   they are listed for graph correctness.
+
+- 2026-07-26 — implemented. The whole fix is one preprocess function,
+  `interstate_85_preprocess_menu__main()`: for each top-level item with `in_active_trail`, merge
+  `is-active` + `aria-current="page"` into the link's own `Url` attributes, which `LinkGenerator`
+  renders onto the `<a>`. No CSS changed, no markup changed, no new tokens — the current-section
+  treatment already existed and was correct; only the marking it keys off was reaching the wrong pages.
+
+  **Independent test authorship.** The ten new Playwright tests (extending `front-page-nav.spec.ts`)
+  were written by a separate model from this ticket and the existing code alone. Seven were confirmed
+  red for the right reason first — the locator resolved to the real anchor
+  (`<a href="/songs" data-drupal-link-system-path="songs">Songs</a>`) on a 200 response, with a
+  genuinely empty class attribute — and three are unchanged-behaviour guards that are green by design,
+  which the author flagged explicitly rather than dressing up as failing tests. Their shared
+  `expectOnlySongsMarked()` helper asserts all four DoD facets at once, including *exactly one* marked
+  nav item, so an implementation that marked everything would still fail.
+
+  **This ticket's own Background was wrong, and the test author caught it.** See the correction
+  blockquote above: `ActiveLinkResponseFilter` — core's server-side "PHP implementation of the
+  drupal.active-link JavaScript library" — is what marks the nav today, not `active-link.js`. The
+  diagnosis and the fix survived intact (both implementations are query-exact in the same way), but two
+  of the ticket's own instructions did not, and rules 3 and 4 were rewritten before implementing rather
+  than silently ignored:
+
+  - **The front-page special case was dropped.** `ActiveLinkResponseFilter` already handles `/` with its
+    own `isFrontPage()` branch, and being a *response* filter it runs after render caching, per
+    request. Re-implementing it in preprocess would have introduced a cache-correctness problem core
+    doesn't have.
+  - **The `url.path.is_front` cache context was dropped with it** — with the front-page branch gone
+    there is nothing left for it to cover, since `route.menu_active_trails:main` (already on the menu
+    block) varies by exactly the signal the fix uses.
+
+  Worth recording because it cost real investigation and would have failed *silently*: **a theme cannot
+  implement `hook_block_build_alter()` at all.** `BlockViewBuilder` invokes it through
+  `ModuleHandler::alter()`, which is modules-only; the only alters that reach themes are those routed
+  explicitly through `ThemeManager::alter()` (`css`, `js`, `js_settings`, `library_info`,
+  `form`/`form_FORM_ID`, `element_info`, `page_attachments`, and two `views_ui` hooks). Had a cache
+  context genuinely been needed, the mechanism this ticket originally prescribed would have done
+  nothing at all, with no error.
+
+  **The two mechanisms compose cleanly, by core's design.** Since the preprocess now marks the link
+  server-side and `ActiveLinkResponseFilter` still runs afterwards, `/songs` (no query) is marked
+  twice — except it isn't: the filter reads the existing class first and sets
+  `$add_active = !in_array('is-active', explode(' ', $class))` under the comment *"Ensure we don't set
+  the 'active' class twice on the same element"*. Verified in the real response: exactly one
+  `is-active`, one `aria-current="page"`. Keeping `core/drupal.active-link` (rule 5) is therefore
+  genuinely harmless, and the `libraryOverrides` comment was rewritten to describe it as a redundant
+  secondary marker naming *both* of core's implementations.
+
+  **Two spec drifts spotted by the test author, neither in scope here, both worth a ticket:**
+  `api-contract.md` §2.1 writes the type value as "Side Projects" while the real term (and
+  `songs-landing.spec.ts`) is "Side projects"; and Tailwind's preflight sets `border-style: solid;
+  border-width: 0` on every element, which makes any test asserting `border-left-style === 'solid'`
+  vacuous — the author switched to asserting a non-zero width and a non-transparent colour instead.
+
+  **Verification.** Default gate green (58 PHPUnit, PHPCS, PHPStan, boundary check — theme-only change,
+  so the PHP suite is unchanged). Full Playwright suite **69/69 on chromium**, including all 13
+  front-page-nav tests. The ticket's own one-line sanity test now returns `1` where it returned `0`:
+  `curl -s 'http://interstate-8-5.lndo.site/songs?type=All' | grep -c 'aria-current="page"'`. Firefox
+  remains unrunnable in the `pw` container (`ENOENT … /ms-playwright/firefox-1532/firefox/lock`) for
+  every spec in the repo — a pre-existing environment gap, unchanged by this work.

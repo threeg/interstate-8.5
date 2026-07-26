@@ -30,11 +30,17 @@ libraryOverrides:
   # libraryOverrides is present:
   # - core/drupal: without it, Drupal.behaviors in site-header.js could run
   #   before core/drupal defines the Drupal global.
-  # - core/drupal.active-link: the JS that actually adds .is-active /
-  #   aria-current="page" to the current nav link client-side (core's
-  #   default menu.html.twig doesn't mark active-trail links server-side at
-  #   all) — without this dependency nothing ever attaches the class the
-  #   .is-active / [aria-current="page"] CSS below is styling.
+  # - core/drupal.active-link: a redundant *secondary* marker, kept
+  #   deliberately. Since INT8-031 the primary nav's current-section marking
+  #   is server-rendered by interstate_85_preprocess_menu__main() from the
+  #   route-based active trail, because core's own active-link matching —
+  #   this library, and its identical PHP twin ActiveLinkResponseFilter — is
+  #   query-exact and so drops the marking the moment the Songs filters add
+  #   ?type=… to the URL. The library is harmless alongside that (it targets
+  #   the same <a>, and classList.add()/setAttribute() are idempotent; core
+  #   also guards against double-marking explicitly), and it still serves any
+  #   other menu rendered with set_active_class, e.g. the footer menu
+  #   arriving in INT8-026.
   dependencies:
     - core/drupal
     - core/drupal.active-link

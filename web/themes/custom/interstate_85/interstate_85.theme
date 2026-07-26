@@ -12,6 +12,62 @@ use Drupal\Core\Url;
 use Drupal\i8_services\Plugin\views\sort\ArticleInsensitiveTitle;
 
 /**
+ * Implements hook_preprocess_HOOK() for menu--main.html.twig.
+ *
+ * Marks the current *section* in the primary nav (INT8-031, FR-16/NFR-1).
+ *
+ * Core marks active links — both in `ActiveLinkResponseFilter` server-side and
+ * in `core/misc/active-link.js` client-side, which are two implementations of
+ * one rule — by comparing the link's `data-drupal-link-query` against the
+ * request's query string, *exactly*. That is right for a pager or an exposed
+ * filter, where a link to one filtered URL should only light up on that exact
+ * URL. It is wrong for a section-level nav item: the Songs menu link is
+ * `internal:/songs` and carries no query at all, so the moment the Songs
+ * filters put `?type=…` in the URL, nothing can match and the "you are here"
+ * marking silently vanishes while the user is still in the Songs section.
+ *
+ * `in_active_trail` is derived from the *route match* (MenuLinkTree::
+ * buildItems()), which ignores query parameters by construction — so it is
+ * the correct signal, and it needs no cache context of its own because the
+ * menu block is already cached per `route.menu_active_trails:main`.
+ *
+ * The front page is deliberately NOT special-cased here. Its Home link is
+ * `route:<front>` while `/` route-matches `i8_services.front`, so the active
+ * trail does not cover it — but `ActiveLinkResponseFilter` has its own
+ * `isFrontPage()` branch that already marks it correctly, and it runs as a
+ * response filter, i.e. *after* render caching and per request. Re-doing that
+ * work here would need a `url.path.is_front` cache context to stay correct,
+ * which a theme cannot bubble (`ThemeManager::render()` takes `$variables` by
+ * value, and `block_build` is not one of the alters that reach themes) — so
+ * leaving the front page to core is both simpler and safer.
+ *
+ * Only top-level items are marked, and that is the point: `in_active_trail`
+ * is true for the ancestor of an active child, so the top level is precisely
+ * "which section am I in".
+ */
+function interstate_85_preprocess_menu__main(array &$variables): void {
+  foreach ($variables['items'] as &$item) {
+    if (empty($item['in_active_trail']) || !$item['url'] instanceof Url) {
+      continue;
+    }
+
+    // Mark the <a>, not the <li>: the CSS keys the desktop underline off the
+    // anchor, and the mobile left-border off `li:has(a[aria-current="page"])`
+    // — putting the class on the <li> would give it a stray border.
+    // LinkGenerator renders a Url's `attributes` option onto the anchor.
+    $attributes = $item['url']->getOption('attributes') ?? [];
+    $classes = $attributes['class'] ?? [];
+    if (!in_array('is-active', $classes, TRUE)) {
+      $classes[] = 'is-active';
+    }
+    $attributes['class'] = $classes;
+    $attributes['aria-current'] = 'page';
+    $item['url']->setOption('attributes', $attributes);
+  }
+  unset($item);
+}
+
+/**
  * Implements hook_preprocess_HOOK() for page.html.twig.
  *
  * Composes the page-header region's blocks into the hero SDC's two slots
