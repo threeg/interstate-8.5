@@ -138,8 +138,13 @@ behaviours follow, confirmed against v2 `songlist.php`:
 - **FR-7** The landing MUST present the complete list on a **single page with no pagination** — the
   full body of work at once.
 - **FR-8** The landing MUST order songs **alphabetically by name, case-insensitively, ignoring a
-  leading article** ("A", "An", "The") for sorting — e.g. "The World at Large" sorts under **W**. The
-  displayed title is unchanged. (A deliberate v5 improvement over v2's raw `ORDER BY Song_Name`.)
+  leading article** ("A", "An", "The") for sorting — e.g. "The World at Large" sorts under **W**. A
+  title that (after that) leads with anything other than a letter — punctuation, a symbol, a digit —
+  MUST be filed by whatever character comes after any leading punctuation (so "(No Song)" sorts under
+  **N**), and if that character is not a letter (a digit, or a title made entirely of punctuation), the
+  title MUST be grouped into a single trailing catch-all bucket rather than sorting arbitrarily by raw
+  punctuation (INT8-029; see the decisions log). The displayed title is unchanged. (A deliberate v5
+  improvement over v2's raw `ORDER BY Song_Name`.)
 - **FR-9** The landing MUST provide a **Type (band/group) filter** offering *All* plus each type in
   §2.1; selecting a type shows only songs of that type (v2: `FK_SongType_ID`). The **default view is
   Modest Mouse** (not All), matching v2.
@@ -250,6 +255,13 @@ behaviours follow, confirmed against v2 `songlist.php`:
 - **2026-07-07** — **Landing sort ignores leading articles** (FR-8): sort by the first significant
   word, dropping a leading "A"/"An"/"The" — a deliberate v5 improvement over v2's raw `ORDER BY
   Song_Name`.
+- **2026-07-25** — **FR-8 extended with a punctuation/symbol catch-all** (INT8-029): the article-only
+  rule left real titles like `(8)copy` and `(No Song)` with nowhere sensible to sort — each became its
+  own one-song, nonsense-headed group on the rendered ledger. Extended the rule (implementation
+  unchanged conceptually, wording clarified here to match): skip past any leading punctuation to find
+  the first letter-or-digit; a letter sorts under itself, anything else (a digit, or a title that is
+  only punctuation) goes into one trailing catch-all group. No hi-fi precedent exists for the catch-all
+  — see `design-system.md`'s matching 2026-07-25 entry.
 - **2026-07-07** — **Type-filter default and page display resolved**: the landing **defaults to Modest
   Mouse** (matching v2, FR-9); the song's type/group is **not shown on the song page** (FR-12).
   Consequence: in the *All* view there is no per-song group distinguisher — a known v2 characteristic,

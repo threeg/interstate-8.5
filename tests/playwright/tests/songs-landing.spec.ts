@@ -112,6 +112,169 @@ function typeFilter(page: Page) {
   return page.getByLabel(/type|band|group/i).first();
 }
 
+/* -------------------------------------------------------------------------
+ * INT8-029 — bucket grouping, the "#" catch-all and the sticky letter rail.
+ *
+ * Written independently of the implementation, from the INT8-029 ticket only.
+ * SELECTOR ASSUMPTIONS, stated up front so they are cheap to correct — the
+ * assertions' intent does not depend on them:
+ *
+ *  A. The rail is `.song-ledger__rail`. This is the one class name the ticket
+ *     itself names (§5, "the letter rail (`.song-ledger__rail` in the compiled
+ *     page)"), so it is quoted from spec rather than guessed.
+ *  B. The ledger block is `.song-ledger` (BEM parent of A). Used only to scope
+ *     the scan; if it is absent the scan falls back to the nearest common
+ *     ancestor of all song links, and then to <body>.
+ *  C. A "group header" is not identified by class at all. It is any element
+ *     inside the ledger, outside the rail and outside any <a>, whose *own*
+ *     text nodes (so a visually-hidden prefix span does not hide it) trim to
+ *     one or two non-space characters, and which is immediately followed in
+ *     document order by a song link. Two characters, not one, on purpose: the
+ *     defect being fixed renders headers reading "(" and ".", and those must
+ *     be *seen* and rejected rather than silently skipped.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Real titles from the migrated dataset that exercise the bucket rule.
+ * Verified against node_field_data — these are the only three listable song
+ * titles that begin with a non-alphanumeric character. Two of them are
+ * quoted with the migrated data's own quirks and are NOT typos here:
+ * "Gohsts" is how the legacy title is spelled, and the N-bucket song is
+ * "Never Ending" as two words.
+ */
+const PUNCT_THEN_DIGIT_TITLE = '(8)copy';
+const PUNCT_THEN_LETTER_TITLE = '(No Song)';
+const ELLIPSIS_TITLE = '...But Theyre Not Singing Gohsts';
+const N_BUCKET_FIRST_TITLE = 'Never Ending Math Equation';
+
+/** The catch-all bucket's label, and the full rail the ticket specifies. */
+const CATCH_ALL = '#';
+const RAIL_ENTRIES = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').concat(CATCH_ALL);
+
+type LedgerEntry = { kind: 'header' | 'song'; value: string };
+
+/**
+ * The ledger as a flat document-order sequence of group headers and song
+ * links. See assumptions B and C above.
+ */
+async function ledgerSequence(page: Page): Promise<LedgerEntry[]> {
+  const raw = (await page.evaluate(() => {
+    const songHref = (el: Element): string | null => {
+      const href = el.getAttribute('href') ?? '';
+      return /\/songs\/[^/?#]+/.test(href) ? href : null;
+    };
+    const isSongLink = (el: Element) => el.tagName === 'A' && songHref(el) !== null;
+
+    const links = Array.from(document.querySelectorAll('a[href]')).filter(isSongLink);
+
+    // Scope: the ledger block, else the nearest common ancestor of the song
+    // links, else the whole document.
+    let scope: Element = document.body;
+    const ledger = document.querySelector('.song-ledger');
+    if (ledger) {
+      scope = ledger;
+    } else if (links.length > 1) {
+      let node: Element | null = links[0];
+      const last = links[links.length - 1];
+      while (node && !node.contains(last)) node = node.parentElement;
+      if (node) scope = node;
+    }
+
+    const rail = document.querySelector('.song-ledger__rail');
+
+    /** Text contributed by an element's own text nodes only. */
+    const ownText = (el: Element): string =>
+      Array.from(el.childNodes)
+        .filter((n) => n.nodeType === 3)
+        .map((n) => n.textContent ?? '')
+        .join('')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    const out: { kind: string; value: string }[] = [];
+    const seen = new Set<string>();
+    for (const el of Array.from(scope.querySelectorAll('*'))) {
+      const href = songHref(el);
+      if (href && el.tagName === 'A') {
+        if (seen.has(href)) continue;
+        seen.add(href);
+        out.push({ kind: 'song', value: (el.textContent ?? '').replace(/\s+/g, ' ').trim() });
+        continue;
+      }
+      // Never mistake a rail entry (or any nav/link text) for a header.
+      if (rail && rail.contains(el)) continue;
+      if (el.closest('a')) continue;
+      if (el.closest('nav')) continue;
+      if (el.closest('[class*="rail"]')) continue;
+      // One or two characters that could plausibly *read* as a bucket
+      // heading: a letter, a digit, "#", or the leading punctuation the
+      // current defect groups by. Deliberately excludes "*" and other
+      // marker glyphs so a per-row alternate-title badge is not mistaken
+      // for a heading.
+      const text = ownText(el);
+      if (/^[A-Za-z0-9#(\[{'"&.…,!?-]{1,2}$/.test(text)) {
+        out.push({ kind: 'header', value: text });
+      }
+    }
+    return out;
+  })) as LedgerEntry[];
+
+  // A header heads a group: keep only candidates immediately followed by a
+  // song link. This drops incidental one/two-character text elsewhere.
+  return raw.filter((e, i) => e.kind === 'song' || raw[i + 1]?.kind === 'song');
+}
+
+/** Just the group headers, in document order. */
+function groupHeaders(seq: LedgerEntry[]): string[] {
+  return seq.filter((e) => e.kind === 'header').map((e) => e.value);
+}
+
+/** The header a given song title is listed under, or null if it precedes all. */
+function headerForTitle(seq: LedgerEntry[], title: string): string | null {
+  let current: string | null = null;
+  for (const entry of seq) {
+    if (entry.kind === 'header') current = entry.value;
+    else if (isTitle(entry.value, title)) return current;
+  }
+  return null;
+}
+
+type RailEntry = {
+  text: string;
+  tag: string;
+  hasHref: boolean;
+  ariaDisabled: string | null;
+};
+
+/**
+ * The rail's entries in document order (assumption A), with just enough shape
+ * to compare how one entry is marked against another — the ticket requires
+ * "#" to be marked present when its bucket is non-empty, but does not pin how
+ * presence is expressed, so the test compares "#" against a letter that is
+ * unarguably present rather than inventing a class name.
+ */
+async function railEntries(page: Page): Promise<RailEntry[]> {
+  return (await page.evaluate(() => {
+    const rail = document.querySelector('.song-ledger__rail');
+    if (!rail) return [];
+    const ownText = (el: Element): string =>
+      Array.from(el.childNodes)
+        .filter((n) => n.nodeType === 3)
+        .map((n) => n.textContent ?? '')
+        .join('')
+        .replace(/\s+/g, ' ')
+        .trim();
+    return Array.from(rail.querySelectorAll('*'))
+      .filter((el) => /^\S{1,2}$/.test(ownText(el)))
+      .map((el) => ({
+        text: ownText(el),
+        tag: el.tagName.toLowerCase(),
+        hasHref: el.hasAttribute('href') || el.closest('a[href]') !== null,
+        ariaDisabled: el.getAttribute('aria-disabled'),
+      }));
+  })) as RailEntry[];
+}
+
 test.describe('Songs landing', () => {
   test('lists every non-excluded song as a link on one page, with no pager (FR-6, FR-7)', async ({
     page,
@@ -361,5 +524,165 @@ test.describe('Songs landing', () => {
     await expect(page.getByLabel(/alt/i).first()).toBeAttached();
     const links = await songLinks(page);
     expect(links.length).toBe(COUNTS.modestMouse);
+  });
+
+  test('a title behind punctuation buckets by the first letter-or-digit found (INT8-029)', async ({
+    page,
+  }) => {
+    await page.goto(songsUrl({ type: TYPE.all }));
+    const seq = await ledgerSequence(page);
+    expect(groupHeaders(seq).length, 'no group headers were found — see assumption C').toBeGreaterThan(0);
+
+    // The rule looks *past* leading punctuation, then stops at the first
+    // letter or digit. A digit sends the title to the catch-all even though
+    // a letter ("copy") follows: "(8)copy" must not file under C, and must
+    // not get a heading of its own reading "(".
+    expect(
+      headerForTitle(seq, PUNCT_THEN_DIGIT_TITLE),
+      `"${PUNCT_THEN_DIGIT_TITLE}" is not under a "${CATCH_ALL}" heading`,
+    ).toBe(CATCH_ALL);
+
+    // Same first step, opposite outcome: past the "(" is a letter, so this
+    // files under N like anyone would expect.
+    expect(
+      headerForTitle(seq, PUNCT_THEN_LETTER_TITLE),
+      `"${PUNCT_THEN_LETTER_TITLE}" is not under an "N" heading`,
+    ).toBe('N');
+
+    expect(
+      headerForTitle(seq, ELLIPSIS_TITLE),
+      `"${ELLIPSIS_TITLE}" is not under a "B" heading`,
+    ).toBe('B');
+  });
+
+  test('every group header is A-Z or "#", appears once, and "#" comes last (INT8-029)', async ({
+    page,
+  }) => {
+    const combos = [
+      songsUrl(),
+      songsUrl({ type: TYPE.all }),
+      songsUrl({ type: TYPE.all, alt: '0' }),
+      songsUrl({ type: TYPE.modestMouse, alt: '0' }),
+      songsUrl({ type: TYPE.sideProjects }),
+    ];
+
+    for (const url of combos) {
+      await page.goto(url);
+      const headers = groupHeaders(await ledgerSequence(page));
+      expect(headers.length, `no group headers on ${url}`).toBeGreaterThan(0);
+
+      // No nonsense headings: never "(", never ".".
+      for (const h of headers) {
+        expect(h, `unexpected group heading "${h}" on ${url}`).toMatch(/^[A-Z#]$/);
+      }
+
+      // Each bucket is a single group — no repeats, consecutive or not.
+      expect(
+        new Set(headers).size,
+        `duplicate group headings on ${url}: ${headers.join(' ')}`,
+      ).toBe(headers.length);
+
+      // Bucket order: A..Z ascending, then "#" last if it is present at all.
+      const letters = headers.filter((h) => h !== CATCH_ALL);
+      expect(letters, `letter buckets out of order on ${url}`).toEqual([...letters].sort());
+      if (headers.includes(CATCH_ALL)) {
+        expect(headers[headers.length - 1], `"#" is not the last bucket on ${url}`).toBe(CATCH_ALL);
+      }
+    }
+  });
+
+  test('rows inside a bucket are ordered by the comparison key (INT8-029)', async ({ page }) => {
+    await page.goto(songsUrl({ type: TYPE.all }));
+    const links = await songLinks(page);
+
+    const iNeverending = indexOfTitle(links, N_BUCKET_FIRST_TITLE);
+    const iNoSong = indexOfTitle(links, PUNCT_THEN_LETTER_TITLE);
+    expect(iNeverending, `"${N_BUCKET_FIRST_TITLE}" should be listed`).toBeGreaterThan(-1);
+    expect(iNoSong, `"${PUNCT_THEN_LETTER_TITLE}" should be listed`).toBeGreaterThan(-1);
+
+    // Within N, ordering is by comparison key — "never ending..." before
+    // "no song)". Ordering by the raw title would put "(No Song)" first,
+    // since "(" sorts before any letter.
+    expect(iNeverending).toBeLessThan(iNoSong);
+
+    // Both are in the same, single N group.
+    const seq = await ledgerSequence(page);
+    expect(headerForTitle(seq, N_BUCKET_FIRST_TITLE)).toBe('N');
+    expect(headerForTitle(seq, PUNCT_THEN_LETTER_TITLE)).toBe('N');
+  });
+
+  test('the letter rail runs A-Z then "#", marked present like any other bucket (INT8-029)', async ({
+    page,
+  }) => {
+    await page.goto(songsUrl({ type: TYPE.all }));
+
+    const entries = await railEntries(page);
+    expect(entries.length, 'no rail entries found — see assumption A').toBeGreaterThan(0);
+    expect(entries.map((e) => e.text)).toEqual(RAIL_ENTRIES);
+    expect(entries[entries.length - 1].text).toBe(CATCH_ALL);
+
+    // With the full catalogue the "#" bucket is non-empty, so the rail must
+    // mark it present. Presence marking is not pinned by the ticket, so
+    // compare "#" against B — a bucket that unarguably has songs — rather
+    // than assert a class name this test has not been shown.
+    const hash = entries.find((e) => e.text === CATCH_ALL)!;
+    const present = entries.find((e) => e.text === 'B')!;
+    expect(
+      { tag: hash.tag, hasHref: hash.hasHref, ariaDisabled: hash.ariaDisabled },
+      '"#" is not marked present the way a non-empty letter bucket is',
+    ).toEqual({ tag: present.tag, hasHref: present.hasHref, ariaDisabled: present.ariaDisabled });
+  });
+
+  test('the letter rail stays in view while the ledger scrolls (INT8-029)', async ({ page }) => {
+    // The ticket pins this at desktop widths, and the project matrix includes
+    // phone viewports, so fix the viewport here rather than inherit it.
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(songsUrl({ type: TYPE.all }));
+
+    const rail = page.locator('.song-ledger__rail');
+    await expect(rail, 'the rail is missing — see assumption A').toBeVisible();
+
+    const railTop = async (): Promise<number> =>
+      rail.evaluate((el) => el.getBoundingClientRect().top);
+    const scrollTo = async (y: number): Promise<number> => {
+      await page.evaluate((to) => window.scrollTo(0, to), y);
+      // Let sticky positioning and any scroll handler settle.
+      await page.evaluate(
+        () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))),
+      );
+      return page.evaluate(() => Math.round(window.scrollY));
+    };
+
+    const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight);
+    expect(pageHeight, 'the 490-song ledger should be far taller than the viewport').toBeGreaterThan(
+      3000,
+    );
+
+    await scrollTo(0);
+    const topAtRest = await railTop();
+
+    const firstOffset = await scrollTo(1200);
+    expect(firstOffset, 'the page did not scroll').toBeGreaterThan(1000);
+    const topScrolled = await railTop();
+
+    const secondOffset = await scrollTo(2400);
+    expect(secondOffset).toBeGreaterThan(firstOffset);
+    const topScrolledFurther = await railTop();
+
+    // A non-sticky rail scrolls away with the page: its viewport top would be
+    // roughly topAtRest - 1200, i.e. far above the fold.
+    expect(
+      topScrolled,
+      `the rail scrolled away with the page (top was ${topAtRest} at rest, ${topScrolled} after scrolling 1200px)`,
+    ).toBeGreaterThan(topAtRest - 1000);
+
+    // Sticky's signature: a constant viewport position across scroll offsets,
+    // docked just below the sticky site header rather than pinned to 0.
+    expect(topScrolled).toBeGreaterThanOrEqual(0);
+    expect(topScrolled, 'the rail is docked well below the fold').toBeLessThan(300);
+    expect(
+      Math.abs(topScrolledFurther - topScrolled),
+      'the rail moved between two scroll positions, so it is not sticking',
+    ).toBeLessThanOrEqual(2);
   });
 });

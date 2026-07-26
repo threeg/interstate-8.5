@@ -96,7 +96,7 @@ values.
 | **Home module** | upcoming tour · recently-passed · this-week-in-history · song-spotlight · from-discography | — | label (teal) + Lora list + "MORE →" |
 | **Contribute block** | — | — | tint panel + Polo-Blue CTA |
 | **Filter bar** | — | default · **hover** (select/toggle/APPLY darken, `#336585`) · **focus** (2px teal outline, 2px offset) · **open** (native select expanded) · disabled (Released/Played-live "coming soon") | Type select, Alt-titles Show/Hide segmented toggle, APPLY (teal) |
-| **Song ledger** | letter-rail + group header + row | row default · **zebra** (alternating row fill `#fafbfb`, cosmetic) · **alt-title** (teal chip, FR-10 marking) · **hover** (Tint `#e4edf2` fill, full row width) · **focus** (2px inset ring, no fill change) | 3-col, sticky rail; "412 results". Note: "zebra" (cosmetic alternating-row shading) and "alt-title" (the FR-10 alternate-version marker chip) are two independent states — don't conflate them. |
+| **Song ledger** | letter-rail + group header + row | row default · **zebra** (alternating row fill `#fafbfb`, cosmetic) · **alt-title** (teal chip, FR-10 marking) · **hover** (Tint `#e4edf2` fill, full row width) · **focus** (2px inset ring, no fill change) | 3-col, sticky rail; "412 results". Note: "zebra" (cosmetic alternating-row shading) and "alt-title" (the FR-10 alternate-version marker chip) are two independent states — don't conflate them. **Rail/grouping (INT8-029):** the rail runs `A`–`Z` then a trailing **`#`** catch-all for any title that doesn't bucket to a letter (a leading digit, symbol, or a script with no ASCII-letter equivalent) — a slice-1 addition with no hi-fi precedent (see decisions log). |
 | **Lyric pair** | side-by-side (desktop) · stacked (mobile) | — | "THIS VERSION" \| "NORMAL VERSION →"; "[same as normal version]" (FR-20) |
 | **"Coming soon" stub** | — | disabled | reserves rail for deferred releases/last-played/tour-stats (FR-14 spirit). Precise spec: `1.5px dashed var(--color-line)` border, `var(--radius-md)` radius, container `opacity:.65` (whole block, not per-text); label Oswald 700 10px `.07em` `var(--color-fg-disabled)`; value Lora 13px `var(--color-fg-disabled)`. |
 | **Quote block** | — | — | left-rule, italic Lora |
@@ -147,3 +147,14 @@ values.
   `segmented-toggle` gained an optional link mode (`href_a`/`href_b`) so the Alternate-titles Show/Hide
   control can be two real links instead of JS-driven buttons, matching this project's "server-rendered,
   a filter change reloads the page" pattern.
+- **2026-07-25** — **Song ledger `#` catch-all added (INT8-029).** INT8-018 grouped songs by the
+  literal first character of the (article-stripped) title, so a title leading with punctuation or a
+  digit got a one-song, nonsense-headed group (e.g. a group literally headed `(`). The hi-fi shows only
+  an `A`–`Z` rail with no non-letter bucket — this is a slice-1 addition, not a hi-fi-documented
+  behaviour, added because real migrated titles (`(8)copy`, `(No Song)`, an ellipsis-led title) need
+  somewhere sensible to file. Rule: strip a leading run of non-letter/non-digit characters first (so
+  `(No Song)` files under **N**, looking past the punctuation), then bucket by whatever character is
+  found there — a letter gets that letter (accented Latin letters fold to their base ASCII form), a
+  digit or anything else goes to a single **`#`** bucket sorted after `Z`. The canonical implementation
+  is `i8_services`' `ArticleInsensitiveTitle::comparisonKey()`/`bucket()` — the theme's rendered grouping
+  and ordering both call it, nothing re-implements the rule.

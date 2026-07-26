@@ -61,7 +61,7 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 22 | INT8-020 | Song versions (side-by-side lyrics + links) | story | theme | 9 / theme | E04 | code | todo | INT8-019 |
 | 23 | INT8-021 | E2E capstone (Playwright + Axe) | task | tooling | 9 / theme | E04 | code | todo | INT8-018, INT8-019, INT8-020 |
 | 24 | INT8-028 | Page-title hero block in a full-width page-header region (random media background) | story | theme | 9 / theme | E03 | code + site-building | todo | INT8-015, INT8-016, INT8-018 |
-| 25 | INT8-029 | Bucket the song ledger's letter rail and groups, with a `#` catch-all | task | theme | 9 / theme | E04 | code | todo | INT8-018 |
+| 25 | INT8-029 | Bucket the song ledger's letter rail and groups, with a `#` catch-all | task | theme | 9 / theme | E04 | code | in-review | INT8-018 |
 
 > **Frontend independence (CONVENTIONS §4.5):** the theme foundation (E03, 015–017) builds against the
 > design/contract in parallel with the content model + migration (E02, 008–014); the Songs-section

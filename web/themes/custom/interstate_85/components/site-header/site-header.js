@@ -27,6 +27,20 @@
           window.addEventListener('scroll', solidify, { passive: true });
           solidify();
         }
+
+        // Published so other sticky elements (the song ledger's letter
+        // rail, INT8-029) can dock below the real header height instead of
+        // a guessed pixel value — the header's own height varies with the
+        // admin toolbar and the responsive breakpoint, a plain CSS token
+        // can't express that.
+        const publishHeaderHeight = () => {
+          document.documentElement.style.setProperty(
+            '--i8-header-height',
+            `${header.getBoundingClientRect().height}px`,
+          );
+        };
+        window.addEventListener('resize', publishHeaderHeight, { passive: true });
+        publishHeaderHeight();
       });
     },
   };

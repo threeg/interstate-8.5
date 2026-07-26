@@ -21,7 +21,15 @@
   font-size: var(--fs-label);
   color: var(--color-line);
   position: sticky;
-  top: 0;
+  /* Docks below the real (site-header.js-measured) header height, plus the
+     admin-toolbar displace offset the header itself docks below — a bare
+     `top: 0` put the rail underneath the sticky header entirely. */
+  top: calc(var(--i8-header-height, 89px) + var(--drupal-displace-offset-top, 0px));
+  /* INT8-029: `.song-ledger__layout` is a grid, and a grid item defaults to
+     `align-self: stretch` — the rail's box was as tall as the ledger beside
+     it, leaving sticky positioning no room to travel. `start` makes it
+     content-height instead. */
+  align-self: start;
 }
 
 .song-ledger__rail-letter {

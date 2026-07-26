@@ -33,14 +33,30 @@ function interstate_85_preprocess_views_view__songs(array &$variables): void {
       continue;
     }
     $title = $node->label();
-    $sort_key = ArticleInsensitiveTitle::stripLeadingArticle($title);
     $songs[] = [
       'title' => $title,
       'url' => $node->toUrl()->toString(),
       'is_alt' => !$node->get('field_parent_song')->isEmpty(),
-      'letter' => mb_strtoupper(mb_substr($sort_key, 0, 1)),
+      // INT8-029: the shared bucket rule, not a literal first-character —
+      // see ArticleInsensitiveTitle::bucket() for why (numbers/symbols get
+      // a single "#" catch-all instead of scattering as one-off groups).
+      'letter' => ArticleInsensitiveTitle::bucket($title),
+      'comparison_key' => ArticleInsensitiveTitle::comparisonKey($title),
     ];
   }
+
+  // INT8-029: the View's own SQL order is only a "good enough" baseline (see
+  // ArticleInsensitiveTitle's class docblock — a real PDO/MariaDB limitation
+  // rules out replicating the full bucket rule in SQL) — this re-sort over
+  // the already-fetched, unpaginated result set (FR-7: no pager, so it is
+  // always the complete set) is the definitive order, and it is the same
+  // canonical rule the grouping below uses, so the two cannot disagree.
+  // usort() is stable as of PHP 8.0, so equal keys keep the View's own
+  // relative order rather than shuffling arbitrarily.
+  usort($songs, function (array $a, array $b): int {
+    $rank = fn (string $letter): int => $letter === '#' ? 1 : 0;
+    return [$rank($a['letter']), $a['comparison_key']] <=> [$rank($b['letter']), $b['comparison_key']];
+  });
 
   $groups = [];
   foreach ($songs as $song) {
@@ -52,9 +68,12 @@ function interstate_85_preprocess_views_view__songs(array &$variables): void {
     $groups[$last_key]['songs'][] = $song;
   }
 
+  // INT8-029: the rail runs A–Z then a trailing "#", matching bucket()'s own
+  // ordering (SQL sorts the same way, so consecutive same-letter rows are
+  // never split into two groups by this sequential pass).
   $present_letters = array_unique(array_column($songs, 'letter'));
   $rail_letters = [];
-  foreach (range('A', 'Z') as $letter) {
+  foreach (array_merge(range('A', 'Z'), ['#']) as $letter) {
     $rail_letters[] = ['letter' => $letter, 'present' => in_array($letter, $present_letters, TRUE)];
   }
 

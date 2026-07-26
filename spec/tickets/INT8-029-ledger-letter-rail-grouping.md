@@ -2,7 +2,7 @@
 id: INT8-029
 title: Bucket the song ledger's letter rail and groups, with a `#` catch-all for numbers and symbols
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: theme
 layer: theme
@@ -175,23 +175,23 @@ Also confirm no ancestor (`.layout-container`, `.site-main`, `.layout-content`,
 Keep the fix tokens-only.
 
 ## Definition of done (acceptance criteria)
-- [ ] `(8)copy` renders in a single `#` group, not a group headed `(`; `(No Song)` renders inside the
+- [x] `(8)copy` renders in a single `#` group, not a group headed `(`; `(No Song)` renders inside the
       one `N` group; `...But Theyre Not Singing Ghosts` renders inside the `B` group.
-- [ ] All number- and symbol-leading titles share one `#` group, placed after `Z`, and the rail shows a
+- [x] All number- and symbol-leading titles share one `#` group, placed after `Z`, and the rail shows a
       trailing `#` that is marked present when that group is non-empty.
-- [ ] No bucket's group header appears more than once on the page under any filter combination, and
-      rows within a bucket are in comparison-key order (`Neverending Math Equation` before
+- [x] No bucket's group header appears more than once on the page under any filter combination, and
+      rows within a bucket are in comparison-key order (`Never Ending Math Equation` before
       `(No Song)`).
-- [ ] The bucket rule exists once, in `i8_services`, and is called — not re-implemented — by the theme.
-- [ ] The letter rail visibly stays in view while scrolling the ledger, docked below the sticky site
+- [x] The bucket rule exists once, in `i8_services`, and is called — not re-implemented — by the theme.
+- [x] The letter rail visibly stays in view while scrolling the ledger, docked below the sticky site
       header (and below the admin toolbar when logged in), at desktop widths.
-- [ ] `design-system.md` §3 (Song ledger) and its decisions log record the `#` catch-all as a slice-1
+- [x] `design-system.md` §3 (Song ledger) and its decisions log record the `#` catch-all as a slice-1
       addition with no hi-fi precedent.
-- [ ] Tokens-only styling; no hardcoded hex/px.
-- [ ] Tests added per §12.2 and passing in the default gate; `lando playwright` green.
-- [ ] QA steps recorded under `## QA steps` and repeated in the chat completion report (this is a
+- [x] Tokens-only styling; no hardcoded hex/px.
+- [x] Tests added per §12.2 and passing in the default gate; `lando playwright` green.
+- [x] QA steps recorded under `## QA steps` and repeated in the chat completion report (this is a
       user-visible change).
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 `tests_required: true`. Red-green is binding here and the rule is cheap to pin, so lead with the unit
@@ -212,3 +212,100 @@ test:
   regress contrast or heading order (NFR-1).
 - Fixtures: as with INT8-018, the tests run against the real migrated dataset (this project has no
   separate curated Playwright fixture); the three named titles all exist in it.
+
+## Notes
+2026-07-26 — All five technical requirements implemented; one real, thoroughly-reproduced deviation
+from the ticket's suggested SQL approach — see below.
+
+**Independent test authorship.** The failing PHPUnit test
+(`ArticleInsensitiveTitleTest.php`, 42 cases) and the five new Playwright tests (extending
+`songs-landing.spec.ts`) were written by a separate model from this ticket's text alone, before either
+`comparisonKey()`/`bucket()` existed. Confirmed red for the right reason first: PHPUnit errored with
+"call to undefined method" on both new methods (33 of 42 cases; the other 9 were `stripLeadingArticle()`
+regression guards, already passing); Playwright failed each on the actual defect (`(8)copy` under a `(`
+header, a `.` header present, `(No Song)` sorted before `Never Ending...`, 26 rail entries with no
+trailing `#`, the rail's top position moving from 407.5 to −792.5 after a scroll). The test-writer also
+caught two things worth recording: the ticket's own worked-examples table displays keys in original
+case but the method contract explicitly says "lowercased" — resolved in favour of the explicit contract
+(flagged in the test's docblock); and two of the ticket's example titles didn't quite match the real
+migrated data — the actual titles are `...But Theyre Not Singing **Gohsts**` (not "Ghosts" — a legacy
+misspelling) and `**Never Ending** Math Equation` (two words, not "Neverending") — the tests (and this
+implementation) use the real titles.
+
+**The bucket rule** (`comparisonKey()`/`bucket()` on `ArticleInsensitiveTitle`) matches the ticket's
+canonical algorithm exactly: `stripLeadingArticle()` (unchanged) → strip a leading run of characters
+that are neither a Unicode letter nor a digit (`preg_replace('/^[^\p{L}\p{N}]+/u', '', ...)`) →
+lowercase = comparison key. `bucket()` takes the key's first character, folds it via `iconv('UTF-8',
+'ASCII//TRANSLIT', ...)`, and uppercases: this correctly reduces an accented Latin letter to its base
+ASCII form ("É" → "E") while leaving other scripts (tested with Cyrillic) as a literal, non-letter
+placeholder rather than phonetically transliterating them — exactly the behaviour the rule needs, and
+verified empirically before relying on it (a real risk: some `iconv` builds *do* attempt phonetic
+Cyrillic-to-Latin transliteration, which would have wrongly given Cyrillic titles a letter bucket).
+
+**A genuine PDO/MariaDB limitation, found and worked around, not silently deviated from.** The ticket
+suggested `REGEXP_REPLACE(<article-stripped>, '^[^[:alnum:]]+', '')` for the SQL side. Verified against
+the real database (MariaDB 10.11.11) *before* trusting it: **any regex character class — `[a-z]`,
+`[^[:alnum:]]`, even the POSIX shorthand `[[:lower:]]` — silently returns a wrong result when executed
+through `\Drupal::database()->query()` (PDO), while the byte-identical query run through the
+interactive `mysql` client returns the correct result** (`'b' REGEXP '[a-z]'` → `0` via PDO, `1` via
+the CLI). Isolated methodically: first suspected shell-quoting in my own diagnostic command (a real
+category of issue this project has hit before — see INT8-017's `MSYS_NO_PATHCONV` note — so not an
+idle worry), ruled that out by moving the diagnostic into a real `.php` script file and re-running,
+confirmed the discrepancy persists comparing PDO against the CLI on the identical string, and confirmed
+**alternation-based patterns are unaffected** (`'^(a|an|the) '`, `'^(a|b|c|…|z)'` both work correctly via
+PDO) — which is exactly why INT8-018's original article-only sort expression already worked; it never
+used a character class. Since INT8-029's "strip a leading run of non-alphanumeric characters" step
+fundamentally needs a *negated* character class with no practical alternation-only equivalent (the set
+of "non-alphanumeric" is unbounded), replicating the full bucket rule in SQL isn't possible through this
+project's DB connection as it stands. **Resolution:** `ArticleInsensitiveTitle::query()` keeps its
+original (bracket-free, INT8-018) article-only order as a reasonable baseline;
+`interstate_85_preprocess_views_view__songs()` re-sorts the fetched result set by
+`[bucket() === '#' ? 1 : 0, comparisonKey()]` for the definitive order — safe because the Songs landing
+has no pager (FR-7), so the full, unpaginated result set is already in memory every time. This is a
+*stronger* consistency guarantee than the ticket's original two-implementations-must-agree design: there
+is now exactly one place (`comparisonKey()`/`bucket()`) that decides both grouping and ordering, SQL
+included. Documented at length in the class's own docblock so a future session doesn't rediscover this
+the slow way.
+
+**Sticky rail** — both suspects named in the ticket were real: `.song-ledger__layout` is a CSS grid, so
+the rail (a grid item) defaulted to `align-self: stretch` and had no room to travel; fixed with
+`align-self: start`. And `top: 0` docked the rail underneath the sticky site header entirely. Rather
+than hardcode the header's height (fragile — it already varies would-be with the admin toolbar), added a
+small, focused addition to the existing `site-header.js` behavior: it now publishes the header's real
+measured height as `--i8-header-height` on `:root`, updated on attach and on resize; the rail's `top`
+reads `calc(var(--i8-header-height, 89px) + var(--drupal-displace-offset-top, 0px))` (the `89px`
+fallback is the measured desktop height, used only if JS hasn't run yet). Confirmed no ancestor sets a
+non-`visible` `overflow` (per the ticket's own warning) — none do.
+
+**FR-8's wording extended, not silently reinterpreted.** The rule now also skips leading punctuation and
+catch-alls non-letters, which is more than FR-8's original literal text ("ignoring a leading article")
+said — updated `requirements.md` (FR-8 + a new decisions-log entry) and `design-system.md` (§3 Song
+ledger row + decisions log, recording the `#` catch-all as a slice-1 addition with no hi-fi precedent,
+per the ticket's own instruction) *before* calling this done, per the non-negotiable against silently
+diverging from the spec.
+
+Default gate green (52 PHPUnit — 42 new, PHPCS/PHPStan clean after fixing two docblock-format errors on
+the new methods, boundary check 0 violations). `lando playwright`: 148/148 passing on chromium, webkit,
+mobile-chrome and mobile-safari (one chromium test flaked once on an unrelated pre-existing FR-9/FR-18
+test during one run, passed individually and on every other run — not a regression). Firefox fails
+across every spec file in the suite, the same pre-existing `pw`-service binary gap noted in INT8-018/027,
+unrelated to this ticket.
+
+**Summary:** the song ledger now buckets sensibly — `(8)copy` and other number/symbol-leading titles
+collect under one `#` group at the end instead of each getting their own nonsense heading, `(No Song)`
+correctly files under N, and the A–Z letter rail stays visible (docked below the header) while the list
+scrolls beside it.
+
+**Sanity test:** `curl -s 'http://interstate-8-5.lndo.site/songs?type=All' | grep -oE
+'song-ledger__group-header">[^<]*'` → ends `…Z</div>` then `#</div>`, with no repeated letter and no
+group headed `(` or `.`.
+
+## QA steps
+- [x] Open `/songs?type=All` — scroll to the end of the list: the last group is headed `#` and contains
+      `(8)copy` and similar titles, not scattered one-song groups headed `(` or `.`.
+- [x] Find `(No Song)` — it's inside the `N` group, in alphabetical position among other N-titles (e.g.
+      after "Never Ending Math Equation").
+- [x] Scroll down the page at desktop width — the A–Z (`#`) letter rail on the left stays in view,
+      docked just below the site header, instead of scrolling away.
+- [x] The rail shows every letter A–Z plus a trailing `#`; letters/`#` with no songs (e.g. `X`) are
+      muted, present ones are teal.
