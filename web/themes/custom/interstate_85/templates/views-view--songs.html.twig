@@ -33,7 +33,7 @@
 
 <div class="layout-content__inner">
   <div class="filter-bar">
-    <form method="get" action="{{ filter_bar.action }}" class="filter-bar__form">
+    <form method="get" action="{{ filter_bar.action }}" id="songs-filter-form" class="filter-bar__form">
       {% embed 'interstate_85:select-field' with {name: 'type', label: 'Type'|t} %}
         {% block options %}
           {% for option in filter_bar.type_options %}
@@ -42,9 +42,6 @@
         {% endblock %}
       {% endembed %}
       <input type="hidden" name="alt" value="{{ filter_bar.alt_value }}">
-      {% embed 'interstate_85:button' with {variant: 'primary', button_type: 'submit'} only %}
-        {% block label %}{{ 'Apply'|t }}{% endblock %}
-      {% endembed %}
     </form>
 
     {% embed 'interstate_85:segmented-toggle' with {
@@ -68,6 +65,15 @@
     <div class="filter-bar__stub">
       {% embed 'interstate_85:select-field' with {name: 'playedlive', label: 'Played live'|t, disabled: true} only %}
         {% block options %}<option>{{ 'Coming soon'|t }}</option>{% endblock %}
+      {% endembed %}
+    </div>
+
+    {# Not a descendant of #songs-filter-form — the form[] attribute submits
+       it anyway, which is what lets APPLY sit at the far right of the whole
+       bar (per the hi-fi's margin-left:auto) instead of directly after Type. #}
+    <div class="filter-bar__apply">
+      {% embed 'interstate_85:button' with {variant: 'primary', button_type: 'submit', form: 'songs-filter-form'} only %}
+        {% block label %}{{ 'Apply'|t }}{% endblock %}
       {% endembed %}
     </div>
   </div>

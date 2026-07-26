@@ -1,10 +1,14 @@
 {% set selected = selected|default('a') %}
 {% set is_links = href_a and href_b %}
-<div class="segmented-toggle" role="group" aria-label="{{ label }}">
-  {% if is_links %}<a href="{{ href_a }}" class="segmented-toggle__option{{ selected == 'a' ? ' is-selected' : '' }}" aria-label="{{ label }}: {{ option_a_label|default('') }}" aria-current="{{ selected == 'a' ? 'true' : 'false' }}">{% else %}<button type="button" class="segmented-toggle__option{{ selected == 'a' ? ' is-selected' : '' }}" aria-pressed="{{ selected == 'a' ? 'true' : 'false' }}">{% endif %}
-    {% block option_a %}{% endblock %}
-  {% if is_links %}</a>{% else %}</button>{% endif %}
-  {% if is_links %}<a href="{{ href_b }}" class="segmented-toggle__option{{ selected == 'b' ? ' is-selected' : '' }}" aria-label="{{ label }}: {{ option_b_label|default('') }}" aria-current="{{ selected == 'b' ? 'true' : 'false' }}">{% else %}<button type="button" class="segmented-toggle__option{{ selected == 'b' ? ' is-selected' : '' }}" aria-pressed="{{ selected == 'b' ? 'true' : 'false' }}">{% endif %}
-    {% block option_b %}{% endblock %}
-  {% if is_links %}</a>{% else %}</button>{% endif %}
+{% set label_id = 'segmented-toggle-label--' ~ label|clean_class %}
+<div class="segmented-toggle-field">
+  <span class="segmented-toggle__label" id="{{ label_id }}">{{ label }}</span>
+  <div class="segmented-toggle" role="group" aria-labelledby="{{ label_id }}">
+    {% if is_links %}<a href="{{ href_a }}" class="segmented-toggle__option{{ selected == 'a' ? ' is-selected' : '' }}" aria-label="{{ label }}: {{ option_a_label|default('') }}" aria-current="{{ selected == 'a' ? 'true' : 'false' }}">{% else %}<button type="button" class="segmented-toggle__option{{ selected == 'a' ? ' is-selected' : '' }}" aria-pressed="{{ selected == 'a' ? 'true' : 'false' }}">{% endif %}
+      {% block option_a %}{% endblock %}
+    {% if is_links %}</a>{% else %}</button>{% endif %}
+    {% if is_links %}<a href="{{ href_b }}" class="segmented-toggle__option{{ selected == 'b' ? ' is-selected' : '' }}" aria-label="{{ label }}: {{ option_b_label|default('') }}" aria-current="{{ selected == 'b' ? 'true' : 'false' }}">{% else %}<button type="button" class="segmented-toggle__option{{ selected == 'b' ? ' is-selected' : '' }}" aria-pressed="{{ selected == 'b' ? 'true' : 'false' }}">{% endif %}
+      {% block option_b %}{% endblock %}
+    {% if is_links %}</a>{% else %}</button>{% endif %}
+  </div>
 </div>

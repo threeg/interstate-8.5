@@ -54,7 +54,13 @@
   background: var(--color-tint);
   padding: 5px var(--space-3);
   border-radius: var(--radius-sm);
-  margin: var(--space-3) 0 3px;
+  /* The hi-fi's own inline style uses a bare 3px here, which reads fine in a
+     static mockup where only the header carries the tint fill — but once the
+     row directly beneath it is ALSO tint-filled on hover, 3px isn't enough
+     gap to read as separate at a glance, and the two blocks visually merge
+     (reported as "the hover pushes out beyond the section above it").
+     --space-2 keeps the same dense feel while staying clearly legible. */
+  margin: var(--space-3) 0 var(--space-2);
 }
 
 .song-ledger__group-header:first-child {

@@ -34,6 +34,13 @@ props:
       type: boolean
       title: Disabled
       default: false
+    form:
+      type: string
+      title: Form id
+      description: >-
+        HTML form attribute — lets this button submit a <form> it is not a
+        descendant of (e.g. a right-aligned APPLY that is not the last child
+        of the form it submits). Ignored when href is set.
 slots:
   label:
     title: Label

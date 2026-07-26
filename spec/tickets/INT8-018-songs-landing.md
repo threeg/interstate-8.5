@@ -229,6 +229,35 @@ letter rail, defaulting to Modest Mouse with alternates shown — exactly the "w
 glance" the ticket asks for, with Type/Alt-titles genuinely functional and Released/Played-live
 correctly reading as "coming soon."
 
+2026-07-25 (revision, user review) — Three fixes from the user's first-pass review, addressed here
+because they're defects in this ticket's own deliverable (the filter bar and ledger row states), not new
+scope; the rest of the feedback became INT8-028 and INT8-029:
+
+- **APPLY was between Type and Alt-titles, not right-aligned** (the hi-fi's `margin-left:auto`).
+  Splitting Type+Apply into their own `<form>` had pulled Apply away from the bar's far right. Fixed by
+  giving the form an `id` and using the HTML5 `form="…"` attribute on the button (added as a new
+  optional prop on the `button` SDC) so it can sit as the *last* child of `.filter-bar` — after the
+  Alt-titles toggle and the disabled stubs — while still submitting the Type form it's not a descendant
+  of. `.filter-bar__apply { margin-left: auto; }` does the actual push.
+- **Alternate-titles had no visible label.** `segmented-toggle` (INT8-016) only ever set an `aria-label`
+  on the group — correct for screen readers, invisible to sighted users, unlike the Type select's real
+  `<label>`. Added a visible `.segmented-toggle__label` (styled identically to `.select-field__label`)
+  and switched the group's accessible name to `aria-labelledby` pointing at it, rather than keeping a
+  redundant `aria-label` alongside a now-visible label. This is a component-level fix (INT8-016's
+  component), surfaced by INT8-018 being the first ticket to actually wire it up.
+- **Hovering the row directly under a group header visually merged with the header above it.**
+  Reproduced with a screenshot before touching anything: the group header's `margin-bottom` was a bare
+  `3px` (copied verbatim from the hi-fi's own inline style), which is invisible once the row below it is
+  *also* tint-filled on hover — both blocks are `--color-tint`, so a 3px gap read as zero at normal
+  viewing size. The hi-fi is a static mockup and never actually demonstrates this hover-adjacent-to-header
+  combination, so this was never visually validated there. Fixed by widening the gap to `var(--space-2)`
+  (8px) — enough to read as clearly separated, still tokens-only, no new colours.
+
+Re-verified via Playwright screenshots (not committed, throwaway) at each step before considering it
+fixed, rather than trusting the CSS by inspection alone. Default gate and `lando playwright` re-run clean
+after these changes (same 104/104 pass profile as before; Firefox gap unchanged, still pre-existing/
+out of scope).
+
 **Sanity test:** `curl -s http://interstate-8-5.lndo.site/songs | grep -c 'href="/songs/'` → `278`
 (Modest Mouse default); `curl -s '...?type=All' | grep -c 'href="/songs/'` → `490`;
 `lando drush cim -y` → "There are no changes to import."

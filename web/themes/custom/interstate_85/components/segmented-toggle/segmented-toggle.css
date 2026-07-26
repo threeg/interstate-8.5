@@ -1,3 +1,14 @@
+/* Matches .select-field__label (select-field.css) so the Type select and the
+   Alternate-titles toggle read as a matched pair in the filter bar. */
+.segmented-toggle__label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--fs-meta);
+  letter-spacing: var(--ls-label);
+  color: var(--color-fg-muted);
+  margin-bottom: var(--space-1);
+}
+
 .segmented-toggle {
   display: flex;
   border: 1px solid var(--color-accent);

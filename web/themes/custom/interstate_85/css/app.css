@@ -108,6 +108,10 @@
   opacity: .5;
 }
 
+.filter-bar__apply {
+  margin-left: auto;
+}
+
 /* Songs landing — empty state (FR-19) */
 .songs-empty {
   text-align: center;
