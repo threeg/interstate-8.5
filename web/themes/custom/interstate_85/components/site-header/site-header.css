@@ -51,18 +51,24 @@
   font-family: var(--font-meta);
   font-size: var(--fs-meta);
   letter-spacing: var(--ls-nav);
+  /* Corrected 2026-07-21 (INT8-027): this was white unconditionally, correct
+     only for the transparent variant it was originally scoped to (a dark
+     photo behind it). Now that the slogan also shows on the solid (white)
+     header, white-on-white failed Axe outright (1.32:1, needs 4.5:1) — same
+     variant-pair pattern as .site-branding__name just above. */
+  color: var(--color-fg-muted);
+}
+
+.site-header--transparent .site-branding__slogan {
   color: var(--color-surface);
   text-shadow: 0 1px 4px rgba(0, 0, 0, .5);
 }
 
-/* 1B.dc.html shows the slogan only in the transparent (hero) header — the
-   solid variant, used everywhere real today, omits it in every instance
-   in the file (homepage, homepage-extra-wide, songs-landing, songs-landing-
-   extra-wide, songs-landing-desktop all agree). */
-.site-header--solid .site-branding__slogan,
-.site-header--transparent.is-scrolled .site-branding__slogan {
-  display: none;
-}
+/* Corrected 2026-07-21 (INT8-027): shown under the wordmark on BOTH header
+   variants at every desktop/tablet width (>= --bp-nav) — the original read
+   ("solid header omits it") missed that the refreshed hi-fi shows it on
+   every header instance, transparent or solid. Hidden only on the mobile
+   toggle bar, in the @media block below — there's no room for it there. */
 
 .site-header__nav {
   font-family: var(--font-display);
@@ -105,26 +111,50 @@
   color: var(--color-surface);
 }
 
-/* Hover and current-section (FR-16 framing) share the one nav-specific
-   indicator style 1B.dc.html actually shows — a border-bottom accent bar
-   (every "current" SONGS instance in the file: solid = teal text + teal
-   border, transparent = unchanged white text + polo-blue border). The file
-   has no separate nav-hover example; its "Hover link" (text-decoration:
-   underline) is a different component (inline Lora body links), not this
-   one, so hover reuses the nav's own accent-bar language instead of
-   borrowing that unrelated style. */
-.site-header__nav a:hover,
+/* Corrected 2026-07-21 (INT8-027, design-system.md §3 Header/nav row): hover
+   and current-section are NOT the same treatment — hover previews the
+   current look but with a different underline colour so the two stay
+   distinguishable. `:not(.is-active):not([aria-current])` makes current
+   always win over hover on the same link (hovering the page you're already
+   on shouldn't make it look like you're about to leave it), rather than
+   relying on selector specificity/source order to sort that out. */
+.site-header__nav a:not(.is-active):not([aria-current="page"]):hover {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent-alt);
+}
+
 .site-header__nav .is-active,
 .site-header__nav a[aria-current="page"] {
   color: var(--color-accent);
   border-bottom-color: var(--color-accent);
 }
 
-.site-header--transparent .site-header__nav a:hover,
+.site-header--transparent .site-header__nav a:not(.is-active):not([aria-current="page"]):hover {
+  color: var(--color-nav-hover-on-transparent);
+  border-bottom-color: var(--color-accent-alt);
+}
+
 .site-header--transparent .site-header__nav .is-active,
 .site-header--transparent .site-header__nav a[aria-current="page"] {
   color: var(--color-surface);
   border-bottom-color: var(--color-accent-alt);
+}
+
+/* Focus ring (design-system.md §4, NFR-1) — none existed anywhere in the
+   theme before this ticket. Teal by default; swapped to the on-dark ring
+   while the transparent header is genuinely transparent (not yet
+   solidified by scroll, when it reverts to the light-surface treatment). */
+.site-header__nav a:focus-visible,
+.site-header__toggle:focus-visible,
+.site-branding__link:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.site-header--transparent:not(.is-scrolled) .site-header__nav a:focus-visible,
+.site-header--transparent:not(.is-scrolled) .site-header__toggle:focus-visible,
+.site-header--transparent:not(.is-scrolled) .site-branding__link:focus-visible {
+  outline-color: var(--focus-ring-color-on-dark);
 }
 
 .site-header__toggle {
@@ -196,7 +226,9 @@
     right: 0;
     background: var(--color-surface);
     box-shadow: var(--shadow-header);
-    padding: var(--space-5) var(--space-6);
+    /* Rows own their own padding below (hi-fi "HEADER · MOBILE — OPEN") —
+       the panel itself has none, so rows can run edge to edge. */
+    padding: 0;
   }
 
   .site-header__nav.is-open {
@@ -205,16 +237,50 @@
 
   .site-header__nav ul {
     flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-4);
+    align-items: stretch;
+    gap: 0;
+  }
+
+  /* Corrected 2026-07-21 (INT8-027): full-width rows with a divider between
+     them, replacing the desktop's gap-separated column. `14px 24px` and the
+     divider/accent widths are copied literally from the hi-fi's own "HEADER
+     · MOBILE — OPEN" panel spec — no spacing token lands on 14px, the same
+     situation as the song ledger's group-header margin (INT8-018/029). */
+  .site-header__nav li {
+    padding: 14px var(--space-6);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .site-header__nav li:last-child {
+    border-bottom: none;
+  }
+
+  /* Current item: a left-border accent instead of the desktop underline,
+     which doesn't read well as a full-width row. Left unset (not
+     `solid transparent`) on every other row, so "no accent" is genuinely
+     absent rather than an invisible-coloured border still counted as one. */
+  .site-header__nav li:has(.is-active),
+  .site-header__nav li:has(a[aria-current="page"]) {
+    border-left: 3px solid var(--color-accent);
+    padding-left: calc(var(--space-6) - 3px);
   }
 
   .site-header__nav a {
+    display: block;
     color: var(--color-nav);
+    /* The desktop underline is drawn with border-bottom + padding-bottom on
+       the <a>; the row's own border-bottom above is the mobile divider, so
+       neither should also draw the desktop accent bar here. */
+    border-bottom: none;
+    padding-bottom: 0;
   }
 
   .site-header__toggle {
     display: flex;
+  }
+
+  .site-branding__slogan {
+    display: none;
   }
 }
 
