@@ -1,0 +1,7 @@
+page_hero:
+  js:
+    js/page-hero.js: {}
+  dependencies:
+    - core/once
+    - core/drupal
+    - core/drupalSettings

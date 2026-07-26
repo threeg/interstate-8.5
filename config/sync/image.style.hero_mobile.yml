@@ -1,0 +1,21 @@
+uuid: 396fbd52-6759-4ae2-b0f0-ff3f6f7c67f5
+langcode: en
+status: true
+dependencies: {  }
+name: hero_mobile
+label: 'Hero (mobile, 760w)'
+effects:
+  ac2fc2b0-7df7-45fc-9153-fabfbd95097d:
+    uuid: ac2fc2b0-7df7-45fc-9153-fabfbd95097d
+    id: image_scale
+    weight: null
+    data:
+      width: 760
+      height: null
+      upscale: false
+  0d21834b-c9c0-48c1-969b-3fdfed8415cc:
+    uuid: 0d21834b-c9c0-48c1-969b-3fdfed8415cc
+    id: image_convert_avif
+    weight: null
+    data:
+      extension: webp

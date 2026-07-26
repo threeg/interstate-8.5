@@ -201,6 +201,17 @@ persisted even with the lazy builder in place. Both turned out to be expected, n
   confirmed instead via cache-busted query strings, and independently via the Playwright suite's own
   browser-based rotation probe (both showed real rotation between the two seeded images).
 
+> **Correction, 2026-07-26 — this conclusion was wrong.** The BigPipe explanation above does not hold
+> up: BigPipe is a deliberate no-op for anonymous requests with no session
+> (`BigPipeStrategy::processPlaceholders()` returns early when `!$sessionConfiguration->hasSession()`),
+> which is the normal case for anonymous visitors to a public archive — there was no BigPipe markup in
+> the response at all (`grep`'d for it, zero matches). The real cause: Drupal's internal Page Cache
+> ignores render-array cache max-age entirely and caches responses **permanently**
+> (`PageCache::storeResponse()`, its own comment: *"page cache ignores max age"*), so the `#lazy_builder`
+> isolation never achieved per-request variation for a real anonymous visitor — confirmed by the site
+> owner in a real (non-incognito-cached) browser: the image was frozen. See the 2026-07-26 entry below
+> for the fix (moved the rotation client-side).
+
 **Title alignment at extra-wide.** Decided, per this ticket's own instruction, **against** building the
 hi-fi's `SONGS LANDING · EXTRA-WIDE` composition — the standard `page-title` hero variant (title left,
 photo filling the rest) is used at all viewport widths, with no extra-wide-specific layout variant.
@@ -224,3 +235,55 @@ Songs' own bespoke hero with one shared, cache-safe block.
 **Sanity test:** visit `/songs` and `/user/login` — both show a full-width hero with the correct page
 title (`Songs`, `Log in`) over a background photo; visit `/` — no hero. Reloading `/songs` a few times
 with a cache-busting query string (e.g. `/songs?x=1`, `/songs?x=2`) shows the background photo changing.
+
+**2026-07-26 — review feedback addressed.**
+
+Four issues from the user's first review, all fixed in this pass:
+
+1. **Title far-left-aligned, not in the 980px content column.** `hero.css`'s `.hero--page-title
+   .hero__title` padded from the edges of the full 1440px sheet (`--space-9`), not the 980px
+   `--content-max` column the rest of the page's content uses. Fixed: the heading itself now gets
+   `max-width: var(--content-max); margin-inline: auto; padding-inline: var(--space-6)` — the exact
+   same cap + gutter `.layout-content` uses — so the title lines up with body copy below it at every
+   viewport width, while the photo still spans the full sheet.
+
+2. **Background image appeared frozen (real browser, incognito).** See the correction above: classic
+   Page Cache ignores render-array max-age and caches permanently, and BigPipe is a no-op for sessionless
+   anonymous requests, so the server-side `#lazy_builder` random pick never varied per page load for a
+   real visitor. Fixed by moving the randomisation client-side: `PageHeroBlock::build()` now renders one
+   deterministic candidate server-side (fully cacheable — no more `#lazy_builder`, no more max-age
+   tricks) plus the other candidates' URLs via `drupalSettings`; a small JS behaviour
+   (`i8_services/js/page-hero.js`, `Drupal.behaviors.i8PageHero`) rerolls to a true random pick on every
+   page **load**, which works identically whether the served HTML came from Page Cache or not. Removed
+   `PageHeroImageRenderer` and the `TrustedCallbackInterface` plumbing it needed — no longer applicable.
+   Disabled the `big_pipe` module (enabled last pass on a mistaken assumption; confirmed it wasn't doing
+   anything for this page and added unexplained config for no benefit).
+
+3. **Config form used `entity_autocomplete` tags instead of the media browser.** Replaced with a real
+   Media Library modal: a new `Drupal\i8_services\MediaLibrary\PageHeroMediaLibraryOpener` (implements
+   `MediaLibraryOpenerInterface`, tagged `media_library.opener`, gated on the `administer blocks`
+   permission) plus a rebuilt `PageHeroBlock::blockForm()` that opens the library via AJAX
+   (`MediaLibraryUiBuilder::buildUi()`) and receives selections the same way core's own
+   `MediaLibraryWidget` field widget does, adapted for plain block-plugin config rather than a real
+   field (no weight/tabledrag — order doesn't matter for a random pool). Verified end-to-end by
+   simulating the AJAX "Add background images" click against a real authenticated session: it correctly
+   returns an `openDialog` command with the real media grid, scoped to the `image` bundle, via the
+   custom opener.
+
+4. **Background image wasn't using an image style.** Added two width-based image styles,
+   `hero_mobile` (760w, matching the theme's one real breakpoint `--bp-nav`) and `hero_desktop` (1440w,
+   matching `--sheet-max` — the hero never renders wider than that regardless of viewport, so one
+   desktop-width style covers tablet through ultra-wide). Rather than the `responsive_image` module's
+   breakpoint/`<picture>` machinery — overkill here since there's no per-breakpoint art-direction crop,
+   only a bandwidth-appropriate width choice — the rendered `<img>` carries a plain `srcset`/`sizes`
+   pair built from these two styles, letting the browser pick the right resource for its viewport/DPR.
+   Both styles follow the project's existing image-style convention (`image_scale` + webp conversion,
+   matching `image.style.{large,medium,wide}.yml`).
+
+Re-ran the full default gate (green) and the independent Playwright suite (`page-hero.spec.ts`, 26/26 on
+chromium + webkit, including the rotation and page-cache-HIT scenarios) after these changes. Re-exported
+config (the two image styles, `big_pipe` removed from `core.extension.yml`); `drush cim -y` is a no-op.
+
+Separately, the user reported a second, unrelated bug found during this same review: the primary nav's
+current-section marking disappears on `/songs` once filter query-string params are present. Filed as
+**INT8-031** (not fixed here — out of scope for this ticket, which only touches the hero).

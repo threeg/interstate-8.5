@@ -1,0 +1,21 @@
+uuid: 6820408d-d574-431c-96d7-e5e8351571b8
+langcode: en
+status: true
+dependencies: {  }
+name: hero_desktop
+label: 'Hero (desktop, 1440w)'
+effects:
+  24f708d4-6ef5-48f6-82a3-b88098e1d3eb:
+    uuid: 24f708d4-6ef5-48f6-82a3-b88098e1d3eb
+    id: image_scale
+    weight: null
+    data:
+      width: 1440
+      height: null
+      upscale: false
+  2d951349-ef0c-44b4-93c3-822d27dea817:
+    uuid: 2d951349-ef0c-44b4-93c3-822d27dea817
+    id: image_convert_avif
+    weight: null
+    data:
+      extension: webp

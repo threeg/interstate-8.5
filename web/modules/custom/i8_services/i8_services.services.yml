@@ -1,4 +1,5 @@
 services:
-  i8_services.page_hero_image_renderer:
-    class: Drupal\i8_services\PageHeroImageRenderer
-    arguments: ['@entity_type.manager']
+  i8_services.media_library_opener.page_hero:
+    class: Drupal\i8_services\MediaLibrary\PageHeroMediaLibraryOpener
+    tags:
+      - { name: media_library.opener }
