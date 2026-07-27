@@ -2,7 +2,7 @@
 id: INT8-E04
 title: Songs section (landing + song page)
 type: epic
-status: todo
+status: done
 milestone: 9
 batch: theme
 layer: theme

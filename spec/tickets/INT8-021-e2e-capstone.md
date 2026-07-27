@@ -2,7 +2,7 @@
 id: INT8-021
 title: E2E capstone (Playwright + Axe)
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: theme
 layer: tooling
