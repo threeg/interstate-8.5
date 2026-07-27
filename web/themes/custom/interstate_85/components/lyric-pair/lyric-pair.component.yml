@@ -1,0 +1,22 @@
+$schema: 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/metadata.schema.json'
+name: Lyric pair
+status: experimental
+description: >-
+  The two-column side-by-side lyrics comparison for an alternate song version
+  (INT8-020, FR-20) — side-by-side on desktop, stacked on mobile, split by
+  `--color-line-accent` (design-system.md §3). Purely structural: each slot is
+  a fully-formed block the caller builds (its own column label plus content),
+  not a label prop — nesting another SDC's own `{% embed %}` inside this
+  component's template would trip the core prop-validation bug already
+  documented in views-view--songs.html.twig and coming-soon-stub, so the
+  labels are plain markup at the call site, not a second embedded component.
+props:
+  type: object
+  properties: {}
+slots:
+  this_version:
+    title: This version
+    description: 'This song''s own lyrics, or the "[same as normal version]" placeholder.'
+  normal_version:
+    title: Normal version
+    description: 'The parent song''s own lyrics.'

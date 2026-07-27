@@ -7,9 +7,12 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\i8_services\Plugin\views\sort\ArticleInsensitiveTitle;
+use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_preprocess_HOOK() for menu--main.html.twig.
@@ -216,4 +219,68 @@ function interstate_85_preprocess_views_view__songs(array &$variables): void {
     'alt_hide_url' => Url::fromRoute('view.songs.page_1', [], ['query' => $current_route_query + ['alt' => '0']])->toString(),
     'alt_selected' => $alt === '0' ? 'b' : 'a',
   ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node--song--full.html.twig.
+ *
+ * Resolves a song's version relationships (INT8-020, FR-13/FR-20): whether
+ * this song IS an alternate (has a parent), and whether it HAS alternates
+ * (other songs whose `field_parent_song` points back at it). Neither
+ * direction is expressible as a plain field render — the "is an alternate"
+ * side needs a second entity's field rendered inline (the parent's lyrics,
+ * filtered through its own text format, which only `viewField()` does
+ * correctly), and the "has alternates" side needs a reverse reference no
+ * field on this entity carries at all.
+ *
+ * Bundle-scoped (`__song`), not view-mode-scoped: `full` is the only view
+ * mode this content type is ever rendered in (INT8-019), so there is no
+ * second case this would wrongly fire for.
+ */
+function interstate_85_preprocess_node__song(array &$variables): void {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+
+  // This song IS an alternate version: it has a parent.
+  $parent = $node->get('field_parent_song')->entity;
+  if ($parent instanceof NodeInterface && $parent->access('view')) {
+    $cache->addCacheableDependency($parent);
+    $variables['alternate_of'] = [
+      'label' => $parent->label(),
+      'url' => $parent->toUrl()->toString(),
+    ];
+    $variables['same_as_parent'] = (bool) $node->get('field_lyrics_same_as_parent')->value;
+    // The parent's OWN lyrics, rendered through its own text format — not
+    // `$parent->get('field_lyrics')->value`, which would skip filtering.
+    // `viewField()` defaults to a formatter that prints the field's label;
+    // this page never shows field labels (the section-label above it already
+    // says "Normal version"), so it is hidden explicitly.
+    $variables['parent_lyrics'] = $view_builder->viewField($parent->get('field_lyrics'), ['label' => 'hidden']);
+  }
+
+  // This song HAS alternates: other songs whose parent is this one. No field
+  // on $node carries this — it is the reverse of field_parent_song, so it
+  // has to be queried. `node_list` is the standard tag for "the SET of
+  // matching entities can change" (a new alternate added elsewhere), which
+  // no per-node cache tag covers.
+  $cache->addCacheTags(['node_list']);
+  $alternate_ids = \Drupal::entityTypeManager()->getStorage('node')->getQuery()
+    ->condition('type', 'song')
+    ->condition('field_parent_song', $node->id())
+    ->condition('status', NodeInterface::PUBLISHED)
+    ->sort('title')
+    ->accessCheck(TRUE)
+    ->execute();
+  if ($alternate_ids) {
+    $alternates = [];
+    foreach (Node::loadMultiple($alternate_ids) as $alternate) {
+      $cache->addCacheableDependency($alternate);
+      $alternates[] = ['label' => $alternate->label(), 'url' => $alternate->toUrl()->toString()];
+    }
+    $variables['alternate_versions'] = $alternates;
+  }
+
+  $cache->applyTo($variables);
 }

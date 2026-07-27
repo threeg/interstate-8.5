@@ -1,0 +1,29 @@
+.lyric-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin: var(--space-2) 0 var(--space-7);
+}
+
+.lyric-pair__col {
+  padding: var(--space-5) var(--space-6);
+}
+
+.lyric-pair__col:first-child {
+  /* design-system.md §3, "Lyric pair" — the same divider treatment as the
+     song page's own main/rail split (INT8-019 review round 3). */
+  border-right: 2px dashed var(--color-line-accent);
+}
+
+@media (max-width: 759px) {
+  .lyric-pair {
+    display: block;
+  }
+
+  .lyric-pair__col:first-child {
+    border-right: none;
+    border-bottom: 2px dashed var(--color-line-accent);
+  }
+}

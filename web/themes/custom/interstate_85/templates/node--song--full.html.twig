@@ -42,6 +42,39 @@
  * page.html.twig, not hardcoded here. It held no field content and needed
  * no per-node data, so a block was strictly the right shape for it — this
  * template only ever needed to render the node's own fields.
+ *
+ * INT8-020 (FR-13, FR-20) — song versions. `alternate_of`, `same_as_parent`,
+ * `parent_lyrics` and `alternate_versions` all come from
+ * interstate_85_preprocess_node__song(): none of them is expressible as a
+ * plain field render, since they either need a SECOND entity's field
+ * (the parent's lyrics) or a reverse reference no field on this entity
+ * carries (which other songs point back at it).
+ *
+ * When `alternate_of` is set, the plain single-column LYRICS section below
+ * is replaced by the `lyric-pair` SDC (THIS VERSION | NORMAL VERSION) —
+ * never both; a song is either a standard lyrics page or an alternate's
+ * comparison view, matching FR-20's scope. The column labels inside it are
+ * plain markup reusing `.section-label`'s own classes, not a nested
+ * `{% embed 'interstate_85:section-label' %}`: embedding one SDC's embed
+ * inside a block passed to ANOTHER embed (`lyric-pair`'s `this_version`/
+ * `normal_version` blocks) is the same class of nesting that already broke
+ * `views-view--songs.html.twig` and is avoided here for the same reason,
+ * not assumed safe.
+ *
+ * Cross-links to the parent use the `link` component's `inline`/`action`
+ * variants (design-system.md §3 — plain-colour inline links failed Axe's
+ * `link-in-text-block`, WCAG 1.4.1: a link inside running text needs more
+ * than colour to read as a link, which `link--inline`'s underline gives it).
+ * Only the TWO links outside `lyric-pair` (the cross-reference line below,
+ * and the alternate-versions list) are genuine `{% embed 'interstate_85:link' %}`
+ * calls — safe, since neither sits inside another component's block. Doing
+ * that at least once per page is also what attaches `link.css` at all: an
+ * SDC's CSS is only attached where it is genuinely rendered, not wherever
+ * its class names are reused, so the two links INSIDE `lyric-pair` above
+ * (same reasoning as the labels — no nested embed) rely on one of these two
+ * having already put `link.css` on the page. Both are on every page that
+ * can reach them: an alternate's own page always has the cross-reference
+ * link; a parent's page always has the alternates list.
  */
 #}
 {%
@@ -70,7 +103,34 @@
       {% endembed %}
     {% endif %}
 
-    {% if has_lyrics %}
+    {% if alternate_of %}
+      <p class="song-detail__alt-link">
+        {{ 'Alternate title/lyrics for →'|t }}
+        {% embed 'interstate_85:link' with {href: alternate_of.url, variant: 'inline'} %}
+          {% block label %}{{ alternate_of.label }}{% endblock %}
+        {% endembed %}
+      </p>
+
+      {% embed 'interstate_85:lyric-pair' %}
+        {% block this_version %}
+          <div class="section-label section-label--default">{{ 'This version'|t }}</div>
+          {% if same_as_parent %}
+            <p class="song-detail__same-as-parent">
+              <a class="link link--inline" href="{{ alternate_of.url }}">{{ '[same as normal version]'|t }}</a>
+            </p>
+          {% elseif has_lyrics %}
+            <div class="song-detail__lyrics">{{ content.field_lyrics }}</div>
+          {% endif %}
+        {% endblock %}
+        {% block normal_version %}
+          <div class="section-label section-label--default">
+            {{ 'Normal version'|t }} —
+            <a class="link link--inline" href="{{ alternate_of.url }}">{{ alternate_of.label }}</a>
+          </div>
+          <div class="song-detail__lyrics">{{ parent_lyrics }}</div>
+        {% endblock %}
+      {% endembed %}
+    {% elseif has_lyrics %}
       {% embed 'interstate_85:section-label' %}
         {% block label %}{{ 'Lyrics'|t }}{% endblock %}
       {% endembed %}
@@ -89,6 +149,21 @@
         {% block label %}{{ 'Video'|t }}{% endblock %}
       {% endembed %}
       <div class="song-detail__video">{{ content.field_video }}</div>
+    {% endif %}
+
+    {% if alternate_versions %}
+      {% embed 'interstate_85:section-label' %}
+        {% block label %}{{ 'Alternate versions'|t }}{% endblock %}
+      {% endembed %}
+      <ul class="song-detail__alternates">
+        {% for alternate in alternate_versions %}
+          <li>
+            {% embed 'interstate_85:link' with {href: alternate.url} %}
+              {% block label %}{{ alternate.label }}{% endblock %}
+            {% endembed %}
+          </li>
+        {% endfor %}
+      </ul>
     {% endif %}
   </div>
 </article>
