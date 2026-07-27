@@ -242,3 +242,38 @@ throwaway probe described in round 1's Notes — the round-1 statement that FR-1
 boundary). Full Playwright suite **89/89 on chromium**, all 17 song-page tests included. Config exported
 (`interstate_85.info.yml`'s new region isn't itself config, but `block.block.interstate_85_songsidebar`
 is); `drush cim -y` is a no-op.
+
+**2026-07-26 — review round 2, follow-up on the sidebar restructure.** Three more issues from the same
+review, all in `page.html.twig`/`app.css`, none touching the node template or the block itself.
+
+1. **DOM order.** `sidebar_second` was rendering before `sidebar_first` — an artifact of `sidebar_second`
+   living inside the new two-column row while `sidebar_first` stayed a separate sibling below it. Fixed
+   by making both true siblings of `page.content` in one row, in reading order: first, then content,
+   then second — so "first" now genuinely comes first in the markup.
+2. **Asymmetric wrapping.** `page.content` had gained an extra `.layout-content__main` wrapper div that
+   `sidebar_first` never had. Removed it — `page.content` prints bare again, exactly as it did before this
+   region existed; only each sidebar's own `<aside>` landmark wraps anything, which was already how
+   `sidebar_first` worked.
+3. **The rail rendered detached from the main content, far down the page — a real bug, not a screenshot
+   artifact.** Root cause: `page.sidebar_first` is truthy in Twig even with **no block placed in it** —
+   Drupal still emits a render array (and, once printed, a bare `<div></div>`) for a declared, empty
+   region, and a plain `{% if page.sidebar_first %}` treats that as content. This meant `<aside
+   class="layout-sidebar-first">` had been rendering empty on **every page of the site** since the region
+   was first declared (INT8-015) — harmless while invisible, but once the grid below had to count its
+   children, it saw three grid items against two declared columns and auto-wrapped the third (the real
+   rail) onto an implicit new row far below the tall main column. Fixed by testing actual rendered output
+   instead of the region's raw truthiness: `page.sidebar_first|render|striptags|trim` — `|render|trim`
+   alone was insufficient, because an empty region's output is literally `<div></div>` (non-whitespace
+   characters `trim` alone won't remove); `striptags` is what reduces a truly empty region to nothing.
+   Confirmed with real measurements, not assumption: `.quote-block` and `.song-sidebar` both now measure
+   `top: 261` — the same row, genuinely aligned — where the rail had previously measured `top: 2797`.
+   Also moved `padding-block` from `.song-detail` onto `.layout-content__row--with-rail` itself, so both
+   columns share one top-offset declaration instead of only the main column having one (this alone still
+   wouldn't have fixed the detached-row bug, but it is what "no margin like there was before" was
+   additionally pointing at, and is the correct place for it now that the row genuinely holds both
+   columns).
+
+Verified with real screenshots at four widths (1024/980/1440/1920, plus 800/900/760) rather than trusting
+the CSS math alone, since the previous round's reasoning about padding had missed the actual defect.
+Default gate green; full Playwright suite **89/89 on chromium** (the empty-`<aside>` fix touches every
+page on the site, not just the song page, and caused no regression anywhere).

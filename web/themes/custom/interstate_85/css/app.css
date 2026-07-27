@@ -144,14 +144,24 @@
    than the hi-fi's unnamed one-off blue (#b9d3e3) — design-system.md §3
    doesn't name that colour as a token, and inventing one for a single
    divider would violate the "never hardcode hex" rule from the other
-   direction. sidebar_first has no content anywhere on the site and is
-   deliberately left unstyled (see page.html.twig) — this is not
-   speculative symmetry for a region nothing uses yet. */
+   direction. sidebar_first has no content anywhere on the site and gets no
+   grid column of its own here — this is sized for the one real combination
+   (main + second), not speculatively generalised for a combination nothing
+   renders.
+
+   padding-block lives HERE, not on .song-detail, and that is deliberate:
+   this row is what the two columns share, so it is the one place both a
+   sidebar and the main content can get the same top offset from a single
+   declaration. Putting it on .song-detail alone (round 2's first pass) only
+   padded the main column — the rail, sitting outside .song-detail entirely,
+   had no top offset of its own and rendered flush against the hero, which
+   is what the second review round caught. */
 .layout-content__row--with-rail {
   display: grid;
   grid-template-columns: 1fr 260px;
   gap: 0 var(--space-8);
   align-items: start;
+  padding-block: var(--space-8);
 }
 
 .layout-sidebar-second {
@@ -162,24 +172,13 @@
 @media (max-width: 759px) {
   .layout-content__row--with-rail {
     display: block;
+    padding-block: var(--space-6);
   }
 
   .layout-sidebar-second {
     border-left: none;
     padding-left: 0;
     margin-top: var(--space-6);
-  }
-}
-
-/* The song page's own field content (INT8-019) — a plain single column now
-   that the rail lives in sidebar_second instead of inside this template. */
-.song-detail {
-  padding-block: var(--space-8);
-}
-
-@media (max-width: 759px) {
-  .song-detail {
-    padding-block: var(--space-6);
   }
 }
 

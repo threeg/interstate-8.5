@@ -37,30 +37,46 @@
     <div class="layout-content">
       {{ page.breadcrumb }}
 
-      {# INT8-019 review round 2: sidebar_second is a real rail next to the
-         main content (song page: the "coming soon" block), so it forms a
-         two-column row with page.content rather than stacking full-width —
-         the modifier class only appears when something is actually placed
-         there, so every route with no sidebar_second block keeps today's
-         plain single-column layout untouched. sidebar_first has no content
-         anywhere on the site yet and is deliberately left as it was
-         (stacked below, unstyled) rather than speculatively building the
-         same two-column treatment for a region nothing uses. #}
-      <div class="layout-content__row{{ page.sidebar_second ? ' layout-content__row--with-rail' : '' }}">
-        <div class="layout-content__main">{{ page.content }}</div>
-        {% if page.sidebar_second %}
-          <aside class="layout-sidebar-second">
-            {{ page.sidebar_second }}
-          </aside>
+      {# INT8-019 review round 2, revised: sidebar_first and sidebar_second
+         are one row, in reading order — first, then the main content, then
+         second — so "first" genuinely comes first in the markup, matching
+         the names. Neither sidebar_first nor page.content gets an extra
+         wrapper div; only each sidebar's own <aside> landmark wraps
+         anything, exactly as page.content and sidebar_first were unwrapped
+         before this region existed. The row's modifier class appears only
+         when a sidebar is actually placed, so every route with neither
+         populated (i.e. everything except the song page today) keeps
+         today's plain single-column layout untouched.
+
+         `page.sidebar_first` is truthy even with NO block placed in it —
+         Drupal still emits a (contentless) render array for a declared,
+         empty region, which Twig sees as a non-empty array. A bare
+         `{% if page.sidebar_first %}` therefore rendered an empty <aside> on
+         every page, which — worse — made the grid below see three items
+         instead of two and auto-wrap the real sidebar onto its own implicit
+         row, far down the page (caught in review: the rail rendered
+         detached from the main content entirely). `|render|trim` asks
+         whether there is any actual OUTPUT, the same idiom already used for
+         empty field detection in node--song--full.html.twig.
+
+         sidebar_first has no content anywhere on the site yet; the grid
+         below is sized for the one combination that is real (main + second)
+         rather than speculatively generalised for a combination nothing
+         renders. #}
+      {% set sidebar_first = page.sidebar_first|render|striptags|trim %}
+      {% set sidebar_second = page.sidebar_second|render|striptags|trim %}
+      <div class="layout-content__row{{ (sidebar_first or sidebar_second) ? ' layout-content__row--with-rail' : '' }}">
+        {% if sidebar_first %}
+          <aside class="layout-sidebar-first">{{ page.sidebar_first }}</aside>
+        {% endif %}
+
+        {{ page.content }}
+
+        {% if sidebar_second %}
+          <aside class="layout-sidebar-second">{{ page.sidebar_second }}</aside>
         {% endif %}
       </div>
     </div>{# /.layout-content #}
-
-    {% if page.sidebar_first %}
-      <aside class="layout-sidebar-first">
-        {{ page.sidebar_first }}
-      </aside>
-    {% endif %}
   </main>
 
   {{ include('interstate_85:site-footer', {}, with_context: false) }}
