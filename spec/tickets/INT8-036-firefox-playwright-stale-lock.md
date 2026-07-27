@@ -2,7 +2,7 @@
 id: INT8-036
 title: Restore Firefox coverage in the Playwright suite (stale profile-lock symlink) and correct the record
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: tooling
@@ -107,15 +107,15 @@ upgrading Playwright or the `pw` image; the browser-matrix composition itself (N
 settled); INT8-033's separate Playwright-assertion cleanup.
 
 ## Definition of done (acceptance criteria)
-- [ ] `lando playwright` exits **0** with **545/545 passing**, Firefox included.
-- [ ] A stale lock left behind by a killed run no longer disables the suite — verified by recreating the
+- [x] `lando playwright` exits **0** with **545/545 passing**, Firefox included.
+- [x] A stale lock left behind by a killed run no longer disables the suite — verified by recreating the
       condition deliberately (`ln -s 1.2.3.4:+999 /ms-playwright/firefox-1532/firefox/lock`) and
       confirming the next `lando playwright` still passes.
-- [ ] The profile-lock-location finding from step 2 is recorded in `## Notes`, whatever it turns out to be.
-- [ ] All eight tickets carry a dated correction; INT8-021's DoD caveats are restated.
-- [ ] `BOARD.md` traceability lists INT8-036 against NFR-7 and NFR-8.
-- [ ] `lando test` still green (unchanged — this ticket touches no PHP).
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] The profile-lock-location finding from step 2 is recorded in `## Notes`, whatever it turns out to be.
+- [x] All eight tickets carry a dated correction; INT8-021's DoD caveats are restated.
+- [x] `BOARD.md` traceability lists INT8-036 against NFR-7 and NFR-8.
+- [x] `lando test` still green (unchanged — this ticket touches no PHP).
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 
@@ -138,3 +138,37 @@ lando ssh -s pw -c "ls -la /ms-playwright/firefox-1532/firefox/lock"   # expect:
   in the running container took the suite from 436/545 to **545/545** immediately, which is what
   established that no application defect was involved. Promoted into the main sequence at the site
   owner's decision, before Milestone 9 sign-off.
+
+- 2026-07-27 — **implemented, in review.** `.lando.yml`'s `playwright` tooling command now runs
+  `find /ms-playwright -name lock -xtype l -delete` before `npx playwright test`. Verified the `-xtype l`
+  claim directly rather than trusting it: created both a dangling lock symlink and a live-target symlink
+  under a scratch directory, ran the exact `find` invocation, and confirmed only the dangling one was
+  removed. Verified the regression test in the DoD by hand: recreated
+  `/ms-playwright/firefox-1532/firefox/lock -> 1.2.3.4:+999` deliberately, then ran `lando playwright` —
+  545/545 passed, and the stale symlink was gone afterward.
+
+  **Step 2 finding (profile-lock location).** `HOME=/var/www` is set for `www-data` in the `pw`
+  container and is writable, but no `~/.mozilla` profile directory has ever been created there —
+  Playwright drives Firefox with its own ephemeral per-run temp profile, so normal profile-lock
+  resolution via `$HOME` is not the mechanism. The `lock` symlink instead appears directly inside the
+  *installation* directory (`/ms-playwright/firefox-1532/firefox/`), alongside a `.parentlock` regular
+  file that gets recreated on every launch. This is most consistent with Playwright's own one-time
+  post-install browser-validation launch (evidenced by the adjacent `INSTALLATION_COMPLETE` /
+  `DEPENDENCIES_VALIDATED` marker files in that same directory) — a launch that doesn't go through a
+  per-test temp profile — being killed mid-run on 2026-07-20 and leaving its lock in the shared install
+  directory rather than a disposable one. No environment variable fix was found that stops it landing
+  there at source (root cause sits inside Playwright's/Firefox's own launch code, not this container's
+  configuration), so this ticket relies on step 1's defensive cleanup rather than a source fix, per the
+  ticket's own instruction not to widen into a container rebuild.
+
+  Corrected the record in all eight affected tickets (INT8-018, 019, 021, 027, 028, 029, 030, 031) with a
+  dated, appended note — originals left intact. INT8-021's DoD caveats and summary were restated plainly
+  (its own correction, per this ticket's requirement 4, rather than a bare append). `BOARD.md`
+  traceability already listed INT8-036 against NFR-7/NFR-8 from its creation.
+
+  **Summary:** a single leftover symlink from a killed Firefox launch on 2026-07-20 was silently failing
+  every Firefox test ever since; eight tickets recorded it as an unfixable, pre-existing environment gap.
+  The suite now clears dangling lock symlinks before every `lando playwright` run, so a future killed run
+  can't repeat this, and all eight tickets' records are corrected.
+
+  **Sanity test:** `lando ssh -s pw -c "ln -s 1.2.3.4:+999 /ms-playwright/firefox-1532/firefox/lock" && lando playwright` → 545/545 passed.

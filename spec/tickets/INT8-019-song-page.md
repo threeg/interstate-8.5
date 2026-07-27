@@ -301,3 +301,9 @@ main/rail divider, both real, verified against the hi-fi source rather than assu
 
 Gate green; full Playwright suite 89/89 on chromium (this touches only the shared divider treatment;
 no other page uses `.layout-content__row--with-rail` yet).
+
+**2026-07-27 — correction (INT8-036).** "Firefox remains unrunnable... a pre-existing environment gap"
+above was misdiagnosed: the real cause was a dangling profile-lock symlink at
+`/ms-playwright/firefox-1532/firefox/lock` left by a process killed on 2026-07-20 (a regression, not a
+scaffolding-era boundary — INT8-006 itself records Firefox passing). Fixed in INT8-036; the full matrix
+is now 545/545 with Firefox included.

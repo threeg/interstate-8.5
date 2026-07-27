@@ -163,6 +163,11 @@ of links.
 **Sanity test:** `curl -s http://interstate-8-5.lndo.site/user/login | grep -c 'site-branding__slogan'`
 → `1`; `lando drush cim -y` → "There are no changes to import."
 
+**2026-07-27 — correction (INT8-036).** The "Firefox gap" noted above was misdiagnosed: the real cause
+was a dangling profile-lock symlink left by a process killed on 2026-07-20, not a missing binary or a
+scaffolding-era gap (INT8-006 itself records Firefox passing). Fixed in INT8-036; the full matrix is now
+545/545 with Firefox included.
+
 ## QA steps
 - [x] Visit `/user/login` at desktop width — "A MODEST MOUSE FAN COLLABORATIVE" shows under the
       wordmark, in muted grey (not white-on-white).

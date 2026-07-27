@@ -37,6 +37,6 @@ tooling:
     description: "Default gate: PHPUnit + PHPCS + PHPStan + boundary check (custom code only)"
   playwright:
     service: pw
-    cmd: "bash -c 'cd /app/tests/playwright && npm install --silent && npx playwright test'"
+    cmd: "bash -c 'find /ms-playwright -name lock -xtype l -delete && cd /app/tests/playwright && npm install --silent && npx playwright test'"
     description: "Playwright + Axe FE suite (lando rebuild required once for pw service)"
 

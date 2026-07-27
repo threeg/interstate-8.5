@@ -29,9 +29,9 @@ this consolidates the journeys, the a11y sweep, and the browser/responsive matri
 
 ## Definition of done (acceptance criteria)
 - [x] The journey suite passes; Axe clean on both screens (NFR-1).
-- [x] 320px + desktop pass (NFR-2); the configured browser matrix runs (NFR-7/NFR-8) — all projects green
-      except the pre-existing, documented firefox-in-`pw`-container gap (see Notes).
-- [x] `lando test-all` green (default gate + Playwright, same caveat).
+- [x] 320px + desktop pass (NFR-2); the configured browser matrix runs (NFR-7/NFR-8) — all five projects
+      green, Firefox included (see the 2026-07-27 correction in Notes; INT8-036).
+- [x] `lando test-all` green (default gate + Playwright).
 - [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
@@ -74,10 +74,18 @@ mobile-chrome, mobile-safari) are fully green: 436/436.
 
 **Summary:** one new Playwright spec proves the finished Songs section works as a continuous visitor
 journey — real clicks and form interactions across screens, not just per-screen checks — and is
-accessible at that composed state, across every browser project except the pre-existing
-firefox-in-container gap.
+accessible at that composed state, across every configured browser project.
 
 **Sanity test:** `lando ssh -s pw -c "cd /app/tests/playwright && npx playwright test e2e-journey.spec.ts --project=chromium --reporter=list"` — 3/3 pass.
+
+**2026-07-27 — correction (INT8-036).** The "firefox-in-`pw`-container gap" noted above as
+pre-existing/documented was misdiagnosed — it was not a missing binary, and not a scaffolding-era gap
+(INT8-006 itself records Firefox passing). The real cause was a dangling profile-lock symlink at
+`/ms-playwright/firefox-1532/firefox/lock`, left by a Firefox process killed on 2026-07-20, which fails
+every subsequent launch with `ENOENT` until removed — a regression, not a boundary of this project's
+tooling. Fixed in INT8-036 (`.lando.yml`'s `playwright` command now clears dangling lock symlinks before
+every run). The full matrix is now **545/545**, Firefox included; the DoD checkboxes above are restated
+without the caveat.
 
 ## QA steps
 

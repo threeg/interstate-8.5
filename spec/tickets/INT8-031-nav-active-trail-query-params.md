@@ -339,3 +339,9 @@ One-line sanity test once implemented:
   **Verification.** Default gate green. Full Playwright suite **72/72 on chromium** (up 3). Verified
   live across all four cases: song page marked, `?type=All` marked, `/` marks Home, `/user/login` marks
   nothing. `composer.json`/`composer.lock` now carry `drupal/menu_trail_by_path`; config exported.
+
+**2026-07-27 — correction (INT8-036).** The "known Firefox `pw`-service gap" cited in this ticket's DoD
+and the "unrunnable... pre-existing environment gap" note above were both wrong: the real cause was a
+dangling profile-lock symlink left by a process killed on 2026-07-20, not a missing binary or a
+scaffolding-era gap (INT8-006 itself records Firefox passing). Fixed in INT8-036; the full matrix is now
+545/545 with Firefox included.

@@ -261,3 +261,10 @@ out of scope).
 **Sanity test:** `curl -s http://interstate-8-5.lndo.site/songs | grep -c 'href="/songs/'` → `278`
 (Modest Mouse default); `curl -s '...?type=All' | grep -c 'href="/songs/'` → `490`;
 `lando drush cim -y` → "There are no changes to import."
+
+**2026-07-27 — correction (INT8-036).** The Firefox failure recorded above was misdiagnosed: it was not
+a missing Firefox binary, and not a pre-existing scaffolding-era gap (INT8-006 itself records Firefox
+passing). The real cause was a dangling profile-lock symlink at
+`/ms-playwright/firefox-1532/firefox/lock`, left by a process killed on 2026-07-20, which fails every
+subsequent Firefox launch until removed — a regression, not a boundary of this project's tooling. Fixed
+in INT8-036; the full matrix is now 545/545 with Firefox included.

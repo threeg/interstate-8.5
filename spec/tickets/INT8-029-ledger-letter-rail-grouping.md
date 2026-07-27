@@ -322,6 +322,11 @@ such ticket was ever actually created (a real gap, not a deliberate deferral). C
 ("Make the song ledger's letter rail a real jump-to-letter navigation"), `depends_on: [INT8-029]`, in
 the main sequence (E04) alongside this ticket.
 
+**2026-07-27 — correction (INT8-036).** The "pre-existing Firefox gap" cited above was misdiagnosed:
+the real cause was a dangling profile-lock symlink left by a process killed on 2026-07-20, not a missing
+binary or a scaffolding-era gap (INT8-006 itself records Firefox passing). Fixed in INT8-036; the full
+matrix is now 545/545 with Firefox included.
+
 ## QA steps
 - [x] Open `/songs?type=All` — scroll to the end of the list: the last group is headed `#` and contains
       `(8)copy` and similar titles, not scattered one-song groups headed `(` or `.`.

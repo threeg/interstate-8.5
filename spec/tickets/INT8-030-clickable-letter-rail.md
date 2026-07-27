@@ -318,3 +318,8 @@ theme-only, so the PHP suite is unchanged). Full Playwright suite **59/59 on chr
 songs-landing tests. Firefox remains unrunnable in the `pw` container (`ENOENT …
 /ms-playwright/firefox-1532/firefox/lock`) for every spec in the repo — a pre-existing environment gap,
 unchanged by this work.
+
+**2026-07-27 — correction (INT8-036).** That "pre-existing environment gap" was wrong: the real cause
+was a dangling profile-lock symlink left by a process killed on 2026-07-20, not a missing binary or a
+scaffolding-era gap (INT8-006 itself records Firefox passing). Fixed in INT8-036; the full matrix is now
+545/545 with Firefox included.
