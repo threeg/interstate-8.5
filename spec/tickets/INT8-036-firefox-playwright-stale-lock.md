@@ -2,7 +2,7 @@
 id: INT8-036
 title: Restore Firefox coverage in the Playwright suite (stale profile-lock symlink) and correct the record
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: tooling
