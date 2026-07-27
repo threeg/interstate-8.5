@@ -1,0 +1,28 @@
+uuid: 23dce515-87f5-459d-8053-1c518f4e209b
+langcode: en
+status: true
+dependencies:
+  module:
+    - i8_services
+    - node
+  theme:
+    - interstate_85
+id: interstate_85_songsidebar
+theme: interstate_85
+region: sidebar_second
+weight: 0
+provider: null
+plugin: i8_song_sidebar
+settings:
+  id: i8_song_sidebar
+  label: 'Song sidebar'
+  label_display: '0'
+  provider: i8_services
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      song: song

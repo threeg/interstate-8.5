@@ -705,7 +705,15 @@ test.describe('Song page — Scenario 1: a standard song (FR-12, FR-14, FR-17)',
     await page.goto(QUOTE_SONG.path);
     const mainText = await visibleText(page, 'main');
     expect(mainText, '<main> not found — see assumption B').not.toContain('NOT-FOUND');
-    expect(mainText).toContain(QUOTE_SONG.lyrics!.slice(0, 30));
+    // AMENDED BY IMPLEMENTER, review round 2: the site owner asked for lyrics
+    // to render lowercased via CSS (text-transform), which the fixture's own
+    // mixed-case snippet predates. `visibleText()` reads `.innerText`, which
+    // — unlike `.textContent` — reflects the CSS-rendered case, so this
+    // premise check (merely "are we on the right page") now needs a
+    // case-insensitive comparison. It is a premise, not the thing under
+    // test: FR-12's actual assertions below are already case-insensitive
+    // regexes and are untouched.
+    expect(mainText.toLowerCase()).toContain(QUOTE_SONG.lyrics!.slice(0, 30).toLowerCase());
     expect(
       mainText,
       'the song page shows its type/group ("Modest Mouse") inside <main> — FR-12 forbids it',
@@ -768,7 +776,17 @@ test.describe('Song page — Scenario 2: missing fields (FR-15)', () => {
     // empty field. It stops being free the moment a bespoke Twig override
     // hardcodes the section headings, which is exactly what this ticket does —
     // so this is the regression this test exists to catch.
-    await page.goto(QUOTE_SONG.path);
+    //
+    // AMENDED BY IMPLEMENTER, review round 2: originally QUOTE_SONG
+    // ("Float On"), which had no notes and no video at authoring time. The
+    // site owner has since used that exact node as their live worked example
+    // while reviewing this ticket and added both a real video and real notes
+    // to it — a genuine, desirable change to the site's content, not a defect.
+    // That leaves QUOTE_SONG unable to carry this fixture's premise, so this
+    // one test uses BARE_SONG ("Bukowski") instead, verified to still have
+    // none of quote/notes/video. FR-15's actual claim (an absent field omits
+    // its label entirely) is unaffected either way.
+    await page.goto(BARE_SONG.path);
     const label = await labels(page, SECTION_LABEL_PATTERNS);
 
     // Premise, so an absent label cannot be read as "the page failed to render":
@@ -778,12 +796,12 @@ test.describe('Song page — Scenario 2: missing fields (FR-15)', () => {
     // FR-15's strong form: the section's LABEL is absent, not merely its value.
     expect(
       label.notes.index,
-      `${QUOTE_SONG.path} has no notes, but renders a "${label.notes.text}" heading — FR-15 requires the ` +
+      `${BARE_SONG.path} has no notes, but renders a "${label.notes.text}" heading — FR-15 requires the ` +
         'section be omitted cleanly rather than left as an empty heading',
     ).toBe(-1);
     expect(
       label.video.index,
-      `${QUOTE_SONG.path} has no video, but renders a "${label.video.text}" heading — FR-15 requires the ` +
+      `${BARE_SONG.path} has no video, but renders a "${label.video.text}" heading — FR-15 requires the ` +
         'section be omitted cleanly',
     ).toBe(-1);
 
@@ -978,12 +996,21 @@ test.describe('Song page — Scenario 3: unknown slug', () => {
  * ---------------------------------------------------------------------- */
 
 test.describe('Song page — accessibility and responsiveness', () => {
+  // AMENDED BY IMPLEMENTER, review round 2: written when `field_video` was
+  // empty across the whole dataset, so this scan never actually reached a
+  // real embed. QUOTE_SONG now carries a real YouTube video, and Axe (via
+  // CDP) reaches inside it — reporting violations in YOUTUBE'S OWN player
+  // chrome (`html5-video-player`, `ytmVideoInfoLink`, ...), third-party
+  // markup this project cannot fix or influence. Both scans now exclude the
+  // video iframe's own subtree; NFR-1 for the embed itself is covered
+  // separately (the FR-17 test's iframe-title assertion) — what these two
+  // tests check is everything OURS on the page.
   test('axe: no serious/critical violations on a song page at desktop (NFR-1)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(QUOTE_SONG.path);
     await expect(page.locator('h1')).toHaveCount(1);
 
-    const results = await new AxeBuilder({ page }).analyze();
+    const results = await new AxeBuilder({ page }).exclude('.song-detail__video iframe').analyze();
     const serious = results.violations.filter((v) => ['serious', 'critical'].includes(v.impact ?? ''));
     expect(serious, JSON.stringify(serious, null, 2)).toEqual([]);
   });
@@ -995,7 +1022,7 @@ test.describe('Song page — accessibility and responsiveness', () => {
     await page.setViewportSize({ width: 320, height: 640 });
     await page.goto(QUOTE_SONG.path);
 
-    const results = await new AxeBuilder({ page }).analyze();
+    const results = await new AxeBuilder({ page }).exclude('.song-detail__video iframe').analyze();
     const serious = results.violations.filter((v) => ['serious', 'critical'].includes(v.impact ?? ''));
     expect(serious, JSON.stringify(serious, null, 2)).toEqual([]);
   });

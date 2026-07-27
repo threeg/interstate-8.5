@@ -133,47 +133,53 @@
   margin: 0 0 var(--space-5);
 }
 
-/* Song page (INT8-019) — main column + "coming soon" rail. Page-level
-   composition classes rather than an SDC wrapper, matching the Songs
-   landing's own precedent (see views-view--songs.html.twig's file comment):
-   nesting a wrapper SDC around the quote-block/section-label/coming-soon-stub
-   embeds below would hit the same core prop-validation bug that pattern
-   avoids by staying flat. 260px is a fixed layout dimension, not a design
+/* Page shell — the two-column row when a route places a block in
+   sidebar_second (INT8-019 review round 2: this used to be the song page's
+   own private grid, hardcoded in its Twig template; it is now the page
+   shell's job, so any future block placed in that region gets the same
+   treatment for free). 260px is a fixed layout dimension, not a design
    token — the same kind of literal already used for song-ledger's own rail
    column (song-ledger.css: `grid-template-columns: 36px 1fr`). The dashed
-   main/rail divider reuses --color-line (the filter bar's own border colour)
-   rather than the hi-fi's unnamed one-off blue (#b9d3e3) — design-system.md
-   §3 doesn't name that colour as a token, and inventing one for a single
+   divider reuses --color-line (the filter bar's own border colour) rather
+   than the hi-fi's unnamed one-off blue (#b9d3e3) — design-system.md §3
+   doesn't name that colour as a token, and inventing one for a single
    divider would violate the "never hardcode hex" rule from the other
-   direction. */
-.song-detail {
+   direction. sidebar_first has no content anywhere on the site and is
+   deliberately left unstyled (see page.html.twig) — this is not
+   speculative symmetry for a region nothing uses yet. */
+.layout-content__row--with-rail {
   display: grid;
   grid-template-columns: 1fr 260px;
   gap: 0 var(--space-8);
+  align-items: start;
+}
+
+.layout-sidebar-second {
+  border-left: 2px dashed var(--color-line);
+  padding-left: var(--space-8);
+}
+
+@media (max-width: 759px) {
+  .layout-content__row--with-rail {
+    display: block;
+  }
+
+  .layout-sidebar-second {
+    border-left: none;
+    padding-left: 0;
+    margin-top: var(--space-6);
+  }
+}
+
+/* The song page's own field content (INT8-019) — a plain single column now
+   that the rail lives in sidebar_second instead of inside this template. */
+.song-detail {
   padding-block: var(--space-8);
-}
-
-.song-detail__main {
-  padding-right: var(--space-8);
-  border-right: 2px dashed var(--color-line);
-}
-
-.song-detail__rail {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
 }
 
 @media (max-width: 759px) {
   .song-detail {
-    display: block;
     padding-block: var(--space-6);
-  }
-
-  .song-detail__main {
-    padding-right: 0;
-    border-right: none;
-    margin-bottom: var(--space-6);
   }
 }
 
@@ -183,6 +189,26 @@
   line-height: var(--lh-lyrics);
   color: var(--color-fg-slate);
   margin: var(--space-2) 0 var(--space-7);
+  /* Review round 2: lowercased purely as typography, matching the
+     convention of other fan-lyrics sites — the underlying field value
+     (search, copy-paste, screen readers) is untouched, only the rendered
+     glyphs change. Deliberately CSS, not a backend text filter: a filter
+     would destroy the stored casing, whereas this is trivially reversible
+     and never touches the data players actually search/quote against. */
+  text-transform: lowercase;
+}
+
+.song-detail__lyrics p {
+  /* Tailwind's preflight zeroes every element's margin (including <p>),
+     so with no rule here paragraphs ran together with no visible gap
+     between stanzas — reported in review. --space-3 approximates the
+     hi-fi's own stanza spacing (each stanza block used a plain 10px
+     margin-bottom in the mockup). */
+  margin: 0 0 var(--space-3);
+}
+
+.song-detail__lyrics p:last-child {
+  margin-bottom: 0;
 }
 
 .song-detail__notes {
@@ -201,7 +227,25 @@
 .song-detail__video video {
   display: block;
   width: 100%;
+  /* Explicit, not merely omitted: the oEmbed formatter renders the iframe
+     with real width/height HTML attributes from the provider (its own
+     default embed size). Those are mapped by the UA stylesheet as a
+     presentational hint with just enough specificity that aspect-ratio's
+     auto-height calculation never triggers unless `height` is explicitly
+     declared here too — confirmed empirically (measured 606x150, an
+     un-derived height, until this line was added; 606x340.875, true
+     16:9, once it was). Leaving this implicit was the round-1 bug. */
+  height: auto;
   aspect-ratio: 16 / 9;
   border: 0;
   border-radius: var(--radius-sm);
+}
+
+/* The song page's "more about this song" rail (INT8-019 review round 2) —
+   now the i8_song_sidebar block's own wrapper, placed in sidebar_second,
+   not part of the song page's template. */
+.song-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }

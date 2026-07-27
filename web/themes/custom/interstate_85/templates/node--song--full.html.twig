@@ -3,10 +3,21 @@
  * @file
  * The song page (INT8-019) — FR-12, FR-14, FR-15, FR-17.
  *
+ * REVIEW ROUND 2 (2026-07-26): this template originally replaced core's
+ * node.html.twig outright, which silently dropped the <article> wrapper,
+ * `attributes` (the node--type-song / node--view-mode-full classes,
+ * contextual-links attributes) and the title_prefix/title_suffix hooks other
+ * modules attach to — a real accessibility/SEO and module-compatibility
+ * regression, caught in review rather than by a test (nothing in this
+ * project's suite asserts the node's own wrapper element). Rebuilt to keep
+ * that structure, mirroring core/starterkit's own node.html.twig, with only
+ * the CONTENT arrangement inside customised.
+ *
  * The page's one <h1> is supplied site-wide by INT8-028's page-header hero
- * block, not by this template — core's own node.html.twig already omits the
- * in-page title heading whenever `page` is true (the canonical-route case),
- * so nothing here needs to suppress it a second time.
+ * block, not by this template — so unlike core's own node.html.twig (which
+ * conditionally prints an <h2> title when `view_mode != 'full'`), no title
+ * heading is printed here at all: this template is suffixed `--full`, so
+ * that condition is always false for it anyway.
  *
  * FR-12's negative half (no type/group) and FR-14 (no releases, setlist,
  * tabs, studio) are satisfied by OMISSION: `field_song_type`,
@@ -24,15 +35,35 @@
  * emptiness check throughout: it asks "would this actually render
  * something", which also respects field access — a field an anonymous
  * visitor cannot see is correctly treated as absent, not merely unset.
+ *
+ * The "coming soon" rail moved out of this template entirely (review round
+ * 2) — it is now the `i8_song_sidebar` block, placed in the theme's new
+ * `sidebar_second` region and composed into a real two-column layout by
+ * page.html.twig, not hardcoded here. It held no field content and needed
+ * no per-node data, so a block was strictly the right shape for it — this
+ * template only ever needed to render the node's own fields.
  */
 #}
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    'node--view-mode-' ~ view_mode|clean_class,
+  ]
+%}
 {% set has_quote = content.field_quotes|render|trim %}
 {% set has_lyrics = content.field_lyrics|render|trim %}
 {% set has_notes = content.field_notes|render|trim %}
 {% set has_video = content.field_video|render|trim %}
 
-<div class="song-detail">
-  <div class="song-detail__main">
+<article{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  <div{{ content_attributes.addClass('song-detail') }}>
     {% if has_quote %}
       {% embed 'interstate_85:quote-block' %}
         {% block quote %}{{ content.field_quotes }}{% endblock %}
@@ -60,16 +91,4 @@
       <div class="song-detail__video">{{ content.field_video }}</div>
     {% endif %}
   </div>
-
-  {# The "more about this song" rail — reserved space, no real data
-     (FR-14 spirit), unconditional: it carries no field content, so there is
-     nothing for it to omit. #}
-  <div class="song-detail__rail">
-    {% embed 'interstate_85:section-label' with {variant: 'muted'} %}
-      {% block label %}{{ 'More about this song'|t }}{% endblock %}
-    {% endembed %}
-    {% embed 'interstate_85:coming-soon-stub' with {label: 'Releases'|t} %}{% endembed %}
-    {% embed 'interstate_85:coming-soon-stub' with {label: 'Last played live'|t} %}{% endembed %}
-    {% embed 'interstate_85:coming-soon-stub' with {label: 'Times played / tour stats'|t} %}{% endembed %}
-  </div>
-</div>
+</article>

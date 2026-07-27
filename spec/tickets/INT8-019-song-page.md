@@ -167,3 +167,78 @@ by this work.
 **Out of scope, confirmed untouched:** FR-13/FR-20 (alternate versions, side-by-side lyrics, parent/child
 cross-links) — INT8-020; the "Back to Songs" link (FR-16, not in this ticket's `implements`, and not
 exercised by any test in this suite).
+
+**2026-07-26 — review round 2.** Four pieces of feedback, working from `https://interstate-8-5.lndo.site/songs/float`
+(the site owner's chosen live example, to which they had added a real video and real notes). All four
+were verified against the live page before touching anything, and #4 turned up a real regression.
+
+1. **Lyrics lowercased via CSS.** `text-transform: lowercase` on `.song-detail__lyrics`, not a backend
+   filter — deliberately: it leaves the stored field value untouched (search, copy-paste, and any future
+   re-export still see the real casing), and it's trivially reversible. Notes/quote are unaffected — only
+   the lyrics were asked for.
+2. **Paragraph spacing between lyrics stanzas.** Tailwind's preflight zeroes every element's margin,
+   including `<p>`, and no replacement rule had been added — stanzas ran together with no visible gap.
+   Added `margin: 0 0 var(--space-3)` on `.song-detail__lyrics p` (approximating the hi-fi's own ~10px
+   stanza spacing), with the last paragraph's bottom margin zeroed.
+3. **Video aspect ratio.** The embed was rendering at its raw oEmbed-provider dimensions (606×150),
+   not 16:9. Root cause, confirmed empirically rather than assumed: the oEmbed formatter emits real
+   `width`/`height` HTML attributes, and the browser's UA stylesheet maps those to a low-specificity
+   presentational `width`/`height` — just enough to pre-empt `aspect-ratio`'s auto-height calculation
+   unless `height` is *explicitly* re-declared in author CSS. Added `height: auto;` next to the existing
+   `aspect-ratio: 16/9`; measured 606×340.875 (exact 16:9) afterward.
+4. **The "coming soon" rail moved into a real region + block, and a real regression was caught in the
+   process.** Building this round's fix surfaced that `node--song--full.html.twig` had replaced core's
+   entire `node.html.twig` rather than extending it — silently dropping the `<article>` wrapper, the
+   `node--type-song`/`node--view-mode-full` classes, and the `title_prefix`/`title_suffix` hooks other
+   modules attach through. Nothing in the test suite asserts the node's own wrapper element, so this had
+   shipped unnoticed in round 1. Rebuilt to mirror core/starterkit's own structure (`<article
+   {{ attributes }}>`, `title_prefix`/`title_suffix` preserved, content in a `content_attributes`-carrying
+   wrapper), with only the field arrangement inside customised — confirmed live:
+   `<article class="node node--type-song node--view-mode-full">` is back.
+
+   The rail itself is now `i8_song_sidebar`, a plain block **plugin** (not `block_content`, unlike
+   INT8-028's hero images) — the distinction matters and is recorded in the class's own docblock: there
+   is no admin-editable content here at all, so a content entity would add a type with nothing to store.
+   Composed straight from the existing SDC components via `#type => 'component'`
+   (`Drupal\Core\Render\Element\ComponentElement`, core — no bespoke block template needed). Added a new
+   `sidebar_second` region (`interstate_85.info.yml`), and gave `page.html.twig` a two-column
+   `layout-content__row--with-rail` grid that activates only when `page.sidebar_second` actually has
+   something in it — every other route keeps today's single-column layout untouched, verified live on
+   `/songs`, `/user/login`. `sidebar_first` (already declared, populated nowhere on the site) was
+   deliberately left exactly as it was rather than speculatively building the same treatment for a region
+   nothing uses yet. The block is placed with an `entity_bundle:node` visibility condition scoped to
+   `song`, generated via the entity API (`tooling/place-song-sidebar-block.php`, deleted after running)
+   and exported.
+
+   **One placement mistake, caught and fixed before export:** the block was first created before
+   `sidebar_second` had been registered by a cache rebuild, so Drupal silently placed it in `header`
+   instead of erroring; a second pass corrected the region. Also caught: the block's `status` was left
+   `FALSE` by the initial `Block::create()` call and had to be explicitly enabled — the corrected
+   one-shot script now sets `'status' => TRUE` directly, recorded so the mistake isn't repeated.
+
+**Fixing #1 and #4 broke two existing test assertions, and a third needed widening — none from a defect
+in the fix, each recorded rather than silently patched:**
+
+- The FR-12 premise check that read `<main>`'s **rendered** text (`.innerText`, which reflects
+  `text-transform`) against the fixture's stored mixed-case lyrics snippet no longer matched — the
+  premise (are we on the right page?) doesn't care about case, so the comparison was made
+  case-insensitive; FR-12's actual assertions (already case-insensitive regexes) are untouched.
+- The FR-15 "no notes and no video" test used `QUOTE_SONG` ("Float On") specifically because it had
+  neither at authoring time. The site owner's own edits for this review — a real video, real notes —
+  made that no longer true, which is a desirable content change, not a bug. Swapped that one test's
+  fixture to `BARE_SONG` ("Bukowski"), verified still lyrics-only.
+- Both axe scans were written when `field_video` was empty across the whole dataset, so they had never
+  actually reached a real embed. With "Float On" now carrying a real YouTube video, Axe (via CDP) reaches
+  inside the iframe and reports violations in **YouTube's own player chrome** — third-party markup this
+  project cannot fix. Both scans now `.exclude('.song-detail__video iframe')`; NFR-1 for the embed itself
+  stays covered by the FR-17 test's iframe-title assertion, which does not exclude anything.
+
+One pleasant side effect of the real data now existing: the FR-17 video test's strict positive branch
+(real iframe, real dimensions, real title) now runs for real, permanently, rather than only via the
+throwaway probe described in round 1's Notes — the round-1 statement that FR-17 stays
+"built-but-unproven" is superseded by this.
+
+**Verification.** Default gate green (58 PHPUnit, PHPCS — now 10 checks, one new class — PHPStan,
+boundary). Full Playwright suite **89/89 on chromium**, all 17 song-page tests included. Config exported
+(`interstate_85.info.yml`'s new region isn't itself config, but `block.block.interstate_85_songsidebar`
+is); `drush cim -y` is a no-op.
