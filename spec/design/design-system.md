@@ -55,6 +55,7 @@ panel.)
 | `--color-nav-hover-on-transparent` | `#cfe3ee` (Ice) | hero/transparent header nav-hover text only — distinguishes hover from the unchanged-white "current" state; solid header hover uses `--color-accent` instead |
 | `--color-tint` | `#e4edf2` | section fills (Contribute, ledger group headers, alt-version header) |
 | `--color-line` / `--color-disabled` | `#d3d6d5` (Pumice) | dividers, borders, disabled fills |
+| `--color-line-accent` | `#b9d3e3` (Spindle) | the two-pane dashed divider only — song page main/rail split, lyric-pair split (INT8-020) |
 | `--color-surface` | `#ffffff` | content sheet |
 | `--color-canvas` | `#eef0ef` | page background outside the sheet |
 
@@ -97,7 +98,7 @@ values.
 | **Contribute block** | — | — | tint panel + Polo-Blue CTA |
 | **Filter bar** | — | default · **hover** (select/toggle/APPLY darken, `#336585`) · **focus** (2px teal outline, 2px offset) · **open** (native select expanded) · disabled (Released/Played-live "coming soon") | Type select, Alt-titles Show/Hide segmented toggle, APPLY (teal) |
 | **Song ledger** | letter-rail + group header + row | row default · **zebra** (alternating row fill `#fafbfb`, cosmetic) · **alt-title** (teal chip, FR-10 marking) · **hover** (Tint `#e4edf2` fill, full row width) · **focus** (2px inset ring, no fill change) | 3-col, sticky rail; "412 results". Note: "zebra" (cosmetic alternating-row shading) and "alt-title" (the FR-10 alternate-version marker chip) are two independent states — don't conflate them. **Rail/grouping (INT8-029):** the rail runs `A`–`Z` then a trailing **`#`** catch-all for any title that doesn't bucket to a letter (a leading digit, symbol, or a script with no ASCII-letter equivalent) — a slice-1 addition with no hi-fi precedent (see decisions log). |
-| **Lyric pair** | side-by-side (desktop) · stacked (mobile) | — | "THIS VERSION" \| "NORMAL VERSION →"; "[same as normal version]" (FR-20) |
+| **Lyric pair** | side-by-side (desktop) · stacked (mobile) | — | "THIS VERSION" \| "NORMAL VERSION →"; "[same as normal version]" (FR-20). The two columns split on a `2px dashed var(--color-line-accent)` rule — the same divider treatment as the song page's main/rail split, not a component-specific colour. |
 | **"Coming soon" stub** | — | disabled | reserves rail for deferred releases/last-played/tour-stats (FR-14 spirit). Precise spec: `1.5px dashed var(--color-line)` border, `var(--radius-md)` radius; label Oswald 700 10px `.07em`; value Lora 13px. Label and value are `--color-fg-muted`, with **no container opacity** — *corrected 2026-07-26 (INT8-019)*, see decisions log: the hi-fi's own literal choices (`--color-fg-disabled` at whole-block `opacity:.65`) measure 1.77:1 on white, and the colour alone (no opacity) is still only 2.56:1 — both fail NFR-1's 4.5:1 on real text. `--color-fg-disabled` remains correct for a genuinely disabled native form control (e.g. the filter bar's Released/Played-live selects), where the browser's own disabled rendering applies; it is no longer used for text that merely *looks* disabled. |
 | **Quote block** | — | — | left-rule, italic Lora |
 | **Button / CTA** | primary teal · CTA polo-blue | default · hover (−12%) · disabled (Pumice, 70%) | see token panel. Governs solid CTA buttons only (e.g. "SUBMIT IT", "APPLY") |
@@ -171,3 +172,18 @@ values.
   evaluate it the same way. Recorded as a spec correction (root CLAUDE.md's non-negotiable: fix the spec
   first, never silently diverge) rather than an implementation-only tweak, since the wrong values were
   written here, not just used here.
+- **2026-07-26** — **The song page/lyric-pair dashed divider is a real token, `--color-line-accent`
+  (`#b9d3e3`, "Spindle"), not the neutral `--color-line`.** During INT8-019's second review round, the
+  divider between the song page's main content and its "coming soon" rail was built using
+  `--color-line` (Pumice, neutral grey), reasoned at the time as "the hi-fi's colour is an unnamed
+  one-off, and inventing a token for a single divider would violate 'never hardcode hex' from the other
+  direction." That reasoning was wrong: `#b9d3e3` appears **three times** in the hi-fi — the SONG PAGE
+  DESKTOP composition, the SONG PAGE — MISSING FIELDS panel (the same divider, in a variant
+  composition), and the alternate-version lyric-pair split (INT8-020, not yet built) — which is
+  precisely the bar for "this is a deliberate, reusable value," not a one-off. Missed in the original
+  token extraction (Milestone 5); added now as `--i8-spindle` / `--color-line-accent`. Non-text contrast
+  checked and found consistent with an already-shipped precedent rather than a new risk: at 1.56:1
+  against white it sits *below* WCAG 1.4.11's 3:1 floor for UI-component boundaries, but so does
+  `--color-line` itself (1.46:1, already used for the filter bar's border and already Axe-clean in
+  production) — both are purely decorative panel dividers, not functional UI boundaries, which is
+  exactly the category 1.4.11 does not mandate a floor for.

@@ -140,14 +140,15 @@
    treatment for free). 260px is a fixed layout dimension, not a design
    token — the same kind of literal already used for song-ledger's own rail
    column (song-ledger.css: `grid-template-columns: 36px 1fr`). The dashed
-   divider reuses --color-line (the filter bar's own border colour) rather
-   than the hi-fi's unnamed one-off blue (#b9d3e3) — design-system.md §3
-   doesn't name that colour as a token, and inventing one for a single
-   divider would violate the "never hardcode hex" rule from the other
-   direction. sidebar_first has no content anywhere on the site and gets no
-   grid column of its own here — this is sized for the one real combination
-   (main + second), not speculatively generalised for a combination nothing
-   renders.
+   divider uses --color-line-accent — corrected 2026-07-26 (a third review
+   round) from --color-line (plain grey): the hi-fi's blue divider
+   (#b9d3e3) was assumed to be a one-off not worth tokenising, but it
+   recurs three times across two components (this split, twice, and the
+   lyric-pair split, INT8-020), which is exactly the bar for a real token —
+   see design-system.md §5. sidebar_first has no content anywhere on the
+   site and gets no grid column of its own here — this is sized for the one
+   real combination (main + second), not speculatively generalised for a
+   combination nothing renders.
 
    padding-block lives HERE, not on .song-detail, and that is deliberate:
    this row is what the two columns share, so it is the one place both a
@@ -160,12 +161,17 @@
   display: grid;
   grid-template-columns: 1fr 260px;
   gap: 0 var(--space-8);
-  align-items: start;
+  /* Not "start": that sizes each column to its own content height, so the
+     sidebar's border-left divider stopped at the rail's own (shorter)
+     height instead of running the full row — the hi-fi's divider spans the
+     whole content, not just the shorter column. Grid's default ("stretch")
+     is what makes both columns match the row's height, i.e. the taller
+     one's. */
   padding-block: var(--space-8);
 }
 
 .layout-sidebar-second {
-  border-left: 2px dashed var(--color-line);
+  border-left: 2px dashed var(--color-line-accent);
   padding-left: var(--space-8);
 }
 

@@ -32,6 +32,13 @@
   --i8-dove:       #c7cbca; /* mid-grey: unselected segmented-toggle option on hover */
   --i8-quote:      #455250; /* quote-block text, both breakpoints */
   --i8-mist:       #e3e6e5; /* song ledger row dividers — lighter than --i8-pumice */
+  --i8-spindle:    #b9d3e3; /* pale sky-blue: the two-pane dashed divider — song page main/rail
+                                split (SONG PAGE DESKTOP + MISSING FIELDS, both x2) and the
+                                alternate-version lyric pair split (INT8-020). Missed in the
+                                original token extraction — round-2 INT8-019 review substituted
+                                --i8-pumice, gray rather than blue, before this was traced back to
+                                three literal occurrences in the hi-fi and added properly
+                                (2026-07-26, design-system.md §5). */
 
   /* --- Semantic colour aliases (use these in components) --- */
   --color-fg:            var(--i8-ink);
@@ -56,6 +63,7 @@
   --color-toggle-hover:  var(--i8-dove); /* unselected segmented-toggle option, hovered */
   --color-fg-quote:      var(--i8-quote); /* quote-block text */
   --color-line-subtle:   var(--i8-mist); /* song ledger row dividers */
+  --color-line-accent:   var(--i8-spindle); /* the two-pane dashed divider — song page main/rail split, lyric-pair split */
 
   /* --- Typography --- */
   --font-display: "Oswald", system-ui, sans-serif; /* headings, nav, labels, buttons */

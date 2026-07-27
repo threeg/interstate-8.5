@@ -277,3 +277,27 @@ Verified with real screenshots at four widths (1024/980/1440/1920, plus 800/900/
 the CSS math alone, since the previous round's reasoning about padding had missed the actual defect.
 Default gate green; full Playwright suite **89/89 on chromium** (the empty-`<aside>` fix touches every
 page on the site, not just the song page, and caused no regression anywhere).
+
+**2026-07-26 — review round 3: the divider's colour and length.** Two more issues on the same
+main/rail divider, both real, verified against the hi-fi source rather than assumed.
+
+1. **Wrong colour.** Round 2 used `--color-line` (neutral grey), reasoning at the time that the hi-fi's
+   actual divider colour (`#b9d3e3`) was an unnamed one-off not worth tokenising. Checking the hi-fi's
+   raw HTML properly this time: `#b9d3e3` appears **three times** — the song page's main/rail split
+   (twice, across the standard and MISSING FIELDS compositions) and the alternate-version lyric-pair
+   split (INT8-020) — which is exactly the bar for a real, reusable token, not a one-off. Added
+   `--i8-spindle` / `--color-line-accent` to `tokens.css` and `design-system.md` §2/§5 (a genuine
+   token-extraction gap from Milestone 5, corrected now rather than perpetuated), and switched the
+   divider to it. Checked its non-text contrast before adopting it (1.56:1 against white) against the
+   already-shipped, already-Axe-clean `--color-line` (1.46:1, the filter bar's own border) — both sit
+   below WCAG 1.4.11's 3:1 floor, consistent with treating a purely decorative panel divider as exempt,
+   which is already this project's practice, not a new risk introduced here.
+2. **Wrong length.** The divider (a `border-left` on the sidebar) stopped at the rail's own height
+   instead of running the full column, because `.layout-content__row--with-rail` set
+   `align-items: start` — which sizes each grid column to its own content height rather than the row's.
+   Switched to grid's default (`stretch`), so the shorter column's box now matches the taller one's
+   height and the border runs the full length. Verified by measuring both columns' real rendered
+   heights (they now match) and with a full-page screenshot, not by CSS inspection alone.
+
+Gate green; full Playwright suite 89/89 on chromium (this touches only the shared divider treatment;
+no other page uses `.layout-content__row--with-rail` yet).
