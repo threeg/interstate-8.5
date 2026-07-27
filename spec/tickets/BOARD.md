@@ -116,6 +116,7 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 | C5 | INT8-026 | Hook the footer's secondary label row up to a real Drupal menu | task | theme | cleanup | todo | INT8-015 |
 | C6 | INT8-032 | Reconcile the "Side Projects" song-type name across the spec, and pin the filter's case-sensitivity | task | docs | cleanup | todo | INT8-008, INT8-018 |
 | C7 | INT8-033 | Drop the inert border-style clauses Tailwind's preflight makes vacuous in the Playwright suite | task | tooling | cleanup | todo | INT8-015, INT8-027 |
+| C8 | INT8-034 | Correct the theme's starterkit provenance record and restore the menu active-trail template | task | theme | cleanup | todo | INT8-005, INT8-031 |
 
 > **INT8-022** was promoted into the main execution-order table above (row 12, before INT8-012) — its
 > own DoD required it be worked before the first migration module landed.
