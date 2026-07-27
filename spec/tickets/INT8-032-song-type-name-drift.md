@@ -38,6 +38,15 @@ Against that, the spec is split:
 | `spec/requirements/requirements.md` (line ~53, the type table) | `Side projects` | ❌ |
 | `spec/wireframes/overview.md` (line ~67) | `Side projects` | ❌ |
 | `tests/playwright/tests/songs-landing.spec.ts` (`TYPE.sideProjects`, line ~36) | `Side projects` | ❌ |
+| `spec/architecture/architecture.md` (line ~115, the Song type data-model row) | `Side projects` | ❌ |
+| `web/modules/custom/i8_services/src/Plugin/views/filter/SongTypeFilter.php` (line ~19, class docblock) | `Side projects` | ❌ |
+
+> **The last two rows were added by `sfk-verify` on 2026-07-27** (theme-batch run), which swept the whole
+> repository rather than the `spec/` + `tests/` scope this ticket originally assumed. `architecture.md`
+> is a **binding spec document**, and `SongTypeFilter.php`'s docblock is **the implementation's own
+> record of the values the contract accepts** — the one place a future reader is most likely to trust.
+> Neither was in the original inventory, and the DoD grep below was scoped `spec/ tests/`, so the PHP
+> occurrence would have survived this ticket entirely.
 
 **Why nothing is failing today, and why that is itself the finding.** The Songs filter is
 *case-insensitive*, so `?type=Side%20projects` and `?type=Side%20Projects` both return the same 175
@@ -62,13 +71,18 @@ Documentation and test-constant only. **No behaviour change**, and specifically 
 its filters, the preprocess, or the taxonomy itself — the live term name is the fact everything else is
 being reconciled *to*.
 
-1. **Correct the two drifting spec documents** to `Side Projects`:
+1. **Correct the three drifting spec documents** to `Side Projects`:
    - `spec/requirements/requirements.md` — the song-type table (~line 53), and discharge the
      "working list / confirmed in Milestone 3" hedge beneath it now that the migration has run.
    - `spec/wireframes/overview.md` — the song-types line (~line 67).
+   - `spec/architecture/architecture.md` — the Song type data-model row (~line 115).
    Leave `api-contract.md` §2.1 alone; it is already right.
 2. **Correct `TYPE.sideProjects` in `tests/playwright/tests/songs-landing.spec.ts`** to `Side Projects`.
    The constant is currently relying on case-insensitive matching without saying so.
+2a. **Correct the `SongTypeFilter` class docblock** (`web/modules/custom/i8_services/src/Plugin/views/
+   filter/SongTypeFilter.php`, ~line 19), which lists the accepted `type` values as
+   `"All", "Modest Mouse", "Ugly Casanova", "Side projects", "Covers"`. Comment-only — **no code
+   change**, and specifically no change to the `loadByProperties()` name lookup beneath it.
 3. **Pin the case-sensitivity in `api-contract.md` §2.1**, next to the existing "unrecognized value
    yields zero results" sentence — state explicitly whether `type` matching is case-insensitive, and
    note that the canonical values are the `song_type` term names. Confirm the actual behaviour first
@@ -84,18 +98,22 @@ Out of scope: making the filter case-*sensitive* (that would break in-the-wild U
 benefit); any other term name; the `alt` parameter; adding a test for case-insensitivity — see below.
 
 ## Definition of done (acceptance criteria)
-- [ ] `requirements.md`, `wireframes/overview.md` and `songs-landing.spec.ts` all say `Side Projects`,
-      matching the live term and `api-contract.md`.
+- [ ] `requirements.md`, `wireframes/overview.md`, `architecture.md`, `songs-landing.spec.ts` and
+      `SongTypeFilter.php`'s docblock all say `Side Projects`, matching the live term and
+      `api-contract.md`.
 - [ ] `requirements.md`'s "working list, confirmed in Milestone 3" hedge is discharged.
 - [ ] `api-contract.md` §2.1 states the `type` parameter's case-sensitivity explicitly, verified
       against both the View filter and the preprocess comparison rather than assumed.
-- [ ] `grep -rin "side projects" spec/ tests/` returns no lower-case-p occurrence outside this
-      ticket's own history.
+- [ ] `grep -rin "side projects" spec/ tests/ web/modules/custom/ web/themes/custom/` returns no
+      lower-case-p occurrence outside this ticket's own history. **Note the widened scope** — the
+      original `spec/ tests/` grep could not see the PHP docblock.
 - [ ] `lando playwright` still green — the corrected constant must exercise the same 175 results.
 - [ ] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
-`tests_required: false` — **docs-only**, plus one test *constant* corrected. No behaviour changes, so
+`tests_required: false` — **docs-only**, plus one test *constant* and one PHP *comment* corrected. The
+docblock edit keeps this docs-only: it changes no executable line, so the exemption still holds. No
+behaviour changes, so
 there is nothing new to assert; the existing Songs filter tests already cover the parameter and must
 stay green with the corrected value, which is the verification.
 
@@ -113,6 +131,13 @@ Verify with:
   **reported with the direction reversed** ("api-contract.md is wrong"); checking the live taxonomy
   before filing showed `api-contract.md` is the one that is right and two other spec documents plus a
   test constant are wrong. Filed at the site owner's request.
+- 2026-07-27 — **scope widened by `sfk-verify`** (theme-batch run) after a repository-wide sweep found two
+  further lowercase-p occurrences the original inventory missed: `spec/architecture/architecture.md`
+  (~line 115) and `SongTypeFilter.php`'s class docblock (~line 19). The second is the more significant —
+  it is the implementation's own statement of which `type` values the contract accepts, and the ticket's
+  original `spec/ tests/` DoD grep was structurally unable to see it, so this ticket would have closed
+  with the drift still live in code. Estimate unchanged (both are one-word edits); the DoD grep is now
+  scoped across the custom modules and theme too.
 - Cleanup backlog rather than the main sequence: this improves the internal consistency of already-shipped,
   already-correct behaviour and changes nothing a user can see, which is exactly what CONVENTIONS §6.6
   reserves the backlog for — the opposite of the reasoning that put INT8-027/029/031 in the main

@@ -64,6 +64,7 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 25 | INT8-029 | Bucket the song ledger's letter rail and groups, with a `#` catch-all | task | theme | 9 / theme | E04 | code | done | INT8-018 |
 | 26 | INT8-030 | Make the song ledger's letter rail a real jump-to-letter navigation | task | theme | 9 / theme | E04 | code | done | INT8-029 |
 | 27 | INT8-031 | Keep the primary nav's current-section marking across the whole Songs section | task | theme | 9 / theme | E03 | code | done | INT8-017, INT8-018 |
+| 28 | INT8-036 | Restore Firefox coverage in the Playwright suite (stale profile-lock symlink) and correct the record | task | tooling | 9 / cleanup | — | code | todo | INT8-006, INT8-021 |
 
 > **Frontend independence (CONVENTIONS §4.5):** the theme foundation (E03, 015–017) builds against the
 > design/contract in parallel with the content model + migration (E02, 008–014); the Songs-section
@@ -123,9 +124,18 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 | C7 | INT8-033 | Drop the inert border-style clauses Tailwind's preflight makes vacuous in the Playwright suite | task | tooling | cleanup | todo | INT8-015, INT8-027 |
 | C8 | INT8-034 | Correct the theme's starterkit provenance record and restore the menu active-trail template | task | theme | cleanup | todo | INT8-005, INT8-031 |
 | C9 | INT8-035 | Move the theme's entity queries and loads into the services layer | task | services | cleanup | todo | INT8-018, INT8-020 |
+| C10 | INT8-037 | Correct INT8-018's caching claim and decide whether the Songs landing's max-age 0 stands | task | config | cleanup | todo | INT8-018 |
 
 > **INT8-022** was promoted into the main execution-order table above (row 12, before INT8-012) — its
 > own DoD required it be worked before the first migration module landed.
+
+> **INT8-036** was likewise raised by `sfk-verify` but placed in the **main sequence** (row 28), not
+> here, per CONVENTIONS §6.5: it is a live **gate failure**, not an internal-quality improvement.
+> `lando playwright` exits 1 — every Firefox test has failed since 2026-07-20 on a dangling profile-lock
+> symlink — while root `CLAUDE.md` requires `lando test-all` green at milestone completion and NFR-8
+> names Firefox among the supported browsers. Removing the stale symlink takes the suite from 436/545 to
+> **545/545** with no application change, which is what confirmed this is tooling, not a defect in the
+> shipped screens. It must be worked before Milestone 9 sign-off.
 
 > **INT8-035** covers **two** call sites (INT8-018's and INT8-020's), not just the one that prompted it.
 > INT8-020 followed the pattern INT8-018 had already established rather than inventing it, so fixing
@@ -177,5 +187,5 @@ Derived from each ticket's `implements` field. Every `FR`/`NFR` appears against 
 | NFR-4 | *(deferred — pre-launch performance pass; no slice-1 ticket)* |
 | NFR-5 | INT8-006 |
 | NFR-6 | INT8-010 (+ the config-export-and-verify practice on every `[site-building]` ticket: 002, 003, 008, 009, 011, 017) |
-| NFR-7 | INT8-006, INT8-021 |
-| NFR-8 | INT8-021 |
+| NFR-7 | INT8-006, INT8-021, INT8-036 |
+| NFR-8 | INT8-021, INT8-036 |
