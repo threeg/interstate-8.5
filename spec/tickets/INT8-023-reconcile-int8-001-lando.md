@@ -2,7 +2,7 @@
 id: INT8-023
 title: Reconcile the INT8-001 record (and its BOARD title) from DDEV to Lando
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: docs
@@ -49,11 +49,11 @@ what was actually built.
   the ticket.
 
 ## Definition of done (acceptance criteria)
-- [ ] INT8-001's title, body, and Notes describe Lando, not DDEV, and match the artefacts actually on
+- [x] INT8-001's title, body, and Notes describe Lando, not DDEV, and match the artefacts actually on
       disk.
-- [ ] `BOARD.md` row 1 title reflects Lando.
-- [ ] A Notes line records the switch with its rationale.
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] `BOARD.md` row 1 title reflects Lando.
+- [x] A Notes line records the switch with its rationale.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 `tests_required: false` — **docs-only.** Verified by reading the reconciled INT8-001 against
@@ -62,3 +62,23 @@ switch). Adds no requirement (`implements: []`).
 
 ## Notes
 2026-07-12 — created by `sfk-verify` (scaffolding batch INT8-001…007).
+
+2026-07-27 — **implemented, in review.** Corrected `INT8-001-init-repo-ddev.md`: frontmatter title,
+`## Background`, and the technical-requirements line now describe the Lando `drupal11` recipe rather
+than `ddev config`; the DoD and `## Tests / verification` commands are `lando start` / `lando composer
+install` / `lando drush status`; the `## Notes` completion report now names the real artefacts
+(`.lando.yml`, the `legacy` MariaDB service) instead of the never-built `.ddev/config.yaml` /
+`.ddev/.gitignore`. Appended a dated correction there (not rewritten) recording the DDEV→Lando switch
+and its rationale (DDEV's WSL/mutagen sessions were roughly 90% slower). `BOARD.md` row 1's title
+corrected to match. Kept the filename `INT8-001-init-repo-ddev.md` as-is per CONVENTIONS §1.3 (ids and
+filenames are permanent) — the ticket left this as a decision, and INT8-002's own Notes already record
+the DDEV→Lando switch happening one ticket later, so the filename now reads as a snapshot of the moment
+rather than a live inaccuracy. Checked `INT8-002`, `INT8-034` and `architecture.md`'s DDEV mentions: all
+three already correctly describe the switch as history, not as a live claim about DDEV being in use, so
+no change was needed there — out of this ticket's stated scope (INT8-001 + `BOARD.md` row 1) in any case.
+
+**Summary:** INT8-001's record now describes what was actually built (Lando), not what was tried and
+dropped (DDEV).
+
+**Sanity test:** `grep -i ddev spec/tickets/INT8-001-init-repo-ddev.md` shows only the dated correction
+note, not a live technical claim.

@@ -37,7 +37,7 @@ on a higher-numbered one. Epics close when their children are all `done`.
 
 | # | id | title | type | layer | M / batch | epic | kind | status | depends_on |
 |---|----|-------|------|-------|-----------|------|------|--------|------------|
-| 1 | INT8-001 | Initialise repo + DDEV environment | task | repo | 8 / scaffolding | E01 | code | done | — |
+| 1 | INT8-001 | Initialise repo + Lando environment | task | repo | 8 / scaffolding | E01 | code | done | — |
 | 2 | INT8-002 | Install Drupal 11 (minimal) + config/sync | task | config | 8 / scaffolding | E01 | site-building | done | INT8-001 |
 | 3 | INT8-003 | Essential contrib + Gin admin theme | task | config | 8 / scaffolding | E01 | site-building | done | INT8-002 |
 | 4 | INT8-004 | Mount the v2 MySQL dump as a migration source | task | tooling | 8 / scaffolding | E01 | code | done | INT8-002 |
@@ -116,7 +116,7 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 
 | # | id | title | type | layer | batch | status | depends_on |
 |---|----|-------|------|-------|-------|--------|------------|
-| C2 | INT8-023 | Reconcile the INT8-001 record (and its BOARD title) from DDEV to Lando | task | docs | cleanup | todo | INT8-001 |
+| C2 | INT8-023 | Reconcile the INT8-001 record (and its BOARD title) from DDEV to Lando | task | docs | cleanup | in-review | INT8-001 |
 | C3 | INT8-024 | Pin lyrics/notes/quotes fields to the Restricted HTML format | task | content-model | cleanup | todo | INT8-010 |
 | C4 | INT8-025 | Harden the migration count-parity check to verify FR-5 literally (published == active source) | task | migration | cleanup | todo | INT8-014 |
 | C5 | INT8-026 | Hook the footer's secondary label row up to a real Drupal menu | task | theme | cleanup | todo | INT8-015 |
