@@ -2,7 +2,7 @@
 id: INT8-020
 title: Song versions (side-by-side lyrics + links)
 type: story
-status: in-review
+status: done
 milestone: 9
 batch: theme
 layer: theme
@@ -124,3 +124,18 @@ plain classes, guaranteed to co-occur with one of the two genuine embeds on ever
 ticket is theme/PHP-preprocess only, no schema change). Full Playwright suite **106/106 on chromium**
 (20 net new across all suites, no regressions). No config drift — `drush cex`/`cim` both report nothing
 to do.
+
+2026-07-26 — **done (reviewed), but the feature is expected to be redesigned.** Closed as built: FR-13
+and FR-20 are implemented and their tests pass. The site owner's review found it visually incomplete
+against the hi-fi (the alternate block's light-blue `--color-tint` header bar is missing) and, more
+substantially, judged the *design itself* not to work — the hi-fi only ever draws this composition as
+an isolated panel, never in the full page layout, so how it should sit within the song page was never
+really settled. **A redesign of this view is expected**, and no further patching happens against this
+ticket: it would be work against a composition that is about to change. Logged in `spec/TODO.md` so it
+survives outside this closed ticket, and will become its own ticket once the redesign exists.
+
+Also raised in the same review and split out rather than fixed here: this ticket's preprocess does its
+own entity queries directly in the theme layer, which the architecture's dependency rule assigns to
+`services` (architecture.md §2.1 names "version-display logic" as a services-layer example almost
+verbatim). It follows the precedent INT8-018 already set rather than inventing it, so both are moved
+together — see **INT8-035**.
