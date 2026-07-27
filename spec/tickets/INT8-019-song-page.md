@@ -2,7 +2,7 @@
 id: INT8-019
 title: Song page (view mode + Twig + video)
 type: story
-status: in-review
+status: done
 milestone: 9
 batch: theme
 layer: theme

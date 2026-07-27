@@ -57,7 +57,7 @@ on a higher-numbered one. Epics close when their children are all `done`.
 | 18 | INT8-017 | Primary nav + front-page/route wiring | task | theme | 9 / theme | E03 | code + site-building | done | INT8-015 |
 | 19 | INT8-027 | Header nav hover/focus states, slogan visibility, mobile-menu styling (design-sync corrections) | task | theme | 9 / theme | E03 | code | done | INT8-015 |
 | 20 | INT8-018 | Songs landing (View + filters + ledger) | story | theme | 9 / theme | E04 | code + site-building | done | INT8-013, INT8-015, INT8-016 |
-| 21 | INT8-019 | Song page (view mode + Twig + video) | story | theme | 9 / theme | E04 | code | in-review | INT8-013, INT8-015, INT8-016 |
+| 21 | INT8-019 | Song page (view mode + Twig + video) | story | theme | 9 / theme | E04 | code | done | INT8-013, INT8-015, INT8-016 |
 | 22 | INT8-020 | Song versions (side-by-side lyrics + links) | story | theme | 9 / theme | E04 | code | todo | INT8-019 |
 | 23 | INT8-021 | E2E capstone (Playwright + Axe) | task | tooling | 9 / theme | E04 | code | todo | INT8-018, INT8-019, INT8-020 |
 | 24 | INT8-028 | Page-title hero block in a full-width page-header region (random media background) | story | theme | 9 / theme | E03 | code + site-building | done | INT8-015, INT8-016, INT8-018 |
