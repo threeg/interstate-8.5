@@ -122,9 +122,17 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 | C6 | INT8-032 | Reconcile the "Side Projects" song-type name across the spec, and pin the filter's case-sensitivity | task | docs | cleanup | todo | INT8-008, INT8-018 |
 | C7 | INT8-033 | Drop the inert border-style clauses Tailwind's preflight makes vacuous in the Playwright suite | task | tooling | cleanup | todo | INT8-015, INT8-027 |
 | C8 | INT8-034 | Correct the theme's starterkit provenance record and restore the menu active-trail template | task | theme | cleanup | todo | INT8-005, INT8-031 |
+| C9 | INT8-035 | Move the theme's entity queries and loads into the services layer | task | services | cleanup | todo | INT8-018, INT8-020 |
 
 > **INT8-022** was promoted into the main execution-order table above (row 12, before INT8-012) — its
 > own DoD required it be worked before the first migration module landed.
+
+> **INT8-035** covers **two** call sites (INT8-018's and INT8-020's), not just the one that prompted it.
+> INT8-020 followed the pattern INT8-018 had already established rather than inventing it, so fixing
+> only the newer would leave the architecture rule half-enforced with the older, larger violation still
+> in place. It also closes the blind spot that let both through: `check-boundary.sh` greps `use`
+> statements between modules, so it structurally cannot see a dynamic `\Drupal::entityTypeManager()`
+> call in a `.theme` file.
 
 > **INT8-032 and INT8-033** were both surfaced by the *independent test author* while writing
 > INT8-031's tests — a side-effect of the grader≠graded split worth noting: a model reading the spec
