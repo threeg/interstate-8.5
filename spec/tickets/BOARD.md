@@ -108,6 +108,11 @@ on a higher-numbered one. Epics close when their children are all `done`.
 
 Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on the critical path unless promoted.
 
+> **This board is the whole queue.** Work that is known but **not yet specifiable** — where the design
+> or product decision doesn't exist yet, so no honest ticket can be written — is parked in
+> `spec/TODO.md` instead, each entry naming the decision still owed. It is a waiting room, not a second
+> backlog: an entry gets deleted from there in the same commit that files its real ticket here.
+
 | # | id | title | type | layer | batch | status | depends_on |
 |---|----|-------|------|-------|-------|--------|------------|
 | C2 | INT8-023 | Reconcile the INT8-001 record (and its BOARD title) from DDEV to Lando | task | docs | cleanup | todo | INT8-001 |
