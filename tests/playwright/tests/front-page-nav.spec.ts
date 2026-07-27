@@ -171,6 +171,13 @@ test.describe('primary nav current-section marking under query-string filters', 
   });
 
   test('the filtered Songs URL draws the same current-section underline as the unfiltered one', async ({ page }) => {
+    // The underline is a desktop-only treatment (page-shell.spec.ts): below the
+    // nav breakpoint the nav collapses behind ☰ and current-section uses a
+    // left-border accent instead. Pixel 5 / iPhone 12 default below that
+    // breakpoint, so this pins desktop explicitly — same convention as
+    // page-shell.spec.ts's own desktop-treatment checks.
+    await page.setViewportSize({ width: 1280, height: 800 });
+
     // The DoD asks for the teal underline, but hardcoding a hex would duplicate
     // a design token (design-system.md §3 / tokens.css own that value). Instead
     // the unfiltered page — whose treatment is known-correct today — is the
