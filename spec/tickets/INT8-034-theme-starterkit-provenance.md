@@ -2,7 +2,7 @@
 id: INT8-034
 title: Correct the theme's starterkit provenance record and restore the menu active-trail template
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: theme
