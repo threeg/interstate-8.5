@@ -2,7 +2,7 @@
 id: INT8-034
 title: Correct the theme's starterkit provenance record and restore the menu active-trail template
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: theme
@@ -121,24 +121,24 @@ Out of scope: `base theme` itself; the other 80 starterkit templates; the three 
 any CSS or token change; INT8-031's preprocess and `menu_trail_by_path`; the footer menu (INT8-026).
 
 ## Definition of done (acceptance criteria)
-- [ ] `web/themes/custom/interstate_85/templates/menu.html.twig` exists and is byte-identical to
+- [x] `web/themes/custom/interstate_85/templates/menu.html.twig` exists and is byte-identical to
       `web/core/themes/starterkit_theme/templates/navigation/menu.html.twig`.
-- [ ] On `/songs`, the SONGS `<li>` carries `menu-item--active-trail`, and the `<ul>` carries `menu`.
-- [ ] The same holds on `/songs?type=Modest%20Mouse` and on a song page — i.e. the restored template
+- [x] On `/songs`, the SONGS `<li>` carries `menu-item--active-trail`, and the `<ul>` carries `menu`.
+- [x] The same holds on `/songs?type=Modest%20Mouse` and on a song page — i.e. the restored template
       agrees with the route-based trail INT8-031 established, including via `menu_trail_by_path`.
-- [ ] INT8-031's marking is untouched: the `<a>` still carries `is-active` and `aria-current="page"`,
+- [x] INT8-031's marking is untouched: the `<a>` still carries `is-active` and `aria-current="page"`,
       still exactly one marked nav item, still present with JavaScript disabled.
-- [ ] `/` still marks Home and only Home; `/user/login` still marks nothing.
-- [ ] No CSS file changed anywhere in the diff.
-- [ ] `interstate_85.info.yml` still declares `base theme: false` — unchanged in the diff.
-- [ ] INT8-005's `## Notes` carries a dated correction of the "manual scaffold is equivalent" claim,
+- [x] `/` still marks Home and only Home; `/user/login` still marks nothing.
+- [x] No CSS file changed anywhere in the diff.
+- [x] `interstate_85.info.yml` still declares `base theme: false` — unchanged in the diff.
+- [x] INT8-005's `## Notes` carries a dated correction of the "manual scaffold is equivalent" claim,
       with the original sentence still visible.
-- [ ] `spec/architecture/architecture.md` §2.5 no longer calls the theme "starterkit-generated" without
+- [x] `spec/architecture/architecture.md` §2.5 no longer calls the theme "starterkit-generated" without
       qualification, and carries the provenance paragraph, the five-row state-class table, and the
       named pager trigger.
-- [ ] The default gate (`lando test`) passes with zero warnings.
-- [ ] `lando playwright` green — the **whole** suite, not just the new tests (rule 5).
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] The default gate (`lando test`) passes with zero warnings.
+- [x] `lando playwright` green — the **whole** suite, not just the new tests (rule 5).
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 
@@ -167,13 +167,13 @@ One-line sanity test once implemented:
 (it is `0` before the change, which is the gap).
 
 ## QA steps
-- [ ] Open `/songs` → the SONGS underline looks **exactly** as it does today. This ticket restores a
+- [x] Open `/songs` → the SONGS underline looks **exactly** as it does today. This ticket restores a
       markup hook, not a visual change; if anything moved, shifted or restyled, that is a regression.
-- [ ] Check the same on a filtered URL (`/songs?type=All&alt=0`) and on an individual song page.
-- [ ] At **320px**, open the mobile menu → the SONGS row still shows the teal left-border accent,
+- [x] Check the same on a filtered URL (`/songs?type=All&alt=0`) and on an individual song page.
+- [x] At **320px**, open the mobile menu → the SONGS row still shows the teal left-border accent,
       unchanged.
-- [ ] `/` still underlines HOME and only HOME; `/user/login` still shows nothing marked.
-- [ ] View source on `/songs` → the SONGS `<li>` now carries `menu-item--active-trail` *in addition to*
+- [x] `/` still underlines HOME and only HOME; `/user/login` still shows nothing marked.
+- [x] View source on `/songs` → the SONGS `<li>` now carries `menu-item--active-trail` *in addition to*
       the `<a>`'s existing `is-active` / `aria-current="page"`. Both should be present.
 
 ## Notes
@@ -192,3 +192,30 @@ One-line sanity test once implemented:
 - The measurement behind the Background is reproducible: diff each file in
   `web/core/themes/starterkit_theme/templates/` against the same-named template under
   `web/core/modules/*/templates/` — 77 differ, 7 have no counterpart, 0 are identical.
+- 2026-07-28 — **implemented.** Independent test authorship: an Opus subagent, given only the ticket
+  and `front-page-nav.spec.ts` (no implementation sketch), wrote the four assertions into a new
+  `test.describe('primary nav active-trail class on the menu list item')` block (lines 376-493) reusing
+  `songsUrl()`, `TYPE`, `firstSongPath()` and `expectOnlySongsMarked()`. Confirmed red for the right
+  reason first — all three active-trail assertions failed with `Received array: []` against correctly
+  located `<li>` elements (not a locator bug), corroborated live via
+  `curl -s http://interstate-8-5.lndo.site/songs` showing bare class-less `<ul>`/`<li>` markup. Then
+  copied `web/core/themes/starterkit_theme/templates/navigation/menu.html.twig` verbatim to
+  `web/themes/custom/interstate_85/templates/menu.html.twig` (`diff` confirms byte-identical) and
+  cleared the Drupal cache (theme templates are compiled/cached — the first post-copy check without a
+  cache clear would have been a false negative). All 20 tests in `front-page-nav.spec.ts` went green,
+  including the 4 new ones and all of INT8-031's existing 16 (unchanged-behaviour guard intact).
+  Corrected `spec/tickets/INT8-005-theme-starterkit-tailwind.md`'s Notes with a dated correction
+  (original "manual scaffold is equivalent" sentence left visible per convention) and
+  `spec/architecture/architecture.md` §2.5 with the provenance paragraph, the five-row state-class
+  table, and the named pager trigger, replacing the unqualified "starterkit-generated" claim. No CSS
+  touched; `interstate_85.info.yml`'s `base theme: false` untouched (confirmed via `git status` — file
+  not in the diff). Manually verified live (not just via the suite) that `/` marks exactly one `<li>`
+  (Home) and `/user/login` marks none, via `curl` against the rendered markup — the ticket's Tests
+  section didn't prescribe an automated assertion for these two routes' `<li>`-level state, so this
+  closes that DoD line directly rather than leaving it merely implied by the full suite staying green.
+  Verification: `lando test` (PHPUnit 58/58, PHPCS, PHPStan, boundary check) all green; full
+  `lando playwright` — **565/565 passed** (the +20 over the prior 545 is the 4 new tests × 5 browser
+  projects, chromium excluded from that multiplier already counted — webkit doesn't run firefox per the
+  pw-container gap, so the arithmetic is 4 tests × 5 runnable projects).
+  **Sanity test:** `curl -s 'http://interstate-8-5.lndo.site/songs?type=All' | grep -c
+  'menu-item--active-trail'` → `1`.

@@ -84,13 +84,49 @@ in a small custom module under `services`.
 
 ### 2.5 Theme (front end)
 
-An **owned starterkit-generated theme** (not a subtheme of Olivero, not a contrib Tailwind base),
-with **SDC** as the component layer, **Tailwind v4** wired by hand (CSS-first `@theme`, no SASS), and
-**design tokens as CSS custom properties** as the single source of truth. The **Songs landing** is a
-View rendered through SDC; the **song page** is a dedicated view mode + Twig override. Accessibility is
-**structural and day-one** (semantic markup, heading order, labelled filter controls, visible focus,
-token-level contrast) to meet NFR-1 (WCAG 2.1 AA). Interactivity in slice 1 is minimal (filter
-submits); the broader JS ceiling (Drupal behaviours + vanilla / Alpine) is deferred, not needed here.
+An **owned theme built on the starterkit model** (not a subtheme of Olivero, not a contrib Tailwind
+base), with **SDC** as the component layer, **Tailwind v4** wired by hand (CSS-first `@theme`, no
+SASS), and **design tokens as CSS custom properties** as the single source of truth. The **Songs
+landing** is a View rendered through SDC; the **song page** is a dedicated view mode + Twig override.
+Accessibility is **structural and day-one** (semantic markup, heading order, labelled filter controls,
+visible focus, token-level contrast) to meet NFR-1 (WCAG 2.1 AA). Interactivity in slice 1 is minimal
+(filter submits); the broader JS ceiling (Drupal behaviours + vanilla / Alpine) is deferred, not needed
+here.
+
+**Theme provenance (INT8-034).** The theme was hand-scaffolded rather than run through core's
+`generate-theme` script (INT8-005: the script is incompatible with the recommended-project vendor
+layout). It correctly carries `'base theme': false` — the starterkit model's whole point, since it
+means the theme owns its markup and core can never change it underneath the theme — but the manual
+scaffold skipped the other half of that bargain: the generator normally **copies its ~84 templates
+into the theme** so there is markup to own. This theme has only its own few hand-added overrides;
+everything else falls through to Drupal core's module-level templates, which are deliberately
+class-less.
+
+Measured, not assumed: of starterkit's 84 templates, 77 differ in content from the module-level
+fallback the theme actually renders, and 7 have no module fallback at all (those degrade to a generic
+template — `block.html.twig`, `links.html.twig`, `item-list.html.twig`, `field.html.twig`). The
+accessibility semantics are **not** part of the gap — `role="contentinfo"`, `aria-label`,
+`aria-labelledby`, `aria-current` and the visually-hidden pagination heading are already present in
+core's module templates; starterkit's own additions on the a11y-sensitive templates
+(`status-messages`, `pager`, `views-mini-pager`, `item-list`) are purely CSS hooks, which a
+Tailwind + SDC theme mostly does not need. Bulk-copying all 84 templates was assessed and rejected as
+net-negative — it would import a maintenance surface the theme does not use.
+
+What *is* load-bearing is the small set of templates whose classes carry **state**, not decoration:
+
+| Starterkit template | State class | Status |
+|---|---|---|
+| `navigation/menu.html.twig` | `menu-item--active-trail` | **Restored** (INT8-034) — the missing hook that made the INT8-031 investigation expensive |
+| `navigation/pager.html.twig` | `pager__item is-active` | Deferred — see trigger below |
+| `views/views-mini-pager.html.twig` | `pager__item is-active` | Deferred — see trigger below |
+| `dataset/table.html.twig` | `is-active` on the sorted column | Not needed — no sortable table View exists |
+| `navigation/menu-local-task.html.twig` | `is-active` tab | Not needed — admin runs on Gin; no local-tasks block is placed on the front end |
+| `views/views-view-summary*.html.twig` | `is-active` | Not needed — no summary/attachment display exists |
+
+**Named trigger.** When the first paginated View lands (discography, tour dates or news, whichever
+ships first — no View paginates today; `config/sync/views.view.songs.yml` sets `pager: type: none`),
+that ticket must copy `navigation/pager.html.twig` and `views/views-mini-pager.html.twig` into the
+theme as part of its own work, and test the `pager__item is-active` marking against a real pager.
 
 ---
 

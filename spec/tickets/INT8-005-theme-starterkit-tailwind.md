@@ -52,3 +52,15 @@ dimensions (matching the desktop reference in the hi-fi). Theme set as default f
 Gin). **Sanity test:** `lando npm run build` → "Done in ~300ms"; visit the site front end and
 confirm: site-branding block shows the polo-blue shield outline with "8" in Oswald, plus Lora body
 text and the dark-canvas page background.
+
+2026-07-28 — **Correction (INT8-034).** The claim above that the manual scaffold "is equivalent" to
+the core `generate-theme` script was wrong. `base theme: false` was carried over correctly (that part
+*is* equivalent), but the starterkit generator's defining behaviour is that it also **copies its ~84
+templates into the theme** — the manual scaffold skipped that step, leaving `templates/` with only the
+few hand-added overrides and everything else falling through to core's module-level templates. This
+went unnoticed until INT8-031's investigation ran into a missing `menu-item--active-trail` hook.
+INT8-034 restored the one template with genuine state-bearing markup (`templates/menu.html.twig`) and
+recorded the full gap — measured, not assumed (77 of 84 templates differ in content from the module
+fallback, 7 have no fallback at all) — in `spec/architecture/architecture.md` §2.5's provenance
+paragraph, which is now the authoritative record. `base theme: false` itself remains correct and
+unchanged.

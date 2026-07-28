@@ -372,3 +372,122 @@ test.describe('primary nav current-section marking on a song page', () => {
     }
   });
 });
+
+/* ---------------------------------------------------------------------------
+ * The menu <li> carries the standard active-trail hook (INT8-034).
+ *
+ * A separate mechanism from everything above, on a separate element. INT8-031
+ * marks the `<a>` from a preprocess function; this block is about the `<li>`,
+ * which is marked by Drupal's own menu template from `item.in_active_trail`.
+ * The theme declares `base theme: false`, which in the starterkit model means
+ * it owns the template copies — and the menu one was never copied, so today the
+ * nav falls through to core's deliberately class-less module template and no
+ * `<li>` anywhere carries the hook.
+ *
+ * Why assert a class nothing currently styles: `menu-item--active-trail` is
+ * Drupal's *standard* per-item state hook, and its absence is what made the
+ * INT8-031 investigation expensive — the obvious hook was missing, so the
+ * symptom looked like a different bug. Pinning it here means the next menu (the
+ * footer menu, any later section nav) inherits a working, conventional hook
+ * instead of rediscovering the hole. The ticket is explicit that no CSS may key
+ * off it, so these tests assert markup only and never computed style.
+ *
+ * The class list is read out of the DOM in one pass and dumped into the failure
+ * message, so a red run distinguishes "the hook is genuinely absent" from "the
+ * locator found the wrong element" without a second debugging round.
+ * ------------------------------------------------------------------------ */
+
+const ACTIVE_TRAIL_CLASS = 'menu-item--active-trail';
+
+/** Every `<li>` in the primary nav: its link text and its literal class list. */
+async function navItemClasses(page: Page): Promise<{ text: string; classes: string[] }[]> {
+  return page.locator('nav.site-header__nav li').evaluateAll((els) =>
+    els.map((li) => ({
+      text: (li.querySelector('a')?.textContent ?? '').replace(/\s+/g, ' ').trim(),
+      classes: Array.from(li.classList),
+    })),
+  );
+}
+
+/**
+ * Asserts the `<li>`-level trail state across the whole nav: Songs in the
+ * trail, Home explicitly out of it. Checking Home too is the same guard the
+ * `<a>`-level helper applies — a template that put the class on every item
+ * would satisfy "Songs is in the trail" on its own.
+ */
+async function expectOnlySongsLiInActiveTrail(page: Page): Promise<void> {
+  const rows = await navItemClasses(page);
+  const dump = JSON.stringify(rows, null, 2);
+
+  const songsRow = rows.find((r) => /songs/i.test(r.text));
+  const homeRow = rows.find((r) => /home/i.test(r.text));
+  // Fail loudly on a bad locator rather than silently passing an assertion
+  // about an element that was never found.
+  expect(songsRow, dump).toBeDefined();
+  expect(homeRow, dump).toBeDefined();
+
+  expect(songsRow!.classes, dump).toContain(ACTIVE_TRAIL_CLASS);
+  expect(homeRow!.classes, dump).not.toContain(ACTIVE_TRAIL_CLASS);
+
+  // Exactly one item in the trail, for the same reason the `<a>` helper counts:
+  // "Songs is marked" is also true of a menu that marks everything.
+  const inTrail = rows.filter((r) => r.classes.includes(ACTIVE_TRAIL_CLASS)).map((r) => r.text);
+  expect(inTrail, dump).toEqual([songsRow!.text]);
+}
+
+test.describe('primary nav active-trail class on the menu list item', () => {
+  test('/songs puts the Songs list item in the active trail and Home outside it', async ({ page }) => {
+    const response = await page.goto(songsUrl());
+    expect(response?.status()).toBe(200);
+
+    await expectOnlySongsLiInActiveTrail(page);
+
+    // The same template supplies the `menu` class on the wrapping `<ul>`; it is
+    // the other half of the standard markup and the cheapest signal that the
+    // theme is rendering its own menu template rather than core's module one.
+    // Matched with explicit boundaries so `menu-item` on the children cannot
+    // satisfy it by accident.
+    await expect(page.locator('nav.site-header__nav ul').first()).toHaveClass(/(^|\s)menu(\s|$)/);
+  });
+
+  test('/songs?type=Modest%20Mouse keeps the Songs list item in the active trail', async ({ page }) => {
+    const response = await page.goto(songsUrl({ type: TYPE.modestMouse }));
+    expect(response?.status()).toBe(200);
+
+    // The trail is a property of the route, so a documented filter parameter
+    // must not move it — the exact defect INT8-031 fixed at the `<a>` level,
+    // asserted here at the `<li>` level so the two mechanisms cannot drift.
+    await expectOnlySongsLiInActiveTrail(page);
+  });
+
+  test('a song page keeps the Songs list item in the active trail', async ({ page }) => {
+    // Ledger-read, not hardcoded: no individual slug is a contract, and the
+    // suite runs against real migrated content.
+    const path = await firstSongPath(page);
+    const response = await page.goto(path);
+    expect(response?.status(), `${path} did not return 200`).toBe(200);
+
+    // A song page is `entity.node.canonical` while the menu link is
+    // `view.songs.page_1` — different routes that only *look* nested. This
+    // pins the `<li>` trail to whatever resolves that mismatch, so the two
+    // mechanisms agree on a song page and not merely on the landing page.
+    await expectOnlySongsLiInActiveTrail(page);
+  });
+
+  test('the <a>-level marking is unchanged on all three URLs (unchanged-behaviour guard)', async ({ page }) => {
+    // Green by design, before the change as well as after — a regression guard,
+    // not a red test. INT8-031's preprocess marks the `<a>` with `is-active` +
+    // `aria-current="page"`; the two are complementary, and a class alone can
+    // never supply the `aria-current` that NFR-1 depends on. Restoring the
+    // `<li>` hook must therefore add to this marking, never replace it, and
+    // must not double it up either — `expectOnlySongsMarked()` ends by
+    // asserting exactly one marked nav item.
+    const songPath = await firstSongPath(page);
+
+    for (const url of [songsUrl(), songsUrl({ type: TYPE.modestMouse }), songPath]) {
+      const response = await page.goto(url);
+      expect(response?.status(), `${url} did not return 200`).toBe(200);
+      await expectOnlySongsMarked(page);
+    }
+  });
+});
