@@ -79,6 +79,8 @@
     </div>{# /.layout-content #}
   </main>
 
-  {{ include('interstate_85:site-footer', {}, with_context: false) }}
+  {% embed 'interstate_85:site-footer' with { page: page } only %}
+    {% block menu %}{{ page.footer }}{% endblock %}
+  {% endembed %}
 
 </div>{# /.layout-container #}

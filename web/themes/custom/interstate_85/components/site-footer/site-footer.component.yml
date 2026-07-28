@@ -3,9 +3,17 @@ name: Site footer
 status: experimental
 description: >-
   The Interstate-8 footer. One variant, identical on every page: the
-  secondary label row (About/Contact/Support/Legal/Privacy — deferred
-  sections, shown for design continuity only, not linked), the copyright
-  line and the fan-site disclaimer.
+  secondary label row (About/Contact/Support/Legal/Privacy Policy), the
+  copyright line and the fan-site disclaimer. The label row is a real,
+  editable Drupal menu (INT8-026) passed in as a slot so the component
+  stays decoupled from block/menu configuration, the same pattern as
+  site-header's nav slot. Until About/Contact/etc. have real destination
+  pages, their menu links point at <nolink> so they render as inert text,
+  not dead links.
 props:
   type: object
   properties: {}
+slots:
+  menu:
+    title: Secondary menu
+    description: 'The rendered footer-menu region markup (system_menu_block:footer).'

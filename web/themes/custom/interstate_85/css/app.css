@@ -276,3 +276,20 @@
   flex-direction: column;
   gap: var(--space-2);
 }
+
+/* 5. Utilities */
+
+/* Drupal core emits this class (e.g. a hidden block-title <h2> that still
+   gives a menu <nav> its accessible name) on markup this theme doesn't
+   control the tag of — INT8-026 is the first ticket to actually render such
+   a block. Definition matches core's own (stable9/css/system/components/
+   hidden.module.css) so hidden stays hidden regardless of which core markup
+   uses it next. */
+.visually-hidden {
+  position: absolute !important;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  width: 1px;
+  height: 1px;
+  word-wrap: normal;
+}

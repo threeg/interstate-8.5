@@ -11,16 +11,27 @@
 }
 
 .site-footer__menu {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-6);
   margin-bottom: var(--space-3);
   font-family: var(--font-display);
   font-weight: 600;
   font-size: var(--fs-meta);
   letter-spacing: var(--ls-label);
+  text-transform: uppercase;
   color: var(--color-fg-muted);
+}
+
+/* The block-rendered footer menu (INT8-026) wraps its <ul> in a <nav><div>;
+   the flex row lives on the <ul> itself rather than on .site-footer__menu,
+   so the block wrapper and visually-hidden block title don't become flex
+   items alongside the real menu rows. */
+.site-footer__menu ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .site-footer__copyright {
