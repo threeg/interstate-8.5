@@ -2,7 +2,7 @@
 id: INT8-025
 title: Harden the migration count-parity check to verify FR-5 literally (published == active source)
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: migration
@@ -52,12 +52,12 @@ Surfaced by `sfk-verify` after the migration batch (INT8-011…014).
   correct and stays as-is (see `content-model.md` §9, 2026-07-19).
 
 ## Definition of done (acceptance criteria)
-- [ ] The verification script asserts published-node count == active-source count (FR-5), and separately
+- [x] The verification script asserts published-node count == active-source count (FR-5), and separately
       total-node count == total-source count.
-- [ ] `lando ssh -c "bash tooling/verify-migration.sh"` ends with "Migration verification passed (0
+- [x] `lando ssh -c "bash tooling/verify-migration.sh"` ends with "Migration verification passed (0
       failures)" against the real `legacy` DB (all rows active → both assertions hold at 492 / 4).
-- [ ] Default gate green (the `tooling/*` files remain outside PHPCS/PHPStan scope, as today).
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] Default gate green (the `tooling/*` files remain outside PHPCS/PHPStan scope, as today).
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 `tests_required: false` — the deliverable **is** verification tooling (test-strategy §4's documented
@@ -67,3 +67,23 @@ INT8-014 delivered.
 
 ## Notes
 2026-07-19 — created by `sfk-verify` (migration batch INT8-011…014).
+
+2026-07-27 — **implemented, in review.** `tooling/migration-verification-checks.php`'s count-parity
+section now runs four assertions instead of two: total-node == total-source (the lossless
+"every row imported" property) and published-node == active-source (FR-5's literal promise), for both
+`song` and `song_type`. Applied the same treatment to `song_type` for consistency, per the ticket.
+No migration source/config change, as scoped — the import-all + `status`-map behaviour stays as-is.
+
+Ran the full verification against the real seeded `legacy` DB
+(`lando ssh -c "bash tooling/verify-migration.sh"`): all four count-parity checks pass at their expected
+values (492 total/492 active songs; 4 total/4 active types — every source row is active today, so total
+and active parity coincide, exactly as the ticket anticipated), all 20 field-mapping spot-checks pass,
+and idempotency/rollback/restore (sections 2–4) are unaffected. Default gate re-run clean
+(`tooling/*` stays outside PHPCS/PHPStan scope, unchanged).
+
+**Summary:** the migration's "did every song come across?" check now verifies FR-5's actual guarantee —
+published count against the *active* source count — rather than a total-vs-total comparison that would
+stay green even if an inactive source row's published status ever drifted.
+
+**Sanity test:** `lando ssh -c "bash tooling/verify-migration.sh"` → ends "Migration verification passed
+(0 failures)".

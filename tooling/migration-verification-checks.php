@@ -29,12 +29,26 @@ function i8_check(string $desc, $actual, $expected): void {
 $legacy = \Drupal\Core\Database\Database::getConnection('default', 'migrate');
 
 echo PHP_EOL . '--- Count parity (FR-5) ---' . PHP_EOL;
-$sourceSongs = (int) $legacy->query('SELECT COUNT(*) FROM I8_Songs')->fetchField();
-$sourceTypes = (int) $legacy->query('SELECT COUNT(*) FROM I8_SongType')->fetchField();
-$destSongs = count(\Drupal::entityQuery('node')->condition('type', 'song')->accessCheck(FALSE)->execute());
-$destTypes = count(\Drupal::entityQuery('taxonomy_term')->condition('vid', 'song_type')->accessCheck(FALSE)->execute());
-i8_check('Song node count == I8_Songs count', $destSongs, $sourceSongs);
-i8_check('Song type term count == I8_SongType count', $destTypes, $sourceTypes);
+$sourceSongsTotal = (int) $legacy->query('SELECT COUNT(*) FROM I8_Songs')->fetchField();
+$sourceSongsActive = (int) $legacy->query('SELECT COUNT(*) FROM I8_Songs WHERE Song_Active = 1')->fetchField();
+$sourceTypesTotal = (int) $legacy->query('SELECT COUNT(*) FROM I8_SongType')->fetchField();
+$sourceTypesActive = (int) $legacy->query('SELECT COUNT(*) FROM I8_SongType WHERE SongType_Active = 1')->fetchField();
+
+$destSongsTotal = count(\Drupal::entityQuery('node')->condition('type', 'song')->accessCheck(FALSE)->execute());
+$destSongsPublished = count(\Drupal::entityQuery('node')->condition('type', 'song')->condition('status', 1)->accessCheck(FALSE)->execute());
+$destTypesTotal = count(\Drupal::entityQuery('taxonomy_term')->condition('vid', 'song_type')->accessCheck(FALSE)->execute());
+$destTypesPublished = count(\Drupal::entityQuery('taxonomy_term')->condition('vid', 'song_type')->condition('status', 1)->accessCheck(FALSE)->execute());
+
+// The migration imports every source row (lossless), mapping Song_Active /
+// SongType_Active to node/term status rather than filtering the source — see
+// content-model.md §9. FR-5's actual promise is about the PUBLISHED count, so
+// that is checked against the ACTIVE source count; the total-vs-total
+// assertion is kept alongside it so a future failure names which invariant
+// broke (an import-completeness regression vs. a status-mapping regression).
+i8_check('Song node count (total) == I8_Songs count (total)', $destSongsTotal, $sourceSongsTotal);
+i8_check('Published song node count == I8_Songs active count (FR-5)', $destSongsPublished, $sourceSongsActive);
+i8_check('Song type term count (total) == I8_SongType count (total)', $destTypesTotal, $sourceTypesTotal);
+i8_check('Published song type term count == I8_SongType active count (FR-5)', $destTypesPublished, $sourceTypesActive);
 
 echo PHP_EOL . '--- Field-mapping spot-checks ---' . PHP_EOL;
 $nodeStorage = \Drupal::entityTypeManager()->getStorage('node');
