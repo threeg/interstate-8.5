@@ -1,0 +1,7 @@
+services:
+  i8_services.song_versions:
+    class: Drupal\i8_services\SongVersions
+    arguments: ['@entity_type.manager']
+  i8_services.song_type_options:
+    class: Drupal\i8_services\SongTypeOptions
+    arguments: ['@entity_type.manager']

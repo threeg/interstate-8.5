@@ -11,8 +11,6 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\i8_services\Plugin\views\sort\ArticleInsensitiveTitle;
-use Drupal\node\Entity\Node;
-use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_preprocess_HOOK() for menu--main.html.twig.
@@ -195,8 +193,10 @@ function interstate_85_preprocess_views_view__songs(array &$variables): void {
   $type_options = [
     ['value' => 'All', 'label' => t('All'), 'selected' => $type === 'All'],
   ];
-  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['vid' => 'song_type']);
-  uasort($terms, fn ($a, $b) => $a->getWeight() <=> $b->getWeight());
+  // INT8-035: the term lookup is services-layer content-model knowledge
+  // (architecture.md §2.1); this preprocess only shapes the result into the
+  // filter bar's option list.
+  $terms = \Drupal::service('i8_services.song_type_options')->getTerms();
   foreach ($terms as $term) {
     $type_options[] = [
       'value' => $term->label(),
@@ -236,16 +236,23 @@ function interstate_85_preprocess_views_view__songs(array &$variables): void {
  * Bundle-scoped (`__song`), not view-mode-scoped: `full` is the only view
  * mode this content type is ever rendered in (INT8-019), so there is no
  * second case this would wrongly fire for.
+ *
+ * INT8-035: answering "what is this song's parent" / "what are this song's
+ * alternates" is content-model knowledge (entity queries), which
+ * architecture.md §2.1 reserves for the services layer — `i8_services.
+ * song_versions` now answers both. `viewField()` stays here: it renders an
+ * already-resolved entity's field, which is a render concern, not a lookup.
  */
 function interstate_85_preprocess_node__song(array &$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
+  $song_versions = \Drupal::service('i8_services.song_versions');
   $cache = CacheableMetadata::createFromRenderArray($variables);
 
   // This song IS an alternate version: it has a parent.
-  $parent = $node->get('field_parent_song')->entity;
-  if ($parent instanceof NodeInterface && $parent->access('view')) {
+  $parent = $song_versions->getParent($node);
+  if ($parent) {
     $cache->addCacheableDependency($parent);
     $variables['alternate_of'] = [
       'label' => $parent->label(),
@@ -260,26 +267,17 @@ function interstate_85_preprocess_node__song(array &$variables): void {
     $variables['parent_lyrics'] = $view_builder->viewField($parent->get('field_lyrics'), ['label' => 'hidden']);
   }
 
-  // This song HAS alternates: other songs whose parent is this one. No field
-  // on $node carries this — it is the reverse of field_parent_song, so it
-  // has to be queried. `node_list` is the standard tag for "the SET of
-  // matching entities can change" (a new alternate added elsewhere), which
-  // no per-node cache tag covers.
+  // This song HAS alternates: other songs whose parent is this one. `node_list`
+  // is the standard tag for "the SET of matching entities can change" (a new
+  // alternate added elsewhere), which no per-node cache tag covers.
   $cache->addCacheTags(['node_list']);
-  $alternate_ids = \Drupal::entityTypeManager()->getStorage('node')->getQuery()
-    ->condition('type', 'song')
-    ->condition('field_parent_song', $node->id())
-    ->condition('status', NodeInterface::PUBLISHED)
-    ->sort('title')
-    ->accessCheck(TRUE)
-    ->execute();
-  if ($alternate_ids) {
-    $alternates = [];
-    foreach (Node::loadMultiple($alternate_ids) as $alternate) {
+  $alternates = $song_versions->getAlternates($node);
+  if ($alternates) {
+    $variables['alternate_versions'] = [];
+    foreach ($alternates as $alternate) {
       $cache->addCacheableDependency($alternate);
-      $alternates[] = ['label' => $alternate->label(), 'url' => $alternate->toUrl()->toString()];
+      $variables['alternate_versions'][] = ['label' => $alternate->label(), 'url' => $alternate->toUrl()->toString()];
     }
-    $variables['alternate_versions'] = $alternates;
   }
 
   $cache->applyTo($variables);

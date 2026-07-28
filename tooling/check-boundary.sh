@@ -4,6 +4,7 @@
 #   migration → content-model
 #   content-model imports nothing project-internal
 #   NOTHING imports theme (Drupal\interstate_85\*)
+#   theme does not hold content-model knowledge (no direct entity-storage/query calls) — INT8-035
 #
 # Module → layer convention (custom modules, machine-name suffix):
 #   *_migrate  => migration layer  (may depend only on content-model: forbidden from importing
@@ -22,6 +23,7 @@ set -euo pipefail
 VIOLATIONS=0
 THEME_NS="Drupal\\\\interstate_85"
 CUSTOM_MODULES="web/modules/custom"
+CUSTOM_THEME="web/themes/custom/interstate_85"
 
 # Rule: nothing in custom modules may import the theme namespace.
 if [ -d "$CUSTOM_MODULES" ]; then
@@ -62,6 +64,24 @@ if [ -d "$CUSTOM_MODULES" ]; then
       VIOLATIONS=$((VIOLATIONS + 1))
     fi
   done
+fi
+
+# Rule: the custom theme may not hold content-model knowledge directly — no
+# entity-storage/query API calls. It reaches the container dynamically
+# (`\Drupal::service(...)`, `\Drupal::entityTypeManager()->getViewBuilder(...)`
+# to render an already-resolved entity, etc.), so a `use`-based grep (like the
+# rules above) cannot see this; matched by call shape instead. Deliberately
+# narrow to the storage/query API — `\Drupal::` itself is not banned, since
+# the theme legitimately uses it for `\Drupal::request()` and the like
+# (INT8-035; this rule closed the blind spot that let INT8-018/020 in).
+if [ -d "$CUSTOM_THEME" ]; then
+  HITS=$(grep -rnE '(->|::)(getStorage|getQuery|loadMultiple|loadByProperties)\(|::load\(' "$CUSTOM_THEME" 2>/dev/null \
+    | grep -v '^\s*//' || true)
+  if [ -n "$HITS" ]; then
+    echo "BOUNDARY VIOLATION: custom theme contains a direct entity-storage/query call:"
+    echo "$HITS"
+    VIOLATIONS=$((VIOLATIONS + 1))
+  fi
 fi
 
 if [ "$VIOLATIONS" -eq 0 ]; then

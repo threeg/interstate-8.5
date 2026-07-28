@@ -2,7 +2,7 @@
 id: INT8-035
 title: Move the theme's entity queries and loads into the services layer
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: services
@@ -103,22 +103,22 @@ page looks like); rewriting the Songs landing's grouping/sorting rules (INT8-029
 `ArticleInsensitiveTitle` stays exactly as it is); any config change.
 
 ## Definition of done (acceptance criteria)
-- [ ] `interstate_85.theme` contains no `getStorage(`, `getQuery(`, `loadMultiple(`,
+- [x] `interstate_85.theme` contains no `getStorage(`, `getQuery(`, `loadMultiple(`,
       `loadByProperties(` or `::load(` call.
-- [ ] The moved logic lives in `i8_services` with constructor-injected dependencies (no `\Drupal::`
+- [x] The moved logic lives in `i8_services` with constructor-injected dependencies (no `\Drupal::`
       static calls in the new service).
-- [ ] `tooling/check-boundary.sh` gains a rule that fails on entity-storage/query calls in the custom
+- [x] `tooling/check-boundary.sh` gains a rule that fails on entity-storage/query calls in the custom
       theme, and is confirmed to FAIL against the pre-move code (check out the old file, run it, see it
       go red) before being confirmed green after — a check nobody has watched fail is not a check.
-- [ ] New PHPUnit coverage for the moved logic — in particular `getAlternates()`, which is the piece
+- [x] New PHPUnit coverage for the moved logic — in particular `getAlternates()`, which is the piece
       that currently needs a browser to verify at all. Red-green per the test strategy.
-- [ ] The rendered pages are byte-for-byte equivalent where it matters: `/songs`, a plain song page, an
+- [x] The rendered pages are byte-for-byte equivalent where it matters: `/songs`, a plain song page, an
       alternate-version page and a parent page all render the same content as before, and the response's
       cache tags are unchanged (compare real responses before/after, per requirement 3).
-- [ ] Full Playwright suite still green — the existing `songs-landing`, `song-page` and `song-versions`
+- [x] Full Playwright suite still green — the existing `songs-landing`, `song-page` and `song-versions`
       specs are the regression net for this move and must pass **unmodified**. Needing to edit them
       would mean behaviour changed, which this ticket forbids.
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 `tests_required: true` — this is a refactor, so the bar is *behaviour-preserving*, and the existing
@@ -143,3 +143,36 @@ inert check INT8-033 was filed for.
 - Scope covers **both** call sites deliberately. INT8-020 followed INT8-018's existing pattern rather
   than introducing it, so fixing only the newer one would leave the rule half-enforced and the older,
   larger violation in place.
+- 2026-07-28 — **implemented.** Independent test authorship: an Opus subagent, given only the ticket
+  and the *pre-move* theme code as the behavioural spec (not a future implementation), wrote
+  `web/modules/custom/i8_services/tests/src/Kernel/SongVersionsTest.php` — the project's first Kernel
+  test — covering both methods (two alternates sorted by title, none, an unpublished alternate
+  excluded; a viewable parent, no parent, an unpublished parent, a deleted/dangling parent). Confirmed
+  red for the right reason (`Class "Drupal\i8_services\SongVersions" not found`, at the point of
+  instantiation — all scaffolding above it, including the anonymous-role permission grant the access
+  assertions depend on, ran cleanly).
+  Implemented `Drupal\i8_services\SongVersions` (`getParent()`, `getAlternates()`) and
+  `Drupal\i8_services\SongTypeOptions` (`getTerms()`, the INT8-018 Type-dropdown lookup — split out as
+  its own service, a separate genuine concern from song versions) with constructor-injected
+  `EntityTypeManagerInterface`, registered in a new `i8_services.services.yml`. All 7 Kernel tests
+  green. Thinned both theme preprocess functions to call the services and shape the result for Twig;
+  `viewField()` stayed in the theme per the ticket (a render, not a lookup). Removed the now-unused
+  `Drupal\node\Entity\Node` / `Drupal\node\NodeInterface` imports from the theme.
+  Extended `tooling/check-boundary.sh` with a rule matching `(->|::)(getStorage|getQuery|loadMultiple|
+  loadByProperties)\(` / `::load\(` against the custom theme. Confirmed it fails against the committed
+  pre-move `interstate_85.theme` (`git show HEAD:...` piped through the same grep — 3 hits) before
+  confirming the full boundary check passes clean post-move, per the DoD's explicit red-then-green
+  requirement.
+  Verified requirement 3 (cacheability) and the byte-for-byte requirement together: `git stash`'d just
+  the code changes (ticket file/BOARD.md/check-boundary.sh left in place), cleared the Drupal cache,
+  and for a plain song, an alternate-version song and its parent, captured both the rendered `#cache`
+  tags (via `getViewBuilder('node')->view()` + `renderRoot()`, inspected through `drush php:eval` —
+  `X-Drupal-Cache-Tags` isn't exposed by this site's headers, so this reads the same metadata directly)
+  and the full HTML response for `/songs` and all three song pages. Popped the stash, cleared the cache
+  again, re-captured both — cache tags were identical set-for-set and every HTML response was
+  byte-for-byte identical (`diff` on all four pages, no output).
+  Verification: `lando test` (PHPUnit 65/65 including the new Kernel test, PHPCS, PHPStan, boundary
+  check) all green; full `lando playwright` — **565/565 passed**, `tests/playwright/tests/` untouched
+  in the diff (`git status` confirms).
+  **Sanity test:** `grep -rE '(->|::)(getStorage|getQuery|loadMultiple|loadByProperties)\(|::load\('
+  web/themes/custom/interstate_85/interstate_85.theme` → no output.
