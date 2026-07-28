@@ -77,3 +77,9 @@ gap for the site owner. **Known, deliberately out-of-scope limitation:** no non-
 granted "use text format restricted_html" — fine today since the site has no separate editor role yet;
 revisit when one is introduced. Exported config (`editor.editor.restricted_html`, `core.extension`);
 `lando drush cim -y` no-op; default gate re-run clean.
+
+2026-07-27 — **correction (INT8-024).** The claim above that there is "no format lock-in at field level
+since core has no such setting" was wrong: `allowed_formats` is a core text-field setting (Drupal
+≥10.1) and was already present, empty, in the exported config — leaving every accessible format
+selectable rather than pinning `restricted_html` as `content-model.md` §2/§5 intend. Fixed in INT8-024:
+`field_lyrics`/`field_notes`/`field_quotes` now set `allowed_formats: [restricted_html]`.

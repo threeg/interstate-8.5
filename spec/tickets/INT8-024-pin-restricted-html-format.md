@@ -2,7 +2,7 @@
 id: INT8-024
 title: Pin lyrics/notes/quotes fields to the Restricted HTML format
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: content-model
@@ -46,10 +46,10 @@ Surfaced by `sfk-verify` after the content-model batch (INT8-008…010).
   now pinned to `restricted_html`.
 
 ## Definition of done (acceptance criteria)
-- [ ] The three fields' exported config restricts `allowed_formats` to `restricted_html`.
-- [ ] `lando drush cim -y` is a no-op after export; default gate green.
-- [ ] The node-add form offers no format switcher on these fields (or only `restricted_html`).
-- [ ] INT8-010's note corrected; ticket status + notes and BOARD.md row updated in the same commit.
+- [x] The three fields' exported config restricts `allowed_formats` to `restricted_html`.
+- [x] `lando drush cim -y` is a no-op after export; default gate green.
+- [x] The node-add form offers no format switcher on these fields (or only `restricted_html`).
+- [x] INT8-010's note corrected; ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 `tests_required: false` — **config (site-building).** **Claude verifies** the exported
@@ -58,3 +58,20 @@ Adds no requirement (`implements: []`).
 
 ## Notes
 2026-07-12 — created by `sfk-verify` (content-model batch INT8-008…010).
+
+2026-07-27 — **implemented, in review.** Set `allowed_formats` on `field_lyrics`/`field_notes`/
+`field_quotes` to `['restricted_html']` via the Config API (`FieldConfig::loadByName()` →
+`setSettings()` → `save()`, matching what the Manage Fields UI's "Allowed formats" checkboxes would
+produce — no hand-authored YAML), then `lando drush cex -y`. The three
+`field.field.node.song.field_{lyrics,notes,quotes}.yml` files now carry `allowed_formats: -
+restricted_html`. `lando drush cim -y` confirms no drift. Verified the node-add form directly (not by
+reading code): logged in via `lando drush uli`, fetched `/node/add/song`, and confirmed all three
+fields render `<input type="hidden" name="field_{lyrics,notes,quotes}[0][format]"
+value="restricted_html">` — no visible format selector — since only one format is now allowed. Corrected
+INT8-010's "core has no such setting" claim with an appended, dated note (original left intact).
+
+**Summary:** the lyrics/notes/quotes fields can now only ever use the Restricted HTML editor — nobody
+can switch a song into plain text and silently lose the CKEditor formatting or the FR-21 allow-list.
+
+**Sanity test:** `grep allowed_formats -A1 config/sync/field.field.node.song.field_lyrics.yml` →
+`- restricted_html`; `lando drush cim -y` → "There are no changes to import."
