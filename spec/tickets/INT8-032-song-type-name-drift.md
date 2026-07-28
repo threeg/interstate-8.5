@@ -2,7 +2,7 @@
 id: INT8-032
 title: Reconcile the "Side Projects" song-type name across the spec, and pin the filter's case-sensitivity
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: docs
