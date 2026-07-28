@@ -2,7 +2,7 @@
 id: INT8-025
 title: Harden the migration count-parity check to verify FR-5 literally (published == active source)
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: migration
