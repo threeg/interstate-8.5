@@ -2,7 +2,7 @@
 id: INT8-033
 title: Drop the inert border-style clauses Tailwind's preflight makes vacuous in the Playwright suite
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: tooling
