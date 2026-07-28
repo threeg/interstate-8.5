@@ -2,7 +2,7 @@
 id: INT8-033
 title: Drop the inert border-style clauses Tailwind's preflight makes vacuous in the Playwright suite
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: tooling
@@ -74,14 +74,14 @@ Out of scope: any change to `app.css`, to Tailwind's configuration, or to the pr
 row's accent) — all of which stay exactly as they are.
 
 ## Definition of done (acceptance criteria)
-- [ ] No assertion in `tests/playwright/tests/` relies on a computed `border-*-style` value to
+- [x] No assertion in `tests/playwright/tests/` relies on a computed `border-*-style` value to
       distinguish a real border from an absent one.
-- [ ] The border checks that remain are width- and colour-based, and still fail if the accent or
+- [x] The border checks that remain are width- and colour-based, and still fail if the accent or
       divider is removed — verify by temporarily deleting the `border-left` rule from
       `site-header.css` and confirming the mobile-panel test goes red, then restoring it.
-- [ ] A comment at the assertion site explains the preflight trap so it is not reintroduced.
-- [ ] `lando playwright` green.
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] A comment at the assertion site explains the preflight trap so it is not reintroduced.
+- [x] `lando playwright` green.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 `tests_required: false` — this **is** a change to tests, so there is no separate test to write; the
@@ -101,3 +101,28 @@ INT8-018/027/030.)
   documentation. Filed at the site owner's request.
 - Cleanup backlog, straightforwardly: it improves the internal quality of tests that already pass for
   the right reason and changes nothing a user can see (CONVENTIONS §6.6).
+- 2026-07-28 — **implemented.** Dropped the vacuous `border-*-style !== 'none'` clauses at two sites
+  in `page-shell.spec.ts`: `underlineColour()`'s bottom-border check (~line 83, found by step 1's own
+  sweep since it matches the same background pattern even though the ticket's Background section only
+  named the mobile-panel case) and the mobile-panel `divider`/`accent` `find()` predicates (~lines
+  442-443). Removed the now-dead `borderBottomStyle`/`borderLeftStyle` fields from the mobile-panel's
+  local `describe()` collector (nothing read them after the clause was dropped); left the top-level
+  `BoxStyle`/`boxStyleOf` `borderBottomStyle` field alone since it is read via `JSON.stringify` in a
+  failure message. Left `BoxStyle`'s already-unused `borderLeftWidth`/`borderLeftStyle`/`borderLeftColor`
+  fields alone — pre-existing dead collection unrelated to this ticket's border-*-style trap, out of
+  scope. Added a comment naming the preflight cause at both edited sites. Step 4's sweep
+  (`grep -n "Style !== 'none'\|Style === 'solid'" tests/playwright/tests/`) also matches `outlineStyle`
+  checks in `page-shell.spec.ts` and `songs-landing.spec.ts` — left untouched: preflight's
+  `border: 0 solid` reset does not touch `outline-style` (confirmed in the compiled CSS; the only
+  `outline-style` rule is the `.outline` utility class's own, scoped to elements that use it), so those
+  checks are genuine discriminators, not the same trap.
+  **DoD's regression check, performed live:** temporarily deleted `border-left: 3px solid
+  var(--color-accent);` from `site-header.css`, rebuilt (`lando npm run build`), cleared the Drupal
+  cache (`lando drush cr` — the aggregated CSS was cached and the first re-run without it still passed,
+  which would have been a false confidence otherwise), and re-ran the mobile-panel test: it correctly
+  went red (`current row "Songs" has no left-border accent`). Restored the rule, rebuilt, cleared cache
+  again; `git status` / `git diff --stat` confirmed `site-header.css` and the compiled `app.css` came
+  back byte-identical, so no stray build artifact.
+  Verification: full `lando playwright` — **545/545 passed**.
+  **Sanity test:** `lando ssh -s pw -c "cd /app/tests/playwright && npx playwright test
+  page-shell.spec.ts --project=chromium -g 'open mobile nav panel'"` → 1 passed.

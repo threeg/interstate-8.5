@@ -78,11 +78,12 @@ async function boxStyleOf(locator: Locator): Promise<BoxStyle> {
  * underline at all.
  */
 function underlineColour(style: BoxStyle): { colour: string; source: string } | null {
-  if (
-    parseFloat(style.borderBottomWidth) > 0 &&
-    style.borderBottomStyle !== 'none' &&
-    isVisibleColour(style.borderBottomColor)
-  ) {
+  // No `borderBottomStyle !== 'none'` check: Tailwind v4's preflight sets
+  // `border: 0 solid` on the universal selector, so every element computes
+  // border-*-style: solid regardless of whether it has a border — that
+  // clause can never be false here. Width + colour are what actually
+  // discriminate a real border from an absent one.
+  if (parseFloat(style.borderBottomWidth) > 0 && isVisibleColour(style.borderBottomColor)) {
     return { colour: style.borderBottomColor, source: 'border-bottom' };
   }
   if (
@@ -410,14 +411,17 @@ test.describe('page shell — header + footer', () => {
         parseFloat(navStyle.paddingLeft) -
         parseFloat(navStyle.paddingRight);
 
+      // No border-*-style fields: Tailwind v4's preflight sets `border: 0
+      // solid` on the universal selector, so every element computes
+      // border-*-style: solid whether or not it has a border — a
+      // border-*-style check can never discriminate in this codebase. Width
+      // + colour (below) are the real signal.
       const describe = (el: Element) => {
         const cs = getComputedStyle(el);
         return {
           borderBottomWidth: cs.borderBottomWidth,
-          borderBottomStyle: cs.borderBottomStyle,
           borderBottomColor: cs.borderBottomColor,
           borderLeftWidth: cs.borderLeftWidth,
-          borderLeftStyle: cs.borderLeftStyle,
           borderLeftColor: cs.borderLeftColor,
           width: el.getBoundingClientRect().width,
         };
@@ -439,8 +443,8 @@ test.describe('page shell — header + footer', () => {
             text: (link.textContent ?? '').trim(),
             isCurrent: link.classList.contains('is-active') || link.getAttribute('aria-current') === 'page',
             width: outer.width,
-            divider: styles.find((s) => parseFloat(s.borderBottomWidth) > 0 && s.borderBottomStyle !== 'none') ?? null,
-            accent: styles.find((s) => parseFloat(s.borderLeftWidth) > 0 && s.borderLeftStyle !== 'none') ?? null,
+            divider: styles.find((s) => parseFloat(s.borderBottomWidth) > 0) ?? null,
+            accent: styles.find((s) => parseFloat(s.borderLeftWidth) > 0) ?? null,
           };
         }),
       };
