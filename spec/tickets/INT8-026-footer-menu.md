@@ -2,7 +2,7 @@
 id: INT8-026
 title: Hook the footer's secondary label row up to a real Drupal menu
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: theme
