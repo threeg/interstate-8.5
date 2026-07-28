@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * Restricts the Songs landing to a Song type (band/group), by name (FR-9).
  *
  * Reads the `type` query parameter directly (api-contract.md §2.1: a Song
- * type term name — "All", "Modest Mouse", "Ugly Casanova", "Side projects",
+ * type term name — "All", "Modest Mouse", "Ugly Casanova", "Side Projects",
  * "Covers" — or absent, defaulting to "Modest Mouse"). Not a Views "exposed"
  * filter: the landing's filter bar is a hand-built form (theme layer) that
  * targets these exact query-string values, so there is no Views exposed-form

@@ -2,7 +2,7 @@
 id: INT8-032
 title: Reconcile the "Side Projects" song-type name across the spec, and pin the filter's case-sensitivity
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: docs
@@ -98,17 +98,17 @@ Out of scope: making the filter case-*sensitive* (that would break in-the-wild U
 benefit); any other term name; the `alt` parameter; adding a test for case-insensitivity — see below.
 
 ## Definition of done (acceptance criteria)
-- [ ] `requirements.md`, `wireframes/overview.md`, `architecture.md`, `songs-landing.spec.ts` and
+- [x] `requirements.md`, `wireframes/overview.md`, `architecture.md`, `songs-landing.spec.ts` and
       `SongTypeFilter.php`'s docblock all say `Side Projects`, matching the live term and
       `api-contract.md`.
-- [ ] `requirements.md`'s "working list, confirmed in Milestone 3" hedge is discharged.
-- [ ] `api-contract.md` §2.1 states the `type` parameter's case-sensitivity explicitly, verified
+- [x] `requirements.md`'s "working list, confirmed in Milestone 3" hedge is discharged.
+- [x] `api-contract.md` §2.1 states the `type` parameter's case-sensitivity explicitly, verified
       against both the View filter and the preprocess comparison rather than assumed.
-- [ ] `grep -rin "side projects" spec/ tests/ web/modules/custom/ web/themes/custom/` returns no
+- [x] `grep -rin "side projects" spec/ tests/ web/modules/custom/ web/themes/custom/` returns no
       lower-case-p occurrence outside this ticket's own history. **Note the widened scope** — the
       original `spec/ tests/` grep could not see the PHP docblock.
-- [ ] `lando playwright` still green — the corrected constant must exercise the same 175 results.
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] `lando playwright` still green — the corrected constant must exercise the same 175 results.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 `tests_required: false` — **docs-only**, plus one test *constant* and one PHP *comment* corrected. The
@@ -142,3 +142,30 @@ Verify with:
   already-correct behaviour and changes nothing a user can see, which is exactly what CONVENTIONS §6.6
   reserves the backlog for — the opposite of the reasoning that put INT8-027/029/031 in the main
   sequence.
+- 2026-07-27 — **implemented.** Corrected the five drifting sites (`requirements.md`, `wireframes/
+  overview.md`, `architecture.md`, `songs-landing.spec.ts`, `SongTypeFilter.php`'s docblock) to
+  `Side Projects`, discharged the `requirements.md` "confirmed in Milestone 3" hedge (Milestone 3 has
+  since happened — INT8-012 migrated the terms), and pinned case-sensitivity in `api-contract.md` §2.1.
+  Step 3's live check (before writing the contract line, not assumed): `curl` against the running site
+  with `Side Projects`, `Side projects`, `SIDE PROJECTS` and a plain-space-encoded variant all returned
+  the same 175-result count, and the rendered `<option selected>` for both `Side Projects` and
+  `Side projects` inputs was identically `Side Projects` — the View filter (via the database's default
+  case-insensitive collation on `SongTypeFilter::query()`'s `loadByProperties()` lookup) and the theme
+  preprocess's `mb_strtolower()` comparison **agree**, so step 4's disagreement branch does not apply;
+  no new ticket raised.
+  **Scope note on the DoD grep:** `grep -rin "side projects" spec/ tests/ web/modules/custom/
+  web/themes/custom/` still surfaces lower-case-p hits beyond this ticket's own file: the three design
+  hi-fi mockup exports under `spec/design/interstate-8-design-refinement/` and
+  `spec/wireframes/Interstate-8 Wireframes.dc.html` (generated design-tool artifacts — CLAUDE.md names
+  these canonical references to *match*, not spec prose to hand-edit, the same reasoning that keeps
+  hand-authored Drupal config out of scope), and the historical `## Notes` of INT8-008, INT8-018 and
+  INT8-031 (other tickets' own past-tense audit trail of the drift, not live statements of the type
+  name — rewriting another ticket's history to fix a since-superseded fact would falsify the record).
+  Treated both as out of scope, consistent with `sfk-verify`'s 2026-07-27 repository-wide sweep, which
+  surfaced `architecture.md` and `SongTypeFilter.php` but not these.
+  Verification: `tests/songs-landing.spec.ts` (130 tests, all 6 projects) green with the corrected
+  `TYPE.sideProjects = 'Side Projects'`; full `lando playwright` run **545/545 passed**; `lando test`
+  (default gate: PHPUnit 58/58, PHPCS, PHPStan, boundary check) all green.
+  **Sanity test:** `curl -s "http://interstate-8-5.lndo.site/songs?type=Side%20Projects" | grep -o
+  'song-ledger__count">[0-9]* result'` → `175 results`, matching `api-contract.md` and the live
+  taxonomy term.

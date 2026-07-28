@@ -33,7 +33,7 @@ const TYPE = {
   all: 'All',
   modestMouse: 'Modest Mouse',
   uglyCasanova: 'Ugly Casanova',
-  sideProjects: 'Side projects',
+  sideProjects: 'Side Projects',
   covers: 'Covers',
 };
 

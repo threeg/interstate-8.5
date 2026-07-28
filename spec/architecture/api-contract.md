@@ -32,7 +32,7 @@ The full song list (excluding `field_exclude_from_list = true`, FR-6), article-i
 
 | Param | Values | Default | Effect |
 |-------|--------|---------|--------|
-| `type` | a Song type term name (All, Modest Mouse, Ugly Casanova, Side Projects, Covers) | **Modest Mouse** (FR-9) | Filter by band/group. An unrecognized value yields zero results (FR-19), not a silent fallback to the default. |
+| `type` | a Song type term name (All, Modest Mouse, Ugly Casanova, Side Projects, Covers) | **Modest Mouse** (FR-9) | Filter by band/group. Matching is **case-insensitive** — verified against both the View filter (`SongTypeFilter::query()`, via the database's default case-insensitive collation) and the theme preprocess's selected-option comparison (`mb_strtolower()` on both sides); the two agree. The canonical values are the `song_type` taxonomy term names above. An unrecognized value yields zero results (FR-19), not a silent fallback to the default. |
 | `alt` | `1` / `0` | `1` (show) | Show or hide alternate-title versions (FR-10). |
 | `released` | — | — | **Present but non-functional in slice 1** (FR-11); wired in a later slice. |
 | `playedlive` | — | — | **Present but non-functional in slice 1** (FR-11). |

@@ -112,7 +112,7 @@ The authoritative field-by-field mapping is in `content-model.md`; this is the o
 | | Lyrics same as parent | boolean | Drives the "[same as normal version]" display (FR-20). |
 | | Exclude from list | boolean | v2 `Song_Live`; hides the song from the landing (FR-6). Rename pending. |
 | | Legacy id | integer (indexed) | v2 `PK_Song_ID`; cross-cutting convention (§3.3). |
-| **Song type** | Name | taxonomy term | e.g. Modest Mouse, Ugly Casanova, Side projects, Covers (§2.1 of requirements). |
+| **Song type** | Name | taxonomy term | e.g. Modest Mouse, Ugly Casanova, Side Projects, Covers (§2.1 of requirements). |
 
 **Deferred seams.** The deferred relationships (a song's releases, live performances, tabs, studio
 sessions) are **inbound** from other entities not built in slice 1, so the Song type needs no seam

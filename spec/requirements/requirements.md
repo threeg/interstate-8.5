@@ -50,11 +50,11 @@ Each song belongs to exactly one **type**, identifying the group/context it belo
 |------|---------|
 | Modest Mouse | Core-band songs. |
 | Ugly Casanova | Isaac Brock's side project. |
-| Side projects | Other projects involving core members. |
+| Side Projects | Other projects involving core members. |
 | Covers | Songs by other artists performed/recorded. |
 
-> *"All"* is the unfiltered landing view, not a stored type. The definitive type list is confirmed
-> against the dump in Milestone 3; the set above is the working list.
+> *"All"* is the unfiltered landing view, not a stored type. The set above is the confirmed
+> `song_type` taxonomy, as created and migrated in Milestone 9 (INT8-008, INT8-012).
 
 ### 2.2 Song versions (self-reference)
 

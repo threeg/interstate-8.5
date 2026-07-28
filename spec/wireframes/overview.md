@@ -64,7 +64,7 @@ The frame every screen sits in:
 
 ### Shared vocabulary (must read identically everywhere)
 
-Song types: **Modest Mouse**, **Ugly Casanova**, **Side projects**, **Covers** (plus **All** as the
+Song types: **Modest Mouse**, **Ugly Casanova**, **Side Projects**, **Covers** (plus **All** as the
 unfiltered option). Section label: **Songs** / **Songlist**. Version wording: **"Alternate
 title/lyrics for →"**.
 
