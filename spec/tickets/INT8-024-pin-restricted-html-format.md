@@ -2,7 +2,7 @@
 id: INT8-024
 title: Pin lyrics/notes/quotes fields to the Restricted HTML format
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: content-model
