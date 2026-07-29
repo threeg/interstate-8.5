@@ -124,7 +124,7 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 | C7 | INT8-033 | Drop the inert border-style clauses Tailwind's preflight makes vacuous in the Playwright suite | task | tooling | cleanup | done | INT8-015, INT8-027 |
 | C8 | INT8-034 | Correct the theme's starterkit provenance record and restore the menu active-trail template | task | theme | cleanup | done | INT8-005, INT8-031 |
 | C9 | INT8-035 | Move the theme's entity queries and loads into the services layer | task | services | cleanup | done | INT8-018, INT8-020 |
-| C10 | INT8-037 | Correct INT8-018's caching claim and decide whether the Songs landing's max-age 0 stands | task | config | cleanup | todo | INT8-018 |
+| C10 | INT8-037 | Correct INT8-018's caching claim and decide whether the Songs landing's max-age 0 stands | task | config | cleanup | in-review | INT8-018 |
 
 > **INT8-022** was promoted into the main execution-order table above (row 12, before INT8-012) — its
 > own DoD required it be worked before the first migration module landed.

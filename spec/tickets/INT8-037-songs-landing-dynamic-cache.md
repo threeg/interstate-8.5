@@ -2,7 +2,7 @@
 id: INT8-037
 title: Correct INT8-018's caching claim and decide whether the Songs landing's max-age 0 stands
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: config
@@ -96,13 +96,12 @@ Out of scope: NFR-4's deferred performance thresholds themselves; the internal p
 route's cacheability; the `cache_metadata` block in the exported View config (Drupal regenerates it).
 
 ## Definition of done (acceptance criteria)
-- [ ] INT8-018's `## Notes` carries a dated correction that matches observable behaviour.
-- [ ] The keep-or-change decision is recorded in a durable spec document, with its reasoning.
-- [ ] If behaviour changed: `curl -sI /songs` reports a cacheable dynamic-cache state, **and**
-      `?type=Modest%20Mouse` vs `?type=All` still return 278 vs 490 links.
-- [ ] If behaviour did not change: no config diff — `lando drush cim -y` reports no changes to import.
-- [ ] `lando test` green; `lando playwright` green.
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] INT8-018's `## Notes` carries a dated correction that matches observable behaviour.
+- [x] The keep-or-change decision is recorded in a durable spec document, with its reasoning.
+- [ ] N/A — behaviour did not change (decision: keep `cache: none`/uncacheable-for-authenticated as-is).
+- [x] If behaviour did not change: no config diff — `lando drush cim -y` reports no changes to import.
+- [x] `lando test` green; `lando playwright` green.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 
@@ -128,3 +127,31 @@ done
   rather than main sequence: NFR-4 defers performance thresholds outright, anonymous visitors are
   correctly cached and correctly invalidated, and nothing a user can see is wrong — which is what
   CONVENTIONS §6.6 reserves the backlog for.
+- 2026-07-28 — **resolved.** Re-verified the live behaviour matches the ticket's account exactly:
+  `curl -sI /songs` still reports `X-Drupal-Dynamic-Cache: UNCACHEABLE (poor cacheability)`; a second
+  request shows `X-Drupal-Cache: HIT` (anonymous internal-page-cache path unaffected); `?type=Modest%20
+  Mouse` vs `?type=All` still return 278 vs 490 links, confirming the underlying `cache: none` fix from
+  INT8-018 is still doing its job.
+  Appended a dated correction to INT8-018's `## Notes` (did not rewrite the original) stating plainly
+  that the dynamic page cache does **not** layer on top of `cache: none` — it is disabled for the route
+  — while confirming what the original note got right (internal page cache + tag invalidation for
+  anonymous visitors).
+  **Decision: keep the Songs landing uncacheable for authenticated users through slice 1**, recorded with
+  its reasoning in `content-model.md` §9's decisions log (chosen over `architecture.md`, which has no
+  decisions-log section of its own — `content-model.md` §9 already holds this project's decisions log and
+  sits right beside §6's FR-8 sort-mechanism precedent this ticket's reasoning mirrors). Reasoning: NFR-4
+  explicitly defers all performance thresholds to a pre-launch pass against real measured data; anonymous
+  visitors (this fan-archive's actual traffic) are unaffected; the fix (an owned Views cache plugin keying
+  the result cache on `type`/`alt`) is real, non-trivial engineering effort for a benefit that reaches only
+  the small authenticated population — exactly what the project's lazy-adoption principle says not to build
+  speculatively. Flagged as a candidate for the pre-launch performance pass rather than closed off.
+  No behaviour change, so no test obligation (ticket's own conditional): `lando drush cim -y` reports "no
+  changes to import" for this branch's own diff (an unrelated pre-existing `system.menu.footer` config
+  drift was present in the site's active config before this ticket touched anything, and importing it
+  merely synced the site to what `config/sync` already had committed — confirmed via `git status`
+  showing no config file changes from this ticket's work).
+  Verification: `lando test` (PHPUnit 65/65, PHPCS, PHPStan, boundary check) all green; `lando playwright`
+  full suite green (see chat completion report for the exact count).
+  **Sanity test:** `curl -sI https://interstate-8-5.lndo.site/songs | grep -i dynamic-cache` →
+  `X-Drupal-Dynamic-Cache: UNCACHEABLE (poor cacheability)` (expected — matches the recorded decision to
+  keep it, not a regression).

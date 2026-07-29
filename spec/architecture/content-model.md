@@ -167,6 +167,19 @@ Migration is idempotent and rollbackable (FR-4); imported count is verified agai
 
 ## 9. Decisions log
 
+- **2026-07-28** — **The Songs landing (`/songs`) stays uncacheable for the Dynamic Page Cache through
+  slice 1** (INT8-037; corrects a caching claim in INT8-018's notes — see that ticket). `cache: none` on
+  `views.view.songs` (needed since INT8-018 to stop Views' result cache from serving one result set
+  across every `type=`/`alt=` combination) forces `max-age 0`, which disables the dynamic page cache for
+  the route entirely. **Anonymous visitors are unaffected**: the internal page cache still serves `/songs`
+  correctly, with correct tag-based invalidation. **Authenticated users get the full ~490-row landing
+  rebuilt on every request** — kept as-is rather than fixed now, under **NFR-4**'s explicit deferral of
+  performance thresholds to a pre-launch pass and the project's lazy-adoption principle: the fix (a small
+  owned Views cache plugin keying the result cache on `type`/`alt`, the same "no D11-ready contrib, build
+  a small owned plugin" pattern already used for `ArticleInsensitiveTitle` and the two filter plugins) is
+  real, non-trivial work for a benefit that reaches only the small authenticated population, against a
+  performance bar that has not been set yet. **Candidate for the pre-launch performance pass** (NFR-4),
+  where it can be judged against real measured thresholds instead of a guess now.
 - **2026-07-19** — **Migration imports every `I8_Songs` row and maps `Song_Active → status`** (§8),
   reconciling the earlier "row where `Song_Active = 1` → node" phrasing (which implied a source filter)
   with the `Song_Active → status` mapping row directly below it. The `song` migration deliberately runs
