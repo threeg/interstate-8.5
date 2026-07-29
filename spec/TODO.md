@@ -57,6 +57,37 @@ in the spec milestones that run **before** ticket generation. That is why the pa
 
 -->
 
+### TODO-002 — Site-defining content is not reproducible from the repository
+
+- **Raised:** 2026-07-28 by `sfk-verify` (Claude Opus 5), auditing the cleanup batch (INT8-023–026,
+  032–037).
+- **Decision owed:** which mechanism captures install-required content — the `default_content` module,
+  a small owned `hook_install()` in `i8_services`, a content export/import step, or documented manual
+  rebuild steps — **and** whether it is slice-1 scope at all, given there is no deploy target yet and
+  the site has only ever been stood up once. Both halves are open: picking a mechanism now for a
+  rebuild that may not happen this version is exactly the speculative complexity the project's
+  lazy-adoption principle warns against, but so is discovering the gap during a first deploy.
+- **Reuse:** the exported config already carries the *shape* of all of it — `system.menu.footer`,
+  `block.block.interstate_85_footermenu.yml`, `block.block.interstate_85_pageherobackground.yml`,
+  `block_content.type.page_hero.yml` and its field/display config are all committed and correct. Only
+  the content entities those point at are missing. The Playwright specs
+  (`front-page-nav.spec.ts`, `page-shell.spec.ts`) already assert the rendered result, so whatever
+  mechanism is chosen has a ready-made check — they simply cannot fail today, because they run against
+  the database that holds the content.
+- **Where it surfaced:** `sfk-verify` on the cleanup batch; the content itself came from INT8-017
+  (main menu), INT8-026 (footer menu) and INT8-028 (hero block).
+- **Context:** three pieces of the shipped site are `menu_link_content` / `block_content` entities that
+  live only in the development database: the primary nav's **Home** and **Songs** links — the Songs one
+  being the concrete realisation of **FR-16** — the five footer labels, and the `page_hero` background
+  block, whose UUID `block.block.interstate_85_pageherobackground.yml` hard-references in both its
+  `dependencies.content` and its `plugin` key. A fresh `site-install` + `config:import` would therefore
+  produce a site with no primary navigation, an empty footer label row, and a broken hero block, while
+  every gate stayed green — `lando test` and `lando playwright` both run against the existing database.
+  NFR-6 binds *configuration* to be exported and verified; nothing in the spec covers *content* the
+  site requires in order to match its own requirements and design. Not filed as a ticket because the
+  mechanism decision genuinely does not exist: a ticket written now could only restate the gap, and
+  would have to invent the answer it is supposed to implement.
+
 ### TODO-001 — Song page: redesign the alternate-version composition
 
 - **Raised:** 2026-07-26 by Gregg (site owner), reviewing INT8-020.
