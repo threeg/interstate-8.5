@@ -125,6 +125,10 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 | C8 | INT8-034 | Correct the theme's starterkit provenance record and restore the menu active-trail template | task | theme | cleanup | done | INT8-005, INT8-031 |
 | C9 | INT8-035 | Move the theme's entity queries and loads into the services layer | task | services | cleanup | done | INT8-018, INT8-020 |
 | C10 | INT8-037 | Correct INT8-018's caching claim and decide whether the Songs landing's max-age 0 stands | task | config | cleanup | done | INT8-018 |
+| C11 | INT8-038 | Fold accents in the ledger's sort key so one letter cannot split into two groups | task | services | cleanup | todo | INT8-029, INT8-030 |
+| C12 | INT8-039 | Declare `i8_services`' module dependencies and correct its stale description | task | services | cleanup | todo | INT8-017, INT8-035 |
+| C13 | INT8-040 | Qualify the v2→v5 redirect path-map claim in `api-contract.md` and `architecture.md` §6 | task | docs | cleanup | todo | INT8-011 |
+| C14 | INT8-041 | Scope the Songs landing's Type-filter term lookup to published terms | task | services | cleanup | todo | INT8-018, INT8-035 |
 
 > **INT8-022** was promoted into the main execution-order table above (row 12, before INT8-012) — its
 > own DoD required it be worked before the first migration module landed.
@@ -150,6 +154,25 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 > backlog rather than main sequence because each improves the internal consistency of behaviour that
 > is already shipped and already correct, changing nothing a user can see (CONVENTIONS §6.6) — the
 > opposite of the reasoning that placed INT8-027/029/031 in the main sequence. Neither blocks anything.
+
+> **INT8-038 through INT8-041** were filed by `sfk-verify` on the cleanup batch (INT8-023–026,
+> 032–037) with both gates green — `lando test` clean with zero warnings and `lando playwright`
+> 565/565 across all five browsers. All four are cleanup backlog, not main sequence: each improves the
+> internal correctness or consistency of behaviour that is already shipped and, on the data the site
+> actually holds, already renders correctly (CONVENTIONS §6.6). **INT8-038** and **INT8-041** are both
+> *latent* defects — a bucket that splits only for a non-ASCII title (none of the 492 exist) and a
+> filter option that misbehaves only for an unpublished song type (none of the four are) — so neither
+> is a gate failure of the kind §6.5 promotes. **INT8-040** is the same shape as INT8-032: one fact
+> spelled two ways across the spec, with no decision reopened.
+
+> **A fifth finding is deliberately *not* a ticket.** The site's own presentation depends on content
+> entities that exist only in the development database — the main menu's Home and **Songs** links
+> (`menu_link_content`, the concrete realisation of FR-16), INT8-026's five footer labels, and
+> INT8-028's `page_hero` block, whose UUID `block.block.interstate_85_pageherobackground.yml`
+> hard-references. NFR-6 governs *config*; nothing governs required *content*, and no ticket could be
+> written honestly until the mechanism is chosen. Parked in `spec/TODO.md` (TODO-002) with the owed
+> decision named, per CONVENTIONS §6.6's rule that a genuine spec gap is a specification change, not a
+> cleanup ticket.
 
 ---
 
