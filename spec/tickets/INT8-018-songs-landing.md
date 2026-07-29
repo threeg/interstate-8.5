@@ -268,3 +268,18 @@ passing). The real cause was a dangling profile-lock symlink at
 `/ms-playwright/firefox-1532/firefox/lock`, left by a process killed on 2026-07-20, which fails every
 subsequent Firefox launch until removed — a regression, not a boundary of this project's tooling. Fixed
 in INT8-036; the full matrix is now 545/545 with Firefox included.
+
+**2026-07-28 — correction (INT8-037).** The caching note above ("Drupal's page/dynamic-page/render
+caches still layer on top correctly") is **wrong about the dynamic page cache**. `cache: none` sets
+Views' result-cache plugin to `CachePluginBase::getDefaultCacheMaxAge()`'s default of `max-age 0`
+(`Drupal\views\Plugin\views\cache\None` never overrides it), and a `max-age 0` anywhere in the render
+tree makes the whole response uncacheable for Drupal's Dynamic Page Cache —
+`curl -sI /songs` reports `X-Drupal-Dynamic-Cache: UNCACHEABLE (poor cacheability)`, confirmed live. What
+the note got right: the **internal page cache** does still work correctly for anonymous visitors
+(`X-Drupal-Cache: HIT` on the second request), and tag-based invalidation is correct (`node_list`,
+`config:views.view.songs` both present on the renderable). The practical effect is that authenticated
+users get the full 490-row landing rebuilt on every request; anonymous visitors are unaffected. The
+`cache: none` decision itself is not being revisited — it was necessary to stop the exposed-filter-only
+result cache from serving one result set across every `type=`/`alt=` combination — only this note's claim
+about what still worked on top of it. See `content-model.md` §9 for the decision on whether this is worth
+fixing.
