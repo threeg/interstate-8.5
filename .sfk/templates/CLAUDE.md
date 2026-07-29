@@ -12,7 +12,7 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 ## Project & kit
 
 - **Project code:** `<PRJ>` — the ticket prefix (`<PRJ>-001`). Set by `sfk-init`.
-- **Spec-First Kit version applied:** `1.2.0` — the *kit* version this project is on (set by
+- **Spec-First Kit version applied:** `1.3.1` — the *kit* version this project is on (set by
   `sfk-init`, raised by `sfk-update-kit`). This is **not** your software's release version (that
   is chosen by the project and tracked in `spec/milestone-plan.md`). The kit's own version,
   changelog and pristine templates live in `.sfk/` (read-only — never edit it by hand; skills
@@ -24,6 +24,12 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
   - `tests: <model, or "same">` — writes the failing test from the ticket + spec, independently.
   `sfk-next-ticket` acts on the `tests` model; `same` (or a single model) keeps the default single-model
   behaviour. Set by `sfk-init`.
+- **Review mode:** `<in-place | pr>` — how a finished ticket is reviewed. `in-place` (default): the work
+  is committed and left `in-review` on the current branch; you review the diff and approve by asking for
+  the next ticket. `pr`: each ticket is worked on its own branch and pushed as a **pull/merge request**;
+  the open PR *is* the `in-review` state and your **merge** is the approval (`sfk-next-ticket` opens the
+  PR; `sfk-address-review` pulls its comments back for revision; the merge is yours). `pr` requires a
+  git-safe runtime and a forge remote. Forge/CLI (if `pr`): `<e.g. github / gh>`. Set by `sfk-init`.
 
 ## What this project is
 
@@ -66,9 +72,10 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 - `spec/design/design-system.md` — tokens, components, visual states; the frontend's visual contract. (Omit if no visual design.)
 - `spec/test-strategy/test-strategy.md` — frameworks, conventions, the definition of done.
 - `spec/verify/verify.md` — the verifier's project-specific instructions (gate commands, contractual values to sweep, extra checks). `sfk-verify` is neutral and reads this; created by interview on its first run.
+- `spec/TODO.md` — the parking lot: work known but not yet specifiable (its blocking decision doesn't exist). `sfk-todo` appends entries; `sfk-version` harvests them into a version. Committed and shared; **not** a second backlog.
 - `spec/tickets/` — the work queue; ticket workflow rules in `spec/tickets/CLAUDE.md`.
 - `.sfk/` — kit machinery (read-only): `manifest.md` (kit identity), `CHANGELOG.md`, and `templates/` (pristine sources the skills copy out). Never edit `.sfk/` by hand.
-- `.claude/skills/sfk-*` — the workflow skills (`sfk-init`, `sfk-version`, `sfk-next-milestone`, `sfk-signoff`, `sfk-next-ticket`, `sfk-close-ticket`, `sfk-verify`, `sfk-update-kit`, `sfk-feedback`).
+- `.claude/skills/sfk-*` — the workflow skills (`sfk-init`, `sfk-version`, `sfk-next-milestone`, `sfk-signoff`, `sfk-next-ticket`, `sfk-close-ticket`, `sfk-address-review`, `sfk-verify`, `sfk-todo`, `sfk-update-kit`, `sfk-feedback`).
 
 > Each authoring milestone has its own folder under `spec/` (e.g. `spec/architecture/`). The
 > named master file in it is binding; any other files in the folder are supporting context (reference
@@ -114,10 +121,17 @@ Test targets (all offline after setup):
 
 Commits are gated by the **git-safety of the runtime**, which tracks the authoring/building split:
 
-- **Authoring milestones (worked in Cowork): the agent hands off — it must never run `git`.** Cowork
-  mounts the repo into a sandbox where the agent cannot safely touch `.git` (a partial commit can
-  corrupt `.git/index`). The agent presents the exact `git add` / `git commit` commands and **you** run
-  them. Committing the reviewed deliverable is your gate.
+- **Authoring milestones (worked in Cowork): the agent hands off — it must run _no_ `git` at all.**
+  Cowork mounts the repo into a sandbox where the agent cannot safely touch `.git`. This is **not** just
+  a commit/write rule: **read-only `git status` / `git log` / `git diff` are prohibited too.** In the
+  sandbox even a read-only invocation refreshes the index and leaves a `.git/index.lock` the agent
+  **cannot unlink** (`Operation not permitted`); that stale lock then blocks *your* next `git add` /
+  `commit` until you remove it by hand. Determine milestone and commit state **only** from
+  `spec/milestone-plan.md` and from the user — **never probe `.git` to infer it.** The agent presents the
+  exact `git add` / `git commit` commands and **you** run them. Committing the reviewed deliverable is
+  your gate. The hand-off commit is surfaced **at sign-off** (one commit: deliverable + status flip),
+  *not* after every draft or revision — an authoring milestone iterates before it's ready, so mid-loop
+  commit prompts are noise. Ask if you want a mid-way checkpoint.
 - **Building milestones (worked in Claude Code): the agent commits directly** — one ticket per commit,
   per `spec/tickets/CLAUDE.md`.
 

@@ -16,7 +16,19 @@ spec *says*?" — a different question that tests alone do not cover.
 
 ## Procedure
 
-1. **Load your instructions — or create them.** Read `spec/verify/verify.md`.
+1. **Confirm the run, and state the model.** `sfk-verify` runs **only at the user's explicit request** —
+   never on your own initiative (see Rules). Before doing any work:
+   - **State which model will run the audit** — the model currently driving this session, named plainly.
+     If the project configures a distinct grader model (root `CLAUDE.md` › *Project & kit* › *Models*,
+     e.g. a stronger `tests` model), **recommend switching to it**: verification is a *grader* task
+     (breadth-first review across many files), so running it under the cheaper `implementation` model is
+     the wrong default — the same "grader ≠ graded" reason the tests model exists. You cannot switch the
+     model yourself; tell the user how (they change it, then re-invoke), or offer to proceed on the
+     current one.
+   - **Wait for the go-ahead.** A one-line confirmation, not an interview. Do not start the checks in the
+     same turn you announce them.
+
+2. **Load your instructions — or create them.** Read `spec/verify/verify.md`.
    - **If it does not exist, create it now, by interview.** Copy
      `.sfk/templates/spec/verify/verify.md` out to `spec/verify/verify.md`, then **interview the user**
      before filling it: the real **gate commands**; the **contractual values** that must match the spec
@@ -26,7 +38,7 @@ spec *says*?" — a different question that tests alone do not cover.
      before). Fill the copy, commit it per the **Commit protocol** (root `CLAUDE.md`), then continue.
    - Every later run just reads the file. If the user mentions a new check, offer to add it to §5.
 
-2. **Run the checks below**, using the commands and specifics from `spec/verify/verify.md`.
+3. **Run the checks below**, using the commands and specifics from `spec/verify/verify.md`.
 
 ## What to check
 
@@ -61,6 +73,10 @@ spec *says*?" — a different question that tests alone do not cover.
 
 ## Rules
 
+- **User-triggered only — never self-invoke.** Run `sfk-verify` solely on the user's explicit request.
+  Reaching a batch boundary is **not** standing authorization: *offer* it ("we've finished a related
+  batch — want me to run `sfk-verify`?") and **wait** for a yes. Stating intent and acting on it in the
+  same turn is not asking. Judging "is this a batch boundary" and acting unilaterally is the user's call.
 - **Never edit `.sfk/`** — it is the kit's read-only source (templates, changelog, manifest).
 - **Never edit this skill.** It is kit-owned and refreshed wholesale on a kit update. Project-specific
   content belongs in `spec/verify/verify.md`.

@@ -52,13 +52,22 @@ together, commit by commit.
 
 | # | Milestone | Deliverable | Tool | Status |
 |---|-----------|-------------|------|--------|
-| 9  | vX.Y.0 brief | `spec/vX.Y.0-brief.md` — feature set, epics, requirement deltas | Cowork | ⬜ |
+| 9  | vX.Y.0 brief — review and ratify | `spec/vX.Y.0-brief.md` — feature set, epics, requirement deltas (drafted by `sfk-version`; this milestone reviews and ratifies it) | Cowork | ⬜ |
 | 10 | Requirement deltas | updated `spec/requirements/requirements.md` (new + amended FR/NFR) | Cowork | ⬜ |
 | 11 | Architecture & contract deltas | updated `spec/architecture/architecture.md`, `spec/architecture/api-contract.md` | Cowork | ⬜ |
 | 12 | Wireframe deltas | new/changed screens only | Cowork | ⬜ |
 | 13 | Design deltas | new/changed tokens/components (if UI) | Cowork | ⬜ |
-| 14 | Test-strategy delta + ticket generation | updated `spec/test-strategy/test-strategy.md`; new tickets | Cowork | ⬜ |
-| 15+| Implementation, ticket by ticket | working software | Code | ⬜ |
+| 14 | Test-strategy delta | updated `spec/test-strategy/test-strategy.md` | Cowork | ⬜ |
+| 15 | Ticket generation | new tickets in dependency order, new `BOARD.md` version section, carried-over tickets re-milestoned | Cowork | ⬜ |
+| 16 | Tooling deltas (OPTIONAL — omit for pure feature work) | new dependencies added, new/changed gates wired in — that plumbing only, one ticket at a time | Code | ⬜ |
+| 17+| Implementation, ticket by ticket | working software | Code | ⬜ |
+
+     Rows 12-13 are merged into one only if this version's UI work is purely visual (tokens, styling,
+     no structural change) — structure and visual contract otherwise keep separate gates.
+     Row 15 (ticket generation) is ALWAYS its own step; it may not start until rows 9-14 are all ✅.
+     The tooling row is the scaffolding step's smaller successor: include it only if this version
+     introduces a new dependency, a new gate or a build change, and drop the row entirely otherwise.
+     Gate changes go here, never inside a feature ticket.
 -->
 
 ---

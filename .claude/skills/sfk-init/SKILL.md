@@ -37,14 +37,19 @@ optional: if an argument is supplied, use it without asking; otherwise ask for i
      than the implementer — **independent test authorship** (the test isn't shaped to fit the code that
      must pass it). Default **no** — one model does everything. If yes, take the *implementation* model
      and the *tests* model.
+   - **review mode:** how finished tickets are reviewed — `in-place` (commit and leave `in-review` on
+     the branch; the **default**) or `pr` (a branch + pull/merge request per ticket; your merge is the
+     approval). Offer `pr` only if the repo has a **remote** and the runtime is git-safe (not Cowork);
+     **detect the forge from the remote** (`git remote -v` → e.g. `github.com` → `gh`) and confirm the
+     CLI rather than asking cold. Default `in-place`.
 
 3. **Copy the environment templates out of `.sfk/templates/`** to their working locations, then
    fill the copies (replace every `<PLACEHOLDER>`):
    - `.sfk/templates/CLAUDE.md` → `./CLAUDE.md` (root). Fill it, and in its *Project & kit*
      section record the **project code**, set **Spec-First Kit version applied** to the
-     `kit_version` from `.sfk/manifest.md`, and fill the **Models** line from the interview (one model,
-     or a distinct `tests` model for independent test authorship). (This is where project state lives —
-     not in `.sfk`.)
+     `kit_version` from `.sfk/manifest.md`, fill the **Models** line from the interview (one model, or a
+     distinct `tests` model for independent test authorship), and fill the **Review mode** line
+     (`in-place`, or `pr` + the detected forge/CLI). (This is where project state lives — not in `.sfk`.)
    - `.sfk/templates/spec/milestone-plan.md` → `spec/milestone-plan.md`. Leave the
      milestone table **empty** with a *Current position* line "Environment bootstrapped; run
      `sfk-version` to start the first version." — the table is laid down by `sfk-version`.
@@ -52,6 +57,9 @@ optional: if an argument is supplied, use it without asking; otherwise ask for i
      verbatim, fill nothing.** (It is not shipped in the payload; `spec/` is created entirely here.)
    - `.sfk/templates/spec/gitignore` → `spec/.gitignore` — ignores the `.sfk-feedback/` outbox. Copy
      verbatim.
+   - `.sfk/templates/spec/TODO.md` → `spec/TODO.md` — the parking lot, laid down **empty** (it ships
+     with "no items yet"). Replace `<PROJECT>` in its title; otherwise copy verbatim. It is committed and
+     shared; `sfk-todo` appends to it and `sfk-version` harvests it.
    - `.sfk/templates/spec/tickets/*` → `spec/tickets/*`, and
      `.sfk/templates/spec/templates/layer-CLAUDE.md` → `spec/templates/layer-CLAUDE.md`.
      Adapt the prefix and layer names.

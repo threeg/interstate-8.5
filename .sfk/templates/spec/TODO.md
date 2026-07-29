@@ -1,4 +1,4 @@
-# Interstate-8.5 — Parking lot
+# <PROJECT> — Parking lot
 
 A **waiting room** for work you *know* is coming but genuinely **cannot ticket yet** — because the
 design or product **decision it depends on does not exist**. This is the one place that work is allowed
@@ -57,26 +57,4 @@ in the spec milestones that run **before** ticket generation. That is why the pa
 
 -->
 
-### TODO-001 — Song page: redesign the alternate-version composition
-
-- **Raised:** 2026-07-26 by Gregg (site owner), reviewing INT8-020.
-- **Decision owed:** a design pass that places the alternate-version view **inside the real song page**
-  — either an updated hi-fi export or an equivalent decision recorded in `design-system.md` §3 (Lyric
-  pair) — resolving three things: where the pair sits relative to the quote, the lyrics, the notes and
-  the right-hand rail; whether it keeps the panel framing (border + `--color-tint` header bar) or
-  dissolves into the page; and how the parent cross-link and the "alternate versions" list relate to it.
-- **Reuse:** the `lyric-pair` SDC (deliberately structural — two slots, no props); the song-versions
-  data resolution, now in `i8_services` (INT8-035); and
-  `tests/playwright/tests/song-versions.spec.ts`, whose 17 assertions are written against *behaviour*
-  (FR-13/FR-20) rather than layout — the side-by-side/stacking checks are the only geometry-specific
-  ones, and the only ones a redesign should need to revisit.
-- **Where it surfaced:** INT8-020 (now `done`).
-- **Context:** INT8-020 shipped FR-13/FR-20 as specified and its tests pass, but review found the result
-  unsatisfying in a way that isn't a bug list: the alternate block is missing the light-blue
-  (`--color-tint`) header bar the hi-fi draws above the two lyric columns, and — more substantially —
-  the hi-fi only ever draws this composition **as an isolated panel**, never within the full song-page
-  layout, so how it should sit within the page was never actually settled by the design. The site
-  owner's assessment is that the current arrangement does not work. Not filed as a ticket because the
-  design decision doesn't exist yet: patching the missing header bar onto a composition that is about to
-  be replaced would be work thrown away, and a ticket written now could only restate the problem, not
-  specify the outcome.
+_(No parking-lot items yet.)_

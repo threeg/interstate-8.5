@@ -1,5 +1,6 @@
 ---
 sfk_feedback: 1
+project: <PROJECT_CODE>              # the source project's code (root CLAUDE.md › Project code, e.g. ACME); audit trail only — see below
 kit_version: <KIT_VERSION_APPLIED>   # the kit version this project is on (root CLAUDE.md, Project & kit)
 date: <DATE>                         # ISO date the feedback was captured
 category: <CATEGORY>                 # bug | friction | doc-gap | enhancement | idea
@@ -16,8 +17,10 @@ severity: <SEVERITY>                 # blocker | major | minor | nice-to-have
 > feedback.
 >
 > **Keep it shareable.** This file leaves your repository. Do **not** include secrets, credentials, or
-> proprietary product detail. Describe the *process* friction, not your domain. Project provenance is
-> optional — omit it if in doubt.
+> proprietary product detail. Describe the *process* friction, not your domain. The `project:` field
+> records only the short **project code** (e.g. `ACME`) as an **audit trail** for the maintainer — which
+> projects surface which kinds of feedback over time. It is **never** an input to the accept/reject
+> decision (feedback wins on its merits, not on who raised it). It is not proprietary detail; fill it.
 >
 > Replace every `<PLACEHOLDER>` and delete this guidance block as you fill the sections. **Keep the
 > final `## For the SFK maintainer` section verbatim** — it tells whoever consumes this file how to.

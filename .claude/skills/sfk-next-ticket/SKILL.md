@@ -5,10 +5,18 @@ description: Advance the build queue by one ticket, during the scaffolding and i
 
 # sfk-next-ticket — implement one ticket
 
-Use during the **building milestones — scaffolding and implementation** (both are worked ticket by
-ticket, one at a time). One invocation **finalizes the previously reviewed ticket** (if one is left
+Use during the **building milestones — scaffolding, a later version's optional tooling deltas, and
+implementation** (all are worked ticket by ticket, one at a time). One invocation **finalizes the previously reviewed ticket** (if one is left
 `in-review`) and then **implements the next one**, leaving it `in-review`. Follow the ticket-workflow
 rules in `spec/tickets/CLAUDE.md` and the definition of done in the root `CLAUDE.md`.
+
+> **Review mode.** Read *Review mode* in the root `CLAUDE.md` (*Project & kit*). Default **`in-place`**:
+> everything below is committed on the current branch and the ticket rests `in-review` there; the user
+> reviews the diff and approves by asking for the next ticket. If it is **`pr`**, each ticket is worked
+> on **its own branch** and, when ready, pushed as a **pull/merge request** — the open PR *is* the
+> `in-review` state, and the user's **merge** is the approval. PR mode needs a git-safe runtime (never
+> Cowork) and a forge remote; where either is absent, fall back to `in-place`. The `pr`-only steps are
+> flagged **[PR mode]** below.
 
 ## Procedure
 
@@ -23,6 +31,11 @@ rules in `spec/tickets/CLAUDE.md` and the definition of done in the root `CLAUDE
    - **Exception — outstanding feedback.** If the user has given feedback on the in-review ticket rather
      than approving it, do **not** finalize: revise the ticket, re-commit under its id, leave it
      `in-review`, and stop. Feedback is handled before the queue advances.
+   - **[PR mode].** Approval is the **merge**, not asking for the next ticket. Check the prior
+     `in-review` ticket's PR/MR: if it is **merged**, mark the ticket `done` (+ `BOARD.md`, + close its
+     epic if last child) and commit that status change; if it is **not** merged, it is still in review —
+     **stop** and tell the user to merge it to approve (or to run `sfk-address-review` to pull its
+     comments and revise). Never start the next ticket over an unmerged PR.
 
 2. **Pick the next ticket.** From `spec/tickets/BOARD.md`, take the lowest-numbered `todo` ticket whose
    every `depends_on` id is `done`. Never start a ticket whose dependencies are not done. If none are
@@ -33,7 +46,9 @@ rules in `spec/tickets/CLAUDE.md` and the definition of done in the root `CLAUDE
    `spec/architecture/architecture.md`, `spec/architecture/api-contract.md`, the relevant
    wireframe). The ticket plus that spec should be enough — no conversational context required.
 
-4. **Set `in-progress`** in the ticket and its `BOARD.md` row.
+4. **Set `in-progress`** in the ticket and its `BOARD.md` row. **[PR mode]** first create and switch to
+   the ticket's own branch (e.g. `<PRJ>-NNN-<slug>`) off an up-to-date main line, so all of this
+   ticket's work lands there.
 
 5. **Implement — test-first, and that is binding.** Honour the architecture dependency rule. For
    deterministic and contract-pinned work: **write the failing test FIRST**, run it, **confirm it fails
@@ -73,9 +88,20 @@ rules in `spec/tickets/CLAUDE.md` and the definition of done in the root `CLAUDE
    the ticket, so they are not written into `## Notes`. Tell the user it is ready for review, and that
    asking for the next ticket will finalize it (or giving feedback will revise it).
 
-8. **At batch boundaries, run `sfk-verify`.** After a batch of related tickets, invoke `sfk-verify` to
-   review for reuse/quality/efficiency and propose cleanup tickets; promote any critical finding before
-   the gate it would affect.
+   **[PR mode].** After the ticket-branch commit, **push the branch and open a pull/merge request** —
+   that open PR *is* the `in-review` state. Pushing is an outward action: only in a git-safe runtime,
+   and **confirm with the user first** (per the *Commit protocol*); use the forge CLI named in *Review
+   mode* (e.g. `gh pr create`). Fill the PR title/body from the ticket (id, title, plain-English,
+   summary, sanity test). **Do not merge it yourself** — the merge is the user's approval, detected at
+   step 1 of the next run. (Recommend the forge's **squash-merge** so main keeps one commit per ticket.)
+   Then tell the user: review the PR; merge to approve, or comment and run `sfk-address-review`.
+
+8. **At batch boundaries, *offer* `sfk-verify` — do not launch it.** After a batch of related tickets,
+   **suggest** running `sfk-verify` ("we've finished a related batch — want me to run `sfk-verify`?") and
+   **wait for the user's explicit yes**. `sfk-verify` is user-triggered only; reaching a batch boundary is
+   not standing authorization to run it, and stating intent then invoking it in the same turn is not
+   asking. When the user confirms, it reviews for reuse/quality/efficiency and proposes cleanup tickets;
+   promote any critical finding before the gate it would affect.
 
 When the last `todo` ticket has been implemented, one ticket will remain `in-review`. `sfk-signoff`
 finalizes it (→ `done`) as it completes the implementation milestone; there is no need to trigger

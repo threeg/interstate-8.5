@@ -15,6 +15,126 @@ are told to.
 
 ---
 
+## v1.3.1 — the delta pass gets its missing steps and its own gates
+
+Four fixes to how a **later version** is planned, all from one project-feedback pass. Common root: the
+delta pass was described as a *shorter* list, and an agent following that list literally produced a
+milestone table with work that had nowhere to go and review gates that had been merged away. Nothing here
+affects a first release, and no project content is overwritten — there is **no pre-copy step**.
+
+- **Optional tooling step in the delta pass.** A later version can add dependencies, gates and build
+  plumbing even though the repo is already scaffolded, and the delta pass had no step for it — so it
+  landed as the leading tickets of the implementation milestone, putting a dependency addition or a gate
+  change in the same review bucket as feature commits. There is now a **tooling deltas** step immediately
+  before implementation, the scaffolding step's smaller successor: present **only** when the version adds
+  a dependency, a gate or a build change, omitted entirely for pure feature work, and scoped to that
+  plumbing alone. **A gate change belongs there, never inside a feature ticket.** Its tickets are worked
+  one at a time like scaffolding's. **Apply:** refresh — `sfk-version`, `sfk-next-milestone`,
+  `sfk-next-ticket`, `sfk-signoff`, `spec/README.md`.
+- **Ticket generation and the two UI steps get their own gates back.** The delta pass merged wireframe
+  deltas with design deltas, and the test-strategy delta with ticket generation; both merges cost a review
+  gate. **Ticket generation is now always its own step** — on a delta version it means a fresh queue in
+  dependency order, new epic ids, a new `BOARD.md` version section and re-milestoning carried-over
+  tickets, and it is the one artefact regenerated from scratch every version, so sharing a gate with a
+  test-strategy edit guarantees one of the two gets a shallow review. **Wireframe and design deltas stay
+  separate** unless the version's UI work is *purely visual*; merged, a layout question gets settled
+  inside what looks like a styling review. The "shorter delta pass" framing is dropped: a delta version
+  reaching the first release's step count is not a sign anything went wrong, and steps are never merged to
+  hit a target length. **Apply:** refresh — `sfk-version`, `spec/README.md`; **amend** —
+  `spec/milestone-plan.md` *only if* it still carries the commented example delta table (split its
+  test-strategy + ticket-generation row in two); a project's real, filled-in version tables are **not**
+  touched, and the next table `sfk-version` lays down follows the new shape automatically.
+- **Ticket generation waits for a fully signed-off spec.** It may not begin while any preceding spec
+  milestone of that version is ⬜ or 🔶 — no provisional or draft queue, and no offer to start early —
+  because a queue derived from an unapproved draft is thrown away the moment that draft moves. The old
+  wording ("confirm its inputs are signed off") was soft enough to read as satisfied mid-flow.
+  **Apply:** refresh — `sfk-next-milestone`, `spec/README.md`.
+- **The version-brief milestone is a ratification gate, not re-authoring.** `sfk-version` writes
+  `spec/vX.Y.Z-brief.md` and then lays down a *version brief* milestone as `Not started`, before handing
+  off to the skill that produces deliverables — so the prescribed status and the honest-looking status
+  disagreed, and a real run marked it `In progress` because the artefact existed. `sfk-version` now states
+  it writes a **draft**, labels the row **"Version brief — review and ratify"**, and is barred from
+  setting any status beyond ⬜ (only `sfk-next-milestone` marks 🔶). Its Rules also claimed it never
+  authors a milestone's deliverable, which the brief contradicted; the brief is now the single named
+  exception. `sfk-next-milestone` gains the matching exception — that milestone **reads and reviews the
+  existing draft** instead of copying a template over it and re-interviewing. **Apply:** refresh —
+  `sfk-version`, `sfk-next-milestone`; **amend** — `spec/milestone-plan.md` only if it still carries the
+  commented example delta table (rename its brief row).
+
+Maintainer-side (not shipped): `tools/check_kit.py` gains a 7th check pinning the delta-pass step list to
+one canonical sequence across the skill that executes it and the guide that documents it — the two had
+drifted, and the skill's reading silently wins at runtime.
+
+---
+
+## v1.3.0 — optional PR-review mode, plus friction fixes
+
+An optional **review surface**: instead of reviewing an `in-review` commit in place, each ticket can be
+worked on a **branch** and pushed as a **pull/merge request**, with your **merge** as the approval. Off
+by default; `in-place` review is unchanged. It's the same `in-review` gate, on the forge. This release
+also folds in friction fixes from a project-feedback pass.
+
+- **Parking lot (`spec/TODO.md`) + `sfk-todo` capture skill.** A home for work you *know* is coming but
+  can't ticket yet — its blocking **decision doesn't exist** ("the ticket is the prompt" needs a
+  specifiable outcome). Anti-rot by design: every entry **names the decision owed**, the list is
+  **harvested at `sfk-version`** (checklist → which does this version resolve?), and a selected item
+  becomes a real ticket at **ticket generation** where its entry is **deleted in the same commit** (zero
+  residue). It is committed and shared, so a BA can plan from it; it is **not** a second backlog
+  (anything specifiable goes to `BOARD.md`). The new **`sfk-todo`** skill (11th) captures a one-liner
+  mid-flow, always records the decision owed, and commits `spec/TODO.md` **on its own** (never folded
+  into a ticket commit; hand-off in Cowork). **Apply:**
+  - **add** — copy `.claude/skills/sfk-todo/` in (new skill; no project edits to it);
+  - **add** — create `spec/TODO.md` from `.sfk/templates/spec/TODO.md` if absent (lay it down **empty**,
+    replacing `<PROJECT>`); it is committed like any living doc;
+  - **add** — insert the `spec/TODO.md` line into the root `CLAUDE.md` *Where things live*, and add
+    `sfk-todo` to its `.claude/skills/sfk-*` roster line;
+  - **refresh** — `sfk-version` (harvest step), `sfk-next-milestone` (drain-at-ticket-generation),
+    `sfk-init` (lays down the empty parking lot), and the method guide.
+- **`sfk-verify` is user-triggered only, and announces its model first.** Two fixes to the verifier's
+  procedure: (1) it runs **only on the user's explicit request** — a batch boundary is an *offer*
+  ("want me to run `sfk-verify`?"), never standing authorization; `sfk-next-ticket` step 8 is corrected
+  to offer-and-wait rather than launch. (2) At the start of a run it **states which model** will audit
+  and, if the project configures a distinct grader model (*Models*), **recommends switching to it** —
+  verification is a grader task, so the cheap `implementation` model is the wrong default. One-line
+  confirm, not an interview. **Apply:** refresh — `sfk-verify`, `sfk-next-ticket`.
+- **Cowork: no `git` at all — including read-only `status`/`log`/`diff` (bug fix).** In a hand-off
+  (Cowork) runtime, even read-only git refreshes the index and leaves a `.git/index.lock` the sandbox
+  cannot unlink, which then blocks the *user's* own commits. The Commit protocol prohibition is hardened
+  from "don't commit" to "run no git commands at all; never probe `.git` to infer state — read milestone
+  and commit state only from `spec/milestone-plan.md` and the user." Reinforced in `sfk-signoff` and
+  `sfk-next-milestone`. **Apply:** amend — the *Commit protocol* authoring bullet in the root `CLAUDE.md`
+  (extend the prohibition to read-only git + the `index.lock` rationale; preserve user edits); refresh —
+  `sfk-signoff`, `sfk-next-milestone`.
+- **Feedback template records its source project (audit trail only).** The feedback template gains a
+  required `project:` frontmatter field (the source project's short code), filled by `sfk-feedback` on
+  every item, so feedback arriving on the SFK side can be traced to its origin. It is explicitly **never**
+  a triage input — feedback is accepted on its merits, not on who raised it. Replaces the old "provenance
+  optional — omit if in doubt" guidance. **Apply:** refresh — `.sfk/templates/feedback/feedback.md`,
+  `sfk-feedback`. (Maintainer-side `FEEDBACK.md` also notes the audit-only rule; not shipped.)
+- **Authoring commit cadence: hand off at sign-off, not after every draft.** In a hand-off (Cowork)
+  runtime, `sfk-next-milestone` no longer surfaces `git` commands during the authoring feedback loop —
+  an authoring milestone iterates several rounds before it's ready, so per-draft commit prompts were
+  noise. The whole milestone lands as a **single** commit at `sfk-signoff` (deliverable + status flip);
+  mid-way checkpoints are available only on explicit request. Building milestones keep the per-ticket
+  cadence. **Apply:** refresh — `sfk-next-milestone`, `sfk-signoff`; amend — the *Commit protocol*
+  authoring bullet in the root `CLAUDE.md` (add the "surfaced at sign-off, not per draft" cadence note;
+  preserve any user edits).
+- **`Review mode` setting** in the root `CLAUDE.md` (*Project & kit*): `in-place` (default) or `pr`.
+  **Apply:** add — insert the `Review mode` line into *Project & kit*; **interview** — *offer* `pr` mode
+  (default `in-place`, so behaviour is unchanged unless chosen); if `pr`, detect the forge from the git
+  remote and record its CLI. On an existing project this is an **offer**, not a forced change.
+- **`sfk-next-ticket` gains `pr`-mode behaviour** — a branch per ticket, push + open a PR at `in-review`,
+  and finalize by **detecting the merge** (the merge is the user's approval; the kit never merges).
+  Degrades to `in-place` where unconfigured or unsupported (no remote / not git-safe). **Apply:** refresh.
+- **New skill `sfk-address-review`** — pulls a ticket PR's review comments and revises on its branch;
+  standalone, user-invoked, self-configures its forge command on first run. **Apply:** add — copy
+  `.claude/skills/sfk-address-review/` in; no project edits.
+- **`sfk-init` asks the review-mode question; `sfk-signoff` confirms a PR is merged before finalizing the
+  last ticket in `pr` mode.** **Apply:** refresh — `sfk-init`, `sfk-signoff`.
+- Method guide gains a *Review mode* note. **Apply:** refresh — the guide.
+
+---
+
 ## v1.2.0 — independent test authorship (optional)
 
 Optional **model split for tests vs code**: a test written by the same model that writes the code it

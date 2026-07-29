@@ -40,16 +40,19 @@ software belongs in a ticket. Feedback here is "the method or its tooling could 
    fill it in — `<slug>` a short kebab summary, `<shortid>` a few random characters so files from
    different projects don't collide when they reach SFK. **Do not invent a custom structure or custom
    frontmatter**; a non-conformant file has to be rewritten before it can be consumed. Fill the
-   frontmatter and body: `kit_version` is this project's **applied** kit version (root `CLAUDE.md`,
-   *Project & kit*); `date` is today (ISO). Two instructions that are routinely missed — do both:
+   frontmatter and body: `project` is this project's **project code** (root `CLAUDE.md`, *Project &
+   kit* › *Project code*, e.g. `ACME`) — always fill it; it is the maintainer's audit trail and never a
+   triage input (fall back to the repo directory name only if no project code is set); `kit_version` is
+   this project's **applied** kit version (root `CLAUDE.md`, *Project & kit*); `date` is today (ISO). Two
+   instructions that are routinely missed — do both:
    - **Delete** the `> **What this file is.**` guidance block once you have filled the sections. It is
      instructions *to you*, not content, and must not survive into the finished file.
    - **Keep** the `## For the SFK maintainer` section **verbatim** — that is what makes the file
      self-describing on the SFK side.
 
 4. **Keep it shareable.** These files leave the repository. Do not write secrets, credentials, or
-   proprietary product detail into them; describe the process, not the domain. Project provenance is
-   optional — omit it if in doubt.
+   proprietary product detail into them; describe the process, not the domain. The `project` code is
+   **not** proprietary detail — it is a required audit-trail field (see step 3); fill it every time.
 
 5. **Do not commit.** The folder is gitignored, so there is nothing to commit and nothing should be
    staged. Tell the user where the files are (`spec/.sfk-feedback/`) and that the next step is to send them
