@@ -7,6 +7,98 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\node\NodeInterface;
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_views_pre_render().
+ *
+ * Fetches the Type filter's song_type terms (INT8-018, FR-9) while the view
+ * is still being built, and stashes them on the view's own `element` array —
+ * the same sidecar Views itself uses to carry cache metadata and other
+ * pre-render additions through to the theme layer (see
+ * FieldPluginBase::preRender()). interstate_85_preprocess_views_view__songs()
+ * only ever reads them back off `$view->element` and shapes the result for
+ * Twig (INT8-035): fetching content-model data is services-layer work per
+ * architecture.md §2.1, and a preprocess function is not the place to do it
+ * either — it exists to prepare template variables from data that already
+ * exists, not to go and get more of its own.
+ */
+function i8_services_views_pre_render(ViewExecutable $view): void {
+  if ($view->id() !== 'songs' || $view->current_display !== 'page_1') {
+    return;
+  }
+  $view->element['#i8_song_type_terms'] = \Drupal::service('i8_services.song_type_options')->getTerms();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view() for node.
+ *
+ * Resolves a song's version relationships (INT8-020, FR-13/FR-20) — whether
+ * this song IS an alternate (has a parent), and whether it HAS alternates
+ * (other songs whose `field_parent_song` points back at it) — while the
+ * render array is still being built, and stashes the results as `#`-prefixed
+ * build properties for interstate_85_preprocess_node__song() to shape for
+ * Twig. A `#`-prefixed key is never treated as a renderable child (see
+ * Element::children()), so it survives untouched into the theme's
+ * `$variables['elements']` without being printed twice.
+ *
+ * Lives here rather than in the theme for two reasons (INT8-035): "what is
+ * this song's parent" / "what are this song's alternates" is content-model
+ * knowledge, which architecture.md §2.1 reserves for the services layer; and
+ * `hook_ENTITY_TYPE_view()` can only be implemented by modules —
+ * `EntityViewBuilder::buildComponents()` dispatches it via
+ * `ModuleHandler::invokeAll()`, which never scans theme `.theme` files, so a
+ * theme-side implementation of this specific hook would silently never run.
+ * `viewField()` is still called from here, not deferred to preprocess: it
+ * renders an already-resolved entity's field into a render array, which is
+ * exactly the kind of thing a build-time hook does.
+ *
+ * Bundle- and view-mode-scoped in the body rather than via a `__song`-style
+ * suffix, because `hook_ENTITY_TYPE_view()` is not per-bundle — one
+ * implementation covers every node view.
+ */
+function i8_services_node_view(array &$build, NodeInterface $node, EntityViewDisplayInterface $display, string $view_mode): void {
+  // `full` is the only view mode `song` is ever rendered in (INT8-019), so
+  // there is no second case this would wrongly fire for.
+  if ($node->bundle() !== 'song' || $view_mode !== 'full') {
+    return;
+  }
+
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
+  $song_versions = \Drupal::service('i8_services.song_versions');
+  $cache = CacheableMetadata::createFromRenderArray($build);
+
+  // This song IS an alternate version: it has a parent.
+  $parent = $song_versions->getParent($node);
+  if ($parent) {
+    $cache->addCacheableDependency($parent);
+    $build['#i8_song_parent'] = $parent;
+    // The parent's OWN lyrics, rendered through its own text format — not
+    // `$parent->get('field_lyrics')->value`, which would skip filtering.
+    // `viewField()` defaults to a formatter that prints the field's label;
+    // this page never shows field labels (the section-label above it already
+    // says "Normal version"), so it is hidden explicitly.
+    $build['#i8_song_parent_lyrics'] = $view_builder->viewField($parent->get('field_lyrics'), ['label' => 'hidden']);
+  }
+
+  // This song HAS alternates: other songs whose parent is this one. `node_list`
+  // is the standard tag for "the SET of matching entities can change" (a new
+  // alternate added elsewhere), which no per-node cache tag covers.
+  $cache->addCacheTags(['node_list']);
+  $alternates = $song_versions->getAlternates($node);
+  if ($alternates) {
+    $build['#i8_song_alternates'] = $alternates;
+    foreach ($alternates as $alternate) {
+      $cache->addCacheableDependency($alternate);
+    }
+  }
+
+  $cache->applyTo($build);
+}
+
 /**
  * Implements hook_views_data_alter().
  *

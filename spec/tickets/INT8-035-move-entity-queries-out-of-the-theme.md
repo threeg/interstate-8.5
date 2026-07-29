@@ -81,12 +81,20 @@ Create the services-layer home and move the logic; the theme keeps only presenta
    Whether the Type-options lookup for the filter bar lives on the same service or its own (e.g.
    `SongTypeOptions`) is the implementer's call — one service per genuine concern, not one per call
    site.
-2. **The theme's preprocess functions become thin.** They may call the service and shape the result for
-   Twig (URLs, labels, the grouped/rail structures, `viewField()` for rendering); they must no longer
-   contain `getQuery()`, `loadByProperties()`, `loadMultiple()` or `::load()`.
-   - **`viewField()` may stay in the theme.** It is a *render* concern (it turns an already-resolved
-     entity's field into a render array), not a data lookup — the rule being enforced is about fetching,
-     not rendering. Say so in the code comment so a later reader doesn't "finish the job" wrongly.
+2. **The theme's preprocess functions become thin, and do not call the service either.** A preprocess
+   hook's job is to shape template variables from data the render array already carries, not to go and
+   fetch more. The service is called from `i8_services` itself, in the earlier build-time hook that owns
+   each render pipeline — `hook_ENTITY_TYPE_view()` for the node case, `hook_views_pre_render()` for the
+   view case — which attaches the result to the build array (`#`-prefixed keys) / `$view->element`
+   before theming starts. Preprocess then only reads what is already there. (`hook_ENTITY_TYPE_view()`
+   is module-only — `EntityViewBuilder` dispatches it via `ModuleHandler::invokeAll()`, which never scans
+   theme `.theme` files — so this placement is not optional for the node case.) Preprocess functions must
+   no longer contain `getQuery()`, `loadByProperties()`, `loadMultiple()`, `::load()`, **or a call to an
+   `i8_services` service.**
+   - **`viewField()` stays with the fetch, in the build-time hook.** It is a *render* concern (it turns
+     an already-resolved entity's field into a render array), not a data lookup, and building a render
+     array is exactly what a build-time hook does — the rule being enforced is about fetching, not
+     rendering. Say so in the code comment so a later reader doesn't "finish the job" wrongly.
 3. **Cacheability must survive the move.** INT8-020's preprocess currently adds the parent's and each
    alternate's cache tags plus the `node_list` tag (for "a new alternate was added elsewhere"). Whether
    the service returns cacheability alongside its data or the theme keeps applying it, the rendered page
@@ -176,3 +184,41 @@ inert check INT8-033 was filed for.
   in the diff (`git status` confirms).
   **Sanity test:** `grep -rE '(->|::)(getStorage|getQuery|loadMultiple|loadByProperties)\(|::load\('
   web/themes/custom/interstate_85/interstate_85.theme` → no output.
+- 2026-07-28 — **revised on review.** Site owner review flagged that although the theme no longer
+  queries the content model directly, its preprocess functions were still *calling* the `i8_services`
+  services — and a preprocess hook's job is to shape variables from data a template already has, not to
+  fetch data of its own, service-mediated or not. Corrected: technical requirement 2 above updated to
+  ban service calls from preprocess as well, and to name the correct earlier hooks.
+  Moved the two data fetches into `i8_services.module`: `i8_services_node_view()` implements
+  `hook_ENTITY_TYPE_view()` for `node`, calls `i8_services.song_versions` while the `song`/`full` build
+  array is still assembling, and attaches the parent/alternates/parent-lyrics as `#`-prefixed build
+  properties (plus the same cache metadata as before, applied to `$build` at this earlier point rather
+  than to the preprocess `$variables`). `i8_services_views_pre_render()` implements
+  `hook_views_pre_render()`, calls `i8_services.song_type_options` while the `songs` view is still being
+  built, and attaches the terms to `$view->element['#i8_song_type_terms']` — the same sidecar array Views
+  itself uses to carry pre-render additions through to the theme layer (confirmed against
+  `FieldPluginBase::preRender()` and `ViewsThemeHooks::preprocessViewsView()`'s own
+  `$variables['view']->element` read).
+  `interstate_85_node_view()` was tried first as a theme-side implementation and confirmed *wrong*, not
+  just non-idiomatic: `EntityViewBuilder::buildComponents()` dispatches `hook_ENTITY_TYPE_view()` via
+  `ModuleHandler::invokeAll()`, which enumerates only `$moduleHandler->getModuleList()` — themes are
+  never in that list, so a theme-implemented `hook_node_view()` would silently never fire. Confirmed this
+  against `EntityViewBuilder.php` directly before moving the code, rather than finding it by a page
+  rendering wrong. `hook_views_pre_render()` has no such restriction — `ViewExecutable::render()`
+  explicitly invokes it for both modules and themes ("Let the themes play too, because prerender is a
+  very themey thing") — but it was moved to the module anyway for consistency: with the node case
+  necessarily in `i8_services`, having the view case stay in the theme would leave a same-shaped fetch
+  split across two layers for no structural reason.
+  Both theme preprocess functions now only read already-attached data (`$elements['#i8_song_…']`,
+  `$view->element['#i8_song_type_terms']`) and contain no reference to `i8_services` at all.
+  Re-verified behaviour-preservation the same way as the original implementation: `git stash`'d the
+  rework, cleared cache, captured `#cache` tags (`drush php:eval` + `renderRoot()`) and full HTML for a
+  plain song, an alternate, its parent and `/songs`; popped the stash, cleared cache, re-captured — tags
+  and all four HTML responses were byte-for-byte identical to the pre-rework (committed) state.
+  Verification: `lando test` (PHPUnit 65/65, PHPCS, PHPStan, boundary check) all green; full
+  `lando playwright` — **565/565 passed**, `tests/playwright/tests/` untouched.
+  **Sanity test (unchanged):** `grep -rE '(->|::)(getStorage|getQuery|loadMultiple|loadByProperties)\(|
+  ::load\(' web/themes/custom/interstate_85/interstate_85.theme` → no output. Additionally:
+  `grep -n "Drupal::service('i8_services" web/themes/custom/interstate_85/interstate_85.theme` → no
+  output (the theme calls no `i8_services` service; the file still legitimately imports
+  `ArticleInsensitiveTitle`, a Views sort plugin class it uses directly and unrelated to this ticket).

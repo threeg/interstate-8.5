@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\i8_services\Plugin\views\sort\ArticleInsensitiveTitle;
@@ -112,6 +111,13 @@ function interstate_85_preprocess_page(array &$variables): void {
  * `1B.dc.html`'s SONGS LANDING composition. The View itself only has to
  * select, filter and sort the right rows (see i8_services' custom sort/
  * filter plugins) — none of its own field/row markup is used here.
+ *
+ * The Type filter's song_type terms are fetched in
+ * `i8_services_views_pre_render()` (`i8_services.module`) while the view is
+ * still being built, and read back here off `$view->element` (INT8-035):
+ * content-model-adjacent data fetching belongs in the services module, and
+ * this preprocess function's job is to shape already-fetched data for Twig,
+ * not to go and get more of its own.
  */
 function interstate_85_preprocess_views_view__songs(array &$variables): void {
   $view = $variables['view'];
@@ -193,10 +199,10 @@ function interstate_85_preprocess_views_view__songs(array &$variables): void {
   $type_options = [
     ['value' => 'All', 'label' => t('All'), 'selected' => $type === 'All'],
   ];
-  // INT8-035: the term lookup is services-layer content-model knowledge
-  // (architecture.md §2.1); this preprocess only shapes the result into the
-  // filter bar's option list.
-  $terms = \Drupal::service('i8_services.song_type_options')->getTerms();
+  // INT8-035: fetched in i8_services_views_pre_render() (i8_services.module);
+  // this preprocess only shapes the already-fetched terms into the filter
+  // bar's option list.
+  $terms = $view->element['#i8_song_type_terms'] ?? [];
   foreach ($terms as $term) {
     $type_options[] = [
       'value' => $term->label(),
@@ -224,61 +230,47 @@ function interstate_85_preprocess_views_view__songs(array &$variables): void {
 /**
  * Implements hook_preprocess_HOOK() for node--song--full.html.twig.
  *
- * Resolves a song's version relationships (INT8-020, FR-13/FR-20): whether
- * this song IS an alternate (has a parent), and whether it HAS alternates
- * (other songs whose `field_parent_song` points back at it). Neither
- * direction is expressible as a plain field render — the "is an alternate"
- * side needs a second entity's field rendered inline (the parent's lyrics,
- * filtered through its own text format, which only `viewField()` does
- * correctly), and the "has alternates" side needs a reverse reference no
- * field on this entity carries at all.
+ * Shapes the version-relationship data `i8_services_node_view()`
+ * (`i8_services.module`) already fetched and attached to the build array as
+ * `#i8_song_parent` / `#i8_song_parent_lyrics` / `#i8_song_alternates` into
+ * the template's variables (INT8-020, FR-13/FR-20; INT8-035). That fetch —
+ * "what is this song's parent" / "what are this song's alternates" — lives
+ * in the services module rather than here for two reasons: it is
+ * content-model knowledge, which architecture.md §2.1 reserves for the
+ * services layer, and `hook_ENTITY_TYPE_view()` (the earlier, build-time
+ * hook it uses to do the fetch before rendering starts) can only be
+ * implemented by modules — `EntityViewBuilder::buildComponents()` invokes it
+ * via `ModuleHandler::invokeAll()`, which never scans theme `.theme` files.
+ * A `#`-prefixed build key is never treated as a renderable child (see
+ * Element::children()), so it survives untouched through to
+ * `$variables['elements']` here without being printed twice.
  *
  * Bundle-scoped (`__song`), not view-mode-scoped: `full` is the only view
  * mode this content type is ever rendered in (INT8-019), so there is no
  * second case this would wrongly fire for.
- *
- * INT8-035: answering "what is this song's parent" / "what are this song's
- * alternates" is content-model knowledge (entity queries), which
- * architecture.md §2.1 reserves for the services layer — `i8_services.
- * song_versions` now answers both. `viewField()` stays here: it renders an
- * already-resolved entity's field, which is a render concern, not a lookup.
  */
 function interstate_85_preprocess_node__song(array &$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
-  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
-  $song_versions = \Drupal::service('i8_services.song_versions');
-  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $elements = $variables['elements'];
 
-  // This song IS an alternate version: it has a parent.
-  $parent = $song_versions->getParent($node);
+  /** @var \Drupal\node\NodeInterface|null $parent */
+  $parent = $elements['#i8_song_parent'] ?? NULL;
   if ($parent) {
-    $cache->addCacheableDependency($parent);
     $variables['alternate_of'] = [
       'label' => $parent->label(),
       'url' => $parent->toUrl()->toString(),
     ];
     $variables['same_as_parent'] = (bool) $node->get('field_lyrics_same_as_parent')->value;
-    // The parent's OWN lyrics, rendered through its own text format — not
-    // `$parent->get('field_lyrics')->value`, which would skip filtering.
-    // `viewField()` defaults to a formatter that prints the field's label;
-    // this page never shows field labels (the section-label above it already
-    // says "Normal version"), so it is hidden explicitly.
-    $variables['parent_lyrics'] = $view_builder->viewField($parent->get('field_lyrics'), ['label' => 'hidden']);
+    $variables['parent_lyrics'] = $elements['#i8_song_parent_lyrics'];
   }
 
-  // This song HAS alternates: other songs whose parent is this one. `node_list`
-  // is the standard tag for "the SET of matching entities can change" (a new
-  // alternate added elsewhere), which no per-node cache tag covers.
-  $cache->addCacheTags(['node_list']);
-  $alternates = $song_versions->getAlternates($node);
+  /** @var \Drupal\node\NodeInterface[] $alternates */
+  $alternates = $elements['#i8_song_alternates'] ?? [];
   if ($alternates) {
     $variables['alternate_versions'] = [];
     foreach ($alternates as $alternate) {
-      $cache->addCacheableDependency($alternate);
       $variables['alternate_versions'][] = ['label' => $alternate->label(), 'url' => $alternate->toUrl()->toString()];
     }
   }
-
-  $cache->applyTo($variables);
 }
