@@ -18,11 +18,11 @@ format in `spec/tickets/TICKET-TEMPLATE.md`; the execution order in `spec/ticket
   of done holds (this is where `sfk-next-ticket` leaves a ticket); `done` only after the user's review.
 - **Finalize before starting the next.** `sfk-next-ticket` first flips any `in-review` ticket to `done`
   (its own commit), then implements the next. What counts as the user's approval follows the **Review
-  mode** in the root `CLAUDE.md`: under `pr` (this project's setting) it is the **merge** of that
-  ticket's pull request — never assume approval from an unmerged PR; under `in-place` it is the user
-  asking for the next ticket. `sfk-signoff` finalizes the last `in-review` ticket at milestone sign-off.
-  To close a reviewed ticket **without** starting the next (e.g. before `sfk-verify`, or to pause), use
-  `sfk-close-ticket`.
+  mode** in the root `CLAUDE.md` (currently `in-place`, this project's setting): under `in-place` it is
+  the user asking for the next ticket; under `pr` it would instead be the **merge** of that ticket's
+  pull request — never assume approval from an unmerged PR. `sfk-signoff` finalizes the last `in-review`
+  ticket at milestone sign-off. To close a reviewed ticket **without** starting the next (e.g. before
+  `sfk-verify`, or to pause), use `sfk-close-ticket`.
 - **Commit message:** `INT8-NNN: <short imperative>` for work; `INT8-NNN: mark done (reviewed)` for a
   finalize.
 - **Close epics when their last child is finalized.** When the `in-review → done` finalize completes an

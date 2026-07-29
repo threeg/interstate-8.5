@@ -20,13 +20,14 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
   - `tests: claude-opus-4-8` — writes the failing test from the ticket + spec, independently.
   `sfk-next-ticket` acts on the `tests` model; set `tests: same` (or a single model) to revert to the
   default single-model behaviour. Set by `sfk-init`.
-- **Review mode:** `pr` — how a finished ticket is reviewed. Each ticket is worked on its own branch
-  and pushed as a **pull request**; the open PR *is* the `in-review` state and your **merge** is the
-  approval (`sfk-next-ticket` opens the PR; `sfk-address-review` pulls its comments back for revision;
-  the merge is always yours — the kit never merges). Forge/CLI: **GitHub / `gh`**, remote
-  `threeg/interstate-8.5`. `pr` requires a git-safe runtime and the forge CLI on `PATH`; where either
-  is missing, `sfk-next-ticket` degrades to `in-place` (work committed and left `in-review` on the
-  current branch, approved by asking for the next ticket). Set by `sfk-init`.
+- **Review mode:** `in-place` — how a finished ticket is reviewed. Work is committed directly to the
+  current branch and left `in-review` there; you review the diff/chat directly and approve by asking
+  for the next ticket (or revise by giving feedback). Set by `sfk-init`, changed back from `pr` on
+  2026-07-28: GitHub's PR-author identity is tied to whichever account's token opened the PR, which was
+  this project's own `threeg` account — so GitHub blocked self-approval on every PR by construction, and
+  fixing that for real would mean standing up a separate bot GitHub identity, which wasn't worth the
+  overhead for a single-operator project. `pr` mode (branch + PR, `gh`, remote `threeg/interstate-8.5`)
+  remains available and can be switched back to if that overhead is ever taken on.
 
 ## What this project is
 
