@@ -2,7 +2,7 @@
 id: INT8-035
 title: Move the theme's entity queries and loads into the services layer
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: services
