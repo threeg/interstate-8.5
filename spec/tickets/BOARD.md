@@ -154,6 +154,7 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 | C12 | [INT8-039](INT8-039-i8-services-module-dependencies.md) | Declare `i8_services`' module dependencies and correct its stale description | task | services | cleanup | | ⬜ todo | [INT8-017](INT8-017-nav-frontpage.md), [INT8-035](INT8-035-move-entity-queries-out-of-the-theme.md) |
 | C13 | [INT8-040](INT8-040-redirect-path-map-deferral-drift.md) | Qualify the v2→v5 redirect path-map claim in `api-contract.md` and `architecture.md` §6 | task | docs | cleanup | | ⬜ todo | [INT8-011](INT8-011-pathauto-songs.md) |
 | C14 | [INT8-041](INT8-041-type-filter-published-terms.md) | Scope the Songs landing's Type-filter term lookup to published terms | task | services | cleanup | | ⬜ todo | [INT8-018](INT8-018-songs-landing.md), [INT8-035](INT8-035-move-entity-queries-out-of-the-theme.md) |
+| C15 | [INT8-042](INT8-042-fast-lint-only-gate.md) | Add a fast lint-only check alongside the default gate | task | tooling | cleanup | | ⬜ todo | [INT8-006](INT8-006-test-tooling-gate.md) |
 
 > [**INT8-022**](INT8-022-broaden-boundary-check.md) was promoted into the main execution-order table above (row 12, before [INT8-012](INT8-012-song-type-migration.md)) — its
 > own DoD required it be worked before the first migration module landed. Recorded three ways per
