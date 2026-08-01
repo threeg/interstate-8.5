@@ -15,15 +15,34 @@ there; it does **not** work the milestones (that is `sfk-next-milestone`).
    goals — the capabilities or changes it should deliver. One round of questions to make the goals
    concrete.
 
+   In the same round, ask **"does this version render anything a person looks at?"** — that decides whether
+   the wireframe and design milestones appear in step 4's table, so it is asked here, where it is used,
+   rather than at `sfk-init`. Ask it that way round, **not** "is there a UI": a project with no screens at
+   all can still render a document, a report, print output, an email or an exported image, and its
+   appearance is just as specified (see `spec/wireframes/overview.md`). Judge by whether appearance is
+   specified, not by whether there is a screen. If nothing is rendered, drop both milestones.
+
 2. **Harvest the parking lot.** If `spec/TODO.md` exists and has entries, **scan it and present the
-   entries as a checklist**, then ask the user **which of them this version commits to resolving**. Each
+   entries as a checklist**, then ask the user **which of them this version commits to resolving**.
+   **Read only the *Entries* list — the *Resolved* table at the foot of the file is out of scope.** Those
+   rows are tombstones for entries that already became tickets; a row reads exactly like a parked item
+   whose decision has just been made, so harvesting one re-opens finished work. Each
    parked item names a *decision owed* — selecting it means this version will make that decision, so its
    owed question must flow through the spec milestones. For every item the user checks, **fold it into
    the version's goals** (step 3's brief), interviewing briefly **only** for the context a parked one-
    liner lacks. Do **not** delete entries here and do **not** turn them into tickets now — a parked item
    is unspecifiable until its decision is made in the spec milestones; it becomes a ticket (and its entry
-   is deleted) at **ticket generation**. Unselected entries stay parked for a later version. Skip this
-   step silently if there is no `spec/TODO.md` or it is empty.
+   is tombstoned in that file's *Resolved* table) at **ticket generation**. Unselected entries stay parked
+   for a later version. Skip this step silently if there is no `spec/TODO.md` or it is empty.
+
+   **Then read `spec/open-questions.md` alongside it** — a different question, so ask it separately. Not
+   *"what work shall we schedule?"* but *"what are we still waiting to be told, and does any of it need to
+   land inside this version?"* Surface the open rows **ordered by lead time, not severity**: a question
+   that must go through someone else's approval cycle needs raising now even if it looks minor, while a
+   cheap-to-apply answer can arrive late for free. Two things to put to the user: any question whose answer
+   would **change this version's scope** if it arrived mid-way, and any that has grown **more expensive to
+   answer** since it was opened. Do not fold rows into the goals as if they were work, and do not close or
+   delete any — they are dependencies, not tasks. Skip silently if the register is empty.
 
 3. **Write the version brief.**
    - **First release (whatever number the user gives):** the brief is the full project brief —

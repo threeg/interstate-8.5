@@ -77,3 +77,7 @@ coverage/
 .claude/settings.local.json
 /.editorconfig
 /.gitattributes
+
+# Personal per-user instructions: each person's own register/vocabulary preferences and local
+# scratch notes. Never committed — the shared root CLAUDE.md holds anything project-wide.
+CLAUDE.local.md

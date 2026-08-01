@@ -33,6 +33,36 @@ this order:
 single source of visual truth; each SDC component maps to an entry in §3; every screen matches
 `Interstate-8 1B.dc.html`. Contrast holds to WCAG 2.1 AA (NFR-1); responsive from 320px (NFR-2).
 
+### 1.1 Artefact authority (which artefact binds which kind of fact)
+
+The table above says where to *look*; this one says which artefact **wins** when two of them could answer
+the same question. They are **not interchangeable**, and a ticket that takes a value from the wrong one
+ships a plausible-looking error. A ticket's `## Design authority` section cites this table.
+
+| Kind of fact | Authoritative artefact | Notes |
+|---|---|---|
+| **Exact values** — colour, type, spacing, radius | `spec/design/tokens.css` | The machine-readable set the theme imports. Components read `var(--…)`; **never** a hardcoded hex/px, even one copied out of the hi-fi. §2 below summarises these for readers and is not a second source. |
+| **Placement, structure, hierarchy, component shape** | `…/project/Interstate-8 1B.dc.html` (the canonical hi-fi) | The full visual at x-wide/desktop/tablet/mobile, plus the component library. Rendered at the real output dimensions in a browser, so its proportions are trustworthy. **Match this.** |
+| **Which surfaces exist, their states and flow** | `spec/wireframes/overview.md` + `01`–`03` | Binding for structure and state coverage; deliberately low-fidelity, so it is **not** a value source. |
+| **Component states and rules in prose** | this document, §3–§4 | Where a state or rule is not expressible in the hi-fi (hover/focus behaviour, motion, the empty state's wording). |
+| **Illustrative only — never a value source** | `…/project/assets/interstate-shield.svg` and `.png`; everything under `…/project/uploads/`; `spec/wireframes/Interstate-8 Wireframes.dc.html`; `…/project/Interstate-8 Hi-Fi.dc.html`; `spec/wireframes/references/` | See below. |
+
+**Why those are illustrative.** The **raw SVG/PNG assets** are inputs the hi-fi composes — the shield mark
+carries its own internal padding and proportions, which are not the proportions it is drawn at in a page;
+deriving a component's shape from the asset instead of from the hi-fi reproduces the artwork's framing
+rather than the design's. The **wireframes canvas** is the structural go/no-go artefact (direction 6d,
+pre-Milestone-5): its colours and spacing predate the token set and were never meant to bind. The second
+export in the bundle, **`Interstate-8 Hi-Fi.dc.html`**, does not bind because the bundle's own README names
+`1B` as the primary design — where the two differ, `1B` wins, and `Hi-Fi` is history. The **`uploads/`
+photos** are real assets in use, but their *cropping and placement* come from the hi-fi.
+
+> **A mockup built with substitute assets is a proportion reference, not a value source.** Where an
+> artefact stands in for anything not yet final — unavailable fonts, placeholder imagery, sample copy — it
+> carries deliberate compensation for those substitutes, and a value copied out of it ships the
+> compensation as though it were the design. The same applies to any artefact drawn at other than the real
+> output dimensions: a coordinate lifted from it is proportionally wrong by a margin small enough to
+> survive review.
+
 ---
 
 ## 2. Design tokens

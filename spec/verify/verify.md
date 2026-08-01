@@ -81,6 +81,30 @@
   `content-model → services → theme`, `migration → content-model`, nothing imports `theme`
   (architecture §2.1). Custom modules must not import the theme namespace (`Drupal\interstate_85\...`).
 
+## 4b. Authorship trailers
+
+> This project configures **independent test authorship** (root `CLAUDE.md`, *Models*), so every ticket
+> commit should name the model(s) that produced it. Seeded by the kit at v1.4.1 because this exposure is
+> normally discovered late — at an audit, with the evidence already missing.
+
+One command shows every commit in a range and its trailers, which is enough to spot a bare batch at a glance:
+
+```
+git log --format='%h|%s|%(trailers:key=Co-authored-by,valueonly)' <range>
+```
+
+- A ticket **work** commit for a `tests_required: true` ticket should list **two** models (the independent
+  test author *and* the implementer); a **finalize** — which is status-only — should list **one**. A commit
+  with **none** is the finding.
+- **Match on the model family, not an exact string.** Trailer display text legitimately varies by runtime
+  (`Claude Opus 5` and `Claude Opus 5 (1M context)` can both appear in one repository), and a check that
+  rejects a legitimate variant gets switched off — worse than no check.
+- **Do not match against the contractual model identifiers** this project pins in the root `CLAUDE.md`
+  (`claude-sonnet-5`, `claude-opus-4-8`). Those are spec values, not trailer display text; conflating the
+  two gives you a check that can never pass.
+
+---
+
 ## 5. Extra checks for this project
 
 > Anything additional the verifier should do every run — project quirks, known traps, things that have
@@ -90,12 +114,23 @@
   dependency graph still matches the architecture layering (NFR-5).
 - **Design source.** Theme component shapes must derive from the canonical hi-fi HTML
   (`spec/design/interstate-8-design-refinement/project/Interstate-8 1B.dc.html`), **never** the raw
-  SVG/image assets — flag any component built off the wrong source.
+  SVG/image assets — flag any component built off the wrong source. The full artefact-by-artefact rule is
+  `spec/design/design-system.md` §1.1 (*Artefact authority*); check a ticket's `## Design authority`
+  section cites it rather than naming "the mockup".
+- **`before:` and the board's flag column agree.** For every ticket carrying a `before:` id, confirm its
+  `BOARD.md` row sits above the ticket named and its `flag` cell says so (CONVENTIONS.md §4.6/§6.5). This
+  is the one ordering constraint with no other way to fail loudly — a re-sort, a version-section move or a
+  hand edit drops it while leaving the board looking perfectly ordinary.
+- **`spec/contents.md` is complete.** Every `*.md` under `spec/` appears exactly once (ticket files
+  excepted — `BOARD.md` is their index), and every entry still points at a file that exists.
 
 ## 6. Notes
 
 > Dated record of changes to these instructions — what was added and why.
 
+- **2026-08-01** — v1.4.3 kit update. Added §4b (authorship trailers, kit-seeded — this project runs two
+  models), and three extra checks in §5: the `before:`/flag agreement audit, the `spec/contents.md`
+  completeness check, and a pointer from the design-source check to the new `design-system.md` §1.1.
 - **2026-07-15** — created during the v1.1.0 kit update. Migrated the gate commands and stack-specific
   checks out of the project's filled-in v1.0.x `sfk-verify` skill (backed up before the copy per the
   changelog `Pre-copy` note), when the skill was made neutral and kit-owned.

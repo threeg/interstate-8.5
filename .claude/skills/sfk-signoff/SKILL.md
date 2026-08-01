@@ -21,33 +21,91 @@ records the user's sign-off and advances the project.
    - For an **authoring** milestone (Cowork / hand-off) the deliverable was intentionally **left
      uncommitted** through the feedback loop (see `sfk-next-milestone` step 4). Do **not** commit it as a
      separate step here — it lands together with the status flip as the **single** sign-off commit in
-     step 4. (If the user took a mid-way checkpoint commit on request, that's fine; the final commit still
+     step 5. (If the user took a mid-way checkpoint commit on request, that's fine; the final commit still
      carries whatever remains plus the status change.)
    - **In Cowork, do not run `git` to check any of this — not even read-only `git status` / `log` /
      `diff`.** It can leave an uncleanable `.git/index.lock` that breaks the user's own commits (Commit
      protocol, root `CLAUDE.md`). You already know the state from `spec/milestone-plan.md` and the user;
      that is the only source. Present commands; never probe `.git`.
 
-3. **Mark it `Complete` (✅)** in `spec/milestone-plan.md` and **move the *Current position*** line
+3. **Sweep the two registers — report, ask once, never block.** Both `spec/TODO.md` and
+   `spec/open-questions.md` have scheduled reads **coarser than a milestone** (the parking lot is harvested
+   at `sfk-version`; the register is only *sharpened* at batch boundaries), so an item whose blocker cleared
+   mid-version can quietly age out an entire version. This boundary is the cheapest place to catch that: the
+   user is already reviewing, already holding the milestone in mind, already answering a yes/no. Two file
+   reads — no `git`, so it is safe in every runtime.
+
+   - **`spec/TODO.md`** — surface entries whose **Where it surfaced** names this milestone, or whose
+     **Decision owed** names a milestone now passed. **Sweep the *Entries* list only — the *Resolved*
+     table at the foot of the file is out of scope.** Those rows are tombstones for entries that already
+     became tickets, and a row reads exactly like a parked item whose decision has just been made.
+     Ask once: *is that decision now made?* If it is, **do
+     not file a ticket here.** An entry leaves the parking lot at **ticket generation**, behind that step's
+     hard gate, and its decision must land in a spec document first. The useful output is a note recording
+     which upcoming milestone now owes the decision, or an explicit "carry it to `sfk-version`". Never write
+     `BOARD.md` from this skill.
+   - **`spec/open-questions.md`** — surface rows whose **Needed by** names this milestone or the next. Ask
+     **two** things, because they fail differently: *has the answer arrived?* and, if not, *has the ask
+     actually been sent?* The second catches the common case — a question sharpened into something precisely
+     answerable that nobody ever sent. If an answer **has** arrived, **offer** to close it as its own commit
+     (that file's *When an answer arrives* amends the owning document first); do not do it inline and do not
+     fold it into the sign-off commit.
+
+   **Matching is deliberately loose** — a textual match on the milestone number and its deliverable
+   description is enough. A false positive costs the user one glance; a false negative costs a version.
+   **This step can never block a sign-off:** "not now" is a complete answer, and you proceed unchanged. The
+   value is entirely in the prompt existing. Skip silently if a file is absent or empty.
+
+4. **Mark it `Complete` (✅)** in `spec/milestone-plan.md` and **move the *Current position*** line
    to the next milestone (or, if this was the version's last milestone, note the version is ready to
    ship/tag and that `sfk-version` starts the next one).
 
-4. **Commit — per the Commit protocol.** For an **authoring**-milestone sign-off (Cowork), present the
+   **Then refresh `spec/contents.md`** for the folders this milestone touched, so the specification index
+   is current at the moment the milestone closes. Walk those folders for `*.md`, and:
+   - add a row per file that isn't listed, with a one-line description — the section's **binding master
+     first**, supporting files under it;
+   - **preserve every description already there verbatim** — they are hand-written, so add and remove rows
+     rather than rewriting the file;
+   - drop rows whose file no longer exists, and delete a whole section for a milestone the version dropped;
+   - **never enumerate `tickets/<PRJ>-*.md`** — `BOARD.md` is their index and listing them buries
+     everything else;
+   - link the **file**, never a numbered-section anchor (slugs embed section numbers and break silently).
+
+   This is why the index does not rot: one refresh per milestone, at the point its files are final, rather
+   than relying on anyone updating it per file. It rides along in step 5's commit. Skip silently if
+   `spec/contents.md` does not exist (a project on an older kit version).
+
+5. **Commit — per the Commit protocol.** For an **authoring**-milestone sign-off (Cowork), present the
    exact `git` commands and have the user run them; this is the **single** commit for the milestone,
    carrying the finished deliverable *and* the status flip + *Current position* move together (e.g.
    `process: <milestone> — signed off (complete)`). For a **building**-milestone sign-off (Code) the
    agent commits, and this commit carries only the status change (the deliverable was already committed
    per ticket).
 
-5. **For a building milestone (scaffolding, tooling deltas, or implementation)**, first **finalize any ticket left
-   `in-review`**: signing off the milestone is your approval of that last reviewed ticket. For each,
-   flip it to `done`, update its `BOARD.md` row, close any epic whose last open child it completes, and
-   commit as `<PRJ>-NNN: mark done (reviewed)` (its own commit, before the milestone status change). In
-   **`pr` review mode** (root `CLAUDE.md` › *Review mode*), "finalize" means **confirm the ticket's PR
-   is merged** first — do not sign off over an unmerged PR; if it isn't merged, stop and ask the user to
-   merge it. Sign-off then means the milestone's tickets are all `done` and the gates pass.
+   Either way the commit carries **one** `Co-authored-by` trailer — the model performing the sign-off.
+   **Include it in the commands you present** when handing off, or the user's commit goes out bare and the
+   authorship record has a hole exactly where the milestone closed.
 
-6. **If this was the version's LAST milestone, tag the release.** Signing off the final milestone *is*
+6. **For a building milestone (scaffolding, tooling deltas, or implementation): require a clean queue —
+   do not finalize tickets yourself.** Read `spec/tickets/BOARD.md` — a plain file read, which is all you
+   need and, in Cowork, all you may be permitted. If **any** ticket is `in-review`, **stop** and tell the
+   user to run **`sfk-close-ticket`** first, naming the ticket. Do not flip it to `done`, do not merge
+   anything, and do not sign off around it. Sign-off means the milestone's tickets are **all already
+   `done`** and the gates pass.
+
+   In **`pr` mode you do not need to inspect the PR** — `sfk-close-ticket` merges *before* it marks a
+   ticket `done`, so `done` on the board already implies a merged PR. Do **not** run `git` or a forge CLI
+   to check: the board is the source of truth, exactly as `spec/milestone-plan.md` is for milestone state.
+
+   > **Why this skill doesn't close tickets.** Two reasons. **Responsibility:** a ticket's lifecycle belongs
+   > to the ticket skills (`sfk-next-ticket`, `sfk-close-ticket`) — invoking one of those *is* the user's
+   > approval of the ticket, and sign-off is approval of a **milestone**, which is a different decision
+   > about a different thing. **Runtime:** this skill frequently runs in **Cowork, where it may run no
+   > `git` at all** — not even read-only — so it cannot be relied on to merge a PR or verify one was
+   > merged. A step that only works in some runtimes is worse than a step that refuses honestly. The cost
+   > is one extra command at each building milestone's end; the gain is a boundary that holds everywhere.
+
+7. **If this was the version's LAST milestone, tag the release.** Signing off the final milestone *is*
    the release moment — the version number is already in `spec/milestone-plan.md` (the milestone table
    is grouped under it), so act on it rather than just mentioning it. Do this only for the final
    milestone; intermediate sign-offs are not releases.
@@ -63,7 +121,7 @@ records the user's sign-off and advances the project.
      (`git push origin <branch>` / `git push origin <VERSION>`) and let the user confirm. Pushing is
      outward; it is their call.
 
-7. **Hand off.** Tell the user what is next: `sfk-next-milestone` for the following milestone, or
+8. **Hand off.** Tell the user what is next: `sfk-next-milestone` for the following milestone, or
    `sfk-version` if the version is complete (and the release tag is in place).
 
 ## Rules
@@ -72,7 +130,11 @@ records the user's sign-off and advances the project.
 - Run only on explicit user approval. The agent never self-signs-off a milestone.
 - Sign-off is a status event: it flips the milestone and moves the *Current position*. The one
   exception is a version's **final** milestone, where it also tags the release and **offers** the push
-  (step 6) — it never pushes unconditionally.
+  (step 7) — it never pushes unconditionally.
 - If the milestone isn't actually done — tickets still `todo`/`in-progress`/`blocked`, open feedback,
-  or failing gates — refuse and return to `sfk-next-milestone` or `sfk-next-ticket`. A ticket at
-  `in-review` is *not* a blocker: sign-off finalizes it (step 5).
+  or failing gates — refuse and return to `sfk-next-milestone` or `sfk-next-ticket`. A ticket left
+  `in-review` **is** a blocker: this skill does not finalize tickets, so stop and send the user to
+  `sfk-close-ticket` (step 6).
+- **Read the registers, never rewrite them** (step 3). Sign-off may surface a parked entry or an answerable
+  question and *offer* to act; it never files a ticket, never closes a question inline, and never lets that
+  sweep block the sign-off itself.

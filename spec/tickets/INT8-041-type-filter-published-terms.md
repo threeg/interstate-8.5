@@ -68,6 +68,23 @@ unpublishes a type and produces a dead option nobody expects.
 Out of scope: the Type filter's *matching* behaviour (`SongTypeFilter`, case-insensitivity — pinned by
 INT8-032, unchanged); term ordering; the `All` option; anything about the songs query itself.
 
+## Design authority
+
+Added at the v1.4.3 kit update: this ticket changes **rendered output** (which options the Type control
+offers), so it needs to say what binds that appearance — even though it is a `task` and touches no
+styling. Authority per `spec/design/design-system.md` §1.1.
+
+- **Placement/structure:** `spec/wireframes/02-songs-landing.md` (*Components* — the filter row) and the Songs-landing
+  composition in `…/project/Interstate-8 1B.dc.html`. Neither changes here — the control keeps its
+  position, label and `All` option.
+- **Values (type, spacing, colour):** none taken — **no CSS, template or token is touched.** The change is
+  confined to `SongTypeOptions::getTerms()`.
+- **The one visible change, stated exactly:** an *unpublished* song-type term stops appearing as a
+  choice. The four published types named in `requirements.md` §2.1 are unaffected, so on today's data the
+  rendered control is byte-identical — which is why this is latent rather than a live defect.
+- **Illustrative only, no values taken:** the raw SVG/PNG assets and `spec/wireframes/Interstate-8
+  Wireframes.dc.html` — not consulted, and not a value source (§1.1).
+
 ## Definition of done (acceptance criteria)
 - [ ] `SongTypeOptions::getTerms()` returns published terms only, with the access posture chosen
       deliberately and documented in a comment.

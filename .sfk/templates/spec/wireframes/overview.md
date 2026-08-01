@@ -6,12 +6,18 @@
 | **Repository location** | `spec/wireframes/overview.md` |
 | **Status** | Binding specification (for UI) |
 
-> **Purpose.** For projects with a user interface, this folder is the binding description of the
-> screens, their states, and the navigation between them. The overview (this file) indexes the
-> screens and fixes shared conventions; one file per screen (`01-<screen>.md`, `02-<screen>.md`, …)
-> describes each in detail, optionally alongside an HTML mockup of the same name.
+> **Purpose.** For projects that render something a person looks at, this folder is the binding
+> description of the surfaces, their states, and the navigation between them. The overview (this file)
+> indexes them and fixes shared conventions; one file per surface (`01-<name>.md`, `02-<name>.md`, …)
+> describes each in detail, optionally alongside a renderable mockup of the same name.
 >
-> **Non-UI projects:** skip this milestone entirely and remove `spec/wireframes/`.
+> **"Surface" is not only a screen.** If the project renders a document, a report, print output, an email
+> or an exported image, each of those is a surface and belongs here — a project can have no interactive UI
+> and still have its appearance specified. Judge by whether appearance is specified, not by whether there
+> is a screen.
+>
+> **Projects that render nothing a person looks at:** skip this milestone entirely and remove
+> `spec/wireframes/`.
 >
 > **Supporting context.** Inspiration images, competitor screenshots, and brand references can live in
 > `spec/wireframes/` beside these files; they inform the screens but are *not* binding.
@@ -62,9 +68,18 @@
 > milestone** (`spec/design/design-system.md`) — or is deferred (e.g. "styling to emerge in
 > implementation against these wireframes"), in which case that milestone is skipped.
 >
-> **Offer interactive HTML mockups.** If you (the agent) can render HTML/CSS, *proactively offer* to
-> generate an interactive HTML mockup per screen (`NN-<screen>.html`) alongside the Markdown — they let
-> the user click through the empty/loading/populated/error states in a browser. Don't wait to be asked.
+> **Offer renderable mockups.** If you (the agent) can produce the project's output format, *proactively
+> offer* to generate a mockup per surface alongside the Markdown, named to match (`NN-<name>.<ext>`), so
+> the user can review the empty/loading/populated/error states in the medium they will ship in. Use
+> whatever format fits this project's output — that is the project's choice, never the kit's. Don't wait
+> to be asked.
+>
+> **Then say what the mockup is *not*.** A mockup standing in for anything not yet final — unavailable
+> fonts, placeholder imagery, sample copy, stand-in icons — carries compensation for those substitutes, and
+> a mockup drawn at other than the real output dimensions is proportionally wrong. Either way it is a
+> **proportion reference, not a value source**. Record which artefact *does* hold the binding values in
+> `spec/design/design-system.md` §1.1, *Artefact authority*. Offering a mockup without recording that is
+> how an implementer ends up copying a compensated value and shipping it.
 
 ---
 

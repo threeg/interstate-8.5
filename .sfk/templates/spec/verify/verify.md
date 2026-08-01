@@ -59,6 +59,29 @@
 - `<e.g. no N+1 queries in the ORM layer>`
 - `<…>`
 
+## 4b. Authorship trailers (only if two models are configured)
+
+> Seeded by the kit because every project configuring **independent test authorship** has the same exposure,
+> and it is normally discovered late — at an audit, with the evidence already missing. Delete this section
+> if the project runs a single model.
+
+One command shows every commit in a range and its trailers, which is enough to spot a bare batch at a glance:
+
+```
+git log --format='%h|%s|%(trailers:key=Co-authored-by,valueonly)' <range>
+```
+
+- A ticket **work** commit for a `tests_required: true` ticket should list **two** models; a **finalize** or a
+  single-model project's work commit, **one**. A commit with **none** is the finding.
+- **Match on the model family, not an exact string.** Trailer display text legitimately varies by runtime
+  (`Claude Opus 5` and `Claude Opus 5 (1M context)` can both appear in one repository), and a check that
+  rejects a legitimate variant gets switched off — worse than no check.
+- **Do not match against the contractual model identifiers** this project pins in its spec (e.g.
+  `claude-opus-5`). Those are spec values, not trailer display text; conflating the two gives you a check
+  that can never pass.
+
+---
+
 ## 5. Extra checks for this project
 
 > From the interview: anything additional you want the verifier to do every run — extra workload,

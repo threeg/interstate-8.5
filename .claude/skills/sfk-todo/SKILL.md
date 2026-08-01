@@ -14,6 +14,17 @@ ticket instead — put that on `spec/tickets/BOARD.md`, not here.
 > **Is this actually a parking-lot item?** Only if it has an **open question that blocks it from being a
 > ticket**. If it *can* be specified now, it is a ticket (or a `sfk-verify` cleanup finding), not a TODO.
 > No decision owed ⇒ do not park it here.
+>
+> **Is it a parking-lot item at all, or an open question?** If what's missing is **work awaiting a decision
+> of ours**, it is a TODO. If what's missing is **a value or a piece of information** — something to be
+> told rather than decided — it belongs in `spec/open-questions.md` instead, which is recorded
+> automatically and never blocks anything.
+
+> **You may reach this skill two ways.** The user asks ("park this") — or **you offer**. Whenever work is
+> deliberately stopped because a decision doesn't exist, say so and ask *"shall I park this?"*, rather than
+> waiting to be asked; unparked work of that kind dies in a closed ticket's notes. Parking changes scope,
+> so the offer needs the user's yes — unlike `spec/open-questions.md`, which is recorded without asking
+> (root `CLAUDE.md`, *Non-negotiables*).
 
 ## Procedure
 
@@ -28,7 +39,12 @@ ticket instead — put that on `spec/tickets/BOARD.md`, not here.
 
 3. **Append the entry** to the *Entries* list in `spec/TODO.md`, newest first, using the template block
    in that file. Fill:
-   - a stable `id` (`TODO-NNN`, next after the highest existing — never reuse a number);
+   - a stable `id` (`TODO-NNN`) — **next after the highest id anywhere in the file, counting the
+     *Resolved* tombstones as well as the active entries.** Never reuse a number. Read both sections
+     before choosing: a resolved entry's body is gone but its tombstone remains precisely so this
+     arithmetic is right, and taking the highest *active* id instead reuses the number of something
+     already ticketed. Do **not** reach for `git log` to reconstruct it — the file is self-sufficient by
+     design, and this skill runs in runtimes where you may run no `git` at all;
    - the one-line **title**; **Raised:** today's date (ISO) by the author (the git/user name, or ask);
    - **Decision owed** (from step 2, required); **Reuse** and **Where it surfaced** if known;
    - a one/two-sentence **Context**.
@@ -54,7 +70,13 @@ ticket instead — put that on `spec/tickets/BOARD.md`, not here.
 - **One entry, its own commit.** `sfk-todo` only ever touches `spec/TODO.md`. It never edits tickets,
   code, the spec, or milestone status, and never bundles into a ticket commit.
 - **No interview, no promotion.** This skill captures only. Selecting parking-lot items into a version
-  is `sfk-version`'s job (it harvests `spec/TODO.md` at version planning); converting a selected item
-  into a ticket — and deleting its entry in that same commit — happens at ticket generation.
+  is `sfk-version`'s job (it harvests `spec/TODO.md` at version planning, and `sfk-signoff` sweeps it at
+  each milestone boundary); converting a selected item into a ticket — and replacing its entry with a
+  one-line tombstone in that same commit — happens at ticket generation, never at sign-off.
+- **Never renumber, and never take the highest *active* id.** Ids are permanent because a `TODO-n` is
+  **cited while it is open** — in a ticket's Background, in a board note, in a commit message — and those
+  citations outlive the entry. Reusing a number silently redirects one. The *Resolved* tombstones are what
+  make both things work: they keep those citations resolvable, and they let the next id be computed
+  correctly from the file alone.
 - **Never edit `.sfk/`** — copy `spec/TODO.md` out of `.sfk/templates/` if it does not exist yet.
 - **Not a backlog.** Anything specifiable belongs on `spec/tickets/BOARD.md`, not here.

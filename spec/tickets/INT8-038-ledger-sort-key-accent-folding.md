@@ -94,6 +94,23 @@ Out of scope: `query()`'s SQL expression (still a deliberate "good enough" basel
 docblock's MariaDB bracket-expression note); the bucket rule itself (FR-8 is unchanged — this is a
 sort-order fix, not a rule change); anything about how the ledger looks.
 
+## Design authority
+
+Added at the v1.4.3 kit update: this ticket changes **rendered output** (which heading a row appears
+under, and how many headings the ledger draws), so it needs to say what binds that appearance — even
+though it is a `task` and touches no styling. Authority per `spec/design/design-system.md` §1.1.
+
+- **Placement/structure:** `spec/wireframes/02-songs-landing.md` (*Components* — the ledger and its letter rail) and the
+  Songs-landing composition in `…/project/Interstate-8 1B.dc.html`. Neither changes here: the group
+  headings, their order and the `#` catch-all are already as specified by FR-8 and INT8-029.
+- **Values (type, spacing, colour):** none taken — **no CSS, template or token is touched**. The fix is
+  entirely in `ArticleInsensitiveTitle`'s sort key and the theme's grouping pass.
+- **The one visible change, stated exactly:** a title whose first letter carries a diacritic renders
+  inside its existing folded-ASCII group instead of producing a duplicate heading below `Z`. That is the
+  hi-fi's composition being honoured, not departed from.
+- **Illustrative only, no values taken:** the raw SVG/PNG assets and `spec/wireframes/Interstate-8
+  Wireframes.dc.html` — not consulted, and not a value source (§1.1).
+
 ## Definition of done (acceptance criteria)
 - [ ] `ArticleInsensitiveTitle::sortKey()` exists, folds accents, and `comparisonKey()` / `bucket()`
       are byte-for-byte unchanged.

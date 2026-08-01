@@ -47,3 +47,7 @@ tmp/
 
 # --- Claude Code local state (keep .claude/skills tracked; ignore local settings) ---
 .claude/settings.local.json
+
+# Personal per-user instructions: each person's own register/vocabulary preferences and local
+# scratch notes. Never committed — the shared root CLAUDE.md holds anything project-wide.
+CLAUDE.local.md

@@ -53,8 +53,10 @@ kit yourself.**
 3. **Apply each delta to the files the project owns.** The kit-owned folders are already current (the
    copy did that) — **do not re-copy them**. What remains is the root `CLAUDE.md` and the documents
    under `spec/`. Per the Apply note:
-   - **add:** insert the new section/heading where the new template (`.sfk/templates/…`) has it; leave
-     the body empty, or interview if content is needed.
+   - **add:** **first check whether the project already has a section serving that role under another
+     name** (see *Already present under another name*, below). Otherwise insert the new section/heading
+     where the new template (`.sfk/templates/…`) has it; leave the body empty, or interview if content
+     is needed.
    - **amend:** apply the wording/guidance change; keep the user's edits in that section.
    - **interview:** ask the user, then write their answer.
    - **refresh:** for a project-owned file the changelog says to replace wholesale, confirm first.
@@ -63,6 +65,26 @@ kit yourself.**
    whether a difference is the kit's change or the user's own edit — recover the old pristine from git
    (`git show HEAD:.sfk/templates/<path>`) and reason three ways (user's file vs old pristine vs new
    pristine). If git is unavailable, ask the user rather than guess.
+
+   **Already present under another name.** Before acting on any **add**, check whether the project
+   already has a section doing that job under a different heading. This happens *by construction*: the
+   kit adopts ideas that came from projects (repo-root `FEEDBACK.md`), so the project that originated a
+   feature is the first to meet it again as an `add` — and it is the project most likely to have the
+   richer version. Followed literally, the note leaves an empty kit-named section sitting beside a
+   populated local one, with the file's own prose pointing at the second.
+
+   This is **not** the ambiguity case above. There the question is *"is this difference the kit's change
+   or the user's edit?"*; here it is neither — the project independently implemented the same feature.
+   So:
+
+   - **Never add the duplicate.** Compare the two and keep whichever is richer, folding in any columns,
+     fields or rules the kit's version has that the project's lacks.
+   - **The project's heading wins** if the project prefers it. The mechanism is the point; the name is not.
+   - **Record the mapping in the project's own file** — a one-line pointer under that heading naming the
+     kit's term for it. Skills refer to these sections *by heading*, so without the pointer a later skill
+     run looks for a heading that is not there. One line, in the file that owns the name, is the right
+     home for it — not a hedge in every skill that mentions the section.
+   - **Say so in your report:** that you reconciled rather than added, and which version you kept.
 
    Never overwrite filled-in content, and never touch generated artefacts (individual tickets, code) or
    the gitignored `spec/.sfk-feedback/` outbox.
@@ -76,7 +98,28 @@ kit yourself.**
    carry (e.g. the ticket template gained `## In plain English`), *offer* — do not force — to backfill
    it into the existing instances, interviewing per item for the wording. Skip if the user declines.
 
-6. **Bump and commit.** Set the applied kit version in the root `CLAUDE.md` (*Project & kit*) to the
+6. **Offer to prune the root `CLAUDE.md`.** This skill is one of the things that *writes* correction notes
+   into that file — and at the moment of an edit, a note saying the old value is gone is the honest thing to
+   add. Nothing else in the kit ever decides, a version later, that the note has outlived its purpose, so the
+   always-loaded file only grows. You are the natural place to close that loop, because you are already
+   editing it and you already know which version's deltas are being applied.
+
+   Scan it for material that has served its purpose and **offer** to remove each — never delete silently from
+   a file the project owns:
+   - **Correction notes from *earlier* versions** (*"corrected in v0.1.1: this previously said…"*). For each,
+     check whether the **owning document's decisions log** already carries it. Where it does, offer to drop
+     the inline note — the corrected value stands alone and the record is not lost. Where it does not, offer
+     to **move** it there first. Never simply delete an unrecorded reason.
+   - **Temporary blocks whose retirement condition has been met** — a build-state snapshot naming tickets that
+     have since landed, a workaround for a fixed bug. If a block names no retirement condition, say so and
+     offer to add one rather than guessing whether it is still live.
+
+   **Why this is worth a step rather than left to tidiness:** the cost of a bloated always-loaded file is not
+   tokens, it is dilution — and a rule that goes unread is how rules fail. Report what you propose to remove
+   and why it is safe (naming the decisions log that now holds it), and leave anything the user does not
+   confirm exactly where it is.
+
+7. **Bump and commit.** Set the applied kit version in the root `CLAUDE.md` (*Project & kit*) to the
    `kit_version` from `.sfk/manifest.md`. Commit the copied kit folders **and** the applied deltas
    together (per the **Commit protocol** in the root `CLAUDE.md` — hand off if you are not in a git-safe
    runtime), e.g. `process: update kit to vX.Y.Z`. Summarise for the user what changed, what you

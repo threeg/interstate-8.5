@@ -12,9 +12,15 @@
 > the artwork itself. Keep it lean: capture what binds code; the full-fidelity design is either
 > **generated in-repo** by the agent or authored in a **linked tool** (§1).
 >
-> **When to skip.** Non-UI projects, and UI projects with no distinct visual design (grey-box
-> wireframes styled ad hoc in implementation), skip this milestone and remove `spec/design/`. It
-> depends on the wireframes (you style the screens you have structured).
+> **When to skip.** Projects that render **nothing a person looks at**, and projects with no distinct
+> visual design (grey-box wireframes styled ad hoc in implementation), skip this milestone and remove
+> `spec/design/`. It depends on the wireframes (you style the surfaces you have structured).
+>
+> **"No interactive UI" is not the same as "no visual output."** A project can have no screens at all and
+> still render something whose appearance is specified — a generated document or report, print output, an
+> email, an exported image. Those projects **need this milestone**, and their rendering work will be
+> `Task`-shaped rather than `Story`-shaped (see `spec/tickets/TICKET-TEMPLATE.md`, *Design authority*).
+> Judge by whether appearance is specified, not by whether there is a screen.
 >
 > **Supporting context.** Exported palettes, brand assets, and screenshots can live in `spec/design/`
 > beside this file; they inform the system but the tokens and rules below are what bind.
@@ -27,8 +33,8 @@
 > **decisions**; pick how the full-fidelity design is produced. Three modes, AI-native first:
 >
 > - **Generated in-repo (the natural default for an AI-built project):** the agent produces the design
->   as code right here in `spec/design/` — HTML/CSS mockups (as the wireframes allow) plus a
->   machine-readable **tokens file** (`spec/design/tokens.css` or `tokens.json`) the frontend imports
+>   as code right here in `spec/design/` — renderable mockups in whatever format suits the output medium
+>   (as the wireframes allow) plus a machine-readable **tokens file** the implementation imports
 >   directly. This makes the visual contract *executable*: code consumes the tokens rather than
 >   eyeballing values from a table, the same way it honours `api-contract.md`.
 > - **External design tool:** the visuals are authored in a dedicated tool and linked; this file
@@ -38,8 +44,34 @@
 > Any AI or human design tool works — keep this file the agnostic contract, not a tool's export.
 
 - **Design source:** <in-repo (agent-generated) | external tool + link | in this doc only>
-- **Tokens file:** <path, e.g. `spec/design/tokens.css`, or n/a>
+- **Tokens file:** <path, or n/a>
 - **Brand guide:** <link, or n/a>
+
+### 1.1 Artefact authority (which artefact binds which kind of fact)
+
+> **Fill this in as soon as this milestone produces more than one artefact.** A design milestone
+> typically leaves several — a structural sketch, this document, a machine-readable token source, one or
+> more renderable mockups. They are **not interchangeable**, and a ticket that takes a value from the
+> wrong one ships a plausible-looking error. State here, once, which is authoritative for what. Formats
+> are entirely the project's choice; list whatever this project actually produced.
+
+| Kind of fact | Authoritative artefact | Notes |
+|---|---|---|
+| Placement, structure, hierarchy | `<artefact + section>` | <…> |
+| Component styling rules | `<artefact + section>` | <…> |
+| Exact values (type, spacing, colour) | `<artefact — usually the token source>` | <…> |
+| **Illustrative only — never a value source** | `<artefact(s)>` | <why: substitute assets, different output surface, …> |
+
+> **An artefact built with substitute assets is a proportion reference, not a value source.** If a mockup
+> stands in for anything not yet final — unlicensed or unavailable fonts, placeholder imagery, sample
+> copy, stand-in icons — it will carry deliberate compensation for those substitutes. A value copied out
+> of it ships the compensation as though it were the design. The same applies to any artefact produced at
+> different dimensions from the real output surface: a coordinate lifted from it is proportionally wrong,
+> by a margin small enough to survive review.
+>
+> Where either is true of an artefact this project produced, say so in the table's last row **and** state
+> the real values' home. This is exactly the fact a ticket author cannot infer and an implementer will
+> otherwise discover by shipping it.
 
 ---
 

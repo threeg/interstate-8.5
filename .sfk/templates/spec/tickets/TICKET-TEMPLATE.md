@@ -38,6 +38,7 @@ milestone: 8                 # milestone number from spec/milestone-plan.md
 batch: scaffolding           # optional grouping; here it carries the architecture layer
 layer: core                  # core | domain | storage | services | interface | frontend | tooling | docs | repo
 depends_on: []               # ticket ids that must be done first, e.g. [<PRJ>-003, <PRJ>-004]
+before: []                   # OPTIONAL, omit when empty. Ids this must PRECEDE; may name a LOWER id (§4.6)
 implements: []               # FR-n / NFR-n ids this ticket realises, e.g. [FR-12, FR-13, NFR-9]
 tests_required: true         # false only for docs-only, pure-styling, build-plumbing (state why in the body)
 estimate: 3                  # Fibonacci: 1, 2, 3, 5, 8 (rough session-sizing, not a commitment)
@@ -111,9 +112,14 @@ so that [benefit].
 - Interface endpoint(s) and payloads, citing spec/architecture/api-contract.md by section
 - Data-model touchpoints (architecture §3)
 
-## Design references
-- Wireframe: spec/wireframes/NN-screen.md (and state(s): empty/loading/error)
-- Design system: spec/design/design-system.md (tokens / components this screen uses, if the project has one)
+## Design authority
+Which artefact *binds* this ticket's appearance — not a list of related material. Name the artefact, the
+section, and the values taken from it, so "as per the mockup" is never an answer. Check
+spec/design/design-system.md §1.1 (Artefact authority) for which artefact is binding for which kind of
+fact, and which are illustrative only.
+- Placement/structure: spec/wireframes/NN-<name>.md § (and state(s): empty/loading/error)
+- Values (type, spacing, colour): spec/design/design-system.md § — or the token source it names
+- Illustrative only, no values taken: <artefact(s), if any were consulted>
 
 ## Tests
 - Test files to add/update (per test strategy §12.1 layout)
@@ -140,8 +146,13 @@ per-screen QA documentation.
 
 ## Body — Task
 
-Backend, processing, persistence, tooling, scaffolding or architectural work with no direct UI.
+Backend, processing, persistence, tooling, scaffolding or architectural work with no interactive UI.
 (Most core, domain, storage, services and tooling tickets are tasks.)
+
+> **A task can still change what a person sees.** If the project renders a document, report, print
+> output, email or image, that rendering work is `Task`-shaped and its appearance is still specified —
+> so the `## Design authority` section below is **not** optional for it. "No UI" does not mean "no
+> design".
 
 ```markdown
 ## In plain English
@@ -156,6 +167,15 @@ What technical work is needed and why; the current limitation or the prerequisit
 - Modules/files to create or modify (per architecture §2.1)
 - Contracts to honour: requirements §, interface contract §, architecture dependency rule
 - Constraints (e.g. the core is standard-library-only — NFR-n)
+
+## Design authority
+Required if this ticket changes rendered output; delete the section entirely if it changes nothing a
+person sees. Name which artefact *binds* the appearance — artefact, section, and the specific values —
+so an implementer never picks a value by eye. See spec/design/design-system.md §1.1 (Artefact authority)
+for which artefact is binding for which kind of fact, and which are illustrative only.
+- Placement/structure: <artefact + section>
+- Values (type, spacing, colour): <artefact + section, or the token source>
+- Illustrative only, no values taken: <artefact(s), if any were consulted>
 
 ## Definition of done (acceptance criteria)
 - [ ] Requirement 1

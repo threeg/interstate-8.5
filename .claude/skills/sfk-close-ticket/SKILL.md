@@ -22,13 +22,28 @@ next ticket, minus the "next".
 2. **Outstanding feedback?** If you have unaddressed feedback on it, do **not** close it — revise it
    (re-commit under its id, leave it `in-review`) first. Closing is approval.
 
-3. **Finalize, in its own commit.** Flip the ticket to `done`, update its `BOARD.md` row, and — if it
-   was the last open child of an epic — close that epic. Commit **only** this status change as
-   `<PRJ>-NNN: mark done (reviewed)`. Bundle nothing else into it.
+3. **[PR mode] Merge the ticket's PR first.** In `pr` review mode (root `CLAUDE.md` › *Review mode*),
+   **squash-merge** the ticket's pull/merge request — squash so the main line keeps one commit per ticket
+   even after several `sfk-address-review` rounds. Your invocation was the approval; the merge is plumbing,
+   not the signal, and the forge's Approve button is not used (a user cannot approve their own PR anyway).
+   If the merge is **blocked** — a failing required check, a conflict, or branch protection demanding an
+   approving review — **stop and say which**; do not force it and do not mark anything `done`. If it is
+   already merged by hand, carry on. Skip this step entirely in `in-place` mode.
 
-4. **Stop and hand off.** Report that the ticket is closed, and let the user choose what's next:
-   `sfk-verify` at a batch boundary, `sfk-next-ticket` to implement the next ticket, or `sfk-signoff`
-   if this was the milestone's last ticket.
+4. **Finalize, in its own commit.** Flip the ticket to `done`, update its `BOARD.md` row to `✅ done`
+   (the board carries icon **and** token; the ticket file carries the bare token — CONVENTIONS.md §5.4),
+   and — if it was the last open child of an epic — close that epic. Commit **only** this status change as
+   `<PRJ>-NNN: mark done (reviewed)`. Bundle nothing else into it. This commit is status-only, so it
+   carries **one** `Co-authored-by` trailer — the model performing it. The two-model pair belongs on the
+   ticket's *work* commit (`sfk-next-ticket`), never here.
+
+5. **Stop and hand off.** Report that the ticket is closed (and, in `pr` mode, that its PR is merged), and
+   let the user choose what's next: `sfk-verify` at a batch boundary, `sfk-next-ticket` to implement the
+   next ticket, or `sfk-signoff` if this was the milestone's last ticket.
+
+   > **This skill is how a milestone's last ticket gets closed.** `sfk-signoff` does **not** finalize
+   > tickets — it refuses to run while one is open — so the end of a building milestone is always
+   > `sfk-close-ticket` then `sfk-signoff`.
 
 ## Rules
 

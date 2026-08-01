@@ -8,11 +8,27 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 > This is the **root** instructions template — the project's own standing instructions, kept lean. It
 > contains only what *every* session needs. Push layer-specific patterns into per-layer `CLAUDE.md`
 > files (template: `spec/templates/layer-CLAUDE.md`). Replace every `<PLACEHOLDER>`.
+>
+> **Keeping it lean is a rule, not an aspiration — because length is the tax on being read.** This file is
+> loaded at the start of *every* session, so anything in it competes for attention with everything else in
+> it. Two habits keep it honest:
+>
+> - **Corrections are recorded in the owning document's decisions log, not here.** When a value duplicated
+>   in this file is corrected, **fix the value** and log the *why* where the value is **defined**
+>   (`requirements.md` §7, `architecture.md`'s decisions log, `test-strategy.md`'s, …). An inline *"this used
+>   to say X"* note is loaded into every future session forever, to tell every future reader about a value
+>   they never saw. The corrected text stands on its own.
+> - **Anything temporary must name the condition that retires it.** A build-state snapshot ("⚠ partially
+>   built — these commands don't exist yet"), a workaround, a caveat: state, in the block itself, what makes
+>   it removable — *"delete when `<PRJ>-042` lands"*. Without that, it is indistinguishable from a permanent
+>   rule the moment it goes stale. Same discipline the verifier applies to its own exceptions: an exception
+>   with no expiry becomes an instruction to stop looking. Status belongs to `spec/milestone-plan.md` and
+>   `BOARD.md`; a snapshot here is a convenience with an expiry date, never a second record.
 
 ## Project & kit
 
 - **Project code:** `<PRJ>` — the ticket prefix (`<PRJ>-001`). Set by `sfk-init`.
-- **Spec-First Kit version applied:** `1.3.1` — the *kit* version this project is on (set by
+- **Spec-First Kit version applied:** `1.4.3` — the *kit* version this project is on (set by
   `sfk-init`, raised by `sfk-update-kit`). This is **not** your software's release version (that
   is chosen by the project and tracked in `spec/milestone-plan.md`). The kit's own version,
   changelog and pristine templates live in `.sfk/` (read-only — never edit it by hand; skills
@@ -24,12 +40,41 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
   - `tests: <model, or "same">` — writes the failing test from the ticket + spec, independently.
   `sfk-next-ticket` acts on the `tests` model; `same` (or a single model) keeps the default single-model
   behaviour. Set by `sfk-init`.
-- **Review mode:** `<in-place | pr>` — how a finished ticket is reviewed. `in-place` (default): the work
-  is committed and left `in-review` on the current branch; you review the diff and approve by asking for
-  the next ticket. `pr`: each ticket is worked on its own branch and pushed as a **pull/merge request**;
-  the open PR *is* the `in-review` state and your **merge** is the approval (`sfk-next-ticket` opens the
-  PR; `sfk-address-review` pulls its comments back for revision; the merge is yours). `pr` requires a
-  git-safe runtime and a forge remote. Forge/CLI (if `pr`): `<e.g. github / gh>`. Set by `sfk-init`.
+- **Review mode:** `<in-place | pr>` — **where** a finished ticket is reviewed. It does not change what
+  counts as approval. `in-place` (default): the work is committed and left `in-review` on the current
+  branch; you review the diff in chat. `pr`: each ticket is worked on its own branch and pushed as a
+  **pull/merge request**; the open PR *is* the `in-review` state and you review it on the forge
+  (`sfk-address-review` pulls its comments back for revision). `pr` requires a git-safe runtime and a forge
+  remote. Forge/CLI (if `pr`): `<e.g. github / gh>`. Set by `sfk-init`.
+  - **Approval, in both modes, is you invoking `sfk-next-ticket` or `sfk-close-ticket`.** Those merge the
+    PR as part of finalizing. The forge's **Approve button is not used** — you cannot approve your own PR,
+    and nothing here waits for one.
+  - **When reviewing a PR, submit a review — don't use the conversation box.** *Files changed → Start a
+    review → line comments → Submit review → "Comment"*. A submitted review records the commit it was made
+    against, which is what gives you **"changes since your last review"** next round, plus resolvable
+    threads. A timeline comment gives neither.
+  - **What `pr` mode is for:** a better review *surface* — durable line-anchored comments a skill can read
+    back, checks running before merge, and an unmerged branch as a rollback boundary. **It does not give
+    you a second reviewer:** the PR is authored by whoever's git identity the agent runs under, so you are
+    still reviewing your own work. Genuine independence needs a different human, or the agent on its own
+    account. If your branch protection **requires** an approving review, `pr` mode cannot work solo —
+    nothing can merge.
+
+## Audience (how to explain things)
+
+Default to **plain language**: short sentences, no unexplained jargon, and the *"so what"* before the
+mechanism. Assume a capable reader who may not share your specialism.
+
+If a **`CLAUDE.local.md`** exists at the repo root, it declares **this person's** preferred register and
+vocabulary — it is personal and gitignored, so each person working on the project can set their own, and
+it loads after this file so it takes precedence. If there is none, work from the default above and offer
+once to set one up.
+
+> **This changes how you explain, never what you decide.** It must not affect scope, rigour, the order of
+> the milestones, or any gate — and it must not soften a requirement's precision. The documents in `spec/`
+> are **audience-neutral and identical for everyone**: `NFR-3` means what it says whoever is reading, and
+> a ticket's `## In plain English` is written plainly for *all* readers, not for the person in the session.
+> Adjust the conversation, not the artefacts.
 
 ## What this project is
 
@@ -43,8 +88,13 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 - **<Language/locale>** for everything: spelling, prose, comments, commit messages.
 - **All documentation is Markdown.**
 - The documents in `spec/` are the **binding specification.** Do not reopen or reinterpret a
-  settled decision — implement to the spec. If the spec is genuinely wrong or missing, raise it and
-  change the relevant `spec/` file first; never silently diverge.
+  settled decision — implement to the spec. If the spec is genuinely wrong, **stop before writing the code
+  that depends on it**: put it to the user both ways — *change the spec, or change the code to match it?* —
+  and if the spec changes, amend it (and its decisions log) **first**, then implement. Never silently
+  diverge, and never implement first and reconcile the document afterwards. **Asked before the code exists,
+  both answers cost the same and the choice is genuinely yours; asked afterwards, amending is the cheap
+  option and sunk cost decides.** A ticket does not reach `in-review` with an amendment still owed. (The
+  spec being *silent* is different — that is an open question: record it and carry on.)
 - **Red-green is binding, not a preference.** For deterministic and contract-pinned work: write the
   failing test **first**, confirm it fails for the right reason, **then** implement. Never write the
   implementation first and back-fill tests. This is the default for all implementation work and is
@@ -58,11 +108,20 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
   start the next ticket, first mark the previously reviewed ticket `done` and commit **that alone**
   (`<PRJ>-NNN: mark done (reviewed)`). **Never** bundle one ticket's closure into another ticket's
   commit, and never work more than one ticket before its predecessor is committed and reviewed.
+- **When you and the user are both guessing, record it — don't ask first.** If proceeding needs a value
+  that `spec/` does not fix, and neither of you can confirm it, **add a row to `spec/open-questions.md` as
+  you go**: the question in plain language, and the assumption you are proceeding on. Say that you have
+  done it; do not wait to be asked, and never leave a bare `(to confirm)` marker in a document instead.
+  Then **carry on** — an open question never blocks work (see that file's rules). Recording what we don't
+  know is always correct, so it needs no permission.
+  **`spec/TODO.md` is the opposite:** parking *work* changes scope, so there you **offer** ("shall I park
+  this?") and wait for the user — but do offer, rather than only acting when asked.
 - **<Any hard runtime constraint>** (e.g. no network at runtime).
 
 ## Where things live
 
 - `spec/README.md` — the method (the nine steps, the lifecycle, how the skills drive it).
+- `spec/contents.md` — the index of **every** document in `spec/`, in milestone order, each section's binding master first and supporting files under it. The quickest way to find a spec document, and the only place the binding/supporting split is visible at a glance. Regenerated at milestone sign-off; navigation only, nothing here binds.
 - `spec/milestone-plan.md` — the single source of truth for project status.
 - `spec/brief/brief.md` — scope, goals, out-of-scope (binding).
 - `spec/requirements/requirements.md` — the `FR-n` / `NFR-n` rules; numeric thresholds are contractual.
@@ -72,7 +131,9 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 - `spec/design/design-system.md` — tokens, components, visual states; the frontend's visual contract. (Omit if no visual design.)
 - `spec/test-strategy/test-strategy.md` — frameworks, conventions, the definition of done.
 - `spec/verify/verify.md` — the verifier's project-specific instructions (gate commands, contractual values to sweep, extra checks). `sfk-verify` is neutral and reads this; created by interview on its first run.
-- `spec/TODO.md` — the parking lot: work known but not yet specifiable (its blocking decision doesn't exist). `sfk-todo` appends entries; `sfk-version` harvests them into a version. Committed and shared; **not** a second backlog.
+- `spec/TODO.md` — the parking lot: work known but not yet specifiable (its blocking decision doesn't exist). `sfk-todo` appends entries; `sfk-version` harvests them into a version; ticket generation replaces a resolved entry's body with a one-line tombstone in its *Resolved* table recording what it asked and what was decided — because a `TODO-n` is **cited while it is open** and those citations outlive the entry (and, as a consequence, the next id is never reused). Tombstones are never harvested or swept. Committed and shared; **not** a second backlog.
+- `spec/open-questions.md` — the register of values we are building against but cannot confirm: `Q-n` for the client, `S-n` for ourselves. Recorded automatically as they arise (see *Non-negotiables*); an open question **never blocks work**. Section 1 is written in plain language so it can be sent to the client as it stands and returned with the Answer column filled in. **Not** the parking lot.
+- `spec/id-registry.md` — the id family registry: what each id prefix (`FR-`, `NFR-`, and this project's own) means and which document defines it. A navigation aid, **not** binding — and never a copy of a rule's content. To find what a specific id *says*, search for it; see *Resolving an id* in `spec/README.md`.
 - `spec/tickets/` — the work queue; ticket workflow rules in `spec/tickets/CLAUDE.md`.
 - `.sfk/` — kit machinery (read-only): `manifest.md` (kit identity), `CHANGELOG.md`, and `templates/` (pristine sources the skills copy out). Never edit `.sfk/` by hand.
 - `.claude/skills/sfk-*` — the workflow skills (`sfk-init`, `sfk-version`, `sfk-next-milestone`, `sfk-signoff`, `sfk-next-ticket`, `sfk-close-ticket`, `sfk-address-review`, `sfk-verify`, `sfk-todo`, `sfk-update-kit`, `sfk-feedback`).
@@ -83,39 +144,57 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 
 ## Architecture dependency rule (enforced, not aspirational)
 
-> State the one-line rule and, concretely, what each layer may import. Keep this identical to
-> `spec/architecture/architecture.md` §2.1. Example shape:
+*Not set yet — settled at the architecture milestone (step 3) and written here at its sign-off.*
 
-`core → domain → services → interface`, with `storage` beneath `services`. Concretely:
+> **Deliberately blank at init.** The layering is the architecture milestone's deliverable, decided from
+> the brief and the requirements — not guessed on day one. No code exists before scaffolding (step 8), so
+> there is nothing here for a rule to protect in the meantime, and a guessed rule would only have to be
+> unpicked. `sfk-next-milestone` proposes a layering with its rationale, and fills this in once you sign it
+> off. Once written, keep it **identical** to `spec/architecture/architecture.md` §2.1.
 
-- `core/` imports the **standard library only**. Pure functions over immutable data.
-- `domain/` may import only `core`.
-- `services/` may import `core`, `domain`, `storage`.
-- `interface/` imports only `services` and its schemas. **Nothing imports `interface`.**
-- `storage/` imports nothing from `core`/`domain`/`services`/`interface`.
+<!-- The shape this takes once settled — the one-line rule, then what each layer may import:
 
-This is enforced by `<boundary-enforcement tool>` and a standard-library allowlist test; breaking it
-fails `<the default gate>`.
+     `core → domain → services → interface`, with `storage` beneath `services`. Concretely:
+
+     - `core/` imports the standard library only. Pure functions over immutable data.
+     - `domain/` may import only `core`.
+     - `services/` may import `core`, `domain`, `storage`.
+     - `interface/` imports only `services` and its schemas. Nothing imports `interface`.
+     - `storage/` imports nothing from `core`/`domain`/`services`/`interface`.
+
+     This is enforced by <boundary-enforcement tool> and a standard-library allowlist test; breaking it
+     fails <the default gate>. -->
 
 ## Stack
 
-> One paragraph: languages, frameworks, datastore, process topology. Keep in step with
-> `spec/architecture/architecture.md` §6.
+*Not set yet — proposed at the architecture milestone (step 3), confirmed at scaffolding (step 8).*
+
+<!-- One paragraph once known: languages, frameworks, datastore, process topology. Keep in step with
+     spec/architecture/architecture.md §6. -->
 
 ## Commands
 
-> The single command runner the agent should always use. Examples:
+*Not set yet — written at scaffolding (step 8), when the runner and the gates actually exist.*
 
-- `<make setup>` — one-time, online: install pinned deps, fetch any models, build, install browsers.
-- `<make run>` — the single command to start the app.
-- `<make dev>` — development mode (reload + client dev server).
+> **Deliberately blank at init.** Naming a command runner before the stack is chosen invents a fact. The
+> gate *names* firm up at the test-strategy milestone (step 6); the real commands land at scaffolding,
+> which is also the first point anything can be run.
 
-Test targets (all offline after setup):
+<!-- The shape this takes once the stack exists — the single command runner the agent should always use:
 
-- `<make test>` — **the default gate**: unit + integration + the dependency-rule contracts + the
-  core coverage gate. Run it on every ticket.
-- `<make test-<heavy>>` / `<make test-perf>` / `<make test-e2e>` — heavier gates, per ticket type.
-- `<make test-all>` — everything; required at milestone completion.
+     - <make setup> — one-time, online: install pinned deps, fetch any models, build, install browsers.
+     - <make run>   — the single command to start the app.
+     - <make dev>   — development mode (reload + client dev server).
+
+     Test targets (all offline after setup):
+
+     - <make test> — THE DEFAULT GATE: unit + integration + the dependency-rule contracts + the core
+       coverage gate. Run it on every ticket.
+     - <make test-<heavy>> / <make test-perf> / <make test-e2e> — heavier gates, per ticket type.
+     - <make test-all> — everything; required at milestone completion. -->
+
+> Until the Commands section is filled, **do not invent a command**. If something needs running before
+> scaffolding, ask.
 
 ## Commit protocol (who runs git)
 
@@ -146,17 +225,22 @@ warnings**; **red-green was followed** — the failing test was written first an
 the right reason, or the test strategy explicitly exempts that layer (say which in the completion
 report); new/changed numbered-requirement behaviour has tests **in the same commit**; the core
 coverage gate holds for core-touching work; the relevant heavier gate passes where the ticket says so;
-and the ticket's status + `## Notes` and its `BOARD.md` row are updated in that commit. It becomes
-**`done`** only after the user reviews it — `sfk-next-ticket` finalizes the previous `in-review` ticket
-on its next run (asking for the next ticket is approval), or `sfk-signoff` finalizes the last one at
-milestone sign-off, each in a small status-only commit. Docs-only, pure-styling and build-plumbing
-tickets may set `tests_required: false` and must state the exemption in the body.
+**any spec amendment this ticket required was made *before* the code that depends on it, and is referenced
+from the ticket**; and the ticket's status + `## Notes` and its `BOARD.md` row are updated in that commit. It becomes
+**`done`** only after the user reviews it — `sfk-next-ticket` finalizes the previous `in-review` ticket on
+its next run (asking for the next ticket is approval), or `sfk-close-ticket` finalizes it without starting
+another, each in a small status-only commit (and in `pr` mode each merges the PR). **`sfk-signoff` does not
+finalize tickets** — it refuses to run while one is open, so a building milestone ends with
+`sfk-close-ticket` then `sfk-signoff`. Docs-only, pure-styling and build-plumbing tickets may set
+`tests_required: false` and must state the exemption in the body.
 
 End each ticket with a **completion report**. In the **chat response**, open with the ticket **id and
 title** and its **`## In plain English`** line — so the reader sees which ticket landed and its
 plain-language purpose first — then give: (1) a short plain-language **summary** of what was done;
 (2) a one-line **sanity test** the user can run; and (3) for any ticket that touches the UI, **QA
-steps** — the manual actions and their expected results. In the **ticket file**, append the summary and
+steps** — the manual actions and their expected results. If the ticket **amended the spec**, say so and say
+**when** — before the dependent code, as required, or after, which is a process deviation worth naming
+rather than quietly correcting. In the **ticket file**, append the summary and
 sanity test to `## Notes` and the QA steps to `## QA steps`; the id, title, and plain-English already
 live in the ticket, so they are not repeated in `## Notes`.
 

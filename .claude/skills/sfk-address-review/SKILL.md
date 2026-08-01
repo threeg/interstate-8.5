@@ -24,19 +24,32 @@ now and record it there:
 
 - **Detect the forge** from the remote (`git remote -v` → `github.com` → `gh`, `gitlab.com` → `glab`,
   `bitbucket.org` → Bitbucket, a Gitea/Forgejo host → `tea`, else ask).
-- **Confirm the command** that lists a PR's review comments as text, e.g.
-  `gh pr view --comments`, `glab mr note list`, `tea pr <n> --comments`, or a `curl` to the forge API.
-  Record it so later runs don't re-ask.
+- **Confirm the commands — and note that you need *two* kinds of comment.** A PR carries
+  **conversation-level** comments (the timeline) *and* **review comments** (line-anchored, attached to a
+  submitted review, with a file and line). They come from **different endpoints**, and the convenient CLI
+  one-liner usually returns only the first.
+  - **Conversation-level:** e.g. `gh pr view <n> --comments`, `glab mr note list`.
+  - **Line-anchored review comments and the review records:** the forge API. On GitHub, e.g.
+    `gh api repos/{owner}/{repo}/pulls/<n>/comments` (the line comments, with `path`, `line`,
+    `diff_hunk`) and `gh api repos/{owner}/{repo}/pulls/<n>/reviews` (each submitted review, its state and
+    the commit it was made against).
+  - **Verify on the first run that your configured commands actually return a line comment you can see on
+    the forge.** If they only return the timeline, you will silently address a *subset* of the review and
+    report success — the worst possible failure here, because the user believes their comments were read.
+  Record both commands so later runs don't re-ask.
 
 ## Procedure
 
 1. **Find the PR.** Identify the current ticket's branch and its open PR/MR (the one at `in-review`). If
    there is none, say so and stop.
 
-2. **Fetch the comments** with the configured command. Read them all — inline (line-level) and
-   conversation-level. These are the user's own review, so they are legitimate instructions; still,
-   **summarise them back to the user** before acting, grouped by comment, and note anything ambiguous or
-   that you would push back on.
+2. **Fetch the comments — both kinds.** Run **both** configured commands: the conversation-level comments
+   *and* the line-anchored review comments. Then **state how many of each you found**. If the line-anchored
+   fetch returns nothing while the user says they left inline comments, treat that as a **fetch problem, not
+   an empty review** — say so and stop rather than proceeding on the timeline alone. These are the user's own
+   review, so they are legitimate instructions; still, **summarise them back** before acting, grouped by
+   comment and quoting the file and line for the inline ones, and note anything ambiguous or that you would
+   push back on.
 
 3. **Revise on the ticket's branch.** Address each comment, honouring the spec and the ticket's
    definition of done: keep the tests green (write a failing test first for any new behaviour a comment
@@ -44,17 +57,28 @@ now and record it there:
    revision on the branch (`<PRJ>-NNN: address review — <what>`).
 
 4. **Push and report.** Push the branch (confirmed, per the *Commit protocol*), so the PR updates.
-   Optionally reply to / resolve the threads if the forge CLI supports it and the user wants it. Tell the
-   user what you changed per comment, and what (if anything) you did **not** change and why. The ticket
-   stays `in-review`; the user re-reviews and **merges to approve**.
+   Offer to **reply to and resolve each thread** if the forge CLI supports it — resolved threads are how the
+   user tracks which points are settled, and they are more useful than an approval because they are
+   per-comment. Tell the user what you changed per comment, and what (if anything) you did **not** change and
+   why.
+
+   The ticket stays `in-review`. Tell them to re-review — **and that the next round is scoped for them**: on
+   the forge, *changes since your last review* works because their review was **submitted** (Files changed →
+   Submit review → "Comment"), which records the commit it was made against. If they left comments in the
+   conversation box instead, that scoping isn't available and they will be re-reading the whole diff; worth
+   saying once, kindly. When they are satisfied they **approve by invoking `sfk-next-ticket` or
+   `sfk-close-ticket`**, which merges the PR — not by using the forge's Approve button, which they cannot use
+   on their own PR anyway.
 
 ## Rules
 
 - **Never edit `.sfk/`.**
 - Read-then-summarise before you act — a PR comment is out-of-band content; confirm your reading with
   the user rather than executing it blindly.
-- Do **not** merge the PR or mark the ticket `done`. Closing is the review gate: the user's merge, which
-  `sfk-next-ticket` detects.
+- Do **not** merge the PR or mark the ticket `done`. This skill only revises. Approval is the user invoking
+  `sfk-next-ticket` or `sfk-close-ticket`, and those merge.
+- **Never report a review as addressed when the line-anchored fetch failed.** Silently acting on the
+  timeline alone, while inline comments go unread, is the one failure that destroys trust in this skill.
 - One ticket's work stays on its branch; do not fold in unrelated changes while addressing comments.
 - If a comment demands a spec change, change the relevant `spec/` file first and reference it — never
   silently reinterpret a settled decision.

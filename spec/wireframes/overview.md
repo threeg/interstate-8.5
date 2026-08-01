@@ -84,6 +84,14 @@ title/lyrics for →"**.
 > **Interactive HTML mockups** are part of this workflow, not an afterthought: the go/no-go was decided
 > against a click-through canvas, `Interstate-8 Wireframes.dc.html` (all three screens, desktop +
 > mobile), which sits beside these files as supporting context. Offer the same for any new screen.
+>
+> **But say what a mockup is *not*.** That canvas is a **proportion and structure reference, not a value
+> source**: it predates the token set, its palette carried the wireframe's maroon accent rather than the
+> shipped teal, and any artefact standing in for something not yet final (unavailable fonts, placeholder
+> imagery, sample copy) carries compensation for the substitute — copy a value out of it and you ship the
+> compensation as though it were the design. Which artefact *does* hold the binding values is recorded
+> once, in `spec/design/design-system.md` §1.1 (*Artefact authority*). Offering a mockup without pointing
+> at that is how an implementer ends up picking a value by eye.
 
 ---
 

@@ -42,20 +42,27 @@ code in a single repository, committed and updated in the same commits as the wo
 
 The `status` field takes exactly one of the five values defined by the template:
 
-| Status | Meaning | Entry condition |
-|--------|---------|-----------------|
-| `todo` | Not started. The default at creation. | — |
-| `in-progress` | Actively being worked. **All** `depends_on` ids are `done` (§4). | Work has started. |
-| `blocked` | Cannot proceed despite dependencies being met — an external problem, a discovered defect elsewhere, or a decision needed. | Recorded with the reason in `## Notes`. |
-| `in-review` | Implemented, committed and self-tested by `sfk-next-ticket`; the definition of done holds bar the user's review. A freshly implemented ticket rests here. | Implementation finished, gates green (§5). |
-| `done` | Reviewed and approved. The `in-review → done` flip is its own small status-only commit. | Finalized on the next `sfk-next-ticket` run, or by `sfk-signoff` for the last ticket. |
+| Status | Board icon | Meaning | Entry condition |
+|--------|-----------|---------|-----------------|
+| `todo` | ⬜ | Not started. The default at creation. | — |
+| `in-progress` | 🔶 | Actively being worked. **All** `depends_on` ids are `done` (§4). | Work has started. |
+| `blocked` | ⛔ | Cannot proceed despite dependencies being met — an external problem, a discovered defect elsewhere, or a decision needed. | Recorded with the reason in `## Notes`, **naming what it is blocked on**. |
+| `in-review` | 👀 | Implemented, committed and self-tested by `sfk-next-ticket`; the definition of done holds bar the user's review. A freshly implemented ticket rests here. | Implementation finished, gates green (§5). |
+| `done` | ✅ | Reviewed and approved. The `in-review → done` flip is its own small status-only commit. | Finalized on the next `sfk-next-ticket` run, or by `sfk-close-ticket` (including a milestone's last ticket). |
+
+**The icon is for `BOARD.md` only, and the token is the value.** A ticket's own `status:` frontmatter
+carries the bare token and nothing else — it is a machine-read field (§1). The board writes both
+(`✅ done`), because that is the document people scan by eye; see §5.4 for the rule and the reason. ⬜ / 🔶
+/ ✅ are deliberately the same three `spec/milestone-plan.md` uses, so the method has **one** icon
+vocabulary rather than two; `blocked` and `in-review` have no milestone equivalent and take their own.
 
 Normal flow is `todo → in-progress → in-review → done`. `sfk-next-ticket` sets `in-review` when it
 finishes implementing a ticket (in the work commit); the ticket becomes `done` only once **reviewed** —
 `sfk-next-ticket` finalizes the previous `in-review` ticket at the start of its next run (the user
-asking for the next ticket is their approval), and `sfk-signoff` finalizes the last one at milestone
-sign-off, each as a small status-only commit. `blocked` may be entered from `in-progress` and is left
-back to `in-progress` once unblocked.
+invoking it is their approval), and `sfk-close-ticket` does the same finalize without starting another —
+each as a small status-only commit. **`sfk-signoff` does not finalize tickets**; it refuses to run while
+one is open, so a building milestone ends `sfk-close-ticket` → `sfk-signoff`. `blocked` may be entered
+from `in-progress` and is left back to `in-progress` once unblocked.
 
 The milestone tracker (`spec/milestone-plan.md`) uses its own three-symbol vocabulary (⬜ / 🔶 /
 ✅) for *milestones*; that is a separate, coarser lifecycle and is not the per-ticket status here.
@@ -68,17 +75,20 @@ The milestone tracker (`spec/milestone-plan.md`) uses its own three-symbol vocab
 |-------|-------------------|
 | `id` | The unique identifier (§1). Source of truth for the ticket's identity. |
 | `title` | Short imperative summary. One line. |
-| `type` | `epic` \| `story` \| `task` \| `spike`. Stories are user-facing slices; tasks are backend/infra work verified without a UI; epics are containers; spikes are time-boxed investigations. The body structure follows from this field. |
+| `type` | `epic` \| `story` \| `task` \| `spike`. Stories are user-facing slices; tasks are backend/infra work verified without an interactive UI; epics are containers; spikes are time-boxed investigations. The body structure follows from this field. **A `task` may still change rendered output** — a Twig template, an SDC's markup, a block plugin, a ledger's grouping — and when it does, its `## Design authority` section is required, exactly as for a story. |
 | `status` | The lifecycle value (§2). |
 | `milestone` | The milestone number from `spec/milestone-plan.md`. Scaffolding/tooling/fixtures and implementation are typically separate milestones. Epics record the milestone in which their last child completes. |
 | `batch` | Optional grouping within a milestone. Here it carries the **architecture layer**, making the dependency rule legible at a glance and giving `BOARD.md` a second axis. |
 | `layer` | The architecture layer (`content-model` \| `migration` \| `services` \| `theme` \| `config` \| `tooling` \| `docs` \| `repo`). The `depends_on` graph must respect the dependency rule for this layer (§4). Provisional Drupal-oriented set; finalised in the Architecture milestone. |
 | `depends_on` | The execution-order edges: ids that must be `done` before this ticket may start (§4). Epics are never listed here — depend on the specific child instead. |
+| `before` | **Optional — omit the line entirely when there is nothing to record**, which is nearly always. The **inverse** edges: ids this ticket must *precede* (§4.6). Unlike `depends_on`, it **may name a lower-numbered id** — that is the point of it. Reach for it only when the constraint cannot be a `depends_on`, which in practice means a promoted cleanup ticket (§6.5). |
 | `implements` | The `FR-n` / `NFR-n` ids from `spec/requirements/requirements.md` this ticket realises. Every requirement is implemented by at least one ticket; `BOARD.md` traceability derives from these fields. Pure scaffolding/tooling tickets may implement an NFR's *enforcement* or none. |
 | `tests_required` | `true` for any ticket creating/changing numbered-requirement behaviour (tests in the same commit). `false` only for docs-only, pure-styling, or build-plumbing tickets; the body states which exemption applies. |
 | `estimate` | Rough session-sizing on the Fibonacci scale (1, 2, 3, 5, 8). A sizing aid, not a commitment; every ticket is scoped to fit a single implementation session. |
 
 No ticket adds frontmatter fields beyond those the template defines, and none omits a required field.
+`before` is the one **optional** field: absent means the same as `[]`, so a ticket with no out-of-sequence
+constraint simply leaves the line out. Existing tickets never need editing to gain it.
 
 ---
 
@@ -87,8 +97,10 @@ No ticket adds frontmatter fields beyond those the template defines, and none om
 1. **`depends_on` is the execution order.** Each entry is the id of a ticket that must be `done`
    before this ticket may move to `in-progress`. This is the one and only place execution order is
    encoded; `BOARD.md` is a *view* of these edges, never an independent source.
-2. **The start rule.** A ticket may not start until **every** id in its `depends_on` is `done`.
-   Starting earlier means building on unfinished foundations and is a process violation.
+2. **The start rule.** A ticket may not start until **every** id in its `depends_on` is `done`, **and
+   until every ticket naming it in a `before` list is `done`** (§4.6 — `before: [Y]` on X gates Y exactly
+   as `depends_on: [X]` on Y would). Starting earlier means building on unfinished foundations and is a
+   process violation.
 3. **No forward dependencies.** Because ids are allocated in execution order (§1.1), every id in a
    `depends_on` list is numerically lower than the ticket's own id. The set of tickets is therefore a
    **valid topological ordering**: reading `BOARD.md` top to bottom is a legal build sequence. Any
@@ -102,7 +114,36 @@ No ticket adds frontmatter fields beyond those the template defines, and none om
    therefore depend on the frontend skeleton, the typed client, and the request mocks — **not** on the
    backend endpoint tickets. End-to-end assembly is reconciled in an e2e capstone ticket that depends
    on both sides.
-6. **Epics carry no edges.** An epic lists its children in its body and is referenced by them in
+6. **`before` — the inverse edge, for the constraint `depends_on` cannot express.** `before: [Y]` means
+   *this ticket must be worked before `Y`*. It is the dual of `depends_on` — `depends_on: [X]` is "not
+   before X", `before: [Y]` is "not after Y" — so either can be derived from the other, and both impose
+   the same start condition (§4.2).
+
+   **It exists because §4.3 makes a real, recurring case unexpressible.** Cleanup tickets are by
+   construction numbered *after* everything they clean up (§6.1). So when a post-batch review finds that
+   a **later**-numbered ticket must be worked **before** an earlier-numbered one — the promotion case,
+   §6.5 — that constraint cannot be a `depends_on` edge without creating the forward dependency §4.3
+   forbids, and ids are never renumbered (§1.1). This is the *normal* output of a verification pass, not
+   an edge case: slice 1 hit it twice (INT8-022 before INT8-012; INT8-028 before INT8-019).
+
+   **Without it, the only record is row position in `BOARD.md`, and row position is invisible.** Nothing
+   in an inserted row shows that it arrived out of order. Any reader who sorts by id, reads the cleanup
+   table separately from the main one, or works from ticket frontmatter loses the constraint completely,
+   and a later edit that re-sorts the table drops it with no trace. As data instead of prose it becomes
+   checkable: *is this ticket still ahead of the thing it must precede?* is then a mechanical question.
+
+   **`before` may name a lower-numbered id — that is its entire purpose — and this does not weaken
+   §4.3.** That invariant is about `depends_on` never pointing forward, so that ids read in execution
+   order; its purpose is that a genuine constraint gets **recorded**, not that an inconvenient one goes
+   unrecorded. `depends_on` stays backward-only, and the topological reading of the board still holds.
+
+   **Write both ends.** Adding `before: [Y]` to X also moves X's row above Y's in `BOARD.md` and sets
+   X's *flag* cell (§5.4). The row move is the human-legible half; the field is the checkable half, and
+   `sfk-verify` audits that the two still agree.
+
+   **Rare by design.** Nearly every ordering constraint is a `depends_on`. Reach for `before` only when
+   the id arithmetic forbids one.
+7. **Epics carry no edges.** An epic lists its children in its body and is referenced by them in
    prose, but never appears in any `depends_on`. Epics close when all their children are `done`.
 
 ---
@@ -126,10 +167,50 @@ implementation ticket:
 4. **`BOARD.md` is regenerated, not hand-edited for status.** When a ticket's status changes,
    `BOARD.md`'s status column is brought into line in the same commit. The board is a derived view
    (§4.1), kept in step with the ticket files rather than treated as a parallel source.
-5. **A specification change is a documented change.** Numeric thresholds and rules are contractual. If
-   implementing a ticket reveals the spec must change, the change is recorded in the relevant
-   `spec/` spec document first and the ticket references it — tickets do not silently reinterpret a
-   settled decision.
+   - **A board status cell is `<icon> <token>` — both, always** (§2's table gives the icons): `✅ done`,
+     `⬜ todo`, `👀 in-review`. The icon exists because a board of a hundred near-identical rows is read
+     by eye, and *"what is open right now?"* should not require reading every row — the same reason
+     `spec/milestone-plan.md` has had icons all along. **The text token is the value; the icon is
+     decoration.** Never write the icon alone, for two reasons: status is routinely `grep`-ed (by
+     `spec/verify/verify.md`'s board-versus-ticket agreement check, and by hand), and **a sweep that
+     matches nothing looks exactly like a sweep that found nothing wrong** — an icon-only column would
+     turn every such check into a silent pass. Emoji also render at inconsistent widths across terminals
+     and Markdown viewers, so icon-plus-text degrades to something still readable.
+   - **The `flag` column carries out-of-sequence facts, and nothing else.** Blank on nearly every row.
+     It holds `🔺 before <id>` when the ticket is **promoted** (§6.5) — the 🔺 says *this is out of
+     sequence on purpose*, the `before <id>` says *ahead of what*, mirroring the ticket's `before:`
+     field (§4.6) so the constraint is legible without opening the file. A `before:` set for any other
+     reason gets the `before <id>` without the 🔺. Link the id like any other (see below).
+   - **No ad-hoc emphasis.** Do not bold, asterisk or otherwise mark a row to mean "notable" — `status`
+     and `flag` carry meaning here, and nothing else does. An undocumented convention invented row by
+     row ends up carrying several meanings at once, which is worse for the next reader than carrying
+     none. If a row needs a fact the columns cannot hold, the fact belongs in the ticket.
+   - **A `blocked` row names what it is blocked on** in the ticket's `## Notes` (§2). "Cannot start
+     until a decision is made" is a `blocked` ticket, not a flag — `blocked` already has a lifecycle and
+     an owner, and a second marker for the same fact would give the board two answers to one question.
+   - **Every id in `BOARD.md` is a link to its file** — in the `id` column, in `depends_on` cells, in the
+     epic and traceability tables, and in prose: `[INT8-036](INT8-036-firefox-playwright-stale-lock.md)`.
+     The board is the document people navigate most, and a forge or Markdown viewer makes a linked id one
+     click from the ticket. This is the safe kind of link — an id maps to a **whole file**, so there is no
+     section anchor to break (see *Resolving an id* in `spec/README.md`).
+   - **Decoration wraps *inside* the link, never outside.** `` `INT8-036` `` becomes
+     `` [`INT8-036`](INT8-036-<slug>.md) `` — **not** `` `[INT8-036](INT8-036-<slug>.md)` ``. The second
+     form puts link syntax inside a code span, so it renders as literal brackets and parentheses instead of
+     a link. A naive regex over `INT8-\d{3}` that ignores surrounding backticks or `**` produces exactly
+     that; expand outward over any symmetric decoration pair first, then wrap.
+   - **Whatever writes a row emits it already linked** — ticket generation, `sfk-next-ticket`,
+     `sfk-close-ticket`, and `sfk-verify` when it files a promoted cleanup ticket. A bare id from any one of
+     them degrades the file unevenly, and nobody can tell afterwards which pass did it. Do not rely on a
+     later cleanup sweep.
+5. **A specification change is a documented change, and it comes *first*.** Numeric thresholds and rules
+   are contractual. If implementing a ticket reveals the spec must change, **stop**: the change is agreed
+   with the user, recorded in the relevant `spec/` document (and its decisions log) **before** the code that
+   depends on it, and referenced from the ticket. Tickets do not silently reinterpret a settled decision.
+   **The order is not bookkeeping.** Asked before the code exists, "amend the spec" and "fix the code to
+   match" cost the same and the user can choose freely; asked afterwards, amending is cheap and changing the
+   code looks expensive, so sunk cost decides. It also leaves no way to tell later whether the spec was a
+   decision or a rationalisation — which is what makes auditing code against it meaningful. A ticket does
+   **not** reach `in-review` with an amendment still owed.
 6. **Every completed ticket carries a completion report.** On completion the ticket records — and the
    chat response repeats — a plain-language **summary** and a one-line **sanity test**; UI tickets
    additionally record manual **QA steps** (which accumulate as living per-screen documentation). The
@@ -157,7 +238,18 @@ Reactive tickets discovered by post-batch review rather than planned up front.
    under the same lifecycle and definition-of-done rules.
 5. **Promotion.** If a cleanup ticket is **critical** — it would cause a gate failure (e.g. a
    performance regression, a warning that breaks the zero-warnings gate) — it is promoted into the
-   main sequence, slotted before the gate it would affect.
+   main sequence, slotted before the gate it would affect. Promotion is recorded in **three** places,
+   in one commit:
+   - **`before:`** on the promoted ticket, naming the ticket it must precede (§4.6). This is the
+     authoritative record, and it is the reason the field exists — a cleanup ticket is numbered after
+     everything it cleans up, so this edge can never be a `depends_on`.
+   - **its row moves** into the main-sequence table, above the ticket it must precede;
+   - **its `flag` cell** becomes `🔺 before <the id>` (§5.4), so the row itself says it is out of
+     sequence rather than relying on position alone.
+
+   Promotion is a **binary property with a definition** — *would this fail a gate?* — which is what
+   keeps the flag honest. It is deliberately not a priority scale: an undefined level rots into a
+   record of what was urgent months ago, and with nobody owning it, nothing would catch that.
 6. **Scope.** Cleanup tickets do not implement new requirements (`implements: []`); they improve
    internal quality of already-shipped code. A finding that reveals a genuine spec gap is a
    specification change (§5.5), not a cleanup ticket.
