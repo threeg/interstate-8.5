@@ -2,7 +2,7 @@
 id: INT8-041
 title: Scope the Songs landing's Type-filter term lookup to published terms
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: services
@@ -139,3 +139,4 @@ curl -s http://interstate-8-5.lndo.site/songs | grep -c 'ZZ Test'
   specified order. Not opened as an `S-n`/`Q-n` row: it isn't blocking anything this ticket does, and
   filing it against a hypothetical future term felt premature — flagging it here for the user to decide
   whether it's worth a row now or when it actually matters.
+- 2026-08-01 — done (reviewed).
