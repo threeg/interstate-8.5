@@ -2,7 +2,7 @@
 id: INT8-038
 title: Fold accents in the ledger's sort key so one letter cannot split into two groups
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: services
@@ -112,19 +112,19 @@ though it is a `task` and touches no styling. Authority per `spec/design/design-
   Wireframes.dc.html` — not consulted, and not a value source (§1.1).
 
 ## Definition of done (acceptance criteria)
-- [ ] `ArticleInsensitiveTitle::sortKey()` exists, folds accents, and `comparisonKey()` / `bucket()`
+- [x] `ArticleInsensitiveTitle::sortKey()` exists, folds accents, and `comparisonKey()` / `bucket()`
       are byte-for-byte unchanged.
-- [ ] The theme sorts on `sortKey()`; the reproduction above yields **one** `E` group
+- [x] The theme sorts on `sortKey()`; the reproduction above yields **one** `E` group
       (`E(Em, Émile, Ez) F(Fa)` or equivalent), not two.
-- [ ] Unit coverage added for `sortKey()`, including the accent case and the multi-character-fold
+- [x] Unit coverage added for `sortKey()`, including the accent case and the multi-character-fold
       case (`Æ`), written test-first and confirmed red for the right reason.
-- [ ] A test pins the contiguity property itself — that no bucket letter can appear as two separate
+- [x] A test pins the contiguity property itself — that no bucket letter can appear as two separate
       groups — rather than only the folding, so the guard survives a future refactor of either method.
-- [ ] The stale contiguity comment in `interstate_85.theme` is corrected.
-- [ ] `lando test` green with zero warnings; `lando playwright` green (the existing
+- [x] The stale contiguity comment in `interstate_85.theme` is corrected.
+- [x] `lando test` green with zero warnings; `lando playwright` green (the existing
       `songs-landing.spec.ts` INT8-029/030 assertions must pass **unmodified** — this changes ordering
       only for titles the current data does not contain).
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 
@@ -152,3 +152,21 @@ foreach (["Em","Ez","Fa","The Éclair","Émile"] as $t) { echo "$t bucket=" . A:
   correctness hole in already-shipped behaviour that changes nothing a user can see today
   (CONVENTIONS §6.6), and no `FR` text changes — FR-8's rule is right, its ordering key is
   inconsistent with it.
+- 2026-08-01 — implemented. Added `ArticleInsensitiveTitle::sortKey()`: `comparisonKey()`'s result run
+  through the same `iconv('UTF-8', 'ASCII//TRANSLIT', …)` fold `bucket()` applies to its first
+  character, then lowercased; `comparisonKey()` and `bucket()` are untouched.
+  `interstate_85_preprocess_views_view__songs()` now sorts each row's `sort_key` (was
+  `comparison_key`) instead, and the stale SQL-order comment above the rail-letters loop now cites the
+  real guarantee (sortKey()'s docblock). Failing tests were authored independently (test-writer model)
+  from the ticket text alone, confirmed red on `Call to undefined method sortKey()` before
+  implementation; new coverage in `ArticleInsensitiveTitleTest.php` covers the fold (including `Æ`'s
+  two-character expansion), an explicit guard that `comparisonKey()`/`bucket()` are unchanged, and a
+  general contiguity property test fed both the ticket's own repro and a second, independently-composed
+  case scattering accents/a ligature/a digit/Cyrillic across the alphabet. Sanity test: `lando drush
+  php:eval` with the ticket's five-title reproduction now sorts `Em, Émile, Ez` together (both fold to
+  the `E` bucket) ahead of `Fa` — one `E` group, not two. `lando test` — 83 tests, zero PHPCS/PHPStan
+  warnings. `lando playwright` — 565/565, the pre-existing INT8-029/030 assertions unmodified. No spec
+  amendment needed and no open question raised — one genuinely unpinned case surfaced (folding a script
+  `iconv` cannot transliterate, e.g. Cyrillic, yields a literal `?` per character), but it has no
+  observable consequence: `#`-bucket rows all share sort rank 1, so whatever `sortKey()` returns for
+  them, they stay in one trailing block regardless.

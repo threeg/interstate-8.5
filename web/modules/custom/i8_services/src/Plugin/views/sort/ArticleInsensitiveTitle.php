@@ -121,4 +121,24 @@ class ArticleInsensitiveTitle extends SortPluginBase {
     return preg_match('/^[A-Z]$/', $folded) === 1 ? $folded : '#';
   }
 
+  /**
+   * The song ledger's ordering key (INT8-038).
+   *
+   * The comparisonKey() result, folded to ASCII the same way bucket() folds
+   * its first character, then lowercased. This — not comparisonKey() — is
+   * the key the theme sorts rows by, so that sort order agrees with
+   * bucket() everywhere: bucket() only returns a letter when
+   * comparisonKey()'s first character folds to exactly one A-Z character,
+   * in which case that letter, lowered, is also this key's first
+   * character. A sort on this key therefore cannot place two rows of the
+   * same bucket on opposite sides of a different bucket, which is what the
+   * sequential grouping pass in interstate_85_preprocess_views_view__songs()
+   * relies on.
+   */
+  public static function sortKey(string $title): string {
+    $key = self::comparisonKey($title);
+    $folded = iconv('UTF-8', 'ASCII//TRANSLIT', $key);
+    return mb_strtolower((string) $folded);
+  }
+
 }

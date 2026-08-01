@@ -140,7 +140,12 @@ function interstate_85_preprocess_views_view__songs(array &$variables): void {
       // see ArticleInsensitiveTitle::bucket() for why (numbers/symbols get
       // a single "#" catch-all instead of scattering as one-off groups).
       'letter' => ArticleInsensitiveTitle::bucket($title),
-      'comparison_key' => ArticleInsensitiveTitle::comparisonKey($title),
+      // INT8-038: the accent-folded key, not comparisonKey() — sorting on
+      // the unfolded key can place an accented title's row on the far side
+      // of a different bucket from the rest of its own letter (see
+      // sortKey()'s docblock for why the fold keeps sort order and bucket
+      // order in agreement).
+      'sort_key' => ArticleInsensitiveTitle::sortKey($title),
     ];
   }
 
@@ -154,7 +159,7 @@ function interstate_85_preprocess_views_view__songs(array &$variables): void {
   // relative order rather than shuffling arbitrarily.
   usort($songs, function (array $a, array $b): int {
     $rank = fn (string $letter): int => $letter === '#' ? 1 : 0;
-    return [$rank($a['letter']), $a['comparison_key']] <=> [$rank($b['letter']), $b['comparison_key']];
+    return [$rank($a['letter']), $a['sort_key']] <=> [$rank($b['letter']), $b['sort_key']];
   });
 
   // INT8-030: the anchor id for a bucket. Computed here, once, and handed to
@@ -181,8 +186,9 @@ function interstate_85_preprocess_views_view__songs(array &$variables): void {
   }
 
   // INT8-029: the rail runs A–Z then a trailing "#", matching bucket()'s own
-  // ordering (SQL sorts the same way, so consecutive same-letter rows are
-  // never split into two groups by this sequential pass).
+  // ordering (INT8-038: $songs above is sorted on sortKey(), which is
+  // provably contiguous per bucket — see that method's docblock — so this
+  // sequential grouping pass never splits one letter into two groups).
   $present_letters = array_unique(array_column($songs, 'letter'));
   $rail_letters = [];
   foreach (array_merge(range('A', 'Z'), ['#']) as $letter) {

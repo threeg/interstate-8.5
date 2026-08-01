@@ -198,4 +198,158 @@ class ArticleInsensitiveTitleTest extends UnitTestCase {
     ];
   }
 
+  /**
+   * Tests the accent-folded ordering key (INT8-038).
+   *
+   * The key is comparisonKey()'s result put through the same ASCII//TRANSLIT
+   * fold bucket() applies to its first character, then lowercased — so the
+   * fold covers the whole key, not just its head.
+   */
+  #[DataProvider('providerSortKey')]
+  public function testSortKey(string $title, string $expected_key): void {
+    $this->assertSame($expected_key, ArticleInsensitiveTitle::sortKey($title));
+  }
+
+  /**
+   * Data provider: title, expected folded sort key.
+   */
+  public static function providerSortKey(): array {
+    return [
+      // The fold reaches past the first character: every accented letter in
+      // the key goes, not just the one bucket() looks at.
+      'an accented first letter folds' => ['Éclair', 'eclair'],
+      'the article is stripped before the fold' => ['The Éclair', 'eclair'],
+      'a lower-case accented title folds the same way' => ['émile', 'emile'],
+      'an accent after the first character folds too' => ['Amélie', 'amelie'],
+      'an accent behind punctuation folds' => ['(Àpres)', 'apres)'],
+      // A ligature transliterates to two characters. The trailing lowercase
+      // is what makes this stable whether iconv yields "ae" or "AE".
+      'a ligature expands to its two-letter fold' => ['Æon', 'aeon'],
+      'the same ligature lower-case' => ['æon', 'aeon'],
+
+      // Plain-ASCII spot checks: folding must be a no-op for titles the
+      // existing suite already pins, so sortKey() and comparisonKey() agree
+      // wherever there is nothing to fold.
+      'a plain title is untouched' => ['Bukowski', 'bukowski'],
+      'article stripping still applies' => ['The Cold Part', 'cold part'],
+      'a leading digit survives the fold' => ['(8)copy', '8)copy'],
+      'an empty key stays empty' => ['&', ''],
+    ];
+  }
+
+  /**
+   * Tests that INT8-038 leaves comparisonKey() and bucket() untouched.
+   *
+   * The new key is additive: the unfolded comparison key and the bucket rule
+   * are both pinned as byte-for-byte unchanged by the ticket.
+   */
+  #[DataProvider('providerFoldingIsAdditive')]
+  public function testFoldingIsAdditive(string $title, string $expected_key, string $expected_bucket): void {
+    $this->assertSame($expected_key, ArticleInsensitiveTitle::comparisonKey($title));
+    $this->assertSame($expected_bucket, ArticleInsensitiveTitle::bucket($title));
+  }
+
+  /**
+   * Data provider: title, unfolded comparison key, unchanged bucket.
+   */
+  public static function providerFoldingIsAdditive(): array {
+    return [
+      'the comparison key keeps its accent' => ['Éclair', 'éclair', 'E'],
+      'and so does a lower-case one' => ['émile', 'émile', 'E'],
+      // A first character that folds to two letters is not a single A-Z
+      // character, so it stays in the catch-all bucket.
+      'a ligature still buckets to the catch-all' => ['Æon', 'æon', '#'],
+      'a plain title is unaffected' => ['Bukowski', 'bukowski', 'B'],
+      'the catch-all cases are unaffected' => ['3rd Planet', '3rd planet', '#'],
+    ];
+  }
+
+  /**
+   * Tests that no bucket can be split into two groups (INT8-038).
+   *
+   * The theme builds the ledger's groups by walking the sorted rows and
+   * starting a new group whenever the letter changes, so a bucket that
+   * reappears after being left becomes a second group with a duplicate DOM
+   * id. This asserts the property directly rather than the fold that
+   * currently delivers it, so it survives a refactor of either method.
+   */
+  #[DataProvider('providerContiguity')]
+  public function testBucketsAreContiguousUnderTheLedgerSort(array $titles, array $expected_buckets): void {
+    $buckets = self::sortedBuckets($titles);
+    $this->assertSame($expected_buckets, $buckets);
+
+    $runs = self::collapseRuns($buckets);
+    $this->assertCount(
+      count(array_unique($buckets)),
+      $runs,
+      'A bucket was left and re-entered, so it would render as two groups: '
+      . implode(' ', $runs)
+    );
+  }
+
+  /**
+   * Data provider: source-order titles, expected sorted bucket sequence.
+   *
+   * The first case is the ticket's own reproduction; the second scatters
+   * accents, a ligature and non-Latin text across the alphabet, out of
+   * source order.
+   */
+  public static function providerContiguity(): array {
+    return [
+      "the ticket's reproduction" => [
+        ['Em', 'Ez', 'Fa', 'The Éclair', 'Émile'],
+        ['E', 'E', 'E', 'E', 'F'],
+      ],
+      'accents scattered across the alphabet' => [
+        [
+          'Zebra',
+          '3rd Planet',
+          'Émile',
+          'Anemone',
+          'Æon',
+          'The Éclair',
+          'Привет',
+          'Àpres Vous',
+          'Zed',
+        ],
+        ['A', 'A', 'E', 'E', 'Z', 'Z', '#', '#', '#'],
+      ],
+    ];
+  }
+
+  /**
+   * Returns each title's bucket, in the order the ledger would render them.
+   *
+   * Mirrors the theme's sort: by bucket rank (a letter before the catch-all)
+   * and then by the folded sort key.
+   */
+  private static function sortedBuckets(array $titles): array {
+    $rows = [];
+    foreach ($titles as $title) {
+      $rows[] = [
+        'bucket' => ArticleInsensitiveTitle::bucket($title),
+        'sort_key' => ArticleInsensitiveTitle::sortKey($title),
+      ];
+    }
+    usort($rows, function (array $a, array $b): int {
+      $rank_a = $a['bucket'] === '#' ? 1 : 0;
+      $rank_b = $b['bucket'] === '#' ? 1 : 0;
+      return [$rank_a, $a['sort_key']] <=> [$rank_b, $b['sort_key']];
+    });
+    return array_column($rows, 'bucket');
+  }
+
+  /**
+   * Collapses each run of identical adjacent buckets to a single entry.
+   */
+  private static function collapseRuns(array $buckets): array {
+    $runs = [];
+    foreach ($buckets as $bucket) {
+      if (end($runs) !== $bucket) {
+        $runs[] = $bucket;
+      }
+    }
+    return $runs;
+  }
+
 }
