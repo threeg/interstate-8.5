@@ -2,7 +2,7 @@
 id: INT8-041
 title: Scope the Songs landing's Type-filter term lookup to published terms
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: services
@@ -86,16 +86,16 @@ styling. Authority per `spec/design/design-system.md` §1.1.
   Wireframes.dc.html` — not consulted, and not a value source (§1.1).
 
 ## Definition of done (acceptance criteria)
-- [ ] `SongTypeOptions::getTerms()` returns published terms only, with the access posture chosen
+- [x] `SongTypeOptions::getTerms()` returns published terms only, with the access posture chosen
       deliberately and documented in a comment.
-- [ ] Kernel coverage: a vocabulary with one unpublished term returns only the published ones, and the
+- [x] Kernel coverage: a vocabulary with one unpublished term returns only the published ones, and the
       published set comes back in weight order. Written test-first and confirmed red for the right
       reason.
-- [ ] `/songs` renders the identical filter bar it renders today (All + the four types, same order) —
+- [x] `/songs` renders the identical filter bar it renders today (All + the four types, same order) —
       compared against a real response, not asserted from the code.
-- [ ] `lando test` green with zero warnings; `lando playwright` green with the existing
+- [x] `lando test` green with zero warnings; `lando playwright` green with the existing
       `songs-landing.spec.ts` Type-filter assertions passing **unmodified**.
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 
@@ -119,3 +119,23 @@ curl -s http://interstate-8-5.lndo.site/songs | grep -c 'ZZ Test'
   `content-model.md` §9's status-mapping decision is what exposed the mismatch. Cleanup backlog rather
   than main sequence: it improves the internal correctness of already-shipped behaviour and changes
   nothing a user can see with the current data (CONVENTIONS §6.6).
+- 2026-08-01 — implemented. `SongTypeOptions::getTerms()` now uses an entity query with an explicit
+  `->condition('status', 1)` (the actual filter) and `accessCheck(TRUE)` (the posture consistent with
+  `SongVersions::getAlternates()`'s many-entity search, documented as not itself filtering anything —
+  core registers no taxonomy-term query-access hook), replacing the unscoped `loadByProperties()`.
+  Failing tests were authored independently (test-writer model) from the ticket text and the shipped
+  `song_type` vocabulary alone; confirmed red on two logic failures (the unpublished term present in
+  the result) before implementation, with four other cases already green proving the fixture sound.
+  New coverage in `SongTypeOptionsTest.php` (Kernel — real taxonomy storage) covers the published-only
+  scoping, weight ordering surviving the entity-query rewrite, today's four-published-types shape
+  unchanged, an all-unpublished vocabulary, cross-vocabulary scoping, and an empty vocabulary. Sanity
+  test: created an unpublished `song_type` term, confirmed it appeared in `/songs`'s rendered dropdown
+  before the fix and does not after; the four published types still render, same order. `lando test` —
+  89 tests, zero PHPCS/PHPStan warnings. `lando playwright` — 565/565, the pre-existing Type-filter
+  assertions in `songs-landing.spec.ts` unmodified. No spec amendment needed. One open question flagged
+  by the test-writer and left genuinely unresolved rather than guessed: equal-weight tie-break order is
+  unpinned by the ticket, FR-9, or `content-model.md` §9 — today's four types have distinct weights, so
+  it doesn't affect this ticket, but a future fifth type sharing a weight with an existing one has no
+  specified order. Not opened as an `S-n`/`Q-n` row: it isn't blocking anything this ticket does, and
+  filing it against a hypothetical future term felt premature — flagging it here for the user to decide
+  whether it's worth a row now or when it actually matters.
