@@ -182,6 +182,10 @@ Test targets:
   **Not a single wired command:** the gate runs on the `appserver` service and Playwright on the
   separate `pw` compose service, so run `lando test` **then** `lando playwright` from the host (decided
   in INT8-006; see `spec/test-strategy/test-strategy.md` §2.2).
+- `lando lint` — **fast dev convenience only** (INT8-042): PHPCS + PHPStan + the boundary check, no
+  PHPUnit. Useful mid-ticket to re-check a style/static-analysis fix in seconds instead of the ~5+
+  minutes PHPUnit adds. **Does not replace `lando test`** in the definition of done — a ticket still
+  needs a clean `lando test` before it reaches `in-review`.
 
 ## Commit protocol (who runs git)
 

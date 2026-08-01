@@ -2,7 +2,7 @@
 id: INT8-042
 title: Add a fast lint-only check alongside the default gate
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: tooling
@@ -42,13 +42,13 @@ each one a ~5.5-minute wait to confirm a one-line fix.
   convenience that never substitutes for `lando test` in the definition of done.
 
 ## Definition of done (acceptance criteria)
-- [ ] `tooling/run-lint.sh` exists and runs PHPCS + PHPStan + the boundary check, matching
+- [x] `tooling/run-lint.sh` exists and runs PHPCS + PHPStan + the boundary check, matching
       `tooling/run-tests.sh`'s config for each.
-- [ ] `lando lint` is wired in `.lando.yml` and runs it.
-- [ ] `lando test`'s behaviour and output are unchanged.
-- [ ] Root `CLAUDE.md`'s Commands section documents `lando lint`, stating it does not replace
+- [x] `lando lint` is wired in `.lando.yml` and runs it.
+- [x] `lando test`'s behaviour and output are unchanged.
+- [x] Root `CLAUDE.md`'s Commands section documents `lando lint`, stating it does not replace
       `lando test` in the definition of done.
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 
@@ -64,3 +64,12 @@ Verification: deliberately introduce a PHPCS violation (e.g. a docblock capitali
   `lando test` re-runs triggered by single-line PHPCS/PHPStan fixes. Filed as a cleanup ticket against
   already-shipped tooling (INT8-006) rather than an ad hoc edit, to keep the one-ticket-at-a-time
   paper trail intact.
+- 2026-08-01 — implemented. Added `tooling/run-lint.sh` (PHPCS + PHPStan + the boundary check, same
+  config/flags as `tooling/run-tests.sh`'s corresponding steps) and wired it as `lando lint` in
+  `.lando.yml`, alongside the unchanged `test` entry. Documented in root `CLAUDE.md`'s Commands section
+  as a fast dev convenience that does not replace `lando test`. `tests_required: false`
+  (build-plumbing, as stated in the ticket) — no PHPUnit coverage; verified per the ticket's own method
+  instead: deliberately introduced a PHPCS indentation violation in `SongTypeOptions.php`, confirmed
+  `lando lint` caught it in ~5.5 seconds, reverted it, confirmed `lando lint` clean again, then ran
+  `lando test` and confirmed all four checks still pass unchanged (89 tests, zero warnings). No spec
+  amendment needed, no open question raised.

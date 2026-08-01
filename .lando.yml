@@ -35,6 +35,10 @@ tooling:
     service: appserver
     cmd: bash /app/tooling/run-tests.sh
     description: "Default gate: PHPUnit + PHPCS + PHPStan + boundary check (custom code only)"
+  lint:
+    service: appserver
+    cmd: bash /app/tooling/run-lint.sh
+    description: "Fast dev check: PHPCS + PHPStan + boundary check only, no PHPUnit (does not replace lando test)"
   playwright:
     service: pw
     cmd: "bash -c 'find /ms-playwright -name lock -xtype l -delete && cd /app/tests/playwright && npm install --silent && npx playwright test'"
