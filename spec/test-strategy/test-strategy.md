@@ -185,8 +185,12 @@ the exemption in the body.
 
 - **PHP tests:** `web/modules/custom/<module>/tests/src/{Unit,Kernel,Functional}` (Drupal convention).
 - **Playwright tests:** `tests/playwright/` (specs + the Axe helper); page objects for the two screens.
-- **CI:** none in slice 1 — the **local pre-commit hook** runs the default gate (per the git-workflow
-  proposal). CI is added on a concrete trigger (lazy).
+- **CI:** none in slice 1, and **no automatic pre-commit gate either.** The `.githooks/pre-commit` hook
+  exists and runs the default gate, but it is **opt-in and left unwired** (2026-07-12) — the full gate is
+  too slow to sit on every commit. So **the gate is run by hand**, before a ticket reaches `in-review`
+  (root `CLAUDE.md`, *Definition of done*). State the honest consequence rather than assuming a safety
+  net: nothing stops a red commit but the operator. CI is added on a concrete trigger (lazy) — and a
+  commit landing with a failing gate is exactly such a trigger.
 
 ---
 
@@ -214,6 +218,13 @@ the exemption in the body.
 - **2026-07-11** — **Manual a11y audit** (screen-reader, formal WCAG) is a **periodic pass**, not a
   per-ticket gate; automated Axe + structural day-one is the per-ticket layer.
 - **2026-07-11** — **CI deferred**; the local pre-commit hook is the gate pre-launch.
+- **2026-08-01** — **Corrected §10: the pre-commit hook is opt-in and unwired, so the gate is manual.**
+  The 2026-07-11 decision above assumed the hook would carry the gate, and INT8-006 duly wired it via a
+  `composer.json` post-install step — but that was removed on 2026-07-12 (`2d063b9`, "make pre-commit
+  hook opt-in") because the full gate is too slow to run on every commit. The decision stands; only the
+  record was stale, in three places (§10 here, the root `CLAUDE.md` *Commands* section, and
+  `spec/verify/verify.md` §1), each of which asserted an automatic gate that has not existed since day
+  six. Nothing about *what* is tested changes. (Operator confirmation, 2026-08-01.)
 - **2026-07-11** — **Boundary-check tool (deptrac vs custom) finalized at scaffolding**; runs in the
   default gate.
 

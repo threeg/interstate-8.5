@@ -39,7 +39,7 @@ including the parent/version side-by-side lyrics behaviour.
 
 ### 2.1 Module layout and the dependency rule
 
-Kept **identical to the root `CLAUDE.md`**. Provisional Drupal-oriented layering, finalised here:
+Kept **identical to the root `CLAUDE.md`**. The Drupal-oriented layering, settled at this milestone:
 
 ```
 content-model → services → theme,   with  migration  populating  content-model
@@ -227,3 +227,23 @@ Settled in the prior proposals; made contractual here.
 | Excluded | Layout Builder for entity pages, **Drupal Canvas** (immature), **SASS**, **React/headless**, contrib Tailwind base themes | Reversible "not now" where relevant (all SDC underneath). |
 
 Pinned majors: Drupal 11, Tailwind v4. Keep this section in step with the root `CLAUDE.md` *Stack*.
+
+---
+
+## 7. Decisions log
+
+> Dated record of changes to this document — what changed and why. Append per amendment.
+>
+> **Started 2026-08-01, not backfilled.** `content-model.md`, `design-system.md` and
+> `wireframes/overview.md` have carried a log since their milestones; this document did not, so the
+> Milestone 3 decisions are recorded in §6's *Rationale / exclusions* column and in the milestone's
+> sign-off rather than here. The log runs forward from this entry.
+
+- **2026-08-01** — **Dropped "provisional" from §2.1.** The layering was described as *"Provisional
+  Drupal-oriented layering, finalised here"*, which contradicted itself, and the root `CLAUDE.md` and
+  `spec/tickets/CONVENTIONS.md` §3 both said the layer set would be *"finalised in the Architecture
+  milestone"* — future tense, for a milestone signed off on 2026-07-11. The layering itself is
+  **unchanged**: `content-model → services → theme`, `migration → content-model`, nothing imports
+  `theme`. Only the label changed, in all three places at once, so the three stay identical as §2.1
+  requires. Prompted by the v1.4.3 kit update's rule that anything temporary must name the condition
+  that retires it — this one's condition had been met for three weeks. (Operator approval, 2026-08-01.)

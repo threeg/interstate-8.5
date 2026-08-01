@@ -52,9 +52,18 @@ playwright` uses a dedicated `pw` service (mcr.microsoft.com/playwright:v1.61.1-
 includes all browser deps; the `playwright` tooling does `npm install` then runs the smoke test.
 Smoke test verified against all 5 browser targets (chromium, firefox, webkit, mobile-chrome,
 mobile-safari) — all pass. Pre-commit hook installed: `git config core.hooksPath .githooks` (wired
-in `composer.json` post-install-cmd). `lando test-all` = `lando test && lando playwright` (two
+in `composer.json` post-install-cmd). **[Superseded 2026-07-12 — see the note at the end of `## Notes`.]** `lando test-all` = `lando test && lando playwright` (two
 separate services; run both from the host). **Sanity test:** `lando test` → "All checks passed";
 `lando playwright` → "5 passed".
+
+**2026-08-01 — correction to the pre-commit half of the above.** The hook was made **opt-in** on
+2026-07-12 (`2d063b9`), five days after this ticket landed: the `composer.json` post-install step that
+wired `core.hooksPath` was removed, because running the full gate on every commit is too slow. Everything
+else in this ticket's record stands — the hook file, `tooling/run-tests.sh`, the four gate steps and the
+boundary check are all as delivered. Only the *automatic* part went. **The gate is run by hand** before a
+ticket reaches `in-review`; see `spec/test-strategy/test-strategy.md` §10 and its decisions log. Recorded
+here because this ticket is the origin of the "hook installed" claim that three documents had been
+repeating since.
 
 ## QA steps
 1. `lando test` — should print four numbered steps and end with "All checks passed."

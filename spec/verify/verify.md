@@ -40,8 +40,20 @@
   `use Drupal\interstate_85\...` (theme-namespace imports); fails on any hit.
 - **Coverage gate:** none in slice 1 — no numeric coverage gate (no pure-core layer; lazy adoption,
   test-strategy §2.3).
-- **Pre-commit hook** (`.githooks/pre-commit`, wired via `git config core.hooksPath .githooks`) runs
-  `lando test` automatically.
+- **Pre-commit hook** (`.githooks/pre-commit`) — **opt-in, and deliberately left unwired.** It runs the
+  full `lando test`, which is far too slow to sit on every commit; INT8-006 wired it via a
+  `composer.json` post-install step and that was removed five days later (`2d063b9`, 2026-07-12) for
+  exactly that reason. **Do not wire it**, and do not read an unset `core.hooksPath` as a mistake to fix:
+
+  ```
+  git config core.hooksPath        # expected: empty. '.githooks' means someone opted in.
+  ```
+
+  **What this means for the verifier: nothing gates a commit automatically.** There is no CI in slice 1
+  either (test-strategy §10), so the *only* thing standing between a red gate and a commit is the
+  operator running `lando test` by hand before the ticket reaches `in-review` (root `CLAUDE.md`,
+  *Definition of done*). Treat "the gate was run" as a claim to check against the ticket's `## Notes`,
+  not as something the tooling guaranteed.
 
 ## 2. Where the binding spec lives
 
@@ -131,6 +143,13 @@ git log --format='%h|%s|%(trailers:key=Co-authored-by,valueonly)' <range>
 - **2026-08-01** — v1.4.3 kit update. Added §4b (authorship trailers, kit-seeded — this project runs two
   models), and three extra checks in §5: the `before:`/flag agreement audit, the `spec/contents.md`
   completeness check, and a pointer from the design-source check to the new `design-system.md` §1.1.
+- **2026-08-01** — **Corrected §1's pre-commit claim, which had it backwards.** The bullet said the hook
+  "runs `lando test` automatically". `core.hooksPath` was unset, and the first assumption — that this was
+  an oversight — was wrong: the hook had been made **opt-in on purpose** in `2d063b9` (2026-07-12)
+  because running the whole gate on every commit is too slow. Wiring it to match the document would have
+  been fixing the wrong half. The bullet now records the decision, says explicitly not to wire it, and
+  spells out the consequence for the verifier: with no hook and no CI, nothing gates a commit
+  automatically, so "the gate was run" is a claim to check rather than a guarantee.
 - **2026-07-15** — created during the v1.1.0 kit update. Migrated the gate commands and stack-specific
   checks out of the project's filled-in v1.0.x `sfk-verify` skill (backed up before the copy per the
   changelog `Pre-copy` note), when the skill was made neutral and kit-owned.

@@ -134,7 +134,7 @@ gaps and stays agent-legible — not merely as scaffolding.
 
 ## Architecture dependency rule (enforced, not aspirational)
 
-Provisional Drupal-oriented layering — finalised in the Architecture milestone (§2.1 of
+The Drupal-oriented layering, settled at the Architecture milestone (§2.1 of
 `spec/architecture/architecture.md`), which this section is kept identical to.
 
 `content-model → services → theme`, with `migration` populating the content model and `config`
@@ -172,8 +172,10 @@ Test targets:
 
 - `lando test` — **the default gate**: PHPUnit + **PHPCS** (`Drupal`/`DrupalPractice`) + **PHPStan**
   (deprecation rules) + the dependency-rule boundary check. PHPCS/PHPStan are **scoped to custom code
-  only** (`web/modules/custom` + the custom theme) — **never core/contrib**. Must pass on every ticket
-  and at the pre-commit hook. (PHPStan's deprecation gate is the on-mission guard against the PHP-EOL
+  only** (`web/modules/custom` + the custom theme) — **never core/contrib**. Must pass on every ticket,
+  **run by hand before the ticket reaches `in-review`.** The `.githooks/pre-commit` hook can run it
+  automatically but is **deliberately opt-in and left unwired** — too slow to sit on every commit — so
+  nothing runs the gate for you. (PHPStan's deprecation gate is the on-mission guard against the PHP-EOL
   trap that ended v2.)
 - `lando playwright` — the Playwright + Axe front-end suite (theme / song-screen tickets).
 - `lando test-all` — everything (the default gate **+ Playwright**); required at milestone completion.
