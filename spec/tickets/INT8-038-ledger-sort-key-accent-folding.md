@@ -2,7 +2,7 @@
 id: INT8-038
 title: Fold accents in the ledger's sort key so one letter cannot split into two groups
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: services
@@ -170,3 +170,4 @@ foreach (["Em","Ez","Fa","The Éclair","Émile"] as $t) { echo "$t bucket=" . A:
   `iconv` cannot transliterate, e.g. Cyrillic, yields a literal `?` per character), but it has no
   observable consequence: `#`-bucket rows all share sort rank 1, so whatever `sortKey()` returns for
   them, they stay in one trailing block regardless.
+- 2026-08-01 — done (reviewed).
