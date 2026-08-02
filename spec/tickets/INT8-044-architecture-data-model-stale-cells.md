@@ -2,7 +2,7 @@
 id: INT8-044
 title: Reconcile two stale cells in `architecture.md` §3.1's data-model table
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: docs
@@ -67,15 +67,15 @@ ticket and none being filed here); `content-model.md` §4 and §8, both already 
 rendering, shipped at INT8-019.
 
 ## Definition of done (acceptance criteria)
-- [ ] `architecture.md` §3.1's Music video cell states the settled modelling and the manual-entry
+- [x] `architecture.md` §3.1's Music video cell states the settled modelling and the manual-entry
       descope, cross-referencing `content-model.md` §4.
-- [ ] `architecture.md` §3.1's Exclude from list cell no longer says "Rename pending" and names
+- [x] `architecture.md` §3.1's Exclude from list cell no longer says "Rename pending" and names
       `field_exclude_from_list`.
-- [ ] §3's remaining cells and prose have been swept for the same kind of overtaken language, with the
+- [x] §3's remaining cells and prose have been swept for the same kind of overtaken language, with the
       outcome recorded in `## Notes`.
-- [ ] `architecture.md`'s decisions log carries a dated entry with its evidence.
-- [ ] `lando test` green with zero warnings (no code change expected).
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] `architecture.md`'s decisions log carries a dated entry with its evidence.
+- [x] Gate: docs-only (INT8-046) — no gate required; see `## Notes`.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 
@@ -100,3 +100,24 @@ sed -n '/## 4. Media/,/^## 5/p' spec/architecture/content-model.md
   [INT8-040](INT8-040-redirect-path-map-deferral-drift.md)'s reasoning: no decision is reopened or made
   here — both were settled elsewhere in the spec, and this only propagates them to the document that
   missed them.
+- 2026-08-02 — implemented. Re-confirmed both facts against the repo before editing (per the ticket's
+  own evidence commands): `field_exclude_from_list` is live in `config/sync/`, in
+  `migrate_plus.migration.song.yml:75`, and in `views.view.songs.yml`'s filter; `content-model.md` §4/§8/§9
+  confirm the Remote-video modelling and its 2026-07-19 descope to manual pre-launch entry. Corrected
+  both cells in §3.1 and added a dated §7 decisions-log entry citing that evidence.
+
+  **Sweep of §3's remaining cells and prose (requirement 3): nothing further found.** Read every row in
+  §3.1 (Title, Lyrics, Notes, Quotes, Song type, Parent song, Lyrics same as parent, Legacy id, and the
+  Song type entity row) plus §3.2 and §3.3 for the same "describes a state the build has since
+  overtaken" pattern. Two deferral statements remain, both still true rather than stale:
+  - §3.1's "Deferred seams" paragraph (a song's releases/live/tabs/studio-sessions relationships are
+    inbound from entities not yet built) — those entities are still unbuilt; nothing to correct.
+  - §3.3 point 2 ("Building these redirects is deferred to a future SEO slice") — still an open future
+    deferral, not something the build has since delivered; distinct from
+    [INT8-040](INT8-040-redirect-path-map-deferral-drift.md)'s finding, which was in §6, not here.
+
+  **Gate: docs-only under [INT8-046](INT8-046-scope-default-gate-to-ticket-diff.md).** This ticket's
+  diff is confined to `spec/architecture/architecture.md` and this ticket file — nothing under `web/` or
+  `tooling/` — so per INT8-046's rule no gate needs to run. (INT8-046 postdates this ticket's own DoD
+  text above, which still names `lando test`; applying INT8-046's rule here rather than the now-stale
+  wording, consistent with why INT8-046 exists.)

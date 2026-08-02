@@ -142,11 +142,11 @@ The authoritative field-by-field mapping is in `content-model.md`; this is the o
 | | Lyrics | rich text | Normalised on import (FR-21). |
 | | Notes | rich text | Normalised on import (FR-21). |
 | | Quotes | rich text | Normalised on import (FR-21). |
-| | Music video | media/embed | From `Song_Video` (FR-17); modelling TBD in `content-model.md`. |
+| | Music video | media/embed | From `Song_Video` (FR-17); Core Media *Remote video* via `field_video`, import descoped to manual pre-launch entry (`content-model.md` §4). |
 | | Song type | reference → Song type taxonomy | The band/group (FR-9). |
 | | Parent song | self-reference → Song | Makes this an alternate version (FR-13/FR-20). |
 | | Lyrics same as parent | boolean | Drives the "[same as normal version]" display (FR-20). |
-| | Exclude from list | boolean | v2 `Song_Live`; hides the song from the landing (FR-6). Rename pending. |
+| | Exclude from list | boolean | v2 `Song_Live`; hides the song from the landing (FR-6). Shipped as `field_exclude_from_list`. |
 | | Legacy id | integer (indexed) | v2 `PK_Song_ID`; cross-cutting convention (§3.3). |
 | **Song type** | Name | taxonomy term | e.g. Modest Mouse, Ugly Casanova, Side Projects, Covers (§2.1 of requirements). |
 
@@ -247,3 +247,15 @@ Pinned majors: Drupal 11, Tailwind v4. Keep this section in step with the root `
   `theme`. Only the label changed, in all three places at once, so the three stay identical as §2.1
   requires. Prompted by the v1.4.3 kit update's rule that anything temporary must name the condition
   that retires it — this one's condition had been met for three weeks. (Operator approval, 2026-08-01.)
+- **2026-08-02** — **Corrected two stale cells in §3.1's data-model table (INT8-044).** Both described
+  a state the project had already left behind:
+  - **Music video** read *"modelling TBD in `content-model.md`"*. `content-model.md` §4 settled this on
+    2026-07-07 and revised it at INT8-013: Core Media *Remote video* entities referenced by `field_video`
+    (oEmbed). Because v2 `Song_Video` stored raw embed markup rather than a bare URL, `content-model.md`
+    §9's 2026-07-19 entry descoped the import to **manual, pre-launch entry**; §8's source-mapping table
+    already read *"not imported — `field_video` populated manually, pre-launch"*.
+  - **Exclude from list** read *"Rename pending"*. The rename shipped at INT8-010: `field_exclude_from_list`
+    exists in exported config (`field.storage.node.field_exclude_from_list.yml`), the migration
+    (`migrate_plus.migration.song.yml:75`) and `views.view.songs.yml`'s filter.
+  Neither decision is reopened — both were correct and complete in `content-model.md`; only this
+  document's overview table had not caught up. (`sfk-verify` finding, 2026-08-01; corrected 2026-08-02.)
