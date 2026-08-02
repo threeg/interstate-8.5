@@ -221,7 +221,7 @@ Settled in the prior proposals; made contractual here.
 | Content editing | Core entity/field + **Gin** admin theme | Faster editing than v2. |
 | Media | **Core Media** | Nothing to install; modelling is the work (later slices). |
 | Search | **Search API + DB backend** — **deferred** | Not in slice 1; a View covers the landing (lazy adoption). |
-| URLs | **Pathauto + Redirect** | Preserve the v2→v5 path map at migration (link equity). |
+| URLs | **Pathauto + Redirect** | Clean URLs now; the v2→v5 path map itself is **deferred to a future SEO slice** (§3.3). |
 | Theme | **Owned starterkit theme**, **SDC**, **Tailwind v4** (no SASS), **CSS-custom-property tokens** | Own the stack, minimise contrib. |
 | Layout | **Code-theme entity pages**; **Layout Builder only for the home page** | No per-instance variance on archive pages; keep the entity API clean. |
 | Excluded | Layout Builder for entity pages, **Drupal Canvas** (immature), **SASS**, **React/headless**, contrib Tailwind base themes | Reversible "not now" where relevant (all SDC underneath). |

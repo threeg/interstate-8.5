@@ -167,6 +167,16 @@ Migration is idempotent and rollbackable (FR-4); imported count is verified agai
 
 ## 9. Decisions log
 
+- **2026-08-01** — **Reconciled the v2→v5 redirect path-map claim across the spec** (INT8-040):
+  `api-contract.md` §1/§4 and `architecture.md` §6 stated, unqualified, that the path map is
+  "preserved at migration" — asserting delivered behaviour that does not exist. `architecture.md` §3.3
+  and this document's own legacy-id rationale (above) already correctly stated the deferral; those two
+  are the correct reading and stand unchanged. Verified against the live site before editing: the
+  `redirect` table holds 10 rows against 492 songs — the Redirect module's own automatic entries for
+  changed URL aliases, not a v2 path map — and no ticket, `FR`, or `NFR` implements one. No decision is
+  reopened here; the deferral already existed in two of the four documents, and this only propagates it
+  to the other two (plus a fifth occurrence in `api-contract.md` §4's traceability table, found while
+  fixing §1).
 - **2026-07-28** — **The Songs landing (`/songs`) stays uncacheable for the Dynamic Page Cache through
   slice 1** (INT8-037; corrects a caching claim in INT8-018's notes — see that ticket). `cache: none` on
   `views.view.songs` (needed since INT8-018 to stop Views' result cache from serving one result set

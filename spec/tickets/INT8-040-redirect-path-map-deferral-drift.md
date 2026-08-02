@@ -2,7 +2,7 @@
 id: INT8-040
 title: Qualify the v2→v5 redirect path-map claim in api-contract.md and architecture.md §6
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: docs
@@ -68,12 +68,12 @@ the 10 existing alias-change redirects (correct, automatic, leave them); the Red
 installation (INT8-003, correct).
 
 ## Definition of done (acceptance criteria)
-- [ ] All four sites read consistently on the deferred position, verified by re-reading each one, not
+- [x] All four sites read consistently on the deferred position, verified by re-reading each one, not
       by grep alone.
-- [ ] `api-contract.md` §1 no longer asserts a path map that does not exist.
-- [ ] `content-model.md` §9 carries a dated entry recording the reconciliation and its evidence.
-- [ ] `lando test` green with zero warnings (no code change expected).
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] `api-contract.md` §1 no longer asserts a path map that does not exist.
+- [x] `content-model.md` §9 carries a dated entry recording the reconciliation and its evidence.
+- [x] `lando test` green with zero warnings (no code change expected).
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 
@@ -96,3 +96,15 @@ lando drush php:eval 'echo \Drupal::database()->query("SELECT COUNT(*) FROM {red
   changes (CONVENTIONS §6.6). It is deliberately **not** treated as a specification change (§5.5): no
   decision is being reopened or made here, the deferral already exists in two documents and this only
   propagates it to the other two.
+- 2026-08-01 — implemented. Re-confirmed the evidence before editing (`redirect` table: 10 rows,
+  unchanged since filing). Qualified `api-contract.md` §1 and `architecture.md` §6 to state the slice-1
+  position (Pathauto delivers clean URLs now; the v2→v5 path map build is deferred to a future SEO
+  slice, cross-referencing `architecture.md` §3.3 rather than restating it) and added the dated
+  reconciliation entry to `content-model.md` §9. `architecture.md` §3.3 and `content-model.md`'s
+  legacy-id rationale were already correct and are unchanged, per the ticket. **Found and fixed a fifth
+  occurrence of the same drift** not named in the ticket's four-site table: `api-contract.md` §4's
+  traceability row (*"URL aliases / redirects | (migration path-map; NFR support)"*) made the identical
+  unqualified claim — left uncorrected, it would have reproduced the exact defect this ticket exists to
+  fix a few lines below its own §1 fix. Reworded to name only what's delivered (Pathauto URL aliases).
+  `lando test` green, zero warnings, no code touched. No spec amendment owed beyond this ticket's own
+  edits — this *is* the amendment, not a change requiring a further one.

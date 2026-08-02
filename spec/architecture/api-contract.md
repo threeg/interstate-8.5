@@ -15,9 +15,10 @@
 
 ## 1. Conventions
 
-Server-rendered HTML over HTTPS. Clean URLs via **Pathauto**, with **Redirect** preserving the v2→v5
-path map at migration (link equity). No authentication on the public read surface. No pagination on
-the Songs landing (FR-7).
+Server-rendered HTML over HTTPS. Clean URLs via **Pathauto**. **Redirect** is installed for the v2→v5
+path map (link equity), but building that map is **deferred to a future SEO slice** — slice 1 captures
+only the enabling `field_legacy_id` (architecture.md §3.3). No authentication on the public read
+surface. No pagination on the Songs landing (FR-7).
 
 ---
 
@@ -66,4 +67,4 @@ JSON:API is a switch, not a remodel. Until then there is **no programmatic API s
 |---------|------------|
 | `GET /songs` | FR-6, FR-7, FR-8, FR-9, FR-10, FR-11 |
 | `GET /songs/<slug>` | FR-12, FR-13, FR-14, FR-15, FR-16, FR-17, FR-20 |
-| URL aliases / redirects | (migration path-map; NFR support) |
+| URL aliases | Pathauto (clean URLs; NFR support) |
