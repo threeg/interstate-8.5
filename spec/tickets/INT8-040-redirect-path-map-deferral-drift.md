@@ -2,7 +2,7 @@
 id: INT8-040
 title: Qualify the v2→v5 redirect path-map claim in api-contract.md and architecture.md §6
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: docs
@@ -108,3 +108,4 @@ lando drush php:eval 'echo \Drupal::database()->query("SELECT COUNT(*) FROM {red
   fix a few lines below its own §1 fix. Reworded to name only what's delivered (Pathauto URL aliases).
   `lando test` green, zero warnings, no code touched. No spec amendment owed beyond this ticket's own
   edits — this *is* the amendment, not a change requiring a further one.
+- 2026-08-01 — done (reviewed).
