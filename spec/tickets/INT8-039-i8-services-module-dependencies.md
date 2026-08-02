@@ -2,7 +2,7 @@
 id: INT8-039
 title: Declare i8_services' module dependencies and correct its stale description
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: services
@@ -130,3 +130,4 @@ lando drush php:eval 'print_r(\Drupal::service("extension.list.module")->getExte
   (showed the two cascade-deletes plus one changed entity-view-display), `config:import`, `config:status`
   clean, confirmed `/songs` returns 200 again. This is expected behaviour for any module owning
   Views/Block plugins other config depends on, not a defect in the dependency list.
+- 2026-08-01 — done (reviewed).
