@@ -2,7 +2,7 @@
 id: INT8-044
 title: Reconcile two stale cells in `architecture.md` §3.1's data-model table
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: docs
