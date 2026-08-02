@@ -169,7 +169,18 @@ the v2 dump so migration spot-checks and FE tests share one fixture.
 
 Binding checklist — kept in sync with root `CLAUDE.md` and the ticket template:
 
-- [ ] The default gate (`lando test` — PHPUnit + PHPCS + PHPStan on custom code + boundary check) passes **with zero warnings** (PHPStan reports **no deprecated-API usage**).
+- [ ] **The gate scoped to what the ticket's diff actually touches** (INT8-046) passes with zero
+      warnings — never scoped by the ticket's stated category, since a ticket believed docs-only that
+      turns out to touch code still needs the gate that change requires:
+  - **Docs-only** (only `spec/**`, ticket/`BOARD.md` files): no gate to run.
+  - **Pure-styling** (formatting/comments/docblocks, no logic change): `lando lint` (PHPCS + PHPStan +
+    the boundary check) suffices.
+  - **Everything else — including build-plumbing** (module dependencies, `.services.yml`, routing) and
+    all code/behaviour changes: the full `lando test` (PHPStan reports **no deprecated-API usage**).
+    Deliberate: a wrong or missing `.info.yml` dependency is exactly the defect class PHPUnit's Kernel
+    tests catch (a module failing to install/boot correctly), which PHPCS/PHPStan cannot see.
+    `tests_required: false` on a build-plumbing ticket exempts it from writing a *new* test test-first;
+    it does not shrink which gate has to pass.
 - [ ] New/changed numbered-requirement behaviour has tests **in the same commit** (§12.2 rule).
 - [ ] The relevant heavier suite passes where the ticket says so (`lando playwright` for theme/song-screen tickets).
 - [ ] The dependency-rule boundary check passes (§5).
@@ -227,6 +238,17 @@ the exemption in the body.
   six. Nothing about *what* is tested changes. (Operator confirmation, 2026-08-01.)
 - **2026-07-11** — **Boundary-check tool (deptrac vs custom) finalized at scaffolding**; runs in the
   default gate.
+- **2026-08-02** — **Narrowed INT8-042's "`lando lint` never substitutes for `lando test`" rule.**
+  INT8-042 kept the definition of done at a blanket full `lando test` for every ticket; INT8-043 then
+  spent ~17 minutes, nearly all of it one `lando test` run, verifying a single-line `.info.yml`
+  dependency addition. The fix is to scope the required gate to what the ticket's **diff** touches, not
+  to its stated category: docs-only needs no gate (nothing under `web/`/`tooling/` changed, so neither
+  PHPCS/PHPStan nor PHPUnit has anything new to check); pure-styling needs only `lando lint` (PHPUnit's
+  outcome is provably unaffected by formatting); everything else — explicitly including build-plumbing
+  — keeps the full `lando test`. Categorising by `tests_required` alone was considered and rejected:
+  INT8-043 is itself `tests_required: false` (build-plumbing) and is exactly the class of change
+  PHPUnit's Kernel tests exist to catch (a module failing to install/boot on a wrong dependency list),
+  so a category-based exemption would have removed real coverage rather than redundant ceremony.
 
 ---
 

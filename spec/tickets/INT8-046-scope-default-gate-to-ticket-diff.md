@@ -2,7 +2,7 @@
 id: INT8-046
 title: Scope the definition-of-done gate to what a ticket's diff actually touches
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: docs
@@ -67,11 +67,11 @@ which govern whether a *new* test must be written test-first and are orthogonal 
 existing behaviour is checked against.
 
 ## Definition of done (acceptance criteria)
-- [ ] Root `CLAUDE.md`'s *Definition of done* section states the three-way scope (docs-only / pure-styling
+- [x] Root `CLAUDE.md`'s *Definition of done* section states the three-way scope (docs-only / pure-styling
       / everything else) and that it follows the diff, not the ticket's category.
-- [ ] Root `CLAUDE.md`'s `lando lint` bullet reflects the narrowed rule.
-- [ ] `spec/test-strategy/test-strategy.md` §9 matches, and §11 has a dated decisions-log entry.
-- [ ] Ticket status + notes and `BOARD.md` row updated in the same commit.
+- [x] Root `CLAUDE.md`'s `lando lint` bullet reflects the narrowed rule.
+- [x] `spec/test-strategy/test-strategy.md` §9 matches, and §11 has a dated decisions-log entry.
+- [x] Ticket status + notes and `BOARD.md` row updated in the same commit.
 
 ## Tests / verification
 

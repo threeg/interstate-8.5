@@ -182,10 +182,12 @@ Test targets:
   **Not a single wired command:** the gate runs on the `appserver` service and Playwright on the
   separate `pw` compose service, so run `lando test` **then** `lando playwright` from the host (decided
   in INT8-006; see `spec/test-strategy/test-strategy.md` §2.2).
-- `lando lint` — **fast dev convenience only** (INT8-042): PHPCS + PHPStan + the boundary check, no
-  PHPUnit. Useful mid-ticket to re-check a style/static-analysis fix in seconds instead of the ~5+
-  minutes PHPUnit adds. **Does not replace `lando test`** in the definition of done — a ticket still
-  needs a clean `lando test` before it reaches `in-review`.
+- `lando lint` — PHPCS + PHPStan + the boundary check, no PHPUnit (INT8-042). Useful mid-ticket to
+  re-check a style/static-analysis fix in seconds instead of the ~5+ minutes PHPUnit adds. **Since
+  INT8-046, it also satisfies the definition of done for a pure-styling ticket** (see *Definition of
+  done*) — it does **not** substitute for `lando test` on any ticket that changes behaviour, module
+  wiring (`.info.yml` dependencies, `.services.yml`, routing), or anything else PHPUnit's Kernel tests
+  exercise.
 
 ## Commit protocol (who runs git)
 
@@ -211,18 +213,38 @@ is safe in every runtime.
 
 ## Definition of done (implementation tickets)
 
-A ticket reaches **`in-review`** (ready for the user's review) when: the default gate passes **with
-zero warnings**; **red-green was followed** — the failing test was written first and confirmed to fail
-for the right reason, or the test strategy explicitly exempts that layer (say which in the completion
-report); new/changed numbered-requirement behaviour has tests **in the same commit**; the
-relevant heavier gate passes where the ticket says so; **any spec amendment this ticket required was made
-*before* the code that depends on it, and is referenced from the ticket**; and the ticket's status +
-`## Notes` and its `BOARD.md` row are updated in that commit. It becomes **`done`** only after the user
-reviews it — `sfk-next-ticket` finalizes the previous `in-review` ticket on its next run (invoking it is
-approval), or `sfk-close-ticket` finalizes it without starting another, each in a small status-only
-commit. **`sfk-signoff` does not finalize tickets** — it refuses to run while one is open, so a building
-milestone ends with `sfk-close-ticket` then `sfk-signoff`. Docs-only, pure-styling and build-plumbing
-tickets may set `tests_required: false` and must state the exemption in the body.
+A ticket reaches **`in-review`** (ready for the user's review) when: **the gate scoped to what the
+ticket actually changed** passes with zero warnings (below); **red-green was followed** — the failing
+test was written first and confirmed to fail for the right reason, or the test strategy explicitly
+exempts that layer (say which in the completion report); new/changed numbered-requirement behaviour has
+tests **in the same commit**; the relevant heavier gate passes where the ticket says so; **any spec
+amendment this ticket required was made *before* the code that depends on it, and is referenced from the
+ticket**; and the ticket's status + `## Notes` and its `BOARD.md` row are updated in that commit. It
+becomes **`done`** only after the user reviews it — `sfk-next-ticket` finalizes the previous `in-review`
+ticket on its next run (invoking it is approval), or `sfk-close-ticket` finalizes it without starting
+another, each in a small status-only commit. **`sfk-signoff` does not finalize tickets** — it refuses to
+run while one is open, so a building milestone ends with `sfk-close-ticket` then `sfk-signoff`. Docs-only,
+pure-styling and build-plumbing tickets may set `tests_required: false` and must state the exemption in
+the body.
+
+**Which gate, scoped by what the ticket's diff actually touches (INT8-046)** — the scope follows the
+diff, never the ticket's stated category; a ticket believed docs-only that turns out to touch code still
+needs the gate that change requires:
+
+- **Docs-only** (only `spec/**`, ticket/`BOARD.md` files — nothing under `web/` or `tooling/`): no gate
+  to run — neither PHPCS/PHPStan nor PHPUnit has anything new to check.
+- **Pure-styling** (formatting/comments/docblocks only — no logic change, and PHPUnit's behaviour is
+  provably unaffected): `lando lint` (PHPCS + PHPStan + the boundary check) suffices.
+- **Everything else — including build-plumbing** (module dependencies, `.services.yml`, routing, or
+  anything else module-install-order-sensitive) and all code/behaviour changes: the full `lando test`.
+  This is deliberate, not an oversight — a wrong or missing `.info.yml` dependency is exactly the class
+  of defect PHPUnit's Kernel tests catch (a module failing to install/boot correctly), which PHPCS/PHPStan
+  cannot see. `tests_required: false` on a build-plumbing ticket exempts it from writing a *new* test
+  test-first; it does not shrink which gate has to pass.
+
+This narrows INT8-042's original rule ("`lando lint` never substitutes for `lando test`") to build-
+plumbing/behavioural changes only; docs-only and pure-styling tickets now use the lighter gate above.
+See `spec/test-strategy/test-strategy.md` §9/§11 for the full reasoning and decisions-log entry.
 
 End each ticket with a **completion report**. In the **chat response**, open with the ticket **id and
 title** and its **`## In plain English`** line, then give: (1) a short plain-language **summary**;
