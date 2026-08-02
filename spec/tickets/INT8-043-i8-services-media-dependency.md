@@ -2,7 +2,7 @@
 id: INT8-043
 title: Declare `i8_services`' missing `drupal:media` dependency
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: services
