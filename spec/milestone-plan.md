@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Milestone plan and progress tracker |
 | **Repository location** | `spec/milestone-plan.md` |
-| **Last updated** | 2026-08-02 (Milestone 9 (Implementation) signed off — `5.0.x-dev` complete) |
+| **Last updated** | 2026-08-02 (`sfk-version` laid down `5.0.x-dev2` — slice 2, Milestones 10–18) |
 
 This document is the single source of truth for **where the project is**. It is extracted from the
 project brief so the brief stays stable after approval while this tracker is updated as each milestone
@@ -17,16 +17,25 @@ together, commit by commit.
 
 ## Current position
 
-Version `5.0.x-dev` (v5 first release, delivered in vertical slices) — **all nine milestones complete,
-signed off 2026-08-02 and tagged `5.0.x-dev1`.** Slice 1 shipped: the Songs content model and the v2
-migration (492 songs), the theme foundation (header, footer, nav, hero region, shared atoms), and the
-Songs section (landing ledger with filters, song page, alternate versions), on Drupal 11 under Lando
-with the default gate and the Playwright + Axe suite both green.
+Version `5.0.x-dev2` (slice 2 — consolidation) — **Milestone 10 (Version brief — review and ratify),
+`Not started` (⬜).** The version brief exists as a **draft** (`spec/brief/5.0.x-dev2-brief.md`, laid
+down by `sfk-version` 2026-08-02); Milestone 10 is its review and ratification, and `sfk-next-milestone`
+is what starts it.
 
-**Next: `sfk-version` to start slice 2.** Two parked decisions and one open question carry into its
-planning — `TODO-001` (redesign the song page's alternate-version composition), `TODO-002`
-(install-required content is not reproducible from the repository), and `S-1` (the `song_type`
-equal-weight tie-break, unreachable on today's four types).
+Slice 2 is a **short consolidation slice, not a new content type.** It finishes the two screens slice 1
+actually designed — the song page's alternate-version composition (`TODO-001`) and a homepage hero with
+the nav over it — restructures the design sources to one design file per page before that layout is
+copied into every future slice, and closes the install-required-content gap (`TODO-002`). Slice 3 opens
+the next content type on a clean base.
+
+`S-1` (the `song_type` equal-weight tie-break) stays open and is **not** in slice 2's scope: no external
+dependency, so no lead time, and unreachable on today's four types.
+
+> **Slice 1 (`5.0.x-dev`) is complete** — all nine milestones signed off 2026-08-02 and tagged
+> `5.0.x-dev1`. It shipped the Songs content model and the v2 migration (492 songs), the theme
+> foundation (header, footer, nav, hero region, shared atoms), and the Songs section (landing ledger with
+> filters, song page, alternate versions), on Drupal 11 under Lando with the default gate and the
+> Playwright + Axe suite both green.
 
 > **Signed off with one ticket open, deliberately.** [`INT8-047`](tickets/INT8-047-reconcile-batch-record-drift.md)
 > (reconcile six record drifts left by the INT8-043–046 batch) is still `todo` and stays on the board for
@@ -57,11 +66,34 @@ equal-weight tie-break, unreachable on today's four types).
 | 8 | Repository setup & scaffolding | Drupal 11 + Lando up, essential contrib + admin theme, theme scaffold, dependency-rule check wired in, `sfk-verify` filled for the stack | Code | ✅ |
 | 9 | Implementation, slice by slice | working slice 1 — Songs import + Songs section pages built to the designs; tickets updated in the same commits | Code | ✅ |
 
-<!-- Later slices/versions append their own table and run as a DELTA PASS (see spec/README.md):
-     a slice brief drives requirement deltas rather than a fresh spec. -->
-
 _Note: the homepage is **design-only** in slice 1 (Milestones 4–5) and serves as the project's
 go/no-go viability gate; only the Song-section designs are implemented in Milestone 9._
+
+### `5.0.x-dev2` — v5 slice 2, consolidation (in planning)
+
+Run as a **delta pass** (`spec/README.md`, *How versions evolve*): the version brief drives requirement
+deltas against the living spec rather than a fresh specification. Scope in
+[`spec/brief/5.0.x-dev2-brief.md`](brief/5.0.x-dev2-brief.md).
+
+| # | Milestone | Deliverable | Tool | Status |
+|---|-----------|-------------|------|--------|
+| 10 | Version brief — review and ratify | `spec/brief/5.0.x-dev2-brief.md` reviewed and approved (the draft already exists; this milestone is its ratification) | Cowork | ⬜ |
+| 11 | Requirement deltas | `spec/requirements/requirements.md` — new `FR`/`NFR` for the homepage hero + image library and for content reproducibility; amend-in-place for the song-page alternates. Settles D-c (random-selection semantics vs render cache) | Cowork | ⬜ |
+| 12 | Architecture & content-model deltas | `spec/architecture/architecture.md` + `content-model.md` — the hero block type, the message field and how the image library is modelled (D-b); the install-required-content mechanism and whether it is slice-2 scope (D-d, `TODO-002`) | Cowork | ⬜ |
+| 13 | Wireframe deltas | `spec/wireframes/` — alternate-version placement inside the real song page (D-a) and the homepage hero; wireframe cleanup, and whether wires stay binding for state coverage (D-e) | Cowork | ⬜ |
+| 14 | Design deltas | `spec/design/` — **restructure first**: one design file per page, a tokens page, a components page, with the components-page precedence rule (D-g) and the token authority call (D-f) written into `design-system.md` §1/§1.1; **then** the song-page and homepage-hero designs authored into the new layout | Cowork | ⬜ |
+| 15 | Test-strategy delta | `spec/test-strategy/test-strategy.md` — coverage for the new hero and nav-over-hero, and what would actually catch the reproducibility gap | Cowork | ⬜ |
+| 16 | Ticket generation | `spec/tickets/*.md` + a `BOARD.md` slice-2 section; re-milestones `INT8-047`; tombstones `TODO-001`/`TODO-002` in `spec/TODO.md` *Resolved* | Cowork | ⬜ |
+| 17 | Tooling deltas | only the plumbing M12's mechanism decision requires — a new dependency (e.g. `default_content`) and/or a reproducibility gate. Scoped to that alone; **not** a second scaffolding pass, and a gate change belongs here rather than inside a feature ticket | Code | ⬜ |
+| 18 | Implementation | slice 2 built: song-page alternates rebuilt to the new design, homepage hero + nav wired and tested, reproducibility mechanism landed; tickets updated in the same commits | Code | ⬜ |
+
+_Note: **Milestone 14 is sequenced internally** — the design-source restructure lands before the new page
+designs are authored, or they are authored into a layout that is about to change. **Milestone 17 is
+conditional on M12**: if the reproducibility decision needs no new dependency, gate or build change, it is
+dropped rather than filled._
+
+<!-- Later slices/versions append their own table and run as a DELTA PASS (see spec/README.md):
+     a slice brief drives requirement deltas rather than a fresh spec. -->
 
 ---
 
