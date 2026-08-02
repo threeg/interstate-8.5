@@ -158,7 +158,7 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 | C16 | [INT8-043](INT8-043-i8-services-media-dependency.md) | Declare `i8_services`' missing `drupal:media` dependency | task | services | cleanup | | ✅ done | [INT8-039](INT8-039-i8-services-module-dependencies.md) |
 | C17 | [INT8-044](INT8-044-architecture-data-model-stale-cells.md) | Reconcile two stale cells in `architecture.md` §3.1's data-model table | task | docs | cleanup | | ⬜ todo | [INT8-010](INT8-010-song-content-type.md), [INT8-013](INT8-013-songs-migration.md) |
 | C18 | [INT8-045](INT8-045-open-questions-register-first-rows.md) | Clear the open-questions template rows and record the song-type weight tie-break as `S-1` | task | docs | cleanup | | ⬜ todo | [INT8-041](INT8-041-type-filter-published-terms.md) |
-| C19 | [INT8-046](INT8-046-scope-default-gate-to-ticket-diff.md) | Scope the definition-of-done gate to what a ticket's diff actually touches | task | docs | cleanup | | 👀 in-review | [INT8-042](INT8-042-fast-lint-only-gate.md) |
+| C19 | [INT8-046](INT8-046-scope-default-gate-to-ticket-diff.md) | Scope the definition-of-done gate to what a ticket's diff actually touches | task | docs | cleanup | | ✅ done | [INT8-042](INT8-042-fast-lint-only-gate.md) |
 
 > [**INT8-022**](INT8-022-broaden-boundary-check.md) was promoted into the main execution-order table above (row 12, before [INT8-012](INT8-012-song-type-migration.md)) — its
 > own DoD required it be worked before the first migration module landed. Recorded three ways per

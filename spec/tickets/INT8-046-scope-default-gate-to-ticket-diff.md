@@ -2,7 +2,7 @@
 id: INT8-046
 title: Scope the definition-of-done gate to what a ticket's diff actually touches
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: docs
