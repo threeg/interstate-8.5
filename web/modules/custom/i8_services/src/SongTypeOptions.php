@@ -35,6 +35,10 @@ final class SongTypeOptions {
    * taxonomy-term query-access hook, so it filters nothing by itself; the
    * explicit status condition below is what actually scopes the result.
    *
+   * Equal-weight terms are ordered by whatever the database returns
+   * (undefined) — see open-questions.md S-1, unpinned since no two
+   * song_type terms currently share a weight.
+   *
    * @return \Drupal\taxonomy\TermInterface[]
    *   The published song_type terms.
    */

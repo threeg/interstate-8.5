@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Open questions register |
 | **Repository location** | `spec/open-questions.md` |
-| **Last updated** | 2026-08-01 (register created at the v1.4.3 kit update; no rows yet) |
+| **Last updated** | 2026-08-02 (`S-1` recorded — the `song_type` weight tie-break, INT8-045) |
 
 A live register of **values we are not certain about but are building against anyway** — something a
 client has yet to supply, a rule inferred from a sample, a system we have no access to yet.
@@ -68,8 +68,6 @@ sharpening accumulates instead of being lost in conversation.
 
 | Id | Question | Why we need it | What we assume until told otherwise | Answer | Needed by |
 |----|----------|----------------|--------------------------------------|--------|-----------|
-| `Q-1` | <One plain sentence. No ids, no file names, no jargon.> | <One line a non-technical reader understands.> | <the value we are building to> | | <date or milestone> |
-| `Q-2` | <…> | <…> | <…> | | <…> |
 
 <!-- Good: "Your brand guide shows four different greens. Which one should headings use?"
      Bad:  "Confirm token value for --color-heading per design-system §2.1."
@@ -84,7 +82,7 @@ sharpening accumulates instead of being lost in conversation.
 
 | Id | Question | Why it matters | What we assume for now | Resolution |
 |----|----------|----------------|------------------------|------------|
-| `S-1` | <…> | <…> | <…> | |
+| `S-1` | When two `song_type` terms share a weight, what decides which the Type filter offers first? | `SongTypeOptions::getTerms()` sorts on weight alone, so a tie is resolved by the database's returned order — undefined, and different from the stable-`uasort()` order the same method used before INT8-041. | Ties are not reachable — today's four types have distinct weights — and the current behaviour stands unpinned until a fifth type shares one. | left open |
 
 ---
 
@@ -120,3 +118,12 @@ document — a silently-corrected value is indistinguishable from a bug.
   `content-model.md` §4 settled the Remote-video modelling on 2026-07-07 and revised it at INT8-013. It is
   spec drift for `sfk-verify`, not a row here. Slice 1 has been built against a v2 database the project
   owns outright, so there is no third party to owe us a `Q-n`.
+- **2026-08-02** — **First real row, and the template placeholders cleared (INT8-045).** `Q-1`/`Q-2`/`S-1`
+  had sat as the kit template's own `<…>` stubs since creation — indistinguishable from real unanswered
+  rows to a reader or a `grep`, which is exactly what rule 1's "ids are permanent" is meant to prevent.
+  Removed all three (they never named a real question, so no permanent id is actually retired) and used
+  the vacated `S-1` for the register's first genuine entry: the `song_type` equal-weight tie-break that
+  surfaced during [INT8-041](tickets/INT8-041-type-filter-published-terms.md)'s review, where it was
+  correctly identified as unpinned but recorded in the ticket's own notes instead of here. Root
+  `CLAUDE.md`'s rule is that recording an unknown needs no permission — INT8-041 did the hard half (noticing
+  it, not guessing) right; only its destination was wrong, and this entry is that correction.

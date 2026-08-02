@@ -2,7 +2,7 @@
 id: INT8-045
 title: Clear the open-questions template rows and record the song-type weight tie-break as `S-1`
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: docs
@@ -86,13 +86,13 @@ matching behaviour (INT8-032, unchanged); term weights in the exported vocabular
 which is a different file with different rules.
 
 ## Definition of done (acceptance criteria)
-- [ ] `spec/open-questions.md` §1 and §2 contain no template placeholder rows.
-- [ ] §2 carries a real `S-1` for the equal-weight tie-break, with all four columns filled in the
+- [x] `spec/open-questions.md` §1 and §2 contain no template placeholder rows.
+- [x] §2 carries a real `S-1` for the equal-weight tie-break, with all four columns filled in the
       register's own plain-language register.
-- [ ] `SongTypeOptions::getTerms()` cites `S-1` in a comment beside the weight sort.
-- [ ] §4's notes log carries a dated entry covering both halves.
-- [ ] `lando test` green with zero warnings (comment-only code change; PHPCS must still pass).
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] `SongTypeOptions::getTerms()` cites `S-1` in a comment beside the weight sort.
+- [x] §4's notes log carries a dated entry covering both halves.
+- [x] Gate: pure-styling (INT8-046) — `lando lint` green, zero warnings; see `## Notes`.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 
@@ -115,3 +115,19 @@ grep -rn "S-1" spec/open-questions.md web/modules/custom/
   ambiguity, and adding the row without clearing them would put a real `S-1` beside a stub `S-1`.
   Worth naming plainly for the record: INT8-041 did the hard half right — it noticed the unpinned value,
   resisted guessing it, and wrote down exactly what was unknown. Only the destination was wrong.
+- 2026-08-02 — implemented. Removed `Q-1`/`Q-2`/`S-1`'s template stub rows from §1/§2 (each table now
+  header-only); none named a real question, so no permanent id was actually retired. Added the real
+  `S-1` (`song_type` equal-weight tie-break) to §2 with all four columns filled from this ticket's own
+  content, and a dated §4 notes-log entry covering both halves. Cited `S-1` in
+  `SongTypeOptions::getTerms()`'s docblock beside the `->sort('weight')` call. Also updated the
+  register's own header "Last updated" line, which still read "no rows yet."
+
+  **Gate: pure-styling under [INT8-046](INT8-046-scope-default-gate-to-ticket-diff.md).** The only code
+  touch is a docblock comment (no logic change, PHPUnit's outcome provably unaffected), so `lando lint`
+  — not the full `lando test` — is the required gate here: PHPCS 14/14, PHPStan no errors, boundary
+  check 0 violations, all in ~4 seconds instead of the ~10+ minutes a full run would add. Second use of
+  INT8-046's rule, and the first time it actually shortened a ticket rather than confirming the full gate
+  was still required (as it did for INT8-044).
+
+  Sanity check run: `grep -rn "S-1" spec/open-questions.md web/modules/custom/` → resolves in both
+  directions (the register row, the code comment), nothing else.
