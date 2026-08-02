@@ -155,6 +155,9 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 | C13 | [INT8-040](INT8-040-redirect-path-map-deferral-drift.md) | Qualify the v2→v5 redirect path-map claim in `api-contract.md` and `architecture.md` §6 | task | docs | cleanup | | ✅ done | [INT8-011](INT8-011-pathauto-songs.md) |
 | C14 | [INT8-041](INT8-041-type-filter-published-terms.md) | Scope the Songs landing's Type-filter term lookup to published terms | task | services | cleanup | | ✅ done | [INT8-018](INT8-018-songs-landing.md), [INT8-035](INT8-035-move-entity-queries-out-of-the-theme.md) |
 | C15 | [INT8-042](INT8-042-fast-lint-only-gate.md) | Add a fast lint-only check alongside the default gate | task | tooling | cleanup | | ✅ done | [INT8-006](INT8-006-test-tooling-gate.md) |
+| C16 | [INT8-043](INT8-043-i8-services-media-dependency.md) | Declare `i8_services`' missing `drupal:media` dependency | task | services | cleanup | | ⬜ todo | [INT8-039](INT8-039-i8-services-module-dependencies.md) |
+| C17 | [INT8-044](INT8-044-architecture-data-model-stale-cells.md) | Reconcile two stale cells in `architecture.md` §3.1's data-model table | task | docs | cleanup | | ⬜ todo | [INT8-010](INT8-010-song-content-type.md), [INT8-013](INT8-013-songs-migration.md) |
+| C18 | [INT8-045](INT8-045-open-questions-register-first-rows.md) | Clear the open-questions template rows and record the song-type weight tie-break as `S-1` | task | docs | cleanup | | ⬜ todo | [INT8-041](INT8-041-type-filter-published-terms.md) |
 
 > [**INT8-022**](INT8-022-broaden-boundary-check.md) was promoted into the main execution-order table above (row 12, before [INT8-012](INT8-012-song-type-migration.md)) — its
 > own DoD required it be worked before the first migration module landed. Recorded three ways per
@@ -192,6 +195,24 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 > filter option that misbehaves only for an unpublished song type (none of the four are) — so neither
 > is a gate failure of the kind §6.5 promotes. [**INT8-040**](INT8-040-redirect-path-map-deferral-drift.md) is the same shape as [INT8-032](INT8-032-song-type-name-drift.md): one fact
 > spelled two ways across the spec, with no decision reopened.
+
+> **[INT8-043](INT8-043-i8-services-media-dependency.md) through [INT8-045](INT8-045-open-questions-register-first-rows.md)** were filed by `sfk-verify` on the [INT8-038](INT8-038-ledger-sort-key-accent-folding.md)–042 cleanup batch with **both gates
+> green** — `lando test` 89 tests / 234 assertions, zero PHPCS/PHPStan warnings, boundary 0 violations;
+> `lando playwright` 565/565 across all five browsers. No critical findings. All three are cleanup
+> backlog: none changes anything a user can see and none fails a gate (CONVENTIONS §6.6).
+> [**INT8-043**](INT8-043-i8-services-media-dependency.md) finishes [INT8-039](INT8-039-i8-services-module-dependencies.md) to its own definition of done — the dependency list it wrote
+> missed `drupal:media`, which `HeroBackgroundFormatter::isApplicable()` hard-codes as a string literal;
+> the same *dynamic-reference* method that ticket used for `drupal:image` and `drupal:responsive_image`
+> is what catches it. [**INT8-044**](INT8-044-architecture-data-model-stale-cells.md) and [**INT8-045**](INT8-045-open-questions-register-first-rows.md) are both the [INT8-032](INT8-032-song-type-name-drift.md)/[INT8-040](INT8-040-redirect-path-map-deferral-drift.md) shape — the
+> record lagging behind what shipped — and neither reopens a decision.
+
+> **[INT8-045](INT8-045-open-questions-register-first-rows.md) records a process deviation as well as fixing it.** [INT8-041](INT8-041-type-filter-published-terms.md) surfaced a genuinely
+> unpinned value (equal-weight tie-break order for `song_type` terms, which its rewrite moved from a
+> stable `uasort()` to the database's returned order) and wrote it into its own `## Notes` as a question
+> for the site owner. Root `CLAUDE.md` puts that in `spec/open-questions.md` instead, as a row, without
+> asking first — recording what we don't know needs no permission; it is `spec/TODO.md`, which parks
+> *work*, where the offer-and-wait rule applies. The hard half was done right: the value was noticed and
+> not guessed. Only its destination was wrong.
 
 > **A fifth finding is deliberately *not* a ticket.** The site's own presentation depends on content
 > entities that exist only in the development database — the main menu's Home and **Songs** links
