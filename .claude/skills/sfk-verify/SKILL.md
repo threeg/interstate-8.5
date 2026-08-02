@@ -205,6 +205,21 @@ file and section. If a check found nothing, say so — a silent check is indisti
 - **Code mode:** for accepted findings, draft **cleanup tickets** per `spec/tickets/CONVENTIONS.md` §6:
   ordinary `task` tickets, `batch: cleanup`, `implements: []`, numbered after the current highest id, placed
   in the Cleanup backlog table in `BOARD.md`. Do not auto-promote — flag candidates and let the user decide.
+
+  > **Hand the drafting to the `tests` model, where one is configured** (root `CLAUDE.md` › *Project &
+  > kit* › *Models* names a `tests` model distinct from `implementation`). Spawn a subagent pinned to it
+  > and have it write the ticket from **the finding and the spec alone** — no implementation sketch, no
+  > hint of how you would fix it. Bring the ticket back and carry on here.
+  >
+  > **Why these tickets and not every ticket:** a ticket's acceptance criteria are what the implementer's
+  > work is later checked against, so a model writing both can set itself a bar it finds easy — the same
+  > grader ≠ graded reasoning the kit already applies to tests. Tickets from the *generation milestone*
+  > don't need it, because you review and sign those off; **a cleanup ticket has no such gate** — it goes
+  > straight to the backlog from a finding this session produced. That missing gate is the whole reason.
+  >
+  > The ticket's commit carries a `Co-authored-by` trailer for the model that drafted it, exactly as a
+  > ticket's work commit records its test author. **Degrade gracefully:** with no distinct `tests` model,
+  > or a runtime that cannot pin one to a subagent, draft it here as usual.
   **If the user promotes one, record it in all three places in one commit** (§6.5): set `before:` on the
   promoted ticket naming what it must precede, move its row into the main-sequence table above that
   ticket, and put `🔺 before <id>` in the row's `flag` cell. A cleanup ticket is numbered *after*

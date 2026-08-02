@@ -29,9 +29,10 @@ optional: if an argument is supplied, use it without asking; otherwise ask for i
    - the **project code / ticket prefix** — use the argument if passed (e.g. `/sfk-init ACME` →
      `ACME`); otherwise ask;
    - project name and a one-line description;
-   - **models (optional):** whether the failing test should be written by a *different, stronger* model
-     than the implementer — **independent test authorship** (the test isn't shaped to fit the code that
-     must pass it). Default **no** — one model does everything. If yes, take the *implementation* model
+   - **models (optional):** whether a *different, stronger* model should write what the implementer's
+     work is judged against — **independent authorship**: the failing test (so it isn't shaped to fit the
+     code that must pass it) and any ticket filed without a sign-off gate (so its acceptance criteria
+     aren't either). Default **no** — one model does everything. If yes, take the *implementation* model
      and the *tests* model.
    - **review mode:** how finished tickets are reviewed — `in-place` (commit and leave `in-review` on
      the branch; the **default**) or `pr` (a branch + pull/merge request per ticket; your merge is the
@@ -57,7 +58,7 @@ optional: if an argument is supplied, use it without asking; otherwise ask for i
    - `.sfk/templates/CLAUDE.md` → `./CLAUDE.md` (root). Fill it, and in its *Project & kit*
      section record the **project code**, set **Spec-First Kit version applied** to the
      `kit_version` from `.sfk/manifest.md`, fill the **Models** line from the interview (one model, or a
-     distinct `tests` model for independent test authorship), and fill the **Review mode** line
+     distinct `tests` model for independent authorship), and fill the **Review mode** line
      (`in-place`, or `pr` + the detected forge/CLI). (This is where project state lives — not in `.sfk`.)
      **Leave *Architecture dependency rule*, *Stack* and *Commands* exactly as they ship** — marked not-set,
      with their shape in HTML comments. They are filled by the milestones that settle them; do not guess

@@ -8,30 +8,35 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 ## Project & kit
 
 - **Project code:** `INT8` — the ticket prefix (`INT8-001`). Set by `sfk-init`.
-- **Spec-First Kit version applied:** `1.4.3` — the *kit* version this project is on (set by
+- **Spec-First Kit version applied:** `1.4.4` — the *kit* version this project is on (set by
   `sfk-init`, raised by `sfk-update-kit`). This is **not** the software's release version (that is
   chosen by the project and tracked in `spec/milestone-plan.md`). The kit's own version, changelog
   and pristine templates live in `.sfk/` (read-only — never edit it by hand; skills copy templates
   *out* of it).
-- **Models.** Independent test authorship is **on**: the failing test is written by a *different,
-  stronger* model than the implementer, so the test isn't shaped to fit the code that must pass it
-  (grader ≠ graded).
+- **Models.** Independent authorship is **on**: whatever the implementer's work will later be *judged
+  against* is written by a *different, stronger* model, so the bar isn't shaped to fit the work that has
+  to clear it (grader ≠ graded).
   - `implementation: claude-sonnet-5` — the builder run day to day (the cheaper/faster one).
-  - `tests: claude-opus-4-8` — writes the failing test from the ticket + spec, independently.
-  `sfk-next-ticket` acts on the `tests` model; set `tests: same` (or a single model) to revert to the
-  default single-model behaviour. Set by `sfk-init`.
+  - `tests: claude-opus-4-8` — writes the failing test from the ticket + spec, independently, and drafts
+    any **ungated** ticket (below).
+  `sfk-next-ticket` acts on the `tests` model for tests; `sfk-verify` for the cleanup tickets it files.
+  Set `tests: same` (or a single model) to revert to the default single-model behaviour. Set by
+  `sfk-init`.
+  - **Ungated tickets get the same treatment, and only those.** A ticket's acceptance criteria are what
+    the implementer's own work is checked against, so the reasoning that covers tests covers writing one.
+    It applies where **no human gate** stands behind it: `sfk-verify`'s cleanup tickets, and any ad-hoc
+    *"file this as a ticket"*. **Not** the ticket-generation milestone — you review and sign that off,
+    which is a stronger check than model independence, and it is the expensive case besides.
 - **Review mode:** `in-place` — **where** a finished ticket is reviewed, not what counts as approval.
   Work is committed directly to the current branch and left `in-review` there; you review the diff/chat
   directly. Set by `sfk-init`, moved back from `pr` on 2026-07-28.
   - **Approval is you invoking `sfk-next-ticket` or `sfk-close-ticket`** — the same in both modes. The
     forge's Approve button is not used and nothing waits for one.
-  - **`pr` mode (branch + PR, `gh`, remote `threeg/interstate-8.5`) remains available and now works
-    solo.** It was abandoned here because the kit treated the forge *merge* as the approval, which
-    deadlocks when the PR's author is the only reviewer; kit v1.4.1 removed that assumption. What `pr`
-    buys is a better review *surface* — durable line-anchored comments `sfk-address-review` can read
-    back, checks before merge, an unmerged branch as a rollback boundary. What it does **not** buy is a
-    second reviewer: the PR is authored by whoever's git identity the agent runs under, so it is still
-    your own work. `in-place` stands because that surface is not worth a branch per ticket for a
+  - **`pr` mode (branch + PR, `gh`, remote `threeg/interstate-8.5`) remains available and works solo.**
+    What it buys is a better review *surface* — durable line-anchored comments `sfk-address-review` can
+    read back, checks before merge, an unmerged branch as a rollback boundary. What it does **not** buy
+    is a second reviewer: the PR is authored by whoever's git identity the agent runs under, so it is
+    still your own work. `in-place` stands because that surface is not worth a branch per ticket for a
     single-operator project — not because anything blocks it.
 
 ## Audience (how to explain things)
@@ -227,9 +232,10 @@ run while one is open, so a building milestone ends with `sfk-close-ticket` then
 pure-styling and build-plumbing tickets may set `tests_required: false` and must state the exemption in
 the body.
 
-**Which gate, scoped by what the ticket's diff actually touches (INT8-046)** — the scope follows the
-diff, never the ticket's stated category; a ticket believed docs-only that turns out to touch code still
-needs the gate that change requires:
+**Which gate, scoped by what the ticket's diff actually touches (INT8-046)** — full reasoning in
+`spec/test-strategy/test-strategy.md` §9/§11. The scope follows the diff, never the ticket's stated
+category; a ticket believed docs-only that turns out to touch code still needs the gate that change
+requires:
 
 - **Docs-only** (only `spec/**`, ticket/`BOARD.md` files — nothing under `web/` or `tooling/`): no gate
   to run — neither PHPCS/PHPStan nor PHPUnit has anything new to check.
@@ -241,10 +247,6 @@ needs the gate that change requires:
   of defect PHPUnit's Kernel tests catch (a module failing to install/boot correctly), which PHPCS/PHPStan
   cannot see. `tests_required: false` on a build-plumbing ticket exempts it from writing a *new* test
   test-first; it does not shrink which gate has to pass.
-
-This narrows INT8-042's original rule ("`lando lint` never substitutes for `lando test`") to build-
-plumbing/behavioural changes only; docs-only and pure-styling tickets now use the lighter gate above.
-See `spec/test-strategy/test-strategy.md` §9/§11 for the full reasoning and decisions-log entry.
 
 End each ticket with a **completion report**. In the **chat response**, open with the ticket **id and
 title** and its **`## In plain English`** line, then give: (1) a short plain-language **summary**;

@@ -52,7 +52,21 @@ kit yourself.**
 
 3. **Apply each delta to the files the project owns.** The kit-owned folders are already current (the
    copy did that) — **do not re-copy them**. What remains is the root `CLAUDE.md` and the documents
-   under `spec/`. Per the Apply note:
+   under `spec/`.
+
+   > **`spec/README.md` is the exception, and it is the one that gets missed.** The method guide is
+   > **kit-owned in substance but lives in the project-owned tree**, so the copy does **not** cover it —
+   > the payload is only `.sfk/` and `.claude/`. Read the sentence above literally and you will bucket
+   > the guide as "kit-owned, therefore already handled", which is exactly wrong. Whenever a changelog
+   > entry touches the method, **refresh it wholesale from `.sfk/templates/spec/README.md`**; step 7
+   > checks that you did.
+   >
+   > This has happened. Two consecutive releases declared a guide refresh, both were skipped, and the
+   > project ran two kit versions on a guide that actively contradicted the refreshed skills — which is
+   > the worst possible file to have lagging, because it is what a confused agent reads to re-derive the
+   > method.
+
+   Per the Apply note:
    - **add:** **first check whether the project already has a section serving that role under another
      name** (see *Already present under another name*, below). Otherwise insert the new section/heading
      where the new template (`.sfk/templates/…`) has it; leave the body empty, or interview if content
@@ -119,7 +133,23 @@ kit yourself.**
    and why it is safe (naming the decisions log that now holds it), and leave anything the user does not
    confirm exactly where it is.
 
-7. **Bump and commit.** Set the applied kit version in the root `CLAUDE.md` (*Project & kit*) to the
+7. **Self-check the guide, before you bump anything.** Compare the `| **Kit version** | vX.Y.Z |` row in
+   the project's `spec/README.md` against `kit_version` in `.sfk/manifest.md`. **They must match.** If
+   they differ, the guide refresh was missed — **refresh `spec/README.md` from
+   `.sfk/templates/spec/README.md` now**, then re-check. Do not proceed while they disagree, and do not
+   "fix" it by editing the row: refreshing the guide is what *sets* that row, which is the only thing
+   that makes this check honest rather than cosmetic.
+
+   **Order matters — this runs *before* step 8's bump**, or the bump satisfies the check by itself and
+   it tests nothing.
+
+   **Why a check and not more instruction:** this failure is silent, self-concealing and cumulative — a
+   lagging guide offers the wrong mental model to the next agent that reads it, so the drift compounds
+   rather than surfacing. Instruction has already failed to prevent it twice; a one-line comparison
+   catches it on the run that makes it. If the row is missing entirely (a project from an older kit),
+   the refresh adds it — that is the same fix, not a special case.
+
+8. **Bump and commit.** Set the applied kit version in the root `CLAUDE.md` (*Project & kit*) to the
    `kit_version` from `.sfk/manifest.md`. Commit the copied kit folders **and** the applied deltas
    together (per the **Commit protocol** in the root `CLAUDE.md` — hand off if you are not in a git-safe
    runtime), e.g. `process: update kit to vX.Y.Z`. Summarise for the user what changed, what you

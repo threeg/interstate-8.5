@@ -34,6 +34,13 @@ format in `spec/tickets/TICKET-TEMPLATE.md`; the execution order in `spec/ticket
   still open and tells you to run `sfk-close-ticket`.
 - **Commit message:** `<PRJ>-NNN: <short imperative>` for work; `<PRJ>-NNN: mark done (reviewed)` for a
   finalize.
+- **A ticket filed outside a sign-off gate is drafted by the `tests` model**, where the root `CLAUDE.md`
+  › *Models* names one distinct from `implementation`. That covers `sfk-verify`'s cleanup tickets and any
+  ad-hoc *"file this as a ticket"* — spawn a subagent pinned to that model and let it write the ticket
+  from the finding and the spec alone, with no sketch of the fix. Acceptance criteria are what the
+  implementer's work gets checked against, so the same grader ≠ graded rule that governs tests governs
+  writing one; tickets from the **generation milestone** are exempt because you sign those off. Degrade
+  to drafting it here when no distinct `tests` model is configured.
 - **Authorship trailers record who built it.** A ticket's **work** commit ends with a `Co-authored-by`
   trailer for **every model that built it** — both, where independent test authorship is configured and
   `tests_required: true` (the test author *and* the implementer); one otherwise. A **finalize** is

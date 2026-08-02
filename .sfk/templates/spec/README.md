@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Kit version** | v1.4.3 |
+| **Kit version** | v1.4.4 |
 | **Author** | Gregg Seymour |
 | **Kit identity** | `.sfk/manifest.md` (read-only); changes in `.sfk/CHANGELOG.md` |
 | **A project's applied kit version** | recorded in the project's root `CLAUDE.md` (*Project & kit*) |
@@ -337,7 +337,12 @@ of each template hidden away so future kit updates can be applied. Three buckets
   skills **only read** here (to copy out and, on update, to diff); they never write inside `.sfk/`.
   Only `sfk-update-kit` refreshes it, from a newer kit. This is what makes later updates safe.
 - **Kit-owned — replaced on update.** This guide and the skills. You don't edit these — **no
-  exceptions**; `sfk-update-kit` refreshes them wholesale. Every *enforceable* rule the guide states
+  exceptions**; they are refreshed wholesale. But *how* they are replaced differs, and the difference
+  matters: the **skills** are inside the copied payload (`.claude/`), so **your copy** replaces them,
+  while **this guide lives under `spec/`** — outside the payload — so **`sfk-update-kit` has to refresh
+  it**, from `.sfk/templates/spec/README.md`. Kit-owned in substance, project-owned in location. That
+  split is why the guide is the one file an update can silently skip, and why the skill self-checks the
+  `Kit version` row above against `.sfk/manifest.md` before it finishes. Every *enforceable* rule the guide states
   also lives in `CLAUDE.md`, `spec/tickets/CONVENTIONS.md`, or the skills, so the guide itself is
   reference you could archive. `sfk-verify` is neutral like the rest: its project-specific half lives in
   `spec/verify/verify.md`, which is yours.
@@ -400,7 +405,7 @@ a dependency addition or a gate fix into feature commits is where a reviewer's a
 features usually depend on the plumbing anyway, so it wants to land first.
 
 > Note the two distinct "version" concepts. A **project version** (`v0.1.0`, `v0.2.0`) is *your
-> software's* release, scoped by `sfk-version`. A **kit version** (this kit's `v1.4.3`) is *the
+> software's* release, scoped by `sfk-version`. A **kit version** (this kit's `v1.4.4`) is *the
 > method's* release, applied by `sfk-update-kit`. They are independent.
 
 ---
@@ -428,7 +433,11 @@ afterwards — everything it reads is now inside your project:
    generated artefacts such as individual tickets — though it will *offer* to backfill a new template
    section into them (e.g. "the ticket template gained `## In plain English`; add it to your 14
    tickets?").
-4. It updates the **applied kit version** in your root `CLAUDE.md` and commits the copy + the deltas
+4. It **self-checks this guide** before finishing: the `Kit version` row at the top of this file must
+   match `kit_version` in `.sfk/manifest.md`. The guide sits under `spec/` but is kit-owned, so your
+   copy does not replace it and only the skill can — which makes it the one file an update can skip
+   without anything noticing. If the two disagree, the refresh was missed and the skill applies it.
+5. It updates the **applied kit version** in your root `CLAUDE.md` and commits the copy + the deltas
    together (per the *Commit protocol*).
 
 > **Why no merge step?** Because no skill is ever project-specific. `sfk-verify` is neutral and
@@ -546,7 +555,7 @@ properties). Supporting practices: layered gates (a fast default gate every tick
 type); a coverage gate on the pure core; golden-file snapshots taken *before* any risky refactor; and
 the **`sfk-verify` pass** at batch boundaries, which turns spec-audit findings into cleanup tickets.
 
-**Independent test authorship (optional).** A test written by the same model that writes the code it
+**Independent authorship (optional).** A test written by the same model that writes the code it
 must pass is a weak check — the two share blind spots, and a misread requirement can be embodied in
 both, going green for the wrong reason. If you configure a distinct **`tests`** model in the root
 `CLAUDE.md` (*Project & kit* › *Models*), `sfk-next-ticket` has that model write the failing test —
@@ -556,13 +565,23 @@ verifier becomes the guard against the implementer teaching to the test. It catc
 blind spots (a shared, *ambiguous* spec still misleads both — spec clarity and the human gate remain
 the bigger levers). Off by default; single-model behaviour is unchanged.
 
+> **It covers ungated tickets too.** A ticket's acceptance criteria are the other thing the implementer's
+> work is checked against, so a model writing both can set itself a bar it happens to find easy. Where a
+> `tests` model is configured it also drafts the tickets that **no human gate stands behind** —
+> `sfk-verify`'s cleanup tickets, and any ad-hoc *"file this as a ticket"*. Tickets from the **ticket
+> generation** milestone are deliberately exempt: you review and sign that deliverable off, and a human
+> gate is the stronger check of the two (it is also the expensive case — a whole board, not one ticket).
+
 The **definition of done** for an implementation ticket lives in the root `CLAUDE.md` and the ticket
 template: the default gate passes with zero warnings; new/changed numbered-requirement behaviour has
 tests in the same commit; the relevant heavier gate passes where the ticket says so; and the ticket's
 status + notes and its `BOARD.md` row are updated in that same commit. On meeting that bar
 `sfk-next-ticket` leaves the ticket at **`in-review`**; it is finalized to **`done`** when you review it
-— the next `sfk-next-ticket` run (asking for the next ticket is your approval), or `sfk-signoff` for the
-last ticket — in a small status-only commit.
+— the next `sfk-next-ticket` run (asking for the next ticket is your approval), or **`sfk-close-ticket`**
+to close one without starting another, **including the last ticket of a milestone** — in a small
+status-only commit. In `pr` mode both of those also squash-merge that ticket's PR as part of finalizing.
+**`sfk-signoff` never finalizes a ticket:** it refuses to run while one is still open and sends you to
+`sfk-close-ticket`, because approving a *milestone* is a different decision from approving a *ticket*.
 
 ---
 

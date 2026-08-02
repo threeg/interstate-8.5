@@ -28,18 +28,24 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 ## Project & kit
 
 - **Project code:** `<PRJ>` — the ticket prefix (`<PRJ>-001`). Set by `sfk-init`.
-- **Spec-First Kit version applied:** `1.4.3` — the *kit* version this project is on (set by
+- **Spec-First Kit version applied:** `1.4.4` — the *kit* version this project is on (set by
   `sfk-init`, raised by `sfk-update-kit`). This is **not** your software's release version (that
   is chosen by the project and tracked in `spec/milestone-plan.md`). The kit's own version,
   changelog and pristine templates live in `.sfk/` (read-only — never edit it by hand; skills
   copy templates *out* of it).
-- **Models.** By default one model does everything. For **independent test authorship** — the failing
-  test written by a *different, stronger* model than the implementer, so the test isn't shaped to fit
-  the code that must pass it (grader ≠ graded) — name two:
+- **Models.** By default one model does everything. For **independent authorship** — whatever the
+  implementer's work will later be *judged against* is written by a *different, stronger* model, so the
+  bar isn't shaped to fit the work that has to clear it (grader ≠ graded) — name two:
   - `implementation: <model>` — the builder run day to day (e.g. the cheaper/faster one).
-  - `tests: <model, or "same">` — writes the failing test from the ticket + spec, independently.
-  `sfk-next-ticket` acts on the `tests` model; `same` (or a single model) keeps the default single-model
-  behaviour. Set by `sfk-init`.
+  - `tests: <model, or "same">` — writes the failing test from the ticket + spec, independently, and
+    drafts any **ungated** ticket (below).
+  `sfk-next-ticket` acts on the `tests` model for tests; `sfk-verify` for the cleanup tickets it files.
+  `same` (or a single model) keeps the default single-model behaviour. Set by `sfk-init`.
+  - **Ungated tickets get the same treatment, and only those.** A ticket's acceptance criteria are what
+    the implementer's own work is checked against, so the reasoning that covers tests covers writing one.
+    It applies where **no human gate** stands behind it: `sfk-verify`'s cleanup tickets, and any ad-hoc
+    *"file this as a ticket"*. **Not** the ticket-generation milestone — you review and sign that off,
+    which is a stronger check than model independence, and it is the expensive case besides.
 - **Review mode:** `<in-place | pr>` — **where** a finished ticket is reviewed. It does not change what
   counts as approval. `in-place` (default): the work is committed and left `in-review` on the current
   branch; you review the diff in chat. `pr`: each ticket is worked on its own branch and pushed as a

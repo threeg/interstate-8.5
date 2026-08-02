@@ -7,11 +7,110 @@ For each change, the **Apply** note tells the update skill how to bring it into 
 *refresh* (overwrite the kit-owned file), *add* (insert a new section/heading into a living file),
 *amend* (apply a wording/guidance change), or *interview* (ask the user, because content is needed).
 
+**Apply notes name their targets by path, never in prose.** Write `refresh — spec/README.md`, not
+`refresh — the guide`. A prose target invites the reader to categorise it, and a reader who categorises
+wrongly skips the file without ever knowing they did. This is not hypothetical: two consecutive releases
+declared *"refresh — the guide"*, both were skipped, and the drift went unnoticed for two kit versions
+because nothing named the file and nothing checked afterwards.
+
 A change may also carry a **Pre-copy** note. `Apply` happens *after* the user copies the new `.sfk/` +
 `.claude/` over their project; **`Pre-copy` is an instruction to the human, *before* that copy** — used
 when the copy would destroy something the project owns or filled in. Any entry with a `Pre-copy` note
 must also have a section in the repo-root `UPGRADING.md`, because nobody reads a changelog until they
 are told to.
+
+---
+
+## v1.4.4 — the update checks itself, and the guide stops drifting
+
+Three items, two of them about the same thing from opposite ends: **`spec/README.md` is the file the kit
+is worst at keeping current**, and it is the worst one to have stale. **No pre-copy step.**
+
+- **FIX (major): the method guide can no longer be silently skipped by an update.** A project ran **two
+  kit versions** on a stale `spec/README.md`. v1.1.0 and v1.2.0 each declared *"refresh — the guide"*;
+  both were skipped; it surfaced only when a third update diffed the file by chance. The lagging guide
+  still described `sfk-verify` as a fill-in template, still documented the pre-v1.1.0 temp-folder update
+  procedure, and still framed the payload as shipping `spec/` — all superseded, all **contradicting the
+  skills that had been refreshed alongside it**.
+
+  **The root cause is a real trap, not carelessness.** `spec/README.md` is **kit-owned in substance but
+  lives in the project-owned tree** — the only file on that boundary. Step 3 told the agent *"the
+  kit-owned folders are already current (the copy did that) — do not re-copy them"*, which is true and
+  still misleading, because the guide is **not in one of those folders**: the payload is only `.sfk/` and
+  `.claude/`. An agent reasonably buckets the guide as already handled. The guide's own *ownership*
+  section reinforced the wrong half, and *"the guide"* was the only prose-named target in the changelog,
+  so nothing interrupted the inference.
+
+  Three fixes, each independently sufficient: **Apply notes now name targets by path, never in prose**
+  (a rule in the changelog header — a prose target invites the reader to categorise, and one who
+  categorises wrongly skips the file without knowing); step 3 **names the exception outright**; and a new
+  **step 7 self-check** compares the `Kit version` row in the project's `spec/README.md` against
+  `kit_version` in `.sfk/manifest.md` and refuses to continue while they differ.
+
+  The check is the load-bearing one. It runs **before** the version bump — after it, the bump would
+  satisfy the check by itself and it would test nothing — and the row must be set by *refreshing the
+  guide*, never edited to match, or it is cosmetic. Verification rather than more instruction, because
+  this failure is silent, self-concealing and cumulative: a stale guide hands the wrong mental model to
+  the next agent that reads it, so the drift compounds instead of surfacing. Instruction had already
+  failed twice.
+
+  **Apply:** **n/a — kit-owned** (`sfk-update-kit`, and the changelog header rule); **refresh** —
+  `spec/README.md`, whose *ownership* and *Updating* sections now explain why it is the file an update can
+  skip. Note the self-check will fire on this very update if the refresh is missed.
+
+- **FIX (minor): the guide claimed `sfk-signoff` closes a milestone's last ticket.** It said a ticket is
+  finalized by *"the next `sfk-next-ticket` run … or `sfk-signoff` for the last ticket"* — the exact thing
+  **v1.4.1 reversed**. `sfk-signoff` refuses to run while a ticket is open and sends the user to
+  `sfk-close-ticket`, because approving a *milestone* is a different decision from approving a *ticket*.
+  It was also the only such site missing the `pr`-mode merge clause. Found while checking a report about
+  four docs contradicting the skill on `pr` approval — that report is **obsolete** (the v1.4.0 `pr` rework
+  unified the rule rather than making the sites conditional: invoking the skill is the approval in both
+  modes, the forge Approve button is unused, the merge is plumbing) — but checking its fourth site
+  surfaced this unrelated, live one. Fittingly, in the guide.
+
+  **`check_kit.py` gains an eighth check so it cannot return:** *pinned rules not restated
+  unconditionally*. When a release makes a universal rule conditional or reverses it, every unconditional
+  restatement left behind becomes a defect — and the dangerous ones sit in **ambient, auto-loaded prose**
+  rather than in the skill that executes them, so they read as authoritative and nothing catches them.
+  Verified in both directions: it passes clean, catches the exact pre-fix wording, and catches a planted
+  drift in `spec/tickets/CLAUDE.md`.
+
+  **Apply:** **refresh** — `spec/README.md` (also covered by the item above); **n/a** — `tools/` is
+  maintainer-side and ships in no project.
+
+- **NEW (minor): independent authorship now covers tickets that no gate stands behind.** Where a distinct
+  `tests` model is configured, it already writes the failing test so the test is not shaped to fit the
+  code. **A ticket's acceptance criteria are the other thing the implementer's work is judged against**,
+  so a model writing both can set itself a bar it happens to find easy — the same grader ≠ graded
+  argument, applied one step earlier.
+
+  Deliberately **narrow**: it covers only tickets with **no human gate behind them** — `sfk-verify`'s
+  cleanup tickets, and any ad-hoc *"file this as a ticket"*. Both go straight to the backlog from a
+  finding the same session just produced, with nobody in between. It does **not** cover the
+  **ticket-generation milestone**, which the report proposed including: that deliverable is reviewed and
+  signed off, and a human gate is the stronger of the two checks — it is also the expensive case, pinning
+  a whole board to the stronger model rather than one ticket.
+
+  No new configuration: the same `tests` model, set at `sfk-init`, is simply used for more. The drafting
+  commit carries a `Co-authored-by` trailer for the model that wrote the ticket, matching how a work
+  commit records its test author, and it degrades to single-model behaviour exactly as test authorship
+  does.
+
+  **Also rejected, and recorded in `SFK-DESIGN.md`:** having `sfk-feedback` hand its drafting to the
+  `tests` model. Grader ≠ graded exists so the *bar* is not shaped to fit the *work*; a feedback file
+  grades nothing and gates nothing, and its independent check is the maintainer at triage. Worse, it would
+  make the artefact *less* useful — the value of a feedback file is that the model which hit the friction
+  saw it, and handing raw material to a subagent that was not there loses exactly the specifics that make
+  one actionable.
+
+  **Apply:**
+  - **amend** — the **Models** bullet in the root `CLAUDE.md` (now *independent authorship*, with the
+    ungated-tickets rule);
+  - **amend** — `spec/tickets/CLAUDE.md`, which gains the ad-hoc-filing bullet;
+  - **refresh** — `spec/README.md` (the *Independent authorship* section);
+  - **n/a — kit-owned** — `sfk-verify`, `sfk-init`.
+  - Projects with **no distinct `tests` model configured are unaffected** — nothing to apply beyond the
+    wording. Do not offer to configure one here; that is `sfk-init`'s question.
 
 ---
 
