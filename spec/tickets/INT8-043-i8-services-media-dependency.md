@@ -2,7 +2,7 @@
 id: INT8-043
 title: Declare `i8_services`' missing `drupal:media` dependency
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: services
@@ -76,13 +76,13 @@ Out of scope: any code change inside `i8_services`; splitting the module; `i8_mi
 (correct since INT8-012); the `HeroBackgroundFormatter` logic itself.
 
 ## Definition of done (acceptance criteria)
-- [ ] `i8_services.info.yml` declares `drupal:media`.
-- [ ] The rest of the dependency list has been re-derived against dynamic references as well as `use`
+- [x] `i8_services.info.yml` declares `drupal:media`.
+- [x] The rest of the dependency list has been re-derived against dynamic references as well as `use`
       statements, with the outcome — including any deliberate omissions and why — recorded in `## Notes`.
-- [ ] Uninstall + reinstall + `config:import` leaves `lando drush config:status` clean, and `/songs`
+- [x] Uninstall + reinstall + `config:import` leaves `lando drush config:status` clean, and `/songs`
       and a song page both return 200 afterwards.
-- [ ] `lando test` green with zero warnings.
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] `lando test` green with zero warnings.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 
@@ -105,3 +105,39 @@ lando drush php:eval 'print_r(\Drupal::service("extension.list.module")->getExte
   backlog rather than main sequence: nothing a user can see is wrong, no gate fails, and Media is enabled
   (CONVENTIONS §6.6). Not a specification change (§5.5): no decision is reopened, and
   `architecture.md` §2.1 already places this kind of declaration in the services layer.
+- 2026-08-02 — implemented. `drupal:media` added to `i8_services.info.yml` between `image` and `node`,
+  traced to `HeroBackgroundFormatter::isApplicable()`'s `getSetting('target_type') === 'media'` check —
+  the same dynamic-reference pattern INT8-039 used for `image`/`responsive_image`.
+
+  **Re-derivation (requirement 2): nothing further found.** Re-read every file in the module against
+  dynamic references (plugin attributes, `isApplicable()`-style string literals, `getStorage()` /
+  `\Drupal::service()` calls, render-element `#type` values) as well as `use` statements:
+  `SongVersions.php`, `SongTypeOptions.php`, `PageController.php`, `i8_services.module`,
+  `SongSidebarBlock.php`, `SongTypeFilter.php`, `AlternateTitlesFilter.php`,
+  `ArticleInsensitiveTitle.php`. All string-literal entity/service references
+  (`'node'`, `'taxonomy_term'`, `'image_style'`) resolve to modules already on the list
+  (`node`, `taxonomy`, `image`). No other module-owned name turned up.
+
+  **`media_library` — deliberately left off.** It supplies the *widget* an editor picks images with
+  (`media_library_widget`, per `HeroBackgroundFormatter`'s own docblock) — form/config-side, not
+  referenced by any PHP in this module. `i8_services`' code only ever receives an already-resolved
+  media entity; it never invokes the library's selection UI.
+
+  **`block_content` — deliberately left off.** It's the entity type the formatter's field config
+  attaches to (the `page_hero` block content type), but no class in this module type-hints
+  `Drupal\block_content\...`, extends a `block_content`-owned base class, or calls
+  `getStorage('block_content')`. The dependency lives in the *config* (`page_hero`'s own bundle,
+  and `core.entity_view_display.block_content.page_hero.default.yml`, which already depends on
+  `i8_services`), not in this module's code — INT8-039's rule traces dependencies to code, and there
+  is none to trace here.
+
+  **Verification (requirement 3), same cascade as INT8-039:** `lando drush pmu i8_services -y` then
+  `lando drush en i8_services -y` succeeded; `config:status` showed the same two cascade-deletes
+  INT8-039 documented (`views.view.songs`, `block.block.interstate_85_songsidebar`) plus the changed
+  `core.entity_view_display.block_content.page_hero.default` — expected, not a regression.
+  `config:import` restored all three; `config:status` reported clean afterwards. `/songs` and a song
+  node both returned 200 via a direct kernel request post-import.
+
+  `lando test`: 89 tests / 234 assertions, zero PHPCS/PHPStan warnings, boundary check 0 violations.
+
+  **Sanity test:** `lando drush php:eval 'print_r(\Drupal::service("extension.list.module")->getExtensionInfo("i8_services")["dependencies"]);'` → nine entries, `drupal:media` among them (confirmed).

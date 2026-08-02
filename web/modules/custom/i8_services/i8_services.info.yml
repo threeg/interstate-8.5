@@ -8,6 +8,7 @@ dependencies:
   - drupal:field
   - drupal:file
   - drupal:image
+  - drupal:media
   - drupal:node
   - drupal:responsive_image
   - drupal:taxonomy
