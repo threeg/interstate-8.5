@@ -2,7 +2,7 @@
 id: INT8-045
 title: Clear the open-questions template rows and record the song-type weight tie-break as `S-1`
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: docs
