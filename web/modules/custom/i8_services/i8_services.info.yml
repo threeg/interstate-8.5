@@ -1,5 +1,14 @@
 name: 'Interstate-8 Services'
 type: module
-description: 'Custom services-layer logic: routes and controllers with no direct data-model or theme ownership (architecture.md §2.1).'
+description: 'Custom services-layer logic (architecture.md §2.1): Views sort/filter plugins, a block plugin, a field formatter, song content-model lookups, the front-page stub route, and the build-time hooks that feed the theme.'
 core_version_requirement: ^11
 package: Interstate-8
+dependencies:
+  - drupal:block
+  - drupal:field
+  - drupal:file
+  - drupal:image
+  - drupal:node
+  - drupal:responsive_image
+  - drupal:taxonomy
+  - drupal:views

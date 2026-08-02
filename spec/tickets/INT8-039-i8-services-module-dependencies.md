@@ -2,7 +2,7 @@
 id: INT8-039
 title: Declare i8_services' module dependencies and correct its stale description
 type: task
-status: todo
+status: in-review
 milestone: 9
 batch: cleanup
 layer: services
@@ -66,12 +66,12 @@ Out of scope: any code change inside `i8_services`; splitting the module; the `i
 (already correct).
 
 ## Definition of done (acceptance criteria)
-- [ ] `i8_services.info.yml` declares every module the code requires, each one traced to the specific
+- [x] `i8_services.info.yml` declares every module the code requires, each one traced to the specific
       class or hook that needs it (record the mapping in `## Notes`).
-- [ ] The description matches the module's actual contents.
-- [ ] Uninstall + reinstall of `i8_services` succeeds and leaves `lando drush config:status` clean.
-- [ ] `lando test` green with zero warnings.
-- [ ] Ticket status + notes and BOARD.md row updated in the same commit.
+- [x] The description matches the module's actual contents.
+- [x] Uninstall + reinstall of `i8_services` succeeds and leaves `lando drush config:status` clean.
+- [x] `lando test` green with zero warnings.
+- [x] Ticket status + notes and BOARD.md row updated in the same commit.
 
 ## Tests / verification
 
@@ -96,3 +96,37 @@ lando drush php:eval 'print_r(\Drupal::service("extension.list.module")->getExte
   last written.
   Cleanup backlog rather than main sequence: nothing a user can see is wrong and no gate fails
   (CONVENTIONS §6.6).
+- 2026-08-01 — implemented. Dependency-to-code mapping (all eight confirmed already enabled on the
+  live site — `lando drush pm:list --status=enabled`):
+  - `drupal:block` — `SongSidebarBlock.php` (`#[Block(...)]` attribute, `BlockBase`), placed via
+    `block.block.interstate_85_songsidebar.yml`.
+  - `drupal:field` — `HeroBackgroundFormatter.php` (`FormatterBase`, `#[FieldFormatter(...)]`,
+    `FieldDefinitionInterface`, `FieldItemListInterface` — the Field API).
+  - `drupal:file` — `HeroBackgroundFormatter.php` (`Drupal\file\FileInterface`).
+  - `drupal:image` — `HeroBackgroundFormatter::rerollData()` (loads the `image_style` entity type,
+    owned by the `image` module).
+  - `drupal:node` — `i8_services_node_view()` (`hook_ENTITY_TYPE_view` for node) in
+    `i8_services.module`, and `SongVersions.php` (`NodeInterface`, `getStorage('node')`).
+  - `drupal:responsive_image` — `HeroBackgroundFormatter.php` (renders `'#type' => 'responsive_image'`).
+  - `drupal:taxonomy` — `SongTypeOptions.php` (`TermInterface`, `getStorage('taxonomy_term')`) and
+    `SongTypeFilter.php` (`getStorage('taxonomy_term')`, no type-hint but same functional dependency).
+  - `drupal:views` — `ArticleInsensitiveTitle.php`, `SongTypeFilter.php`, `AlternateTitlesFilter.php`
+    (Views plugin base classes/attributes), and `i8_services.module`'s `hook_views_data()`,
+    `hook_views_data_alter()`, `hook_views_pre_render()`.
+
+  **The Background's "the module has no routes and no controllers" is incorrect** — `PageController.php`
+  and `i8_services.routing.yml` (`i8_services.front`, `/home`) are both still present and live:
+  `config/sync/system.site.yml` sets `front: /home`, so this route/controller is the site's actual front
+  page (INT8-017), not dead code. Corrected in the new description rather than silently reproducing the
+  finding's error — no extra module dependency follows from it (`ControllerBase` and routing are core).
+
+  **Requirement 3's verification method needed one more step than written.** Uninstalling `i8_services`
+  cascade-deletes `views.view.songs` and `block.block.interstate_85_songsidebar` — both depend on
+  `i8_services`-provided plugins, so Drupal's config-dependency system deletes them on uninstall
+  regardless of what `i8_services.info.yml` itself declares (that key governs module install/uninstall
+  *ordering*, not per-config dependency computation, which Drupal derives independently from what
+  plugins/services each config entity actually uses). Reinstalling the module does not restore deleted
+  config; `lando drush config:import` does. Ran the full cycle — uninstall, reinstall, `config:status`
+  (showed the two cascade-deletes plus one changed entity-view-display), `config:import`, `config:status`
+  clean, confirmed `/songs` returns 200 again. This is expected behaviour for any module owning
+  Views/Block plugins other config depends on, not a defect in the dependency list.
