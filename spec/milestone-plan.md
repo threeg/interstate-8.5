@@ -22,11 +22,16 @@ Version `5.0.x-dev2` (slice 2 — consolidation) — **Milestone 10 (Version bri
 down by `sfk-version` 2026-08-02); Milestone 10 is its review and ratification, and `sfk-next-milestone`
 is what starts it.
 
-Slice 2 is a **short consolidation slice, not a new content type.** It finishes the two screens slice 1
-actually designed — the song page's alternate-version composition (`TODO-001`) and a homepage hero with
-the nav over it — restructures the design sources to one design file per page before that layout is
-copied into every future slice, and closes the install-required-content gap (`TODO-002`). Slice 3 opens
-the next content type on a clean base.
+Slice 2 is a **consolidation slice: it adds no archive content type.** It finishes the two screens slice 1
+actually designed — the song page's alternate-version composition (`TODO-001`) and the homepage, where the
+`INT8-017` stub controller is replaced by a real Layout Builder content type carrying the new hero —
+restructures the design sources to one design file per page before that layout is copied into every future
+slice, and closes the install-required-content gap (`TODO-002`). Slice 3 opens the next content type on a
+clean base.
+
+**Consolidation, but not small.** The draft review (PR #3) grew goal B from "a hero component" to "a real
+homepage", which makes M12 the heaviest milestone of the slice and makes B and C one job rather than two —
+the homepage node is exactly the content the default-content mechanism has to carry.
 
 `S-1` (the `song_type` equal-weight tie-break) stays open and is **not** in slice 2's scope: no external
 dependency, so no lead time, and unreachable on today's four types.
@@ -79,18 +84,19 @@ deltas against the living spec rather than a fresh specification. Scope in
 |---|-----------|-------------|------|--------|
 | 10 | Version brief — review and ratify | `spec/brief/5.0.x-dev2-brief.md` reviewed and approved (the draft already exists; this milestone is its ratification) | Cowork | ⬜ |
 | 11 | Requirement deltas | `spec/requirements/requirements.md` — new `FR`/`NFR` for the homepage hero + image library and for content reproducibility; amend-in-place for the song-page alternates. Settles D-c (random-selection semantics vs render cache) | Cowork | ⬜ |
-| 12 | Architecture & content-model deltas | `spec/architecture/architecture.md` + `content-model.md` — the hero block type, the message field and how the image library is modelled (D-b); the install-required-content mechanism and whether it is slice-2 scope (D-d, `TODO-002`) | Cowork | ⬜ |
+| 12 | Architecture & content-model deltas | `spec/architecture/architecture.md` + `content-model.md` — **the heaviest milestone of the slice**: the homepage content type and how narrowly Layout Builder is scoped on it (D-h); the hero block type, message field, image-library modelling and placement (D-b); the default-content mechanism, contrib surveyed first and seeding rather than enforcing (D-d, `TODO-002`) | Cowork | ⬜ |
 | 13 | Wireframe deltas | `spec/wireframes/` — alternate-version placement inside the real song page (D-a) and the homepage hero; wireframe cleanup, and whether wires stay binding for state coverage (D-e) | Cowork | ⬜ |
 | 14 | Design deltas | `spec/design/` — **restructure first**: one design file per page, a tokens page, a components page, with the components-page precedence rule (D-g) and the token authority call (D-f) written into `design-system.md` §1/§1.1; **then** the song-page and homepage-hero designs authored into the new layout | Cowork | ⬜ |
 | 15 | Test-strategy delta | `spec/test-strategy/test-strategy.md` — coverage for the new hero and nav-over-hero, and what would actually catch the reproducibility gap | Cowork | ⬜ |
 | 16 | Ticket generation | `spec/tickets/*.md` + a `BOARD.md` slice-2 section; re-milestones `INT8-047`; tombstones `TODO-001`/`TODO-002` in `spec/TODO.md` *Resolved* | Cowork | ⬜ |
-| 17 | Tooling deltas | only the plumbing M12's mechanism decision requires — a new dependency (e.g. `default_content`) and/or a reproducibility gate. Scoped to that alone; **not** a second scaffolding pass, and a gate change belongs here rather than inside a feature ticket | Code | ⬜ |
-| 18 | Implementation | slice 2 built: song-page alternates rebuilt to the new design, homepage hero + nav wired and tested, reproducibility mechanism landed; tickets updated in the same commits | Code | ⬜ |
+| 17 | Tooling deltas | the plumbing M12's mechanism decision requires — the default-content contrib dependency and/or a reproducibility gate (does a fresh install actually produce a homepage?). Scoped to that alone; **not** a second scaffolding pass, and a gate change belongs here rather than inside a feature ticket | Code | ⬜ |
+| 18 | Implementation | slice 2 built: song-page alternates rebuilt to the new design, the homepage stub replaced by a Layout Builder node with the hero and nav wired and tested, default content landed; tickets updated in the same commits | Code | ⬜ |
 
 _Note: **Milestone 14 is sequenced internally** — the design-source restructure lands before the new page
-designs are authored, or they are authored into a layout that is about to change. **Milestone 17 is
-conditional on M12**: if the reproducibility decision needs no new dependency, gate or build change, it is
-dropped rather than filled._
+designs are authored, or they are authored into a layout that is about to change. **Milestone 17 stays
+nominally conditional on M12** but is now expected to be needed: the draft review settled that the
+default-content mechanism should be a contrib module wherever the survey allows, and adding one is exactly
+this milestone's trigger._
 
 <!-- Later slices/versions append their own table and run as a DELTA PASS (see spec/README.md):
      a slice brief drives requirement deltas rather than a fresh spec. -->
