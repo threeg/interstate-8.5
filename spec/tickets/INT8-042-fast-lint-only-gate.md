@@ -2,7 +2,7 @@
 id: INT8-042
 title: Add a fast lint-only check alongside the default gate
 type: task
-status: in-review
+status: done
 milestone: 9
 batch: cleanup
 layer: tooling
@@ -73,3 +73,4 @@ Verification: deliberately introduce a PHPCS violation (e.g. a docblock capitali
   `lando lint` caught it in ~5.5 seconds, reverted it, confirmed `lando lint` clean again, then ran
   `lando test` and confirmed all four checks still pass unchanged (89 tests, zero warnings). No spec
   amendment needed, no open question raised.
+- 2026-08-01 — done (reviewed).
