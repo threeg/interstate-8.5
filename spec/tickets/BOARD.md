@@ -159,6 +159,7 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 | C17 | [INT8-044](INT8-044-architecture-data-model-stale-cells.md) | Reconcile two stale cells in `architecture.md` §3.1's data-model table | task | docs | cleanup | | ✅ done | [INT8-010](INT8-010-song-content-type.md), [INT8-013](INT8-013-songs-migration.md) |
 | C18 | [INT8-045](INT8-045-open-questions-register-first-rows.md) | Clear the open-questions template rows and record the song-type weight tie-break as `S-1` | task | docs | cleanup | | ✅ done | [INT8-041](INT8-041-type-filter-published-terms.md) |
 | C19 | [INT8-046](INT8-046-scope-default-gate-to-ticket-diff.md) | Scope the definition-of-done gate to what a ticket's diff actually touches | task | docs | cleanup | | ✅ done | [INT8-042](INT8-042-fast-lint-only-gate.md) |
+| C20 | [INT8-047](INT8-047-reconcile-batch-record-drift.md) | Reconcile six record drifts left by the [INT8-043](INT8-043-i8-services-media-dependency.md)–046 batch | task | docs | cleanup | | ⬜ todo | [INT8-044](INT8-044-architecture-data-model-stale-cells.md), [INT8-045](INT8-045-open-questions-register-first-rows.md), [INT8-046](INT8-046-scope-default-gate-to-ticket-diff.md) |
 
 > [**INT8-022**](INT8-022-broaden-boundary-check.md) was promoted into the main execution-order table above (row 12, before [INT8-012](INT8-012-song-type-migration.md)) — its
 > own DoD required it be worked before the first migration module landed. Recorded three ways per
@@ -223,6 +224,25 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 > written honestly until the mechanism is chosen. Parked in `spec/TODO.md` (TODO-002) with the owed
 > decision named, per CONVENTIONS §6.6's rule that a genuine spec gap is a specification change, not a
 > cleanup ticket.
+
+> [**INT8-047**](INT8-047-reconcile-batch-record-drift.md) was filed by `sfk-verify` on the
+> [INT8-043](INT8-043-i8-services-media-dependency.md)–046 batch with the default gate green (89 tests /
+> 234 assertions, PHPCS 14/14, PHPStan no errors, boundary 0 violations). `lando playwright` was not run
+> and was not required — nothing in the batch touches the theme or the song screens, which is the trigger
+> `spec/verify/verify.md` §1 sets for it. **No critical findings:** the audit re-derived `i8_services`'
+> dependency list from scratch rather than trusting [INT8-043](INT8-043-i8-services-media-dependency.md)'s
+> account of it and found the same nine entries, confirmed `S-1` resolves in both directions, swept the
+> contractual values in `verify.md` §3 with no drift, and confirmed
+> [INT8-035](INT8-035-move-entity-queries-out-of-the-theme.md) has not regressed. It carries **six**
+> findings because they share one cause and would otherwise have been three tickets: three of the four
+> tickets were filed on 2026-08-01 and worked on 2026-08-02 with
+> [INT8-046](INT8-046-scope-default-gate-to-ticket-diff.md) — which changed the definition of done —
+> landing in between, so each work commit updated its ticket's DoD line to the new rule and left the
+> filing-time prose elsewhere in the same file describing the old one. Cleanup backlog: nothing a user can
+> see changes and no gate fails (CONVENTIONS §6.6). One of the six is a *record* rather than a correction —
+> [INT8-046](INT8-046-scope-default-gate-to-ticket-diff.md)'s work commit landed while
+> [INT8-043](INT8-043-i8-services-media-dependency.md) was still `in-review`, against root `CLAUDE.md`'s
+> *finalize before advancing* rule; commit hygiene otherwise held, and nothing on disk is wrong.
 
 ---
 
