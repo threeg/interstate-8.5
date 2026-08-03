@@ -1,11 +1,11 @@
-# Interstate-8 — Requirements (v5, `5.0.x-dev` slice 1)
+# Interstate-8 — Requirements (v5, `5.0.x-dev` line)
 
 | | |
 |---|---|
 | **Document** | Functional and non-functional requirements |
 | **Repository location** | `spec/requirements/requirements.md` |
-| **Status** | Binding specification — Milestone 2 signed off (2026-07-07) |
-| **Scope** | Slice 1 of `5.0.x-dev` (dev stack, Songs import, Songs section, homepage design go/no-go) |
+| **Status** | Binding specification — Milestone 2 signed off (2026-07-07); **amended at Milestone 11 for slice 2 (`5.0.x-dev2`), 2026-08-02** |
+| **Scope** | Slice 1 of `5.0.x-dev` (dev stack, Songs import, Songs section, homepage design go/no-go) **plus slice 2 (`5.0.x-dev2`): the real homepage and its hero, content reproducibility, and the song-page alternate composition** |
 | **Grounding** | v2 `I8_Songs` schema per `interstate-8-v2-as-built-reference.md` (validated against the final production dump) |
 
 > **Purpose.** This document turns the brief's slice-1 goals into **numbered, testable rules**. It is
@@ -14,10 +14,15 @@
 > stated here are **contractual** (§1.4) — code and tests must use the exact values, and changing one
 > is a documented spec change.
 >
-> **Slice scope.** These requirements cover **slice 1 only**. Later slices add new `FR`/`NFR` numbers
-> (release, setlist/live, news, search, fan contributions); numbers are never reused. Requirements
-> that are deliberately non-functional-in-slice-1 (the *Released* and *Played live* filters) are
-> stated so the wireframes/design carry them while the implementation does not yet wire them.
+> **Slice scope.** This document is **living**: each slice amends it rather than replacing it. Slice 1
+> minted `FR-1`–`FR-21` and `NFR-1`–`NFR-8`; **slice 2 (`5.0.x-dev2`) adds `FR-22`–`FR-25` and
+> `NFR-9`–`NFR-11`** and amends `FR-20` in place. Later slices add their own (release, setlist/live,
+> news, search, fan contributions); **numbers are never reused**. Requirements that are deliberately
+> non-functional-in-slice-1 (the *Released* and *Played live* filters) are stated so the wireframes/design
+> carry them while the implementation does not yet wire them.
+>
+> **Where a rule says which slice it belongs to, that is provenance, not conditionality.** `FR-6` is
+> binding now and stays binding; "slice 1" tells you when it was minted and what it was grounded in.
 
 ---
 
@@ -64,10 +69,12 @@ rendition (live or alternate-studio, sometimes under a different name). This is 
 relationship and is in scope for slice 1 (cross-entity release/setlist relationships are not). Two
 behaviours follow, confirmed against v2 `songlist.php`:
 
-- **Detail display (§4.3, FR-20).** An alternate version's page shows *its* lyrics **beside** the
-  parent's normal lyrics, with an "alternate title/lyrics for → parent" link. When the alternate's
-  lyrics are identical to the parent's (`Song_LyricsSameAsNormal`), the alt column reads "[same as
-  normal version]" instead of repeating them. A parent's page lists its alternate versions as links.
+- **Detail display (§4.3, FR-20).** An alternate version's page shows *its* lyrics **paired with** the
+  parent's normal lyrics, each attributed, with an "alternate title/lyrics for → parent" link. When the
+  alternate's lyrics are identical to the parent's (`Song_LyricsSameAsNormal`), the alternate's side reads
+  "[same as normal version]" instead of repeating them. A parent's page lists its alternate versions as
+  links. *(Wording aligned with FR-20's slice-2 amendment: "beside" was layout, and placement is the
+  design's call.)*
 - **Landing visibility.** By default the landing lists alternate versions alongside canonical songs,
   marked as alternates; the **Alternate-titles filter** (FR-10) hides them. Independently, a song
   flagged **`Song_Live = 1`** is **always excluded** from the landing (v2's `AND Song_Live = 0`) — the
@@ -163,9 +170,18 @@ behaviours follow, confirmed against v2 `songlist.php`:
   its type/group (as in v2 — a song does not show its band tag).
 - **FR-13** A parent song's page MUST list its alternate versions as links; an alternate version's page
   MUST link to its parent ("alternate title/lyrics for → parent").
-- **FR-20** An alternate version's page MUST display its lyrics **alongside** the parent song's normal
-  lyrics; when `Song_LyricsSameAsNormal` is set, the alternate column MUST read "[same as normal
-  version]" (linking to the parent) instead of repeating the lyrics.
+- **FR-20** *(amended — slice 2, M11.)* An alternate version's page MUST present **both** its own lyrics
+  and the parent song's normal lyrics, **paired and each clearly attributed** to the version it belongs
+  to; when `Song_LyricsSameAsNormal` is set, the alternate's side MUST read "[same as normal version]"
+  (linking to the parent) instead of repeating the lyrics.
+  > **What changed and why.** The original wording required the two to sit **"alongside"** each other.
+  > That is a *layout* constraint in a behavioural document, and `TODO-001` (the alternate-version
+  > redesign) exists precisely because where the pair sits in the page was never decided — so the old
+  > wording would have pre-empted the M13/M14 design decision it is waiting on. The **testable substance
+  > is unchanged**: both lyric sets present, attributed, with the same-as-normal case reading as such.
+  > **Placement, framing and responsive stacking now belong to `design-system.md` and the song-page
+  > design file**, not here. `song-versions.spec.ts` keeps asserting this rule; only its
+  > side-by-side/stacking geometry checks follow the design.
 - **FR-14** A song page MUST NOT display release, setlist/live-performance, tablature, or
   studio-session data in slice 1.
 - **FR-15** When a field is absent (e.g. no lyrics, no video), the page MUST omit that section
@@ -177,6 +193,35 @@ behaviours follow, confirmed against v2 `songlist.php`:
 
 - **FR-16** The site's primary navigation MUST provide a path to the Songs landing page, and each song
   page MUST link back to the Songs landing.
+
+### 4.5 Homepage and page heroes *(slice 2)*
+
+Goal B of the `5.0.x-dev2` brief. `FR-22`–`FR-24` are new behaviour; **`FR-25` records behaviour that
+already ships** (`INT8-028`, the page hero background block) and was specified nowhere.
+
+- **FR-22** The site's front page MUST be **editable content managed in the CMS** — a content item whose
+  body and layout an editor can change without a code deployment — **not** a route backed by a controller.
+  The `INT8-017` stub (`PageController::front()`, the `i8_services.front` route, and the `/home` value in
+  `system.site.yml`) MUST be removed, and `FR-16`'s navigation path MUST continue to resolve.
+- **FR-23** The homepage MUST display a **hero carrying a set editorial message** — copy chosen by an
+  editor, not the page title. This distinguishes it from the site-wide `page_hero` (FR-25), which renders
+  the page title over its background.
+- **FR-24** While the homepage hero is in view the **primary navigation MUST render transparent over it**,
+  and MUST become solid once the page is scrolled past **24px**. The 24px threshold is contractual (§1.4)
+  and matches the shipped `site-header--transparent` / `is-scrolled` behaviour; navigation links MUST
+  remain legible in both states (NFR-1).
+- **FR-25** *(records existing behaviour — see the note below.)* A page hero configured with a **library of
+  background images** MUST display **one of them chosen at random, re-selected on every page load**. The
+  selection MUST NOT be frozen by response caching — including for **anonymous** visitors, whose responses
+  Drupal's internal page cache stores indefinitely. When the library is empty the hero MUST render a plain
+  background rather than a broken or blank image area (cf. FR-15).
+  > **Why this is a requirement and not a decision.** `INT8-028` settled and built this — a deterministic,
+  > fully-cacheable server render handing the whole candidate set to the browser, which re-picks on each
+  > load, because a server-side pick freezes for anonymous visitors and BigPipe is a no-op for them. That
+  > reasoning lived only in a PHP docblock and a field description, so nothing bound it and nothing tested
+  > it *as a rule*. The `5.0.x-dev2` brief reclassified it (`D-c`) from a decision slice 2 owed into a rule
+  > slice 2 must write down. **The mechanism is not re-opened here**; this states the observable behaviour
+  > any implementation of it must keep.
 
 ---
 
@@ -213,11 +258,72 @@ behaviours follow, confirmed against v2 `songlist.php`:
   song page renders its core content (FR-12/FR-13).
 - **NFR-8** Supported browsers SHOULD be the current and previous major versions of evergreen browsers
   (Chrome, Firefox, Edge, Safari) plus their mobile equivalents.
+- **NFR-9** *(slice 2 — resolves the gap `TODO-002` named.)* **Content the site requires in order to match
+  its own specification MUST be reproducible from the repository.** A fresh `site-install` followed by a
+  config import MUST yield a site that satisfies the requirements and design without anyone rebuilding
+  content by hand — including, at minimum, the primary navigation links (`FR-16`), the footer labels, the
+  `page_hero` background block the exported config already references by UUID, and the homepage node with
+  its layout and hero (`FR-22`, `FR-23`). **`NFR-6` binds configuration; this binds the content
+  configuration points at**, which is the gap that let a green gate coexist with an unbuildable site.
+- **NFR-10** *(slice 2.)* That content MUST be **seeded, not enforced**: it is installed once to stand a
+  site up, and MUST remain **freely editable afterwards** — a subsequent deployment, config import or
+  repeat of the seeding step MUST NOT overwrite or revert an operator's edits. *This is deliberately the
+  opposite of `NFR-6`'s treatment of configuration*, and it is a **selection criterion** for the mechanism
+  chosen at M12, not a property to discover in use: content that re-imports on every deploy is worse than
+  no mechanism, because it discards real edits silently.
+- **NFR-11** *(slice 2 — handed back from `D-i`, the Composer dependency strategy.)* **The dependency set
+  MUST remain updatable.** Applying an available core or contrib release — security or otherwise — MUST
+  NOT require editing pinned version constraints, suppressing Composer's advisory policy, or any other
+  workaround, in order to make the resolve succeed. The project SHOULD also track **security-supported
+  core branches**, so that patches exist to apply when it chooses to apply them.
+  > **This binds the toolchain, not the patch level.** *When* to take a given update is an operational
+  > judgement — not every advisory warrants an immediate release, and the site owner makes that call.
+  > What is **not** a judgement call is whether the update can be applied at all: a dependency set that
+  > refuses to resolve removes the choice, and that is the failure this rule exists to prevent. Hence MUST
+  > on updatability and SHOULD on branch currency — a deliberately supported release cadence is a recorded
+  > reason under §1.2, whereas "we could not update if we wanted to" never is.
+  > **Currently breached, and that is the point.** `lando composer update` cannot resolve at all today
+  > (`S-2`): the site is on core **11.4.2**, Composer's advisory policy refuses to load it, and
+  > `drupal/core-recommended` pins core to exactly that version — so nothing moves. **M17's first ticket
+  > (core 11.4.2 → 11.4.4) is what restores the MUST**; the brief's §7 records the exposure accepted in the
+  > meantime.
 
 ---
 
 ## 7. Decisions log
 
+- **2026-08-02** — **Slice 2 requirement deltas (Milestone 11).** Added `FR-22`–`FR-25` (§4.5) and
+  `NFR-9`–`NFR-11`, and amended `FR-20` in place. Taken in turn:
+  - **`FR-20` lost the word "alongside".** It was a layout constraint sitting in a behavioural document,
+    and it would have pre-empted the very design decision `TODO-001` is parked waiting for. The rule now
+    binds *both lyric sets present and attributed*; **placement is the design's call** (M13/M14, `D-a`).
+    No test behaviour changes — only `song-versions.spec.ts`'s geometry assertions follow the new design.
+  - **`FR-22` makes the front page content, not code.** The `INT8-017` stub was always declared temporary
+    in its own docblock; this is the rule that retires it. Deliberately stated as *"editable content
+    managed in the CMS"* rather than naming Layout Builder: **which** mechanism delivers it is `D-h`, owed
+    by M12, and a requirement that names the tool would settle an architecture decision by the back door.
+  - **`FR-23`/`FR-24` are the genuinely new homepage behaviour** — the set editorial message, and the
+    transparent-over-hero navigation. **`FR-24`'s 24px is now contractual**, lifted from the shipped
+    `site-header.js`; it had no specification before, so this pins what already works rather than choosing
+    something new. Change it here first if the design wants a different threshold.
+  - **`FR-25` records what `INT8-028` already built**, per the brief's `D-c` reclassification: random
+    background image, re-picked per page load, not frozen by the anonymous page cache. This is the clearest
+    case in the project so far of **behaviour that worked, was reasoned about carefully, and bound nothing**
+    — it lived in a docblock. A rule in a docblock is a rule the next change is free to break.
+  - **`NFR-9`/`NFR-10` split reproducibility into two testable properties** rather than one: the content
+    *arrives* on a fresh install, and it *survives editing afterwards*. They are separated because they fail
+    independently and a mechanism can easily satisfy the first while violating the second — which is exactly
+    the failure the brief warns about (an artefact re-imported over the operator's edits). `NFR-10` is
+    therefore a selection criterion for M12's mechanism choice (`D-d`), not a post-hoc check.
+  - **`NFR-11` binds updatability, not the patch level** — revised during M11 review, on the site owner's
+    objection to the first draft. That draft required the site to carry **no unpatched core advisory**,
+    which is too strong in a way worth naming: it would put the project in breach from the moment any
+    advisory published until it chose to act, converting an operational judgement — *is this one worth a
+    release right now?* — into a spec violation. **The durable requirement is that the choice exists at
+    all.** So: MUST on the dependency set remaining resolvable and updatable without workarounds, SHOULD on
+    tracking security-supported branches (overridable with a recorded reason, per §1.2). The rule is
+    **currently breached on the MUST** — Composer cannot resolve at all — which is exactly what M17's first
+    ticket fixes. A requirement the project is knowingly failing is a useful document; an absent one is not.
 - **2026-07-19** — **FR-1/FR-5 reading clarified (migration imports all rows, `Song_Active → status`).**
   The Songs migration does not filter the source on `Song_Active`; it imports every `I8_Songs` row and
   maps `Song_Active` to the node's published state. FR-1 ("import every active song") is therefore
