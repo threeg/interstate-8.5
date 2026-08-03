@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Open questions register |
 | **Repository location** | `spec/open-questions.md` |
-| **Last updated** | 2026-08-02 (`S-2` recorded — the unverified Composer version-lock diagnosis, M10) |
+| **Last updated** | 2026-08-02 (`S-2` opened and closed — the Composer failure is an advisory-policy block on unpatched core, not a dependency conflict) |
 
 A live register of **values we are not certain about but are building against anyway** — something a
 client has yet to supply, a rule inferred from a sample, a system we have no access to yet.
@@ -83,7 +83,7 @@ sharpening accumulates instead of being lost in conversation.
 | Id | Question | Why it matters | What we assume for now | Resolution |
 |----|----------|----------------|------------------------|------------|
 | `S-1` | When two `song_type` terms share a weight, what decides which the Type filter offers first? | `SongTypeOptions::getTerms()` sorts on weight alone, so a tie is resolved by the database's returned order — undefined, and different from the stable-`uasort()` order the same method used before INT8-041. | Ties are not reachable — today's four types have distinct weights — and the current behaviour stands unpinned until a fifth type shares one. | left open |
-| `S-2` | What actually causes the Composer version-lock errors when applying module and security updates? | The `5.0.x-dev2` brief §2 F scopes goal F (Composer standardisation) around a **diagnosis nobody has verified**. The failing command and its error text have not been seen — the three divergences named in the brief were read off `composer.json` / `composer.lock` during the M10 review and are *consistent with* the symptom, not proven to be its cause. If the real cause is something else (a stale lock, an `allow-plugins` refusal, a contrib constraint), goal F's scope is wrong in a way that only surfaces at M17. | That `drupal/core-recommended` is the primary cause: it pins 45 transitive dependencies, including `drupal/core` at exactly `11.4.2`, which is the textbook source of an unresolvable contrib update. Secondary contributors assumed to be the absent `config.platform.php` (appserver runs PHP 8.3, so resolution differs by whichever PHP runs the command) and `minimum-stability: dev`. **M17 reproduces the real error before changing anything**, per the brief's own instruction. | left open — answered by reproducing the failure at M17 |
+| `S-2` | What actually causes the Composer version-lock errors when applying module and security updates? | The `5.0.x-dev2` brief §2 F scopes goal F (Composer standardisation) around a **diagnosis nobody has verified**. The failing command and its error text have not been seen — the three divergences named in the brief were read off `composer.json` / `composer.lock` during the M10 review and are *consistent with* the symptom, not proven to be its cause. If the real cause is something else (a stale lock, an `allow-plugins` refusal, a contrib constraint), goal F's scope is wrong in a way that only surfaces at M17. | ~~That `drupal/core-recommended` is the primary cause: it pins 45 transitive dependencies, including `drupal/core` at exactly `11.4.2`, which is the textbook source of an unresolvable contrib update. Secondary contributors assumed to be the absent `config.platform.php` and `minimum-stability: dev`.~~ **Superseded — see Resolution.** | **`closed` 2026-08-02**, answered by Gregg pasting the real error from `lando composer update drupal/ctools --with-dependencies`. **Not a dependency conflict at all: Composer's security-advisory policy is refusing to load a vulnerable `drupal/core`.** Every problem reads `found drupal/core[…] but these were not loaded, because they are affected by security advisories`. The site runs **core 11.4.2, affected by `SA-CORE-2026-010` (information disclosure), `-011` and `-012` (XSS); 11.4.4 fixes all three**. `drupal/core-recommended` 11.4.2 requires core at *exactly* 11.4.2, so an update that doesn't name it leaves core pinned to a blocked version and the whole resolve fails. **The assumption was wrong in kind, not just in detail** — `core-recommended` is the mechanism that traps the site on the blocked version, but the *cause* is an unapplied security release, and `config.platform.php` is unrelated. `5.0.x-dev2-brief.md` §2 F rewritten to match. |
 
 ---
 
@@ -135,3 +135,15 @@ document — a silently-corrected value is indistinguishable from a bug.
   mode this register exists to stop, because prose has no id and nothing sweeps it. **Cost note:** answering
   it is free right now (reproduce one command) and stays free until M17 writes tickets against the assumed
   cause; from then on a wrong diagnosis invalidates the tickets, not just the sentence.
+- **2026-08-02** — **`S-2` answered the same day it was opened, and the assumption was wrong in kind.** The
+  register cost nothing and returned a security finding: the site is on Drupal core 11.4.2 with three
+  unpatched advisories, one of them a Layout Builder XSS (`SA-CORE-2026-012` / `CVE-2026-55805`) in the
+  subsystem this very slice adopts. **This is the case for rule 2** (*an open question never blocks work*)
+  **paying for itself in the other direction:** the row did not hold anything up, and it still surfaced the
+  finding six milestones before M17 would have. Had the caveat stayed as brief prose — which is what it was
+  until the updated `sfk-next-milestone` skill forced a row — nothing would have prompted the question, and
+  the diagnosis would have been discovered at M17 with tickets already written against it.
+  **The cost note in the entry above proved exact**: answering was one pasted command. Worth remembering
+  the shape of it — the assumption was not merely imprecise, it named the wrong *kind* of problem
+  (dependency conflict rather than unapplied security release), which no amount of sharpening the wrong
+  question would have caught.
