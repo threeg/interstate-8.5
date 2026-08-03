@@ -26,6 +26,7 @@ opaque.
 | `FR-n` | Functional requirement — observable behaviour | [`requirements.md`](requirements/requirements.md) §4 (by capability) and §5 (behaviour/flow) | Requirements milestone |
 | `NFR-n` | Non-functional requirement — qualities, limits, thresholds | [`requirements.md`](requirements/requirements.md) §6 | Requirements milestone |
 | `DR-n` | Domain rule — an invariant of the song data model (one type per song, parent links, what makes a song an alternate version) | [`requirements.md`](requirements/requirements.md) §3 | Requirements milestone |
+| `D-x` | Decision a version owes — a choice that version exists to make, lettered (`D-a`…) and scoped to one version brief. **Not** an open question: a `D-x` is ours to settle, and it is retired by the milestone that settles it rather than answered from outside | that version's brief, e.g. [`5.0.x-dev2-brief.md`](brief/5.0.x-dev2-brief.md) §3 | `sfk-version`; extended by the brief's ratification milestone |
 | `Q-n` | Open question for someone outside the team — a value we assume until it is confirmed | [`open-questions.md`](open-questions.md) §1 | Any milestone or ticket |
 | `S-n` | Open question we owe ourselves | [`open-questions.md`](open-questions.md) §2 | Any milestone or ticket |
 | `TODO-n` | Parking-lot item — work awaiting a decision of ours | [`TODO.md`](TODO.md) | `sfk-todo`, any time |

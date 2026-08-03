@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Open questions register |
 | **Repository location** | `spec/open-questions.md` |
-| **Last updated** | 2026-08-02 (`S-1` recorded — the `song_type` weight tie-break, INT8-045) |
+| **Last updated** | 2026-08-02 (`S-2` recorded — the unverified Composer version-lock diagnosis, M10) |
 
 A live register of **values we are not certain about but are building against anyway** — something a
 client has yet to supply, a rule inferred from a sample, a system we have no access to yet.
@@ -83,6 +83,7 @@ sharpening accumulates instead of being lost in conversation.
 | Id | Question | Why it matters | What we assume for now | Resolution |
 |----|----------|----------------|------------------------|------------|
 | `S-1` | When two `song_type` terms share a weight, what decides which the Type filter offers first? | `SongTypeOptions::getTerms()` sorts on weight alone, so a tie is resolved by the database's returned order — undefined, and different from the stable-`uasort()` order the same method used before INT8-041. | Ties are not reachable — today's four types have distinct weights — and the current behaviour stands unpinned until a fifth type shares one. | left open |
+| `S-2` | What actually causes the Composer version-lock errors when applying module and security updates? | The `5.0.x-dev2` brief §2 F scopes goal F (Composer standardisation) around a **diagnosis nobody has verified**. The failing command and its error text have not been seen — the three divergences named in the brief were read off `composer.json` / `composer.lock` during the M10 review and are *consistent with* the symptom, not proven to be its cause. If the real cause is something else (a stale lock, an `allow-plugins` refusal, a contrib constraint), goal F's scope is wrong in a way that only surfaces at M17. | That `drupal/core-recommended` is the primary cause: it pins 45 transitive dependencies, including `drupal/core` at exactly `11.4.2`, which is the textbook source of an unresolvable contrib update. Secondary contributors assumed to be the absent `config.platform.php` (appserver runs PHP 8.3, so resolution differs by whichever PHP runs the command) and `minimum-stability: dev`. **M17 reproduces the real error before changing anything**, per the brief's own instruction. | left open — answered by reproducing the failure at M17 |
 
 ---
 
@@ -127,3 +128,10 @@ document — a silently-corrected value is indistinguishable from a bug.
   correctly identified as unpinned but recorded in the ticket's own notes instead of here. Root
   `CLAUDE.md`'s rule is that recording an unknown needs no permission — INT8-041 did the hard half (noticing
   it, not guessing) right; only its destination was wrong, and this entry is that correction.
+- **2026-08-02** — **`S-2` opened during Milestone 10, and it is a caveat that had nowhere to live.** Goal F
+  (Composer standardisation) was added to the `5.0.x-dev2` brief on an inferred cause: the failing update was
+  never run in front of anyone, so the brief's three named divergences are evidence, not a diagnosis. That
+  caveat *was* stated — in the brief's prose and in the chat that produced it — which is exactly the failure
+  mode this register exists to stop, because prose has no id and nothing sweeps it. **Cost note:** answering
+  it is free right now (reproduce one command) and stays free until M17 writes tickets against the assumed
+  cause; from then on a wrong diagnosis invalidates the tickets, not just the sentence.
