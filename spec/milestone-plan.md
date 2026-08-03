@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Milestone plan and progress tracker |
 | **Repository location** | `spec/milestone-plan.md` |
-| **Last updated** | 2026-08-02 (Milestone 10 started — version brief under review) |
+| **Last updated** | 2026-08-02 (Milestone 10 signed off — the `5.0.x-dev2` brief is ratified) |
 
 This document is the single source of truth for **where the project is**. It is extracted from the
 project brief so the brief stays stable after approval while this tracker is updated as each milestone
@@ -17,10 +17,17 @@ together, commit by commit.
 
 ## Current position
 
-Version `5.0.x-dev2` (slice 2 — consolidation) — **Milestone 10 (Version brief — review and ratify),
-`In progress` (🔶).** The version brief exists as a **draft** (`spec/brief/5.0.x-dev2-brief.md`, laid
-down by `sfk-version` 2026-08-02); Milestone 10 is its review and ratification, started by
-`sfk-next-milestone` on 2026-08-02. It stays `In progress` until `sfk-signoff` ratifies it.
+Version `5.0.x-dev2` (slice 2 — consolidation) — **Milestone 11 (Requirement deltas), `Not started`
+(⬜).** Milestone 10 was signed off 2026-08-02: [`spec/brief/5.0.x-dev2-brief.md`](brief/5.0.x-dev2-brief.md)
+is **ratified and binding for slice 2**. `sfk-next-milestone` starts Milestone 11.
+
+**The brief grew during ratification, from four goals to six.** The M10 review found that three things the
+draft treated as open were already settled by slice 1 — the hero image library's modelling, the random-pick
+semantics and their render-cache workaround (all `INT8-028`, the page hero background block), and the
+existing `<front>` exclusion on the hero region block — so `D-b` narrowed and `D-c` was reclassified from a
+decision to a requirement M11 must simply write down. Two goals were then added: **E**, a root `README.md`
+(the repository has none), and **F**, Composer standardisation (`D-i`), prompted by version-lock errors when
+applying module and security updates.
 
 Slice 2 is a **consolidation slice: it adds no archive content type.** It finishes the two screens slice 1
 actually designed — the song page's alternate-version composition (`TODO-001`, the alternate-version
@@ -35,7 +42,9 @@ homepage", which makes M12 the heaviest milestone of the slice and makes B and C
 the homepage node is exactly the content the default-content mechanism has to carry.
 
 `S-1` (the `song_type` equal-weight tie-break) stays open and is **not** in slice 2's scope: no external
-dependency, so no lead time, and unreachable on today's four types.
+dependency, so no lead time, and unreachable on today's four types. `S-2` (what actually causes the
+Composer version-lock errors) was opened at M10 and **is** in scope — it is answered by reproducing the
+failure at M17, and answering it is free until M17 writes tickets against the assumed cause.
 
 > **Slice 1 (`5.0.x-dev`) is complete** — all nine milestones signed off 2026-08-02 and tagged
 > `5.0.x-dev1`. It shipped the Songs content model and the v2 migration (492 songs), the theme
@@ -83,7 +92,7 @@ deltas against the living spec rather than a fresh specification. Scope in
 
 | # | Milestone | Deliverable | Tool | Status |
 |---|-----------|-------------|------|--------|
-| 10 | Version brief — review and ratify | `spec/brief/5.0.x-dev2-brief.md` reviewed and approved (the draft already exists; this milestone is its ratification) | Cowork | 🔶 |
+| 10 | Version brief — review and ratify | `spec/brief/5.0.x-dev2-brief.md` reviewed and approved (the draft already exists; this milestone is its ratification) | Cowork | ✅ |
 | 11 | Requirement deltas | `spec/requirements/requirements.md` — new `FR`/`NFR` for the homepage hero (its **set message** is the new part) and for content reproducibility; amend-in-place for the song-page alternates. **Writes down `INT8-028`'s existing per-page-load random-image behaviour as an `FR`** — D-c is a requirement to record, not a decision to make | Cowork | ⬜ |
 | 12 | Architecture & content-model deltas | `spec/architecture/architecture.md` + `content-model.md` — **the heaviest milestone of the slice**: the homepage content type and how narrowly Layout Builder is scoped on it (D-h); the hero block type's message field and **placement**, reusing `page_hero`'s existing `field_background_images` shape and formatter (D-b); the default-content mechanism, contrib surveyed first and seeding rather than enforcing (D-d, `TODO-002`) | Cowork | ⬜ |
 | 13 | Wireframe deltas | `spec/wireframes/` — alternate-version placement inside the real song page (D-a) and the homepage hero; wireframe cleanup, and whether wires stay binding for state coverage (D-e) | Cowork | ⬜ |

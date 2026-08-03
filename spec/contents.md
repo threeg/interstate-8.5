@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Specification contents (navigation index) |
 | **Repository location** | `spec/contents.md` |
-| **Last updated** | 2026-08-01 (created at the v1.4.3 kit update; populated from the slice-1 tree) |
+| **Last updated** | 2026-08-02 (Milestone 10 sign-off — the `5.0.x-dev2` brief added; two register descriptions corrected) |
 
 Every document in `spec/`, in milestone order, so you can reach any part of the specification from one
 place instead of opening folders. Open this file on your forge (GitHub/GitLab render it) or in any
@@ -38,15 +38,16 @@ other document needs a link back.
 
 | Document | What it is |
 |---|---|
-| [`open-questions.md`](open-questions.md) | Values we build against but cannot confirm — `Q-n` for outside the team, `S-n` for ourselves. Never blocks work. Empty as of slice 1. |
+| [`open-questions.md`](open-questions.md) | Values we build against but cannot confirm — `Q-n` for outside the team, `S-n` for ourselves. Never blocks work. Two `S-n` rows open as of M10; no `Q-n`. |
 | [`TODO.md`](TODO.md) | The parking lot: work known but not yet specifiable, because the decision it needs doesn't exist. |
-| [`id-registry.md`](id-registry.md) | What each id prefix (`FR-`, `NFR-`, `DR-`, `Q-`, `S-`, `TODO-`, `INT8-`) means, and which document defines it. |
+| [`id-registry.md`](id-registry.md) | What each id prefix (`FR-`, `NFR-`, `DR-`, `D-`, `Q-`, `S-`, `TODO-`, `INT8-`) means, and which document defines it. |
 
 ## 1. Brief
 
 | Document | What it is |
 |---|---|
 | [`brief/brief.md`](brief/brief.md) | **Binding.** Northstar, slice-1 scope, users, out-of-scope, success criteria. |
+| [`brief/5.0.x-dev2-brief.md`](brief/5.0.x-dev2-brief.md) | **Binding for slice 2.** The `5.0.x-dev2` delta brief: six goals (song-page alternates, the real homepage, reproducible install content, the design-source restructure, a root README, Composer standardisation), the `D-x` decisions the version owes, success criteria and risks. Scopes changes *against* the living spec — it does not reopen the northstar. |
 
 ## 2. Requirements
 
