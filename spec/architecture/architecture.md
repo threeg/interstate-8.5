@@ -25,9 +25,14 @@ code-first theme.
 The single most important structural decision (from the front-end/theme proposal): **the uniform,
 structured archive pages are themed in code** — Drupal **view modes + Twig overrides + SDC
 components**, styled with **Tailwind v4** over **CSS-custom-property design tokens** — rather than
-composed in Layout Builder. Layout Builder is reserved for the one genuinely bespoke page (the home
-page), which is design-only in slice 1. Keeping entity pages code-themed keeps the future JSON surface
-clean and the site page-builder-agnostic.
+composed in Layout Builder. **Layout Builder is reserved for bespoke editorial pages — the `page`
+content type, and nothing else** (`content-model.md` §9.1, settled at M12). Keeping entity pages
+code-themed keeps the future JSON surface clean and the site page-builder-agnostic.
+
+> **The line, since it is the one people get wrong.** It is **not** "Layout Builder for one page" — it is
+> *Layout Builder for the kind of content that is composed, never for the kind that is structured.* The
+> homepage, About, Terms and Privacy are the former; songs, releases, setlists and news are the latter.
+> Slice 1 stated this as "only the home page" because `page` did not exist yet.
 
 For slice 1 the concrete surface is: the **Song** content type, a **Song type** taxonomy, a Migrate
 source plugin for Songs, a Songs **landing** (a View) and a **song page** (a view mode + Twig),
@@ -49,14 +54,20 @@ content-model → services → theme,   with  migration  populating  content-mod
 |-------|------------------------|-------|
 | `content-model/` | (nothing project-internal) | Entity, field, content-type and taxonomy definitions (Drupal config). The data foundation. |
 | `migration/` | `content-model` | Migrate API source/process plugins populating the content model from the v2 MySQL dump. |
+| `default-content/` | `content-model` | *(slice 2, M12.)* The seeded install content — menu links, the hero blocks, the homepage node and its layout — shipped via the `default_content` module (`content-model.md` §11). A **sibling of `migration`**: both populate the content model from outside and depend only on its definitions. Distinct from `migration` because its source is the repository rather than the v2 dump, and it runs at install rather than on demand. |
 | `services/` | `content-model` | Custom-module logic (e.g. filter/sort helpers, version-display logic). |
 | `theme/` | consumes rendered content | SDC components, Twig templates, Tailwind. **Nothing imports `theme`.** |
 | `config/`, `tooling/`, `docs/` | cross-cutting | Exported config, build/test tooling, documentation. |
 
 **The dependency rule (enforced, not aspirational).** `content-model → services → theme`, with
-`migration` depending only on `content-model` and nothing importing `theme`. This is checked by a
-boundary tool wired in during the **scaffolding milestone** (§8), and the ticket `depends_on` graph
-(`spec/tickets/CONVENTIONS.md`) must respect the same ordering. A violation fails the default gate.
+`migration` **and `default-content`** depending only on `content-model`, and nothing importing `theme`.
+This is checked by a boundary tool wired in during the **scaffolding milestone** (§8), and the ticket
+`depends_on` graph (`spec/tickets/CONVENTIONS.md`) must respect the same ordering. A violation fails the
+default gate.
+
+> **`default-content` is new at M12** and the boundary check does not know about it yet. Teaching
+> `tooling/check-boundary.sh` the new layer is **M17 tooling work**, not part of a feature ticket — the
+> same reasoning that puts the Composer standardisation there.
 
 ### 2.2 Content model (the foundation)
 
@@ -149,6 +160,11 @@ The authoritative field-by-field mapping is in `content-model.md`; this is the o
 | | Exclude from list | boolean | v2 `Song_Live`; hides the song from the landing (FR-6). Shipped as `field_exclude_from_list`. |
 | | Legacy id | integer (indexed) | v2 `PK_Song_ID`; cross-cutting convention (§3.3). |
 | **Song type** | Name | taxonomy term | e.g. Modest Mouse, Ugly Casanova, Side Projects, Covers (§2.1 of requirements). |
+| **Page** *(slice 2)* | Title | node title | Bespoke editorial pages — the homepage, and later About/Terms/Privacy. Not rendered as the homepage's visible heading (`content-model.md` §9). |
+| | Body | rich text | Restricted HTML. Optional; the homepage may leave it empty. |
+| | *(layout)* | `layout_builder__layout` | Per-node Layout Builder override — **content, not config** (`content-model.md` §9.1). |
+| **Homepage hero** *(slice 2)* | Message | rich text | The set editorial line (FR-23). The only new field the slice's hero needs. |
+| | Background images | reference → Media (image), unlimited | **Shared storage** with `page_hero`; rendered by the existing `i8_hero_background` formatter (FR-25). |
 
 **Deferred seams.** The deferred relationships (a song's releases, live performances, tabs, studio
 sessions) are **inbound** from other entities not built in slice 1, so the Song type needs no seam
@@ -198,6 +214,30 @@ id**. Detailed per-entity mapping is in `content-model.md`.
 
 ---
 
+### 4.4 Homepage render (FR-22–FR-25) — slice 2
+
+1. `content-model` — `system.site.yml`'s `front` resolves to the homepage **`page` node**'s stable path
+   alias (`content-model.md` §11.4). The `INT8-017` stub controller, its route and the `/home` value are
+   gone (FR-22).
+2. `content-model` — the node's `layout_builder__layout` field supplies the composition (per-node
+   override, `content-model.md` §9.1), referencing the reusable **`homepage_hero`** block.
+3. `services` — `HeroBackgroundFormatter` renders one deterministic background candidate and emits the
+   full candidate set for the client-side reroll (FR-25), exactly as it already does for `page_hero`.
+4. `theme` — the hero renders its `field_message` (FR-23); the site header renders in its
+   `site-header--transparent` variant, solidifying past 24px (FR-24). The `page_hero` region block does
+   **not** render here — its `<front>` exclusion holds (`content-model.md` §10.2).
+
+### 4.5 Fresh-install content seeding (NFR-9, NFR-10) — slice 2
+
+1. `site-install` → `config:import` — brings up the site and its **configuration**, including the block
+   placements that reference content by UUID.
+2. `default-content` — installing the owned default-content module imports the seeded entities **by
+   UUID** (`content-model.md` §11.2), so those config references resolve.
+3. **Nothing re-runs.** Later deployments and config imports do not re-import content, so operator edits
+   survive (NFR-10, `content-model.md` §11.3).
+
+---
+
 ## 5. Startup and runtime topology
 
 Local development is **Lando** (nginx + PHP-FPM + MySQL). `lando start` brings the environment up in one
@@ -223,8 +263,9 @@ Settled in the prior proposals; made contractual here.
 | Search | **Search API + DB backend** — **deferred** | Not in slice 1; a View covers the landing (lazy adoption). |
 | URLs | **Pathauto + Redirect** | Clean URLs now; the v2→v5 path map itself is **deferred to a future SEO slice** (§3.3). |
 | Theme | **Owned starterkit theme**, **SDC**, **Tailwind v4** (no SASS), **CSS-custom-property tokens** | Own the stack, minimise contrib. |
-| Layout | **Code-theme entity pages**; **Layout Builder only for the home page** | No per-instance variance on archive pages; keep the entity API clean. |
-| Excluded | Layout Builder for entity pages, **Drupal Canvas** (immature), **SASS**, **React/headless**, contrib Tailwind base themes | Reversible "not now" where relevant (all SDC underneath). |
+| Layout | **Code-theme archive entity pages**; **Layout Builder on the `page` content type only**, with per-node override | *Amended M12 (`D-h`).* Bespoke editorial pages (home, About, Terms, Privacy) are composed; archive entities are structured and must not acquire per-instance variance. See `content-model.md` §9.1 for the scoping table and the cost of override. |
+| Default content | **`default_content` 2.x**, seeded once on module install | *Added M12 (`D-d`).* Makes a fresh install reproducible (NFR-9) while leaving content editable afterwards (NFR-10). Chosen on **UUID preservation**, which exported config requires. Beta; install-time dependency only — see `content-model.md` §11.1. |
+| Excluded | Layout Builder on **archive** content types (`song`, and later releases/setlists/news), **Drupal Canvas** (immature), **SASS**, **React/headless**, contrib Tailwind base themes | *Exclusion sharpened M12:* it was "entity pages", which `page` is too — the real bar is structured-vs-composed. Reversible "not now" where relevant (all SDC underneath). |
 
 Pinned majors: Drupal 11, Tailwind v4. Keep this section in step with the root `CLAUDE.md` *Stack*.
 
@@ -239,6 +280,25 @@ Pinned majors: Drupal 11, Tailwind v4. Keep this section in step with the root `
 > Milestone 3 decisions are recorded in §6's *Rationale / exclusions* column and in the milestone's
 > sign-off rather than here. The log runs forward from this entry.
 
+- **2026-08-02** — **Slice 2 architecture deltas (Milestone 12).** The content-model detail and the full
+  reasoning for `D-h`/`D-b`/`D-d` live in `content-model.md` §9–§11 and its own log; recorded here are the
+  four changes to *this* document:
+  - **§1 and §6 — the Layout Builder line moved from a page to a content type.** It read *"Layout Builder
+    only for the home page"*; it now reads **"the `page` content type only, and nothing else"**. This is a
+    **widening in letter and a tightening in principle**: slice 1 could say "one page" because `page` did
+    not exist, but the real bar was always *composed vs structured* content, and stating it that way is
+    what makes it enforceable when About and Terms arrive. The **binding half is the exclusion** — Layout
+    Builder never on `song` or any later archive type, because per-instance layout variance on structured
+    content is what would dirty the future JSON surface (§1).
+  - **§6's *Excluded* row sharpened** from "Layout Builder for entity pages" — `page` is an entity page
+    too, so the old wording now excluded the very thing §6 permits.
+  - **§2.1 — new `default-content/` layer**, a sibling of `migration`: both populate `content-model` from
+    outside and depend on nothing else. Kept separate from `migration` because its source is the
+    repository rather than the v2 dump and it runs at install rather than on demand. **The boundary check
+    does not know this layer yet** — teaching `tooling/check-boundary.sh` about it is **M17 tooling
+    work**, flagged in §2.1 so it cannot be quietly absorbed into a feature ticket.
+  - **§4.4/§4.5 — two new flows**, the homepage render and fresh-install seeding, so every slice-2 `FR`
+    and `NFR` has a traced path through the layers as §4's other flows do.
 - **2026-08-01** — **Dropped "provisional" from §2.1.** The layering was described as *"Provisional
   Drupal-oriented layering, finalised here"*, which contradicted itself, and the root `CLAUDE.md` and
   `spec/tickets/CONVENTIONS.md` §3 both said the layer set would be *"finalised in the Architecture

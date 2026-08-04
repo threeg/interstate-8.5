@@ -331,7 +331,8 @@ already ships** (`INT8-028`, the page hero background block) and was specified n
   492 are active) are imported **unpublished** rather than dropped, which is lossless and recoverable.
   FR-5's count parity holds; its verification check is tightened to compare *published* imported count
   against the active-source count in **INT8-025**. Rationale and the authoritative mapping live in
-  `content-model.md` §8/§9. (Surfaced by `sfk-verify` on the migration batch; no FR text changed.)
+  `content-model.md` §8/§12 *(the decisions log, renumbered from §9 at M12)*. (Surfaced by `sfk-verify` on
+  the migration batch; no FR text changed.)
 - **2026-07-07** — **Accessibility: WCAG 2.1 AA** chosen over 2.2 AA (newer, stricter) and 2.1 A
   (lighter): 2.1 AA is the established practical/legal baseline; day-one per project principle.
 - **2026-07-07** — **No pagination on the Songs landing** (~400 songs as text links, one page): the

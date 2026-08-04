@@ -1,27 +1,44 @@
-# Interstate-8 — Content Model (v5, `5.0.x-dev` slice 1)
+# Interstate-8 — Content Model (v5, `5.0.x-dev` line)
 
 | | |
 |---|---|
 | **Document** | Content model — content types, fields, taxonomy (the data contract) |
 | **Repository location** | `spec/architecture/content-model.md` |
-| **Status** | Binding specification — Milestone 3 signed off (2026-07-07) |
+| **Status** | Binding specification — Milestone 3 signed off (2026-07-07); **amended at Milestone 12 for slice 2 (`5.0.x-dev2`), 2026-08-02** |
 | **Companion to** | `architecture.md` (§3 data model overview) |
 | **Grounding** | v2 `I8_Songs` / `I8_SongType` (validated schema) and the requirements (`FR`/`NFR`) |
 
-> **Purpose.** The authoritative field-by-field design for slice 1: the **Song** content type, the
-> **Song type** taxonomy, the **Remote video** media use, and the **Restricted HTML** text format. Per
-> the project non-negotiable, this config is **generated in the Drupal admin UI/API and exported**,
-> then the exported config is verified against this document — never hand-authored. Machine names below
-> are proposed; confirm on review.
+> **Purpose.** The authoritative field-by-field design. **Slice 1** (§2–§8): the **Song** content type,
+> the **Song type** taxonomy, the **Remote video** media use, and the **Restricted HTML** text format.
+> **Slice 2** (§9–§11): the **Page** content type and its Layout Builder scoping, the **Homepage hero**
+> block type, and the **default content** that makes a fresh install reproducible. Per the project
+> non-negotiable, this config is **generated in the Drupal admin UI/API and exported**, then the exported
+> config is verified against this document — never hand-authored.
+>
+> **Section numbering note (M12).** Slice 2's sections were inserted as §9–§11 and the decisions log moved
+> from §9 to **§12**. One citation was updated to match (`requirements.md`'s 2026-07-19 log entry). Prefer
+> citing this file rather than a section number — see *Resolving an id* in `spec/README.md`.
 
 ---
 
-## 1. Decisions (this milestone)
+## 1. Decisions
+
+**Milestone 3 (slice 1):**
 
 - **Song = node content type** (`song`) — pragmatic Drupal default; view modes + Twig + Pathauto.
 - **Song type = taxonomy vocabulary** (`song_type`) — entity reference; add/reorder via UI.
 - **Music video = Core Media "Remote video"** (oEmbed) — reference a Media entity, not raw markup.
 - **Rich text = a "Restricted HTML" text format** — the FR-21 cleanup target.
+
+**Milestone 12 (slice 2):**
+
+- **A general `page` content type, not a single-use `homepage` type** (§9, `D-h`) — the homepage is one
+  node of it; About, Terms and Privacy are later nodes of the same type.
+- **Layout Builder is enabled on `page` with per-node override** (§9, `D-h`) — and on **nothing else**.
+- **Homepage hero = its own block type** `homepage_hero` (§10, `D-b`), **reusing** `page_hero`'s existing
+  `field_background_images` storage and the `i8_hero_background` formatter (FR-25).
+- **Default content = the `default_content` module** (§11, `D-d`, `TODO-002`) — seeds on install,
+  preserves UUIDs, never re-imports over an operator's edits.
 
 ---
 
@@ -165,8 +182,179 @@ Migration is idempotent and rollbackable (FR-4); imported count is verified agai
 
 ---
 
-## 9. Decisions log
+## 9. Content type: `Page` (node) — slice 2
 
+Settles `D-h`. Realises **FR-22** (the front page is editable content, not a controller).
+
+**A general type, not a homepage type.** The site needs one homepage but several other bespoke pages —
+About, Terms, Privacy — and they are the same *kind* of thing: hand-composed editorial pages, as opposed
+to the uniform archive entities (`song`, and later releases/setlists/news) that are code-themed. A
+single-use `homepage` type would be a content type per node. **The homepage is simply the `page` node
+that `system.site.yml` points `front` at.** (Operator decision, M12.)
+
+| Label | Machine name | Drupal type | Card. | Req. | Notes |
+|-------|--------------|-------------|:----:|:----:|-------|
+| Title | `title` (node) | node title | 1 | ✔ | Not necessarily rendered — the homepage's visible heading comes from its hero (§10), not the node title. |
+| Body | `body` | Text (formatted, long) | 1 | — | Restricted HTML (§5). The default content region for a plain page (About, Terms). The homepage may leave it empty. |
+
+**No `field_legacy_id`.** The cross-cutting convention (§2, `architecture.md` §3.3) applies to **migrated**
+content; `page` nodes are authored natively in v5 and have no v2 primary key. Adding the field would leave
+it permanently empty and imply a migration that does not exist.
+
+### 9.1 Layout Builder scoping (`D-h`) — the precedent every later page inherits
+
+| Setting | Value | Why |
+|---|---|---|
+| Layout Builder enabled | **`page` only** | The northstar scopes Layout Builder *"narrowly"* (`brief.md` §8) and `architecture.md` §6 excludes it from entity pages. **The bound that keeps "narrowly" meaningful is the content type, not the page count:** LB is for bespoke editorial composition; archive entities stay code-themed. |
+| Enabled on `song` or any archive type | **Never** | Uniform structured content must not acquire per-instance layout variance — that is what keeps the future JSON surface clean (`architecture.md` §1). This is the binding half of the rule. |
+| Per-node override (`allow_custom`) | **On** | Each bespoke page differs by definition; a shared default layout that every node overrides is a default in name only. |
+
+**The cost of override, stated plainly.** With `allow_custom: true` the layout lives in the **node**
+(`layout_builder__layout`), not in the view display — so it is **content, not config**. Two consequences
+follow and both are handled rather than accepted silently:
+
+1. **It is invisible to config diffs.** A layout change will not appear in a `config:export` review. This
+   is the deliberate trade for editorial freedom on bespoke pages, and it is bounded by the rule above —
+   nothing structured is ever laid out this way.
+2. **It must be seeded** (§11), because `NFR-9` requires a fresh install to produce a working homepage.
+   This is why §10's hero is a **reusable** block rather than an inline one.
+
+## 10. Block type: `Homepage hero` — slice 2
+
+Settles `D-b`. Realises **FR-23** (set editorial message) and inherits **FR-25** (random background).
+That this is a *separate* block type rather than an extension of `page_hero` was settled in the version
+brief §2 B, not here.
+
+| Label | Machine name | Drupal type | Card. | Req. | Notes |
+|-------|--------------|-------------|:----:|:----:|-------|
+| Message | `field_message` | Text (formatted, long) | 1 | ✔ | Restricted HTML (§5). The set editorial line (FR-23) — **this is the only genuinely new field in slice 2's hero.** Replaces the page title `page_hero` renders. |
+| Background images | `field_background_images` | Entity reference → Media (image), **unlimited** | −1 | — | **Reuses the existing field storage** `block_content.field_background_images` (created for `page_hero` at INT8-028) on a second bundle. Rendered through the existing `i8_hero_background` formatter. |
+
+**Why the reuse is safe, and why it is not laziness.** A field *storage* in Drupal is per entity type, so
+`block_content.field_background_images` is already available to any `block_content` bundle — attaching it
+to `homepage_hero` creates a new `field.field.*` instance against the **same storage**, which is the
+normal Drupal pattern, not a workaround. `HeroBackgroundFormatter` is a **field formatter on an
+entity-reference field** and its docblock is explicit that *"nothing here knows it is inside a block"* —
+so it carries to the new bundle unchanged, and **FR-25 is satisfied without new code**. Re-modelling the
+image library for the second hero would duplicate a solved problem and give the two heroes divergent
+behaviour for no gain.
+
+### 10.1 Placement — reusable block, not inline
+
+The homepage hero MUST be a **reusable `block_content` entity referenced from the layout**, not a Layout
+Builder *inline* block.
+
+- **Inline blocks are `block_content` entities with `reusable: false`, owned by the layout field.** They
+  are the awkward case for content export (§11) precisely because they have no independent existence —
+  they travel inside the node's serialised layout rather than as entities in their own right.
+- **A reusable block is an ordinary entity with a stable UUID**, exported and seeded exactly like the
+  `page_hero` block already is, and editable without entering Layout Builder at all.
+- It also keeps the two heroes structurally parallel, which is what makes the shared field storage and
+  shared formatter above coherent rather than coincidental.
+
+### 10.2 The existing `page_hero` region block
+
+`block.block.interstate_85_pageherobackground.yml` already carries
+`visibility.request_path: { negate: true, pages: '<front>' }` — it renders on every page **except** the
+front page. **That exclusion is what stops the two heroes colliding, and it already works.** M12's only
+obligation, per the version brief, was to confirm it still holds once `<front>` resolves to a `page` node
+rather than the `/home` stub route: **it does** — `request_path`'s `<front>` token matches whatever the
+front page currently is, so it follows the change rather than needing to be re-pointed.
+
+## 11. Default content — reproducible install content — slice 2
+
+Settles `D-d`, resolving the gap `TODO-002` named. Realises **NFR-9** (reproducible) and **NFR-10**
+(seeded, not enforced).
+
+**Mechanism: the `default_content` module** (2.x), with the content shipped inside a small owned module.
+(Operator decision, M12.)
+
+### 11.1 Why this one — the survey `D-d` required
+
+The hard constraint first: **`block.block.interstate_85_pageherobackground.yml` hard-references the hero
+block's UUID** in both `dependencies.content` and its `plugin` key. Any mechanism that creates entities
+with fresh UUIDs produces a site whose exported config points at nothing. **UUID preservation is
+therefore a gate, not a preference**, and it eliminates most of the field.
+
+| Candidate | Verdict |
+|---|---|
+| **`default_content` 2.x** | **Chosen.** Imports **by UUID**; seeds **once, when its module is installed**, which makes `NFR-10` true *by construction* rather than by policy; covers `node`, `block_content`, `menu_link_content` and `media` through one mechanism. |
+| `default_content_deploy` | Rejected. Built on the same base, but its purpose is **repeated** content deployment between environments — the enforce direction `NFR-10` warns against, and materially more surface than a one-time seed needs. |
+| `single_content_sync` | Rejected. Manual YAML/ZIP snippets for ad-hoc transfers. The wrong shape for install-time seeding. |
+| `structure_sync` | Rejected. Covers menus and custom blocks but **not nodes or layouts**, so it would need a second mechanism beside it. Its D11 status was not pursued, the coverage gap being decisive on its own. |
+| Owned `hook_install()` | Rejected as the **starting point**, per the brief's lazy-adoption reading: the trigger now exists, contrib covers it, and hand-writing entity creation for UUID-pinned blocks and a serialised `layout_builder__layout` field is the likelier failure than over-engineering. Remains the fallback if `default_content` proves unworkable at M17. |
+
+**The accepted risk, named.** `default_content` 2.x is at **beta** with no stable release. This is
+tolerable because it is an **install-time dependency, not a runtime one** — nothing on a running site
+calls it, so a defect affects standing up a *new* site, which is exactly the scenario that has no working
+alternative today. Confirm the current release state at M17 before adding the dependency.
+
+### 11.2 What is seeded
+
+Everything a fresh `site-install` + `config:import` needs in order to satisfy the requirements and design:
+
+| Content | Entity type | Why it must be seeded |
+|---|---|---|
+| Primary nav **Home** and **Songs** links | `menu_link_content` | The Songs link is the concrete realisation of **FR-16**. |
+| The five footer labels | `menu_link_content` | `block.block.interstate_85_footermenu.yml` renders an empty row without them. |
+| `page_hero` background block | `block_content` | **UUID-pinned** by exported config (above). |
+| The **homepage** `page` node, including its `layout_builder__layout` | `node` | The layout is content, per §9.1. |
+| The **homepage hero** block | `block_content` | Reusable (§10.1), referenced from that layout. |
+| Hero background images | `media` + `file` | Referenced by `field_background_images`; the images themselves must travel. |
+
+### 11.3 Seed, not enforce (`NFR-10`)
+
+`default_content` imports when its module is installed and **does not re-import on subsequent config
+imports or deployments**. An operator who rewrites the homepage hero's message keeps that edit through
+every later deploy. **This is deliberately the opposite of how `NFR-6` treats configuration**, and it is
+why the module is installed once rather than wired into a recurring deploy step.
+
+> **The failure this avoids.** A mechanism that re-asserts content on every deploy silently discards real
+> editorial work — worse than having no mechanism, because the loss is invisible until someone notices
+> their words are gone.
+
+### 11.4 The front-page pointer
+
+`system.site.yml`'s `front` value MUST point at a **stable path alias** for the homepage node, not at
+`/node/N`. Node ids are assigned at install time and are not stable across installs; the alias is seeded
+with the node and is. This replaces the `/home` value the `INT8-017` stub owned (**FR-22**).
+
+## 12. Decisions log
+
+- **2026-08-02** — **Slice 2 content-model deltas (Milestone 12): `D-h`, `D-b`, `D-d` settled.** Added
+  §9 (`page` type + Layout Builder scoping), §10 (`homepage_hero` block), §11 (default content). The
+  decisions log moved from §9 to §12; `requirements.md`'s 2026-07-19 entry updated to cite §8/§12.
+  - **`D-h` — a general `page` type, not a `homepage` type, with per-node override on.** *This reversed
+    the milestone's own recommendation, on the operator's argument:* the site will have exactly one
+    homepage but several bespoke pages (About, Terms, Privacy) of the same kind, so a single-use content
+    type would be a type per node. The homepage is just the `page` node `front` points at.
+    The recommendation had been a dedicated `homepage` type with override **off**, on the grounds that it
+    puts the layout in config where it is exported, verified and diff-reviewable. **That benefit is
+    genuinely lost** and is recorded in §9.1 rather than glossed: layout changes will not show up in a
+    config review. It is outweighed by not minting a content type per page, and bounded by the harder
+    half of the rule — **Layout Builder is enabled on `page` and nothing else, never on archive types.**
+    *Consequence:* `FR-22` stands **unamended**. Its "body and layout an editor can change without a code
+    deployment" clause required override-on; had the recommendation been taken, `FR-22` would have needed
+    amending first, which is why it was put to the operator as a spec question rather than decided here.
+  - **`D-b` — `homepage_hero` block type; one new field, everything else reused.** `field_message` is the
+    only new modelling. The `field_background_images` **storage is shared** with `page_hero` (storages are
+    per entity type in Drupal, so this is the ordinary pattern) and `HeroBackgroundFormatter` is a field
+    formatter that, by its own docblock, *"knows nothing about being inside a block"* — so **`FR-25` is
+    satisfied with no new code**. Placement is a **reusable** block referenced from the layout, **not** an
+    inline block: inline blocks have no independent existence and travel inside the serialised layout,
+    which is the awkward case for §11's export. The existing `page_hero` region block's `<front>`
+    exclusion was **confirmed still valid** — `request_path`'s `<front>` token tracks whatever the front
+    page is, so it follows the switch from stub route to node without being re-pointed.
+  - **`D-d` — `default_content` 2.x.** Chosen against `default_content_deploy` (built for *repeated*
+    environment-to-environment deploys — the enforce direction `NFR-10` warns against),
+    `single_content_sync` (manual snippets, wrong shape for install-time seeding), `structure_sync` (no
+    node or layout coverage, so a second mechanism would be needed alongside) and an owned
+    `hook_install()` (rejected as a *starting point* per lazy adoption — contrib exists, and hand-writing
+    a serialised `layout_builder__layout` is the likelier failure than over-engineering; retained as the
+    fallback). **The deciding constraint was UUID preservation**, since exported config hard-references
+    the `page_hero` block's UUID — that is a gate, not a preference. **Accepted risk:** 2.x is beta with
+    no stable release, tolerable because it is an install-time dependency only; confirm its release state
+    at M17 before adding it.
 - **2026-08-01** — **Reconciled the v2→v5 redirect path-map claim across the spec** (INT8-040):
   `api-contract.md` §1/§4 and `architecture.md` §6 stated, unqualified, that the path map is
   "preserved at migration" — asserting delivered behaviour that does not exist. `architecture.md` §3.3

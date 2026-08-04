@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Milestone plan and progress tracker |
 | **Repository location** | `spec/milestone-plan.md` |
-| **Last updated** | 2026-08-02 (Milestone 11 signed off — slice 2's requirement deltas are binding) |
+| **Last updated** | 2026-08-02 (Milestone 12 signed off — slice 2's architecture and content model are binding) |
 
 This document is the single source of truth for **where the project is**. It is extracted from the
 project brief so the brief stays stable after approval while this tracker is updated as each milestone
@@ -17,19 +17,20 @@ together, commit by commit.
 
 ## Current position
 
-Version `5.0.x-dev2` (slice 2 — consolidation) — **Milestone 12 (Architecture & content-model deltas),
-`Not started` (⬜)** — **the heaviest milestone of the slice.** Milestones 10 and 11 were both signed off
-2026-08-02: the [version brief](brief/5.0.x-dev2-brief.md) is ratified, and
-[`requirements.md`](requirements/requirements.md) now carries slice 2's rules —
-**`FR-22`–`FR-25`, `NFR-9`–`NFR-11`**, with `FR-20` amended in place.
+Version `5.0.x-dev2` (slice 2 — consolidation) — **Milestone 13 (Wireframe deltas), `Not started` (⬜).**
+Milestones 10, 11 and 12 were all signed off 2026-08-02: the [version brief](brief/5.0.x-dev2-brief.md) is
+ratified, [`requirements.md`](requirements/requirements.md) carries slice 2's rules (**`FR-22`–`FR-25`,
+`NFR-9`–`NFR-11`**, with `FR-20` amended in place), and the architecture is settled.
 
-**What M11 hands M12.** `FR-22` says the front page must be **editable content rather than a controller**
-but deliberately does **not** name Layout Builder — that is `D-h`, M12's to settle, and a requirement
-naming the tool would decide architecture by the back door. `NFR-9`/`NFR-10` say what the
-install-required-content mechanism **must do** (arrive on a fresh install; be seeded, not enforced) without
-choosing it — `D-d` is M12's, and `NFR-10` is a **selection criterion** for that choice rather than a
-later check. `D-b` (the hero block type's fields and placement) is also M12's, narrowed at M10 to the
-message field and placement because `INT8-028` already settled the image-library modelling.
+**What M12 settled, and what it leaves M13.** `D-h`: a **general `page` content type**, not a single-use
+homepage type, with **Layout Builder enabled on `page` and nothing else** and per-node override on. `D-b`:
+a `homepage_hero` block type needing **one new field** (`field_message`) — the image library and its
+random behaviour are reused from `page_hero` wholesale. `D-d`: **`default_content` 2.x**, chosen because
+exported config hard-references the hero block's UUID, making UUID preservation a gate.
+
+M13 owes `D-a` (where the alternate-version pair sits in the song page) and `D-e` (whether wireframes stay
+binding for state coverage). Note that `FR-20` was **amended at M11 specifically to clear the way** — it no
+longer requires the lyric pair to sit "alongside", so M13 can place it wherever the design says.
 
 **The brief grew during ratification, from four goals to six.** The M10 review found that three things the
 draft treated as open were already settled by slice 1 — the hero image library's modelling, the random-pick
@@ -104,7 +105,7 @@ deltas against the living spec rather than a fresh specification. Scope in
 |---|-----------|-------------|------|--------|
 | 10 | Version brief — review and ratify | `spec/brief/5.0.x-dev2-brief.md` reviewed and approved (the draft already exists; this milestone is its ratification) | Cowork | ✅ |
 | 11 | Requirement deltas | `spec/requirements/requirements.md` — new `FR`/`NFR` for the homepage hero (its **set message** is the new part) and for content reproducibility; amend-in-place for the song-page alternates. **Writes down `INT8-028`'s existing per-page-load random-image behaviour as an `FR`** — D-c is a requirement to record, not a decision to make. Also owes the **dependency-updatability `NFR`** handed back by D-i. *Delivered `FR-22`–`FR-25`, `NFR-9`–`NFR-11`, `FR-20` amended* | Cowork | ✅ |
-| 12 | Architecture & content-model deltas | `spec/architecture/architecture.md` + `content-model.md` — **the heaviest milestone of the slice**: the homepage content type and how narrowly Layout Builder is scoped on it (D-h); the hero block type's message field and **placement**, reusing `page_hero`'s existing `field_background_images` shape and formatter (D-b); the default-content mechanism, contrib surveyed first and seeding rather than enforcing (D-d, `TODO-002`) | Cowork | ⬜ |
+| 12 | Architecture & content-model deltas | `spec/architecture/architecture.md` + `content-model.md` — **the heaviest milestone of the slice**: the homepage content type and how narrowly Layout Builder is scoped on it (D-h); the hero block type's message field and **placement**, reusing `page_hero`'s existing `field_background_images` shape and formatter (D-b); the default-content mechanism, contrib surveyed first and seeding rather than enforcing (D-d, `TODO-002`). *Delivered `content-model.md` §9–§11 and `architecture.md` §2.1/§4.4/§4.5/§6; root `CLAUDE.md` kept identical* | Cowork | ✅ |
 | 13 | Wireframe deltas | `spec/wireframes/` — alternate-version placement inside the real song page (D-a) and the homepage hero; wireframe cleanup, and whether wires stay binding for state coverage (D-e) | Cowork | ⬜ |
 | 14 | Design deltas | `spec/design/` — **restructure first**: one design file per page, a tokens page, a components page, with the components-page precedence rule (D-g) and the token authority call (D-f) written into `design-system.md` §1/§1.1; **then** the song-page and homepage-hero designs authored into the new layout | Cowork | ⬜ |
 | 15 | Test-strategy delta | `spec/test-strategy/test-strategy.md` — coverage for the new hero and nav-over-hero, and what would actually catch the reproducibility gap | Cowork | ⬜ |

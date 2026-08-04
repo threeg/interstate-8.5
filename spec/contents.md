@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Specification contents (navigation index) |
 | **Repository location** | `spec/contents.md` |
-| **Last updated** | 2026-08-02 (Milestone 10 sign-off — the `5.0.x-dev2` brief added; two register descriptions corrected) |
+| **Last updated** | 2026-08-02 (Milestone 12 sign-off — content-model description extended for slice 2) |
 
 Every document in `spec/`, in milestone order, so you can reach any part of the specification from one
 place instead of opening folders. Open this file on your forge (GitHub/GitLab render it) or in any
@@ -61,7 +61,7 @@ other document needs a link back.
 |---|---|
 | [`architecture/architecture.md`](architecture/architecture.md) | **Binding.** Layering and the dependency rule (§2.1), data model, migration and rendering flows, stack (§6). |
 | [`architecture/api-contract.md`](architecture/api-contract.md) | **Binding.** Authoritative route/response shapes; where code and contract disagree, the contract wins. |
-| [`architecture/content-model.md`](architecture/content-model.md) | **Binding.** The Drupal realisation: content types, fields and machine names, the Song type taxonomy, Remote-video media, Restricted HTML. Config is exported and verified against this — never hand-authored. |
+| [`architecture/content-model.md`](architecture/content-model.md) | **Binding.** The Drupal realisation: content types, fields and machine names, the Song type taxonomy, Remote-video media, Restricted HTML. Config is exported and verified against this — never hand-authored. *Slice 2 added the `Page` type and its Layout Builder scoping, the `Homepage hero` block, and the default content that makes a fresh install reproducible.* |
 
 ## 4. Wireframes
 

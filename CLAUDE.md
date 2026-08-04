@@ -142,13 +142,19 @@ gaps and stays agent-legible — not merely as scaffolding.
 The Drupal-oriented layering, settled at the Architecture milestone (§2.1 of
 `spec/architecture/architecture.md`), which this section is kept identical to.
 
-`content-model → services → theme`, with `migration` populating the content model and `config`
-capturing exported configuration. Concretely:
+`content-model → services → theme`, with `migration` **and `default-content`** populating the content
+model and `config` capturing exported configuration. Concretely:
 
 - `content-model/` — entity, field and content-type definitions (Drupal config). The data
   foundation; imports nothing project-internal.
 - `migration/` — Migrate API source plugins that populate the content model from the v2 MySQL dump.
   Depends only on `content-model`.
+- `default-content/` — *(added M12.)* The seeded install content — menu links, the hero blocks, the
+  homepage node and its layout — shipped via the `default_content` module. A **sibling of `migration`**:
+  both populate the content model from outside and depend only on `content-model`. Distinct because its
+  source is the repository rather than the v2 dump, and it runs at install rather than on demand.
+  **The boundary check does not know this layer yet** — teaching `tooling/check-boundary.sh` about it is
+  M17 tooling work, not part of a feature ticket.
 - `services/` — custom-module logic (e.g. discography inclusion rules anchored to core members,
   setlist-by-song indexing, Search API integration). May depend on `content-model`.
 - `theme/` — the presentation layer: SDC components, Twig templates, Tailwind. Consumes rendered
@@ -162,9 +168,12 @@ wired in during the scaffolding milestone.
 
 Drupal 11 on PHP, local development via **Lando**. Front end: an owned starterkit-generated theme with
 **SDC** as the component layer and **Tailwind v4** hand-wired without SASS (design tokens as CSS
-custom properties); Layout Builder scoped narrowly. Search via **Search API** with a database backend
-to start. Data comes in through the **Migrate API** (v2 MySQL dump as the sole source of truth).
-Keep this paragraph in step with `spec/architecture/architecture.md` §6.
+custom properties). **Layout Builder is enabled on the `page` content type only** — bespoke editorial
+pages, with per-node override — and **never on archive content types** (`song`, and later
+releases/setlists/news), which stay code-themed. Search via **Search API** with a database backend to
+start. Data comes in through the **Migrate API** (v2 MySQL dump as the sole source of truth), with
+install-required content seeded once by **`default_content`**. Keep this paragraph in step with
+`spec/architecture/architecture.md` §6.
 
 ## Commands
 
