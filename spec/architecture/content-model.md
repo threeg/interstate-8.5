@@ -319,99 +319,10 @@ why the module is installed once rather than wired into a recurring deploy step.
 `/node/N`. Node ids are assigned at install time and are not stable across installs; the alias is seeded
 with the node and is. This replaces the `/home` value the `INT8-017` stub owned (**FR-22**).
 
-## 12. Decisions log
+## 12. Decisions and superseded wording
 
-- **2026-08-02** — **Slice 2 content-model deltas (Milestone 12): `D-h`, `D-b`, `D-d` settled.** Added
-  §9 (`page` type + Layout Builder scoping), §10 (`homepage_hero` block), §11 (default content). The
-  decisions log moved from §9 to §12; `requirements.md`'s 2026-07-19 entry updated to cite §8/§12.
-  - **`D-h` — a general `page` type, not a `homepage` type, with per-node override on.** *This reversed
-    the milestone's own recommendation, on the operator's argument:* the site will have exactly one
-    homepage but several bespoke pages (About, Terms, Privacy) of the same kind, so a single-use content
-    type would be a type per node. The homepage is just the `page` node `front` points at.
-    The recommendation had been a dedicated `homepage` type with override **off**, on the grounds that it
-    puts the layout in config where it is exported, verified and diff-reviewable. **That benefit is
-    genuinely lost** and is recorded in §9.1 rather than glossed: layout changes will not show up in a
-    config review. It is outweighed by not minting a content type per page, and bounded by the harder
-    half of the rule — **Layout Builder is enabled on `page` and nothing else, never on archive types.**
-    *Consequence:* `FR-22` stands **unamended**. Its "body and layout an editor can change without a code
-    deployment" clause required override-on; had the recommendation been taken, `FR-22` would have needed
-    amending first, which is why it was put to the operator as a spec question rather than decided here.
-  - **`D-b` — `homepage_hero` block type; one new field, everything else reused.** `field_message` is the
-    only new modelling. The `field_background_images` **storage is shared** with `page_hero` (storages are
-    per entity type in Drupal, so this is the ordinary pattern) and `HeroBackgroundFormatter` is a field
-    formatter that, by its own docblock, *"knows nothing about being inside a block"* — so **`FR-25` is
-    satisfied with no new code**. Placement is a **reusable** block referenced from the layout, **not** an
-    inline block: inline blocks have no independent existence and travel inside the serialised layout,
-    which is the awkward case for §11's export. The existing `page_hero` region block's `<front>`
-    exclusion was **confirmed still valid** — `request_path`'s `<front>` token tracks whatever the front
-    page is, so it follows the switch from stub route to node without being re-pointed.
-  - **`D-d` — `default_content` 2.x.** Chosen against `default_content_deploy` (built for *repeated*
-    environment-to-environment deploys — the enforce direction `NFR-10` warns against),
-    `single_content_sync` (manual snippets, wrong shape for install-time seeding), `structure_sync` (no
-    node or layout coverage, so a second mechanism would be needed alongside) and an owned
-    `hook_install()` (rejected as a *starting point* per lazy adoption — contrib exists, and hand-writing
-    a serialised `layout_builder__layout` is the likelier failure than over-engineering; retained as the
-    fallback). **The deciding constraint was UUID preservation**, since exported config hard-references
-    the `page_hero` block's UUID — that is a gate, not a preference. **Accepted risk:** 2.x is beta with
-    no stable release, tolerable because it is an install-time dependency only; confirm its release state
-    at M17 before adding it.
-- **2026-08-01** — **Reconciled the v2→v5 redirect path-map claim across the spec** (INT8-040):
-  `api-contract.md` §1/§4 and `architecture.md` §6 stated, unqualified, that the path map is
-  "preserved at migration" — asserting delivered behaviour that does not exist. `architecture.md` §3.3
-  and this document's own legacy-id rationale (above) already correctly stated the deferral; those two
-  are the correct reading and stand unchanged. Verified against the live site before editing: the
-  `redirect` table holds 10 rows against 492 songs — the Redirect module's own automatic entries for
-  changed URL aliases, not a v2 path map — and no ticket, `FR`, or `NFR` implements one. No decision is
-  reopened here; the deferral already existed in two of the four documents, and this only propagates it
-  to the other two (plus a fifth occurrence in `api-contract.md` §4's traceability table, found while
-  fixing §1).
-- **2026-07-28** — **The Songs landing (`/songs`) stays uncacheable for the Dynamic Page Cache through
-  slice 1** (INT8-037; corrects a caching claim in INT8-018's notes — see that ticket). `cache: none` on
-  `views.view.songs` (needed since INT8-018 to stop Views' result cache from serving one result set
-  across every `type=`/`alt=` combination) forces `max-age 0`, which disables the dynamic page cache for
-  the route entirely. **Anonymous visitors are unaffected**: the internal page cache still serves `/songs`
-  correctly, with correct tag-based invalidation. **Authenticated users get the full ~490-row landing
-  rebuilt on every request** — kept as-is rather than fixed now, under **NFR-4**'s explicit deferral of
-  performance thresholds to a pre-launch pass and the project's lazy-adoption principle: the fix (a small
-  owned Views cache plugin keying the result cache on `type`/`alt`, the same "no D11-ready contrib, build
-  a small owned plugin" pattern already used for `ArticleInsensitiveTitle` and the two filter plugins) is
-  real, non-trivial work for a benefit that reaches only the small authenticated population, against a
-  performance bar that has not been set yet. **Candidate for the pre-launch performance pass** (NFR-4),
-  where it can be judged against real measured thresholds instead of a guess now.
-- **2026-07-19** — **Migration imports every `I8_Songs` row and maps `Song_Active → status`** (§8),
-  reconciling the earlier "row where `Song_Active = 1` → node" phrasing (which implied a source filter)
-  with the `Song_Active → status` mapping row directly below it. The `song` migration deliberately runs
-  **unfiltered** and lets `Song_Active` set published/unpublished — lossless (a future inactive row
-  becomes an unpublished node, recoverable, not a dropped song). All 492 dump rows are active, so this
-  equals importing the active set today (FR-1 satisfied; FR-5 count parity holds). Surfaced by
-  `sfk-verify` on the migration batch; the FR-5 count check is hardened to assert *published* count ==
-  active-source count in **INT8-025** so it verifies FR-5 literally rather than total==total.
-- **2026-07-19** — **`Song_Video` import descoped to manual entry** (§4, §8; supersedes the original
-  "migration MUST extract the video URL" plan and `requirements.md` FR-2's inclusion of music video).
-  Checked the real dump at INT8-013: only 15 of 492 songs have a video, all clean `<iframe>` embeds
-  (14 YouTube, 1 Vimeo) — too small and low-risk a set to justify an automated markup parser. Populate
-  `field_video` by hand pre-launch instead. (Operator decision.)
-- **2026-07-12** — **CKEditor 5 attached to the Restricted HTML format** (§5 "Authoring UI"): toolbar
-  limited to bold / italic / link, matching the `filter_html` allow-list exactly so the editor and the
-  filter cannot drift. Discovered during INT8-010 (the format from INT8-009 had no editor, leaving a
-  bare-HTML textarea); the editor is part of the format's spec, not optional.
-- **2026-07-12** — **`field_legacy_id` extended to the Song type taxonomy term** (§3), closing a gap
-  where the cross-cutting convention (architecture.md §3.3, "every migrated content entity") wasn't
-  reflected here — only Song had the field listed. Also corrected the working term set's spelling to
-  **"Side Projects"** (capital P), confirmed against the `I8_SongType` dump per INT8-008's own
-  instruction to reconfirm at build time.
-- **2026-07-07** — Song = **node** content type; Song type = **taxonomy**; video = **Core Media remote
-  video** (oEmbed); rich text = **Restricted HTML**. (Operator decisions, Milestone 3.)
-- **2026-07-07** — `Song_Live` becomes **`field_exclude_from_list`** — the rename away from the "live"
-  misnomer; it is purely a "hide from the song list" control.
-- **2026-07-07** — **Video migration extracts the URL from v2 embed markup** to build Media entities;
-  unparseable rows are reported.
-- **2026-07-07** — **FR-8 sort — query-time, no duplicated field** (operator decision). Preferred:
-  **Views Sort Expression** (stable/security-covered, but declares `^9 || ^10` — verify D11), else a
-  small **owned Views sort handler** (D11-safe). **Views Natural Sort** de-prioritised (alpha-only on
-  D11 and duplicates into its own index). Final mechanism deferred to the build milestone, tested on
-  the real stack.
-- **2026-07-07** — **`field_legacy_id` adopted as a cross-cutting convention** (all migrated content
-  entities), not optional: needed at runtime for **cross-entity join repair** in later slices and for
-  **legacy-URL / inline-link redirects** (Redirect module), keyed on entity type + legacy id. Not
-  required (natively-created content leaves it empty); indexed. Reversed the earlier "optional" call.
+> Not here — see **[`decisions.md`](decisions.md)** beside this file. This document holds **builder
+> instructions only**: rules, contractual values, and operational hazards. Why a rule is what it is, and
+> what it used to say, live in the archive so they are out of the reading path (`spec/README.md`, *How
+> versions evolve*). The reference runs **one way** — entries there name rules here; a rule never cites
+> an entry.

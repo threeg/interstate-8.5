@@ -72,6 +72,13 @@ kit yourself.**
      where the new template (`.sfk/templates/…`) has it; leave the body empty, or interview if content
      is needed.
    - **amend:** apply the wording/guidance change; keep the user's edits in that section.
+     **Never renumber.** If the change adds an item to a numbered list, **append it** — do not insert,
+     even where the template puts it mid-list. A section or list number is a **citation target**: the
+     project cites it from tickets, from other `spec/` documents, from its root `CLAUDE.md`. Renumbering
+     silently invalidates every one of those, and **nothing detects it** — the citation still renders, it
+     just now points at a different rule. Expect the project's numbering to diverge from the template's
+     as a result; that is correct, and it is why an Apply note names a section by **title** rather than
+     number. If a note *does* name a number, resolve it by title in the project's own file.
    - **interview:** ask the user, then write their answer.
    - **refresh:** for a project-owned file the changelog says to replace wholesale, confirm first.
 
@@ -121,7 +128,7 @@ kit yourself.**
    Scan it for material that has served its purpose and **offer** to remove each — never delete silently from
    a file the project owns:
    - **Correction notes from *earlier* versions** (*"corrected in v0.1.1: this previously said…"*). For each,
-     check whether the **owning document's decisions log** already carries it. Where it does, offer to drop
+     check whether the **`decisions.md` beside the owning document** already carries it. Where it does, offer to drop
      the inline note — the corrected value stands alone and the record is not lost. Where it does not, offer
      to **move** it there first. Never simply delete an unrecorded reason.
    - **Temporary blocks whose retirement condition has been met** — a build-state snapshot naming tickets that
@@ -130,7 +137,7 @@ kit yourself.**
 
    **Why this is worth a step rather than left to tidiness:** the cost of a bloated always-loaded file is not
    tokens, it is dilution — and a rule that goes unread is how rules fail. Report what you propose to remove
-   and why it is safe (naming the decisions log that now holds it), and leave anything the user does not
+   and why it is safe (naming the `decisions.md` that now holds it), and leave anything the user does not
    confirm exactly where it is.
 
 7. **Self-check the guide, before you bump anything.** Compare the `| **Kit version** | vX.Y.Z |` row in

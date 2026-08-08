@@ -21,6 +21,15 @@ so that the next person reading it does not have to work out which half to belie
 
 ## Background
 
+> **This is a record-correction ticket (CONVENTIONS.md §6.7), re-labelled at the v1.4.7 kit update
+> (2026-08-08).** Its purpose is *make the record true*, so §6.4's *"between batches, at the developer's
+> discretion"* does **not** apply to it: **work it before the next batch starts.** While it waits, further
+> tickets are written and closed against the very statements it exists to fix — the debt compounds and the
+> ticket can expire. Carry §5.5's retrospective half inside it: for each drift corrected, name the tickets
+> worked against the false version and say, in one line each, whether their work stands. (The audit below
+> already establishes that the batch's *work* is correct and only its *record* lagged — state that per
+> finding as you close them, rather than leaving it as a single blanket sentence.)
+
 Raised by `sfk-verify` on the INT8-043–046 batch (2026-08-02), with the default gate green: `lando test`
 89 tests / 234 assertions, PHPCS 14/14, PHPStan no errors, boundary check 0 violations.
 `lando playwright` was not run and was not required — nothing in the batch touches the theme or the song

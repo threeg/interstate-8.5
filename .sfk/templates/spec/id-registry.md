@@ -60,6 +60,15 @@ This file deliberately does **not** list individual ids. See *Resolving an id* i
   removed. `TODO-n` is the case in this kit: a resolved entry's body goes, but a one-line tombstone stays
   in `TODO.md`'s *Resolved* table. Families whose entries persist (`FR-`, `NFR-`, `Q-`, `S-`, tickets) need
   nothing extra. **Check this before inventing a family with a delete-on-resolve lifecycle.**
+- **A within-a-conversation label is not an id, and must never be written into a document.** Work
+  frequently produces short-lived labels for things being discussed — `sfk-verify` numbering a pass's
+  findings `F1`, `F2`, …; a review enumerating comments. Those sequences **restart** each time, so a label
+  only means something inside the run that produced it, and it belongs in **no** durable file: not a
+  ticket's `## Background`, not `BOARD.md`, not `verify.md`. Cite the permanent thing it turned into (the
+  cleanup ticket) or restate it in words. Writing one down looks like an id and behaves like the opposite —
+  two unrelated `sfk-verify` findings once ended up cited as bare `F7` in different documents, breaking the
+  permanence rule above without anything detecting it. **If you want durable ids for such a thing, it is a
+  family: add a row first**, naming what scopes it.
 - **Never link an id to a numbered-section anchor.** The reason, and what to do instead, is in
   *Resolving an id* in `spec/README.md`.
 - If this project only ever uses `FR`/`NFR`, this file earns little — it pays off from the first

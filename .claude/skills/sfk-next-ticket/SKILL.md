@@ -76,7 +76,9 @@ rules in `spec/tickets/CLAUDE.md` and the definition of done in the root `CLAUDE
 
 5. **Implement — test-first, and that is binding.** Honour the architecture dependency rule. For
    deterministic and contract-pinned work: **write the failing test FIRST**, run it, **confirm it fails
-   for the right reason**, and only **then** write the implementation. Do not write implementation
+   for the right reason — and copy the failure message out now, verbatim, while you have it** (step 7
+   writes it into `## Notes`; once the code is green it is unrecoverable). Only **then** write the
+   implementation. Do not write implementation
    first and back-fill tests — that is a process violation, not a shortcut, and it loses coverage you
    will not notice missing. Red-green is the default for **all** implementation work; it is overridden
    only where `spec/test-strategy/test-strategy.md` **explicitly names** that layer as exempt (§1).
@@ -121,7 +123,7 @@ rules in `spec/tickets/CLAUDE.md` and the definition of done in the root `CLAUDE
    >    say and reconcile the document afterwards.
    > 2. **Put the choice to the user, both ways:** *should the spec change, or should the code match the
    >    spec as written?* You are looking at a **settled decision** they signed off, so the answer is theirs.
-   > 3. **If the spec changes, amend it first** — the owning document, plus a line in its decisions log
+   > 3. **If the spec changes, amend it first** — the owning document, plus a line in the `decisions.md` beside it
    >    saying what changed and why — and reference it from the ticket. **Then** implement.
    >
    > **Order is the whole point, and reversing it removes the user's veto.** Ask before the code exists and
@@ -152,11 +154,34 @@ rules in `spec/tickets/CLAUDE.md` and the definition of done in the root `CLAUDE
 
 7. **Close for review, in one commit.** Set the ticket **`in-review`** (not `done` — that waits for the
    user's review), append a dated `## Notes` line with the **completion report** (plain-language summary
-   + one-line sanity test; for UI tickets, fill `## QA steps`), and update the `BOARD.md` row to `👀
+   + one-line sanity test; for UI tickets, fill `## QA steps`), **plus the red you observed in step 5 —
+   the test's name and its failure message verbatim** (see below), and update the `BOARD.md` row to `👀
    in-review` — all in
    the same commit as the code and tests. Commit message: `<PRJ>-NNN: <short imperative>`. Do **not**
    set `done` and do **not** close the parent epic here — that happens when the ticket is finalized
    (step 1 of the next run, or `sfk-close-ticket` — including for a milestone's last ticket).
+
+   > **Record the red you saw, not the fact that you saw one.** `## Notes` carries the test's name and the
+   > message it actually produced — verbatim, one line:
+   >
+   > > `rounds a computed 57.5 up`: `AssertionError: expected 57 to be 58`
+   >
+   > **The bar is that a reader can distinguish a real red-green from a plausible one without re-running
+   > anything.** *"All the new tests passed on the first implementation attempt"* does **not** clear it: that
+   > sentence is equally true of a test authored from the spec before you saw the problem and of one written
+   > afterwards to fit code that already worked — the two cases this rule exists to separate.
+   >
+   > **You are the last point at which this is recoverable.** Every other definition-of-done item survives
+   > in the tree and can be audited later; a gate re-runs, an amendment can be re-read. *When* and *by whom*
+   > the failing test was written leaves **no artefact** unless this commit captures one — and under
+   > independent test authorship that is precisely the property being bought. Once the suite is green, no
+   > later pass can reconstruct it.
+   >
+   > **If there is honestly no red to show,** say which permitted substitute applies and why (root
+   > `CLAUDE.md` › *Definition of done*): an untouched suite for a pure refactor, a guard whose absence
+   > cannot be expressed, or a layer the test strategy exempts. **Never manufacture a failure to satisfy the
+   > form** — a fabricated red is worse than an honest exemption, because it is indistinguishable from a real
+   > one and it corrupts the only record that matters here.
 
    > **Emit an authorship trailer for every model that built this ticket.** This step is the **only place in
    > the kit that knows both** which model authored the failing test and which implemented against it, so it

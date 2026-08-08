@@ -7,6 +7,15 @@ For each change, the **Apply** note tells the update skill how to bring it into 
 *refresh* (overwrite the kit-owned file), *add* (insert a new section/heading into a living file),
 *amend* (apply a wording/guidance change), or *interview* (ask the user, because content is needed).
 
+**Apply notes never renumber anything in a project-owned document.** A new item in a numbered list is
+**appended**, never inserted — and a note names a section by **title**, not by number (*"the *Numeric
+thresholds are contractual* convention"*, not *"§1.4"*). A section number is a **citation target**: a
+project cites it from tickets, from other spec documents, from its `CLAUDE.md`. Renumbering one silently
+invalidates every citation, and nothing detects it — which is why the kit already forbids linking an id
+to a numbered-section anchor, and why ids are never renumbered. The template may order its own list
+however reads best for a new project; an existing project appends, so the two legitimately diverge and
+only titles are stable across both.
+
 **Apply notes name their targets by path, never in prose.** Write `refresh — spec/README.md`, not
 `refresh — the guide`. A prose target invites the reader to categorise it, and a reader who categorises
 wrongly skips the file without ever knowing they did. This is not hypothetical: two consecutive releases
@@ -18,6 +27,309 @@ A change may also carry a **Pre-copy** note. `Apply` happens *after* the user co
 when the copy would destroy something the project owns or filled in. Any entry with a `Pre-copy` note
 must also have a section in the repo-root `UPGRADING.md`, because nobody reads a changelog until they
 are told to.
+
+---
+
+## v1.4.7 — a section number is a citation target
+
+One fix, found by the first project to apply v1.4.6. **No pre-copy step.**
+
+- **FIX (major): an Apply note never renumbers a section a project cites.** v1.4.6 inserted a new
+  convention as item **2** of `requirements.md` §1, pushing *Numeric thresholds are contractual* from
+  §1.4 to §1.5 — and its Apply note told projects to renumber, then *"check the project's own citations
+  of §1.4"*.
+
+  The first project to upgrade found **§1.4 cited across twenty-two files**: eight tickets, `BOARD.md`,
+  `verify.md`, four architecture documents, `contents.md`, `milestone-plan.md`, `open-questions.md`, two
+  version briefs and the root `CLAUDE.md`. It **deviated from the note**, appended the new convention at
+  the end of the list instead, and was right to. The renumber buys nothing, and every citation missed in
+  the sweep is **silently wrong** — it still renders, it just points at a different rule.
+
+  **The kit already states this rule twice, and the same release broke it.** `CONVENTIONS.md` §1.1: *ids
+  are permanent — never reused, never renumbered.* `id-registry.md`: never link an id to a
+  numbered-section anchor, because *numbered headings make slugs embed section numbers that break
+  silently on renumbering*. A section number is a citation target with exactly that property, and nothing
+  protected it.
+
+  **Apply:**
+  - **amend** — `spec/requirements/requirements.md` §1: the new *This document holds builder
+    instructions* convention moves to the **end** of the list, restoring §1.4 for anyone who has not yet
+    applied v1.4.6. **If you already applied v1.4.6 as written and did the renumber, do nothing** —
+    either numbering is internally consistent, and re-renumbering would invalidate the citations you have
+    just fixed. Only the citations and the document need to agree;
+  - **n/a — kit-owned** — the `CHANGELOG.md` header rule (Apply notes never renumber; new list items are
+    appended; sections are named by **title**, not number) and `sfk-update-kit`, which now carries it in
+    the `amend` verb and resolves a numbered reference by title in the project's own file;
+  - **n/a — kit-owned** — `spec/architecture/decisions.md`'s scope line, which named two documents; the
+    reporting project has four binding documents in that folder, three of which already had logs.
+
+  **v1.4.6's own Apply note is corrected in place, marked and dated.** Entries apply oldest-to-newest, so
+  a project upgrading from 1.4.5 would otherwise read the renumber instruction *first* and do the work
+  before reaching the rule that forbids it. The changelog is a script as well as a record, and a
+  knowingly-wrong executable step is worse than a visibly corrected one.
+
+---
+
+## v1.4.6 — the spec holds instructions, and nobody checks their own work
+
+Three items from one project. Two are the same discovery from opposite ends: **a binding document was
+being asked to do two jobs at once, and the person doing them was checking their own work.** **No pre-copy
+step, and nothing here restructures a document that already exists.**
+
+- **NEW (major): a newly created binding document gets fresh eyes before sign-off.** Measured on one
+  authoring milestone of twenty-four new rules: **six self-verification passes, every one finding a real
+  defect — and every one but the last introducing a smaller defect of the same class in its own
+  correction.** Three regressions re-used a justification already struck as false elsewhere in the same
+  rule; two corrected a mis-citation with a *different* wrong citation. Among the defects that pass did
+  catch: two rules that between them required an authenticated session and a stated role on **every**
+  route. Sign-in is a route, so **the application was unreachable by its own specification.**
+
+  That is not quality variance. One party writing and checking the same large, cross-referential document
+  shares its own model of what the document says, so the same misreading survives every pass. **The kit
+  already believes this** — *grader ≠ graded*, applied to tests since v1.2.0 and to ungated tickets since
+  v1.4.4 — and had never applied it to the documents every later ticket is checked against.
+
+  Scoped to documents a milestone **created**. An amended one has a natural check in its prior version and
+  its diff; one created from nothing has neither, and that is where the reporting project's defect count
+  was highest. Self-limiting, since most later milestones amend rather than create.
+
+  **Before sign-off, never after** — the reason v1.4.2 and v1.4.5 both turned on. A finding raised after ✅
+  either forces un-signing the milestone, destroying the one human gate the method has, or leaves a
+  signed-off document with a known defect standing against it and nothing marking it suspect. And it
+  **degrades rather than assuming a runtime**: a subagent pinned to the `tests` model where one is
+  configured, otherwise the skill says plainly that the fresh eyes must be **the user's** rather than
+  passing off a second self-review as independent.
+
+  It **complements** `sfk-verify` spec mode and both now say so: spec mode is *cross-document* at the
+  ticket gate (requirements can only contradict the brief once both exist); this is *single-document*, at
+  the moment of writing.
+
+  **Apply:**
+  - **refresh** — `spec/README.md`;
+  - **n/a — kit-owned** — `sfk-next-milestone` (new step 6), `sfk-signoff` (step 1 now states what
+    reviewing an authoring deliverable *means* — a full read for a created document, the diff for an
+    amended one — and reports whether the fresh-eyes pass ran; it reports and never blocks);
+  - **Forward-only.** This binds from the next authoring milestone. Do **not** retro-verify documents that
+    already exist, and do not offer to.
+
+- **NEW (major): a binding document holds builder instructions; its decisions log holds the record.** By
+  its third version one project's spec reached **~4,000 lines** describing a dozen HTML forms — a
+  1,450-line requirements document, an 1,100-line contract. The dominant cause was the kit's own
+  instruction: `requirements.md` said *"superseded ones are amended in place and annotated."*
+
+  **Dead text beside live text is not merely long — it gets read as current, and it caused two real
+  defects** in that project: a superseded tail left spliced onto the **next** rule, asserting a behaviour
+  that had been removed and which an implementer working from that rule alone would have built; and two
+  rules in one authoritative document contradicting each other from ninety lines apart.
+
+  **The kit already held this rule and applied it in exactly one file.** The root `CLAUDE.md` says
+  corrections belong in the owning document's decisions log, because an inline *"this used to say X"* note
+  tells every future reader about a value they never saw. That reasoning was never extended to the binding
+  documents, while `requirements.md` instructed the opposite.
+
+  Now: a superseded rule is **rewritten in place** and marked with a **pinned** marker — exactly
+  `*(amended vX.Y.Z)*` — and the old wording **moves to a `decisions.md` beside the document**, keyed by
+  id. **The archive is a separate file, not a section**, which is the part that makes it work: a section
+  at the foot of `requirements.md` still loads with `requirements.md`, so the binding document keeps
+  growing and a builder handed the spec still reads the history. A sibling file is out of the reading
+  path, and it matches what the kit already does everywhere else — `open-questions.md`, `TODO.md`,
+  `id-registry.md`, `verify/verify.md` are each their own file. Six of them, one per milestone folder. The marker is a
+  flag, **never a cross-reference**: a rule that cites its log entry soon acquires a sentence explaining
+  the citation, and the narration is back. The reference runs **one way** — log names rules, rules never
+  name entries — so the log becomes an **archive, not a living document**. The test for any sentence in a
+  binding document: *can this be rewritten as a rule?*
+
+  **Operational hazards are named as a third category so that rule cannot strip them** — a clean
+  vulnerability audit that is not sufficient evidence, a published parameter set that throws against a
+  default memory limit, a comment-syntax edge case that breaks a parser. Same shape as v1.4.5's permitted
+  substitutes: a tightening rule needs its named exception or it causes the harm it was meant to prevent.
+
+  Pinning the marker matters beyond tidiness: it was previously only an example, so superseded text was
+  never reliably identifiable. Pinned, it is machine-matchable — which is what lets a condensation pass act
+  on it safely instead of guessing.
+
+  *Rejected:* a stated per-document **size budget**. The argument under it is the kit's own — a constraint
+  you can see yourself violating beats a rule you must remember — but a line cap is the wrong mechanical
+  form: nobody can justify 800 over 1,200, it varies by project, and it creates pressure to **delete rules
+  to fit**. The visibility it wanted is what the shape report gives instead.
+
+  **Three binding documents had no decisions log at all** — `brief.md`, `architecture.md` and
+  `api-contract.md` — so the rule above was unfollowable on them, including the two most likely to be
+  amended in a delta version. Architecture is also the kit's most decision-dense document (§6 is
+  *Technology choices*, and `sfk-next-milestone` asks for rejected alternatives by name), so the kit was
+  *generating* rationale into it with nowhere to put it. Related long-standing bug, now fixed: the root
+  `CLAUDE.md` told people to log corrections in *"`architecture.md`'s decisions log"* — a section that has
+  never existed.
+
+  **Apply:**
+  - **add** — `decisions.md` in each of the six milestone folders (`brief/`, `requirements/`,
+    `architecture/`, `wireframes/`, `design/`, `test-strategy/`), copied from
+    `.sfk/templates/spec/<folder>/decisions.md`. Create only for folders the project **already has** — a
+    milestone not yet reached gets its archive when `sfk-next-milestone` creates the folder;
+  - **amend** — `spec/requirements/requirements.md` §1 (the *Identifiers* convention gains the pinned
+    marker and the move-to-archive clause; the list gains a new **This document holds builder
+    instructions** convention) and the *Decisions log* section, now a one-line pointer to the archive.
+    **APPEND the new convention at the end of the list — do not insert it, and do not renumber
+    anything.** *(Corrected 2026-08-06, v1.4.7: this note originally told you to insert it second and
+    renumber *Numeric thresholds are contractual* from §1.4 to §1.5, then check your own citations. That
+    was wrong — a section number is a citation target, one project cites §1.4 across twenty-two files,
+    and the renumber buys nothing. The v1.4.6 template shipped with the item second; the v1.4.7 template
+    has it last. Corrected here rather than only in v1.4.7 because entries apply oldest-to-newest, so
+    leaving it would have you do the renumber and then undo it.)*;
+  - **amend** — the same replacement in `spec/design/design-system.md` §5,
+    `spec/test-strategy/test-strategy.md` §13 and `spec/wireframes/overview.md` §6;
+  - **MOVE the existing log contents into the new file, verbatim.** This is the *one* structural change
+    this release makes to an existing document, and it is safe because it is **whole-section relocation,
+    not editing** — the text is identical, the result is verifiable by comparison, and it is reversible.
+    That is the mechanical tier, not the judgement tier; do **not** touch anything else in the document
+    while you are there. Keep the numbered heading in place as the pointer so the section numbering of
+    every other document is undisturbed;
+  - **amend** — the root `CLAUDE.md` leanness rule, which named `requirements.md` §7 and a
+    non-existent `architecture.md` decisions log; it now names the `decisions.md` files;
+  - **amend** — `spec/contents.md`, which gains a row per archive marked *not binding, not in the reading
+    path*;
+  - **refresh** — `spec/README.md`;
+  - **n/a — kit-owned** — `sfk-verify`, `sfk-next-milestone` (which now copies a folder's `decisions.md`
+    out alongside its master, and moves superseded wording there when amending).
+  - **FORWARD-ONLY, and this is the important part. Amend the *convention text* only — never the rules
+    themselves.** Do not restructure the document, do not move existing superseded text, do not strip
+    justification, and do not offer to. Every such edit is a *"is this a rule or is this narration?"*
+    judgement; a wrong one silently deletes a constraint, the volume makes real review impossible, and
+    relocating superseded text wrongly is **exactly how the spliced-tail defect above happened**. An
+    existing spec does not shrink as a result of this update, and should not.
+  - **The safe retrofit, if the project wants one:** `sfk-verify` spec mode now produces a **shape
+    report** on request — in its own section, so hundreds of editorial items cannot bury five real
+    contradictions — sorting findings into **mechanical** (marked superseded text, *relocated* not
+    rewritten, safe to batch on approval), **judgement** (reported only, never batched) and **leave
+    alone** (hazards). Timed at the **start of a delta pass**, never mid-batch, where open tickets cite
+    text whose surroundings would shift under them.
+
+- **FIX (minor): `sfk-next-milestone`'s own summary no longer contradicts its step 4.** The `description`,
+  the H1 and the opening line all said it *commits* the draft, against step 4's *"defer the whole commit to
+  sign-off — run no `git` yourself"* for authoring milestones in a hand-off runtime. The report found three
+  sites; there were **six**, three of them in the method guide. All are now runtime-neutral, with step 4
+  the single place that names a cadence.
+
+  **Apply:** **refresh** — `spec/README.md`; **n/a — kit-owned** — `sfk-next-milestone`.
+
+---
+
+## v1.4.5 — records are tiered by what a false one costs
+
+Three items from one project, which turned out to be one idea: **records differ in how recoverable they
+are, and the kit was treating them all the same.** Some can be corrected late at no cost, some produce
+wrong work while they are false, and one cannot be corrected at all. That tiering now lives in
+`spec/tickets/CONVENTIONS.md` §5.5 and both major changes hang off it. **No pre-copy step.**
+
+- **FIX (major): red-green must show the observed failure, not claim one happened.** The *Definition of
+  done* required **stating** that red-green was followed and never the evidence for it — `evidence`,
+  `observed` and `verbatim` appeared **zero times** in the `CLAUDE.md` template — so the requirement was
+  discharged by assertion.
+
+  **Why this ranked as a major rather than a wording nit: the kit's weakest requirement guarded its most
+  perishable record.** Every other definition-of-done item survives in the tree and can be audited later —
+  a gate re-runs, an amendment can be re-read, a `BOARD.md` row re-checked. *"The failing test was written
+  first, from the spec, before the implementer saw the problem"* is a fact about **a moment that leaves no
+  trace**: captured in the work commit, or gone permanently. Under independent test authorship it is
+  precisely the property that feature is bought to guarantee.
+
+  The field evidence settled it. In one eight-ticket batch, **six** tickets discharged the requirement with
+  *"all new tests passed on the first implementation attempt"* — a sentence equally true of a test authored
+  from the spec beforehand and one written afterwards to fit code that already worked. In the **same
+  batch**, the mechanically-checked authorship trailers were clean on **all 43 commits**. A previous batch
+  was the mirror image: exemplary prose, no trailer on any of ten commits. This is v1.4.1's *they fail
+  independently* lesson plus a corollary: **the unverifiable half loses whenever it is the only one.**
+
+  The bar is now *can a reader tell a real red-green from a plausible one **without re-running anything**?*
+  A quoted assertion clears it; a claim does not. `sfk-next-ticket` takes the message **at the moment red is
+  observed**, because after green it is unrecoverable.
+
+  Two supporting pieces, both load-bearing. **Permitted substitutes are named** — an untouched suite for a
+  pure refactor, a guard whose absence cannot be expressed, an exempt layer — because a stricter rule with
+  no honest escape creates pressure to manufacture a failure, and **a fabricated red is worse than a stated
+  exemption: it is indistinguishable from a real one.** And `sfk-verify` now checks for the quote, which
+  cannot prove authorship order but makes absence **loud instead of silent** — the difference that held the
+  trailers. It is explicitly forbidden from asking for the evidence to be added at audit time, since a
+  retrofitted quote is a fabrication.
+
+  **Apply:**
+  - **amend** — the *Definition of done* in the root `CLAUDE.md`: the red-green clause now requires the
+    quoted failure, followed by a block giving the bar, the reason this one item is held to evidence, and
+    the permitted substitutes;
+  - **amend** — `spec/tickets/CONVENTIONS.md` §5.6 (the completion report now carries the quoted failure);
+  - **amend** — `spec/tickets/CLAUDE.md`, which gains a `## Notes` bullet;
+  - **amend** — `spec/verify/verify.md` **if it exists** (lazily created by `sfk-verify`): insert a new
+    **§4a — Red-green evidence**, before the existing §4b. Seeded for **every** project, single-model
+    included — unlike §4b, this exposure does not depend on running two models;
+  - **refresh** — `spec/README.md`;
+  - **n/a — kit-owned** — `sfk-next-ticket`, `sfk-verify`.
+  - **Do not backfill.** Existing tickets cannot gain this evidence retrospectively, and a quote written
+    now would be fabricated. The rule binds from the next ticket onward; say so and leave the history alone.
+
+- **NEW (major): correcting a false record re-opens the work done from it.** §5.5 covered the prospective
+  case well — amend the document, then write the code — and had **no retrospective half**. The kit contained
+  zero occurrences of *"correct the record"*, *"record-correction"* or *"retrospect"*.
+
+  **The insight that makes this an obligation rather than tidiness: a retrospective correction is not
+  neutral.** Repair the document and a reader now sees a `done` ticket beside a **true** document, with
+  nothing marking it suspect — so the correction **destroys the last visible trace of the exposure it was
+  written to record**, turning a visible inconsistency into an invisible one. A correction that stops at the
+  record is worse than none.
+
+  The dated instance: a ticket was filed recording that another's `## Background` was false in three
+  respects and instructing it be re-scoped. It sat `todo` — correctly, per §6.4's discretion. The next day
+  the subject ticket was implemented and closed as *"already discharged by earlier tickets"*, citing the
+  correction nowhere; the false `## Background` was what the implementer read. The genuinely-undone item
+  shipped three days and one extra ticket later, and only because someone happened to re-read the
+  correction — an accident of drafting, not something the method asked for.
+
+  Three changes. **§5.5 gains the retrospective half:** a correction to a record others implement from must
+  **name the tickets worked against the false version and state, per ticket, whether their work stands** —
+  one line each, which is what turns a correction back into verification. **§6.7 names the
+  record-correction ticket**, because projects otherwise invent it namelessly and repeatedly: one built the
+  same instrument **five times across three milestones**. *When a project reinvents one tool per milestone,
+  the method is missing it.* And **§6.4's discretion no longer covers it** — a quality ticket that waits
+  leaves the code imperfect and nothing worsens, while a record-correction ticket that waits has other
+  tickets closing **against the record it exists to fix**, so it compounds and can expire. The observed one
+  became literally *unsatisfiable*, its subject having closed first.
+
+  **Apply:**
+  - **amend** — `spec/tickets/CONVENTIONS.md`: §5.5 gains the retrospective half and the record tiering,
+    §6.4 gains the exception, and **§6.7 is new**;
+  - **amend** — `spec/tickets/CLAUDE.md`, which gains a correcting-a-record bullet;
+  - **n/a — kit-owned** — `sfk-verify`.
+  - **Offer, once:** if the project has open cleanup tickets whose purpose is *make the record true*,
+    offer to re-label them as record-correction tickets and bring them forward. Do **not** re-open closed
+    ones or audit the history for uncorrected records — that is a project decision, not a migration.
+
+- **FIX (minor): a verify pass's finding labels are labels, not ids.** Reported as *"`sfk-verify`'s `F-n`
+  ids are never registered in `id-registry.md`"*. The premise was wrong in a way that changed the fix: **the
+  kit never minted `F-n` at all** — there is nothing about finding labels anywhere in `sfk-verify` or the
+  `verify.md` template. The convention was **emergent model behaviour the kit had never defined**, which is
+  why nothing scoped it either.
+
+  So the bug was not a missing registry row. It was an **ephemeral conversation label written into durable
+  documents as though it were an id**. The sequence restarts every pass, so two unrelated findings from two
+  passes were both cited as bare `F7` in different documents, silently breaking `id-registry.md`'s own
+  binding rule that **ids are permanent — never reused, never renumbered**.
+
+  `sfk-verify` now owns the convention and bounds it: number findings for the conversation, and **never**
+  write one into a ticket's `## Background`, `BOARD.md` or `verify.md`. A finding is ephemeral by design —
+  it either becomes a cleanup ticket, which has a real permanent id, or it is rejected — so the durable
+  reference is always the ticket, or the finding restated in words. That removes the collision
+  structurally instead of relying on every citation to remember to qualify itself. *Rejected:* baking a
+  batch qualifier into the label (`<batch> Fn`), which fixes the collision while legitimising the thing
+  that should not happen. *Kept as the escape hatch:* if a project genuinely wants durable finding ids,
+  that is a **new id family** and the skill stops to offer the registry row.
+
+  **Apply:**
+  - **amend** — `spec/id-registry.md`, which gains the general form of the rule (a within-a-conversation
+    label is not an id) since the same trap awaits any future labelling scheme;
+  - **n/a — kit-owned** — `sfk-verify`.
+  - **Check for existing damage:** `grep` the project for bare `F<n>` citations in `spec/`. If any are
+    found, **offer** to replace each with the cleanup ticket it became or the finding restated. If a
+    project already added its own `F-n` registry row, that is the escape hatch working — leave it, and
+    reconcile per the *already present under another name* rule in `sfk-update-kit`.
 
 ---
 

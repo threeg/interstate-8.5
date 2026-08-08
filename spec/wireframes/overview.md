@@ -105,31 +105,10 @@ title/lyrics for →"**.
 
 ---
 
-## 6. Decisions log
+## 6. Decisions and superseded wording
 
-- **2026-07-07** — **Homepage is design-only** in slice 1 (the go/no-go viability check); not built.
-- **2026-07-07** — **Homepage composition set as components, not layout** (grounded after reading v2
-  `index.php`, which was news-first). **Confirmed:** latest news, upcoming tour dates, recently-passed
-  shows + setlists, "on this day / this week" (broadened with album anniversaries + fallback),
-  tour-stats teaser, and a visible Contribute call. **On trial (shown in the mockup, may be cut):**
-  song spotlight, from the discography. **Dropped:** recently-added; and from v2, Facebook/Twitter
-  share + theme switcher. Layout is Claude Design's and must **not** mimic v2. (Sketches convey content
-  grouping, not layout.)
-- **2026-07-07** — **Design direction captured** (`design-brief.md` + `references/`): centred layout;
-  a highway/interstate motif as the identity through-line; three colour lanes for the three homepage
-  directions — shield red/white/blue, the extracted muted-highway palette, and a third "surprise"
-  scheme introduced at the actual-design stage. All lanes hold WCAG 2.1 AA contrast (NFR-1).
-- **2026-07-11** — **Go/no-go: GO.** Claude Design produced `Interstate-8 Wireframes.dc.html`;
-  **direction 6d chosen** (highway hero + "TAKE AN EXIT", muted-highway palette with a maroon accent,
-  ledger + letter-rail songlist, side-by-side alternate lyrics). Covers all three screens, desktop +
-  mobile, on the muted-highway lane. The other homepage variants (6a/6c) remain in Claude Design's
-  archive, not exported. Full visual polish and the third "surprise" palette are Milestone 5.
-- **2026-07-11** — **Song-page "coming soon" rail accepted.** 6d reserves a right-rail with disabled
-  "coming soon" stubs for the deferred releases / last-played / tour-stats widgets so lyrics don't
-  reshuffle when those ship. Consistent with FR-14 (no real release/live data is shown — same spirit as
-  the disabled landing filters, FR-11); revisit at implementation if it reads as clutter.
-- **2026-07-07** — **Global nav shown for continuity**, but only Home (design) and Songs (live) are in
-  the slice-1 build; other sections deferred.
-- **2026-07-07** — **Released / Played-live filters shown but disabled** on the landing (FR-11).
-- **2026-07-07** — **Visuals produced in Claude Design**, exports returned to `spec/wireframes/`;
-  structure/states/navigation stay binding here, visual system settles in Milestone 5.
+> Not here — see **[`decisions.md`](decisions.md)** beside this file. This document holds **builder
+> instructions only**: rules, contractual values, and operational hazards. Why a rule is what it is, and
+> what it used to say, live in the archive so they are out of the reading path (`spec/README.md`, *How
+> versions evolve*). The reference runs **one way** — entries there name rules here; a rule never cites
+> an entry.

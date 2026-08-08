@@ -161,6 +161,13 @@ Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on t
 | C19 | [INT8-046](INT8-046-scope-default-gate-to-ticket-diff.md) | Scope the definition-of-done gate to what a ticket's diff actually touches | task | docs | cleanup | | ✅ done | [INT8-042](INT8-042-fast-lint-only-gate.md) |
 | C20 | [INT8-047](INT8-047-reconcile-batch-record-drift.md) | Reconcile six record drifts left by the [INT8-043](INT8-043-i8-services-media-dependency.md)–046 batch | task | docs | cleanup | | ⬜ todo | [INT8-044](INT8-044-architecture-data-model-stale-cells.md), [INT8-045](INT8-045-open-questions-register-first-rows.md), [INT8-046](INT8-046-scope-default-gate-to-ticket-diff.md) |
 
+> [**INT8-047**](INT8-047-reconcile-batch-record-drift.md) is a **record-correction ticket** (CONVENTIONS
+> §6.7), re-labelled at the v1.4.7 kit update on 2026-08-08. Its purpose is *make the record true*, so
+> §6.4's *"at the developer's discretion"* does not apply: **work it before the next batch starts.** While
+> it waits, further tickets close against the statements it exists to fix. No `before:` edge is set — it
+> constrains no single ticket, it constrains the next batch — and no new flag token was invented for it,
+> because §5.4 permits only the defined ones.
+
 > [**INT8-022**](INT8-022-broaden-boundary-check.md) was promoted into the main execution-order table above (row 12, before [INT8-012](INT8-012-song-type-migration.md)) — its
 > own DoD required it be worked before the first migration module landed. Recorded three ways per
 > CONVENTIONS §6.5: `before: [INT8-012]` in its frontmatter, the row move, and the `🔺 before INT8-012`

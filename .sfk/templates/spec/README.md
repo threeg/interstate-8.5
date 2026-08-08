@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Kit version** | v1.4.4 |
+| **Kit version** | v1.4.7 |
 | **Author** | Gregg Seymour |
 | **Kit identity** | `.sfk/manifest.md` (read-only); changes in `.sfk/CHANGELOG.md` |
 | **A project's applied kit version** | recorded in the project's root `CLAUDE.md` (*Project & kit*) |
@@ -49,8 +49,8 @@ later improvements into an existing project without disturbing your filled-in do
    brief and lays down that version's milestone table in `spec/milestone-plan.md`. (For the first
    release that's the full nine steps; for later versions it's the delta pass.)
 
-5. **Work the milestones.** Run `sfk-next-milestone` to work the next one — the agent interviews you,
-   produces the deliverable, and commits it as a draft. Review; loop with feedback until it's right;
+5. **Work the milestones.** Run `sfk-next-milestone` to work the next one — the agent interviews you
+   and produces the deliverable as a draft. Review; loop with feedback until it's right;
    then run `sfk-signoff` to mark it complete and advance. Repeat to the end of the version. During the
    implementation milestone, run `sfk-next-ticket` repeatedly and `sfk-verify` at batch boundaries.
 
@@ -83,7 +83,7 @@ is itself the output of a project that treated its development method as a deliv
 │   └── skills/                   ← the eleven workflow skills (auto-discovered by Claude Code)
 │       ├── sfk-init/             ← one-time environment bootstrap
 │       ├── sfk-version/          ← start a version: brief + its milestone table
-│       ├── sfk-next-milestone/   ← work one milestone to a committed draft
+│       ├── sfk-next-milestone/   ← work one milestone to a reviewable draft
 │       ├── sfk-signoff/          ← finalise & commit a milestone's completion
 │       ├── sfk-next-ticket/      ← implement one ticket, one commit
 │       ├── sfk-close-ticket/     ← finalise the reviewed ticket without starting the next
@@ -104,7 +104,10 @@ is itself the output of a project that treated its development method as a deliv
     │                               (navigation only; regenerated at each milestone sign-off)
     ├── brief/ requirements/      ← one folder per authoring milestone. sfk-next-milestone copies the
     │   architecture/ wireframes/   master (e.g. architecture/architecture.md) out of .sfk/templates,
-    │   design/ test-strategy/      fills the copy, and you drop supporting context alongside
+    │   design/ test-strategy/      fills the copy, and you drop supporting context alongside.
+    │                               Each also holds a decisions.md — the archive: why the rules are what
+    │                               they are, and every superseded wording. Not binding, not in the
+    │                               reading path; the binding document holds instructions only
     ├── verify/verify.md          ← the verifier's project-specific instructions (sfk-verify creates it
     │                               by interview on first run; the skill itself stays neutral)
     ├── TODO.md                   ← parking lot: work known but not yet specifiable (sfk-todo appends;
@@ -181,7 +184,8 @@ exactly one status:
 Two rules keep it honest, and they are non-negotiable:
 
 - **`sfk-next-milestone` marks a milestone `In progress` (🔶)** when work starts, moves the *Current
-  position* line to it, and commits the draft deliverable.
+  position* line to it, and produces the draft deliverable (commit cadence follows the commit protocol —
+  an authoring milestone's single commit lands at sign-off).
 - **A milestone only becomes `Complete` (✅) by `sfk-signoff`, which you trigger.** The agent never
   self-completes a milestone. Finishing the deliverable, passing the gates, and self-verification are
   *not* sufficient — until you sign off, it stays `In progress`, however done it looks.
@@ -238,7 +242,7 @@ You answer questions and sign off; the agent does the rest. Eleven skills, mappe
 |-------|------|--------------|
 | `sfk-init` | once, on a fresh repo | Short essentials interview; lays down root `CLAUDE.md`, `spec/`, `.gitignore`. Prepares the environment only — starts no milestones. |
 | `sfk-version` | start of each version | Takes a number + goals; writes the version brief and lays down that version's milestone table in the plan. |
-| `sfk-next-milestone` | start of each milestone | Marks the next milestone `In progress`, runs its authoring interview or build, and commits the draft deliverable. Iterates on your feedback. |
+| `sfk-next-milestone` | start of each milestone | Marks the next milestone `In progress`, runs its authoring interview or build, and produces the draft deliverable. Iterates on your feedback. For a **newly created** binding document it also arranges a fresh-eyes read before hand-off. Commit cadence follows the commit protocol. |
 | `sfk-signoff` | when you approve a milestone | Flips it to `Complete`, moves the *Current position*, commits the status change. The human gate. |
 | `sfk-next-ticket` | repeatedly, in the build steps (8–9) | Finalizes the previous ticket left `in-review` (→ `done`), then implements the next ready `todo` ticket and leaves it `in-review` for you to review. One at a time, scaffolding **and** implementation. |
 | `sfk-close-ticket` | to close a reviewed ticket and stop | Finalizes the current `in-review` ticket (→ `done`, its own commit) **without** starting the next — for a batch boundary (then run `sfk-verify`) or to pause. |
@@ -362,8 +366,10 @@ shipped.
 drives **requirement deltas** against the living spec:
 
 - New requirements take **new** `FR-`/`NFR-` numbers.
-- Superseded requirements are **amended in place** and annotated (e.g. *“rewritten — vX.Y”*), never
-  silently reinterpreted.
+- Superseded requirements are **rewritten in place** and marked exactly `*(amended vX.Y.Z)*`, never
+  silently reinterpreted — and **the superseded wording moves to the `decisions.md` beside that document**,
+  keyed by the id. It does not stay beside the live rule.
+
 - The only point-in-time artefacts are the milestone plan and each version's ticket batch. `BOARD.md`
   gains a new version section; shipped versions collapse into a “Shipped” section.
 - **A delta milestone amends its document; it never regenerates it.** Templates are copied out of
@@ -371,6 +377,61 @@ drives **requirement deltas** against the living spec:
   copied out at all — the document is already there and is binding. You should expect to review a
   **diff**, never a fresh skeleton of placeholders. If you are ever shown one, stop: something
   overwrote your spec.
+
+> **A binding document holds builder instructions; the `decisions.md` beside it holds the record.** They
+> are different jobs in **different files**, and the growth problem came from doing both in one place — by a third version, one
+> project's spec reached ~4,000 lines describing a dozen forms, most of it narration.
+>
+> **Dead text beside live text is the part that is not merely long.** It gets read as current. That
+> project lost a superseded tail onto the *next* rule, where it asserted a removed behaviour that an
+> implementer working from that rule alone would have built; and it carried two rules contradicting each
+> other from ninety lines apart. Moving the superseded wording out removes a defect class, not just bulk.
+>
+> **The test for any sentence in a binding document:** *can this be rewritten as a rule?* If yes, make it
+> the rule and delete the prose. If no, it is history — it belongs in `decisions.md`.
+>
+> **One exception, and it matters: operational hazards stay.** A finding a builder would otherwise
+> rediscover expensively, whose absence lets someone build the wrong thing — *a clean vulnerability audit
+> that is not sufficient evidence for this package*, a published parameter set that throws against the
+> runtime's default memory limit, a comment-syntax edge case that breaks a parser. Not justification, not
+> history. Never strip these for length.
+>
+> **The reference runs one way — log → rules.** Entries are keyed by the ids they affect, so "why is this
+> rule like this" is a search. A rule never cites its log entry: do that and someone soon adds a sentence
+> explaining the citation. Wanting to point at the log *from* a rule is the signal the justification
+> should have stayed out of the rule.
+>
+> The archive is therefore **a separate file, not a section**, so it is out of the reading path entirely:
+> a builder handed the spec reads rules, not history. Nobody reads `decisions.md` routinely,
+> and that is correct — its value is entirely at the rare, expensive moment someone asks *"why can't I
+> just change this?"*
+>
+> **This is forward-only.** It governs how the *next* amendment is written. It is not a licence to
+> restructure documents that already exist — see *Condensing an existing spec* below.
+
+### Condensing an existing spec
+
+The rules above are **forward-only**. If your spec already carries inline superseded text and rule-shaped
+narration, nothing in an update rewrites it — and nothing should. Bulk-rewriting a binding document is the
+most dangerous operation in the method: every edit is a *"is this a rule or is this narration?"* judgement,
+a wrong one silently deletes a constraint, and the volume makes real review impossible. It is also exactly
+how the defect above happened, with superseded text landing on the wrong rule.
+
+So the kit **reports and lets you choose**. Ask `sfk-verify` in **spec mode** for a **shape report** — a
+separate section from its drift findings, so four hundred editorial items never bury five real
+contradictions. It sorts what it finds by how much judgement the fix needs:
+
+| Tier | What it is | How to act |
+|---|---|---|
+| **Mechanical** | Superseded wording marked `*(amended vX.Y.Z)*`, delimited and identifiable — and, on a project upgrading from an older kit, a whole in-document *Decisions log* section | Safe to apply as a batch on your approval — the text is **relocated** to `decisions.md`, not rewritten, so nothing is lost and the result is verifiable by comparison |
+| **Judgement** | Prose that could be a rule, or could be dropped | **Reported only.** One at a time, as ordinary reviewed work — never a batch |
+| **Leave alone** | Operational hazards | Never proposed for removal |
+
+**When to do it: at the start of a version's delta pass**, when `sfk-version` runs. You are about to amend
+those documents anyway, nothing is in flight, and condensing first makes the amendments cleaner.
+
+**Never mid-batch.** If tickets are open and citing requirement text whose surroundings shift underneath
+them, you have recreated the defect this is meant to prevent — live, against work in progress.
 
 So later versions run as a delta pass — the step list, in order:
 
@@ -405,7 +466,7 @@ a dependency addition or a gate fix into feature commits is where a reviewer's a
 features usually depend on the plumbing anyway, so it wants to land first.
 
 > Note the two distinct "version" concepts. A **project version** (`v0.1.0`, `v0.2.0`) is *your
-> software's* release, scoped by `sfk-version`. A **kit version** (this kit's `v1.4.4`) is *the
+> software's* release, scoped by `sfk-version`. A **kit version** (this kit's `v1.4.7`) is *the
 > method's* release, applied by `sfk-update-kit`. They are independent.
 
 ---
@@ -548,12 +609,32 @@ layer's `CLAUDE.md` immediately.
 The test strategy (step 6) is written before code so tests express the spec, not the implementation.
 **Test-first (red-green) is binding**, not a preference: for deterministic and contract-pinned layers,
 write the failing test from the requirement/contract, confirm it fails for the right reason, then
-implement. It is the default for all implementation work and is overridden only where the test strategy
+implement — and **quote that failure in the ticket's `## Notes`, verbatim**, because it is the one part
+of the definition of done that no later pass can reconstruct (see below). It is the default for all implementation work and is overridden only where the test strategy
 *explicitly* names a layer as exempt — implementation-first quietly loses coverage you don't know you
 need. **Characterisation tests** cover probabilistic/external layers (seeded/recorded, asserting
 properties). Supporting practices: layered gates (a fast default gate every ticket, heavier gates per
 type); a coverage gate on the pure core; golden-file snapshots taken *before* any risky refactor; and
 the **`sfk-verify` pass** at batch boundaries, which turns spec-audit findings into cleanup tickets.
+
+**Fresh eyes on a newly created binding document, before you sign it off.** A document a milestone
+*amended* has a natural check — the prior version, and a diff you can read. One *created from nothing*
+has neither, and that is where defects concentrate. So `sfk-next-milestone` has a new document read end
+to end by someone that did not author it (a subagent on the `tests` model where one is configured;
+otherwise **you**, and it will say so rather than pretending a second self-review counts), and reports
+what that found before `sfk-signoff` asks for your approval.
+
+> **Why an author re-reading their own document is not a check.** Measured on one milestone: six
+> self-verification passes, every one finding a real defect and **every one but the last introducing a
+> smaller defect of the same class while fixing it.** The checker shares the author's model of what the
+> document says, so the same misreading survives every pass. It is the same *grader ≠ graded* rule the
+> kit applies to tests — a binding document is what every later ticket is checked against.
+>
+> It runs **before** the gate, not after: a finding raised after ✅ either forces un-signing a milestone
+> or leaves a signed-off document with a known defect standing against it. And it does not replace
+> `sfk-verify` **spec mode**, which is *cross-document* at the ticket gate — requirements can only
+> contradict the brief once both exist. This one is *single-document*, while the author still remembers
+> what they meant.
 
 **Independent authorship (optional).** A test written by the same model that writes the code it
 must pass is a weak check — the two share blind spots, and a misread requirement can be embodied in
@@ -574,8 +655,17 @@ the bigger levers). Off by default; single-model behaviour is unchanged.
 
 The **definition of done** for an implementation ticket lives in the root `CLAUDE.md` and the ticket
 template: the default gate passes with zero warnings; new/changed numbered-requirement behaviour has
-tests in the same commit; the relevant heavier gate passes where the ticket says so; and the ticket's
-status + notes and its `BOARD.md` row are updated in that same commit. On meeting that bar
+tests in the same commit; the relevant heavier gate passes where the ticket says so; the `## Notes` quote
+the failing test's name and message **verbatim**; and the ticket's
+status + notes and its `BOARD.md` row are updated in that same commit.
+
+> **Why the red-green item asks for evidence when the rest ask for a statement.** Every other item above
+> describes something still on disk: a gate can be re-run, an amendment re-read, a board row re-checked.
+> *"The failing test was written first, from the spec, before the implementer saw the problem"* is a fact
+> about **a moment that leaves no trace** — captured in that commit or lost for good. So a claim like *"all
+> tests passed first time"* is not a weaker record; it is the permanent absence of one, and it reads
+> identically whether red-green happened or not. Where there is honestly no red (a pure refactor, a guard
+> that cannot be made to fail, an exempt layer), name the substitute — never manufacture a failure. On meeting that bar
 `sfk-next-ticket` leaves the ticket at **`in-review`**; it is finalized to **`done`** when you review it
 — the next `sfk-next-ticket` run (asking for the next ticket is your approval), or **`sfk-close-ticket`**
 to close one without starting another, **including the last ticket of a milestone** — in a small

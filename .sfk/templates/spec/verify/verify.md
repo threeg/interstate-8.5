@@ -59,6 +59,25 @@
 - `<e.g. no N+1 queries in the ORM layer>`
 - `<…>`
 
+## 4a. Red-green evidence (every project)
+
+> Seeded by the kit. This is the **only** definition-of-done item that cannot be re-derived later, so it is
+> the only one where a missing record is a permanent loss rather than a chore. Keep this section even on a
+> single-model project.
+
+For each `tests_required: true` ticket in the batch, `## Notes` must carry the failing test's **name** and
+its **verbatim** failure message, or a named permitted substitute (root `CLAUDE.md` › *Definition of done*).
+
+- **The bar:** can a reader tell a real red-green from a plausible one **without re-running anything?**
+  *"All the new tests passed on the first implementation attempt"* cannot — it is equally true of a test
+  authored from the spec beforehand and of one written afterwards to fit working code.
+- **Report absence; never ask for it to be filled in now.** The evidence cannot be reconstructed after the
+  suite is green, so a quote added at audit time is a fabrication — and worse than the gap, because it is
+  indistinguishable from a real one. Name the tickets that lack it and treat the pattern as the finding.
+- **Expect this to fail more often than the trailer check**, and note the asymmetry when it does: the
+  trailers are mechanical, this is prose, and *they fail independently*. A batch with clean trailers on
+  every commit and evidence in only some tickets is the normal shape of the problem, not a contradiction.
+
 ## 4b. Authorship trailers (only if two models are configured)
 
 > Seeded by the kit because every project configuring **independent test authorship** has the same exposure,

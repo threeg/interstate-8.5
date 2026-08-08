@@ -204,16 +204,45 @@ implementation ticket:
      later cleanup sweep.
 5. **A specification change is a documented change, and it comes *first*.** Numeric thresholds and rules
    are contractual. If implementing a ticket reveals the spec must change, **stop**: the change is agreed
-   with the user, recorded in the relevant `spec/` document (and its decisions log) **before** the code that
+   with the user, recorded in the relevant `spec/` document (and the `decisions.md` beside it) **before** the code that
    depends on it, and referenced from the ticket. Tickets do not silently reinterpret a settled decision.
    **The order is not bookkeeping.** Asked before the code exists, "amend the spec" and "fix the code to
    match" cost the same and the user can choose freely; asked afterwards, amending is cheap and changing the
    code looks expensive, so sunk cost decides. It also leaves no way to tell later whether the spec was a
    decision or a rationalisation — which is what makes auditing code against it meaningful. A ticket does
    **not** reach `in-review` with an amendment still owed.
-6. **Every completed ticket carries a completion report.** On completion the ticket records — and the
-   chat response repeats — a plain-language **summary** and a one-line **sanity test**; UI tickets
-   additionally record manual **QA steps** (which accumulate as living per-screen documentation). The
+
+   **The retrospective half — a correction must re-open the work done from the false record.** The rule
+   above is prospective, and sometimes it did not hold: a document was false for an interval and nobody
+   knew. When you correct a record **others implement from** — a binding `spec/` document, or a ticket's
+   `## Background` or acceptance criteria — the correction **must name the tickets that were worked against
+   the false version and state, per ticket, whether their work stands.** One line each.
+
+   **Why that is an obligation rather than tidiness: a correction is not neutral.** Repair the document and
+   a reader now sees a `done` ticket beside a true document, with **nothing left to signal** that work done
+   against the earlier version might be incomplete. The correction destroys the last visible trace of the
+   very exposure it was written to record — so a correction that stops at the record is *worse* than none,
+   because it converts a visible inconsistency into an invisible one. Naming the affected tickets is what
+   keeps a correction a piece of **verification** instead of bookkeeping.
+
+   **Tier the record by exposure — the obligation differs:**
+   - **Records others implement from** — a binding document, a ticket's `## Background`, acceptance
+     criteria. A false one **produces wrong work**. Full obligation above, and it files a
+     record-correction ticket (§6.7) if the re-opened work is not settled on the spot.
+   - **Archival records** — a `depends_on` edge, a registry row, a traceability line. Nothing is built from
+     them, so a late correction is genuinely fine: correct it, date it, move on.
+   - **Records that cannot be corrected at all** — the red-green evidence (§5.6). There is no repair
+     available later; the only move is capture at the time, which is why that one is held to evidence.
+6. **Every completed ticket carries a completion report, and the red it observed.** On completion the
+   ticket records — and the chat response repeats — a plain-language **summary** and a one-line **sanity
+   test**; UI tickets additionally record manual **QA steps** (which accumulate as living per-screen
+   documentation). A `tests_required: true` ticket's `## Notes` also carry the **failing test's name and
+   its verbatim failure message**, or a named permitted substitute (root `CLAUDE.md` › *Definition of
+   done*). **This is the only item here that cannot be reconstructed after the fact**: everything else is
+   still in the tree to be re-checked, whereas *when* and *by whom* the failing test was written leaves no
+   artefact unless the work commit captures one — so an unevidenced claim is not a lesser record, it is the
+   permanent loss of one. A retrofitted quote is a fabrication; if the evidence was not captured, the
+   honest record is that it was not. The
    **chat response opens with the ticket id, title, and its `## In plain English` line** before the
    summary, so the reader sees which ticket landed and why it matters first; those three are chat-only
    (already in the ticket) and are not written into `## Notes`.
@@ -235,7 +264,8 @@ Reactive tickets discovered by post-batch review rather than planned up front.
 3. **Dependencies.** Each cleanup ticket's `depends_on` lists the tickets whose code it cleans up.
    Nothing in the main sequence depends on a cleanup ticket unless explicitly promoted.
 4. **When to work them.** Between batches or at the end of a milestone, at the developer's discretion,
-   under the same lifecycle and definition-of-done rules.
+   under the same lifecycle and definition-of-done rules. **Except a record-correction ticket (§6.7),
+   which has a deadline rather than discretion.**
 5. **Promotion.** If a cleanup ticket is **critical** — it would cause a gate failure (e.g. a
    performance regression, a warning that breaks the zero-warnings gate) — it is promoted into the
    main sequence, slotted before the gate it would affect. Promotion is recorded in **three** places,
@@ -253,6 +283,24 @@ Reactive tickets discovered by post-batch review rather than planned up front.
 6. **Scope.** Cleanup tickets do not implement new requirements (`implements: []`); they improve
    internal quality of already-shipped code. A finding that reveals a genuine spec gap is a
    specification change (§5.5), not a cleanup ticket.
+7. **Record-correction tickets are a distinct kind, and they have a deadline.** A ticket whose purpose is
+   *make the record true* — a batch left a document, a `## Background`, or a set of acceptance criteria
+   false — is **not** a quality ticket, and §6.4's *"at the developer's discretion"* does not apply to it.
+   Give it that name, carry **§5.5's retrospective half inside it** (the tickets worked against the false
+   version, and whether each one's work stands), and **work it before the next batch starts.**
+
+   **Why it has a half-life when quality cleanup does not.** While a quality ticket waits, the code stays
+   imperfect and nothing gets worse. While a record-correction ticket waits, **other tickets are written
+   and closed against the very record it exists to fix** — so the debt compounds, and the ticket can
+   expire. One observed instance became literally *unsatisfiable* in the interval, because the ticket it
+   had been written to re-scope was implemented and closed against its false `## Background` first; the
+   genuinely-undone work shipped three days and one extra ticket later, and only because someone happened
+   to re-read the correction. A ticket saying *"this record is knowingly false"* is a **live hazard**, not
+   a backlog item.
+
+   This kind is named here because projects otherwise invent it repeatedly and namelessly — one project
+   built the same instrument **five times across three milestones** before anyone noticed it was the same
+   thing. When a project reinvents one tool per milestone, the method is missing it.
 
 ---
 

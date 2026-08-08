@@ -129,7 +129,7 @@ with the file and section on both sides of each one.
 > **3. Amending a signed-off document needs the user's explicit approval, and a decisions-log line.**
 > Every document you are reviewing has already been approved. Present the finding and the proposed
 > amendment, get a yes, then amend **in place** and record what changed and why in that document's
-> decisions log. Never silently edit an approved deliverable. In the authoring phase you are in a
+> `decisions.md` beside it. Never silently edit an approved deliverable. In the authoring phase you are in a
 > **hand-off** runtime: present the `git` commands, run none yourself (root `CLAUDE.md`).
 
 ---
@@ -158,6 +158,18 @@ with the file and section on both sides of each one.
      row position, and a re-sort, a version-section move, or a hand edit drops it leaving the board
      looking perfectly ordinary. Report a broken pair as a finding: a promoted ticket that has drifted
      below the gate it was promoted ahead of is a gate failure waiting to happen.
+   - **Check that the red was quoted, not asserted.** For every `tests_required: true` ticket in the batch,
+     `## Notes` must carry the failing test's name and its **verbatim** failure message (root `CLAUDE.md` ›
+     *Definition of done*), or a named permitted substitute. A sentence like *"all tests passed on the first
+     attempt"* is an **absence of evidence, and report it as one** — it is equally consistent with a test
+     authored from the spec beforehand and one written afterwards to fit working code.
+
+     This check cannot prove authorship *order*; nothing can, after the fact. What it does is make the
+     absence **loud rather than silent**, which is the whole difference: in one observed batch the
+     mechanically-checked authorship trailers were clean on all 43 commits while the unverifiable prose was
+     missing from six of eight tickets. Do **not** ask for the evidence to be added now — it cannot be
+     reconstructed, and a retrofitted quote is a fabrication. Report which tickets lack it, and treat the
+     pattern as the finding.
    - **Check the authorship trailers, not just the prose.** Where the project configures a distinct `tests`
      model, a `tests_required: true` ticket's **work** commit should carry a `Co-authored-by` trailer for
      **both** models; a finalize carries one. **Prose and trailers fail independently** — faultless red-green
@@ -199,9 +211,48 @@ with the file and section on both sides of each one.
 **Both modes:** a short findings list, each tagged **critical** or **improvement**, each naming the exact
 file and section. If a check found nothing, say so — a silent check is indistinguishable from a skipped one.
 
+> **Numbering findings: they are labels for this pass, not ids.** Numbering them (`F1`, `F2`, …) makes the
+> conversation workable, and the sequence **restarts every pass** — so a label only means anything inside
+> the pass that produced it.
+>
+> **Never write one into a durable document.** Not into a ticket's `## Background`, not into `BOARD.md`, not
+> into `spec/verify/verify.md`. Once a finding is accepted it **has** a permanent id — the cleanup ticket it
+> became — and that is what a lasting reference cites; if it was rejected, restate the finding in words.
+> Writing `F7` into a document creates a citation that resolves to nothing as soon as the next pass mints
+> its own `F7`, and this has happened: two unrelated findings from two passes were both cited as bare `F7`
+> in different documents, silently breaking `spec/id-registry.md`'s binding rule that **ids are permanent —
+> never reused, never renumbered.**
+>
+> **A finding is ephemeral by design**, which is why it needs no id: it either becomes a ticket (which has
+> one) or it is rejected. If a project genuinely wants durable finding ids, that is a **new id family** —
+> stop and offer to add a row to `spec/id-registry.md` naming what it means, where it is defined and what
+> scopes it, per that file's rule *"add a row when you invent a family, not when you invent an id"*. Do not
+> start minting durable labels without one.
+
 - **Spec mode:** for each finding, the proposed **amendment** and which document owns it. Group them so the
   user can approve in batches. Nothing is edited before they say yes, and nothing becomes a ticket. Close by
   stating plainly whether the spec is ready for ticket generation, and if not, what is outstanding.
+
+  > **The shape report — only when asked, and always in its own section.** A project may ask you to report
+  > where its documents violate the *builder instructions only* rule (`spec/README.md`, *How versions
+  > evolve*). **Do not fold this into the findings above.** A mature spec can yield hundreds of editorial
+  > items, and mixed together they bury the handful of real contradictions — which are the reason spec mode
+  > exists. Separate section, separate approval, or the pass loses its point.
+  >
+  > Sort what you find into three tiers and **say which tier each item is in**:
+  > - **Mechanical** — superseded wording marked `*(amended vX.Y.Z)*`. It is delimited, so the fix
+  >   **relocates** it to the `decisions.md` beside the owning document, verbatim, rather than rewriting anything.
+  >   Safe to offer as a batch: nothing is lost, and the result is checkable.
+  > - **Judgement** — prose that reads as narration and could be a rule or could go. **Report; never
+  >   batch.** Each one is a *"is this a rule?"* call, and a wrong one silently deletes a constraint. These
+  >   are ordinary reviewed project work, one at a time.
+  > - **Leave alone** — **operational hazards** (a clean vulnerability audit that is not sufficient
+  >   evidence, a parameter set that throws against a default limit, a syntax edge case that breaks a
+  >   parser). Never propose removing one; if you are unsure whether something is a hazard or narration, it
+  >   is a hazard.
+  >
+  > **Refuse the timing if it is wrong.** Not mid-batch, while open tickets cite text whose surroundings
+  > would shift under them — say so and propose the start of the next delta pass instead.
 - **Code mode:** for accepted findings, draft **cleanup tickets** per `spec/tickets/CONVENTIONS.md` §6:
   ordinary `task` tickets, `batch: cleanup`, `implements: []`, numbered after the current highest id, placed
   in the Cleanup backlog table in `BOARD.md`. Do not auto-promote — flag candidates and let the user decide.
@@ -220,6 +271,18 @@ file and section. If a check found nothing, say so — a silent check is indisti
   > The ticket's commit carries a `Co-authored-by` trailer for the model that drafted it, exactly as a
   > ticket's work commit records its test author. **Degrade gracefully:** with no distinct `tests` model,
   > or a runtime that cannot pin one to a subagent, draft it here as usual.
+
+  > **A finding that a record is false files a *record-correction* ticket** (CONVENTIONS.md §6.7), not an
+  > ordinary cleanup ticket — and it is the one kind with a **deadline**: worked before the next batch
+  > starts, not at discretion. Name it as one, and put §5.5's retrospective half **inside** it: which
+  > tickets were worked against the false version, and whether each one's work stands. Say so in your
+  > report, and flag it if the user is about to start another batch with one open.
+  >
+  > **The reason it cannot wait:** while it sits, further tickets are written and closed against the record
+  > it exists to fix. One such ticket became *unsatisfiable* while queued — the ticket it was written to
+  > re-scope closed against its own false `## Background` first. Correcting the record without re-opening
+  > that work would also have **hidden** the gap rather than closed it, because afterwards nothing marks a
+  > `done` ticket as suspect.
   **If the user promotes one, record it in all three places in one commit** (§6.5): set `before:` on the
   promoted ticket naming what it must precede, move its row into the main-sequence table above that
   ticket, and put `🔺 before <id>` in the row's `flag` cell. A cleanup ticket is numbered *after*

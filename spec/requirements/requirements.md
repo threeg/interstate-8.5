@@ -30,7 +30,14 @@
 
 1. **Identifiers.** Functional requirements are `FR-n`; non-functional are `NFR-n`. Numbers are
    permanent once allocated — never reused or renumbered. New requirements take the next free number;
-   superseded ones are amended in place and annotated.
+   a superseded one is **rewritten in place** and marked — exactly `*(amended vX.Y.Z)*`, at the end of
+   the rule, nothing else.
+   **The superseded wording does not stay in the rule.** It moves to [`decisions.md`](decisions.md)
+   verbatim, keyed by the id. Dead text left beside live text is read as current: in one project a
+   superseded tail was left spliced onto the *next* rule and asserted a behaviour that had been removed,
+   and an implementer working from that rule alone would have built it. The marker is a flag, **not a
+   cross-reference** — it never points at the archive, because a rule that cites its entry soon acquires a
+   sentence explaining the citation, and the narration is back.
 2. **Modal verbs.** MUST / MUST NOT are binding; SHOULD is a strong default that may be overridden
    with a recorded reason; MAY is optional.
 3. **Traceability.** Every `FR`/`NFR` is realised by at least one ticket (its `implements` field) and
@@ -38,6 +45,22 @@
 4. **Numeric thresholds are contractual.** Any number here (limits, viewport widths, counts) is
    binding. Implementation references it as a named constant; tests assert it. Changing one means
    editing this document first.
+5. **This document holds builder instructions.** Three things belong in it, and a fourth does not:
+   - **Rules** — what MUST, MUST NOT, SHOULD hold. The test for any sentence: *can this be rewritten as a
+     rule?* If yes, make it the rule and delete the prose. *"The band is a fixed height so the budget is
+     computable without rendering"* → **the budget MUST be computable without rendering.**
+   - **Contractual values** — thresholds, limits, names (§1.4).
+   - **Operational hazards** — findings a builder would otherwise rediscover expensively, and whose
+     absence lets someone build the wrong thing: *"the standard vulnerability audit reports this package
+     clean, so a clean audit is not sufficient evidence here"*; a published parameter set that throws
+     against the runtime's default memory limit; a comment-syntax edge case that silently breaks a parser.
+     These are **not** narration and are never removed for length.
+   - **Not: justification.** Why a rule is what it is belongs in [`decisions.md`](decisions.md). A builder
+     needs the rule; a reader asking *"why can't I just change this?"* searches the archive for the id.
+
+   *(Appended at the v1.4.7 kit update. It is last, not second as the v1.4.6 template had it, because
+   **§1.4 is a citation target** — this project cites it from the document's own purpose block, from
+   tickets and from `verify.md` — and renumbering it would break every one of those silently.)*
 
 ---
 
@@ -290,94 +313,10 @@ already ships** (`INT8-028`, the page hero background block) and was specified n
 
 ---
 
-## 7. Decisions log
+## 7. Decisions and superseded wording
 
-- **2026-08-02** — **Slice 2 requirement deltas (Milestone 11).** Added `FR-22`–`FR-25` (§4.5) and
-  `NFR-9`–`NFR-11`, and amended `FR-20` in place. Taken in turn:
-  - **`FR-20` lost the word "alongside".** It was a layout constraint sitting in a behavioural document,
-    and it would have pre-empted the very design decision `TODO-001` is parked waiting for. The rule now
-    binds *both lyric sets present and attributed*; **placement is the design's call** (M13/M14, `D-a`).
-    No test behaviour changes — only `song-versions.spec.ts`'s geometry assertions follow the new design.
-  - **`FR-22` makes the front page content, not code.** The `INT8-017` stub was always declared temporary
-    in its own docblock; this is the rule that retires it. Deliberately stated as *"editable content
-    managed in the CMS"* rather than naming Layout Builder: **which** mechanism delivers it is `D-h`, owed
-    by M12, and a requirement that names the tool would settle an architecture decision by the back door.
-  - **`FR-23`/`FR-24` are the genuinely new homepage behaviour** — the set editorial message, and the
-    transparent-over-hero navigation. **`FR-24`'s 24px is now contractual**, lifted from the shipped
-    `site-header.js`; it had no specification before, so this pins what already works rather than choosing
-    something new. Change it here first if the design wants a different threshold.
-  - **`FR-25` records what `INT8-028` already built**, per the brief's `D-c` reclassification: random
-    background image, re-picked per page load, not frozen by the anonymous page cache. This is the clearest
-    case in the project so far of **behaviour that worked, was reasoned about carefully, and bound nothing**
-    — it lived in a docblock. A rule in a docblock is a rule the next change is free to break.
-  - **`NFR-9`/`NFR-10` split reproducibility into two testable properties** rather than one: the content
-    *arrives* on a fresh install, and it *survives editing afterwards*. They are separated because they fail
-    independently and a mechanism can easily satisfy the first while violating the second — which is exactly
-    the failure the brief warns about (an artefact re-imported over the operator's edits). `NFR-10` is
-    therefore a selection criterion for M12's mechanism choice (`D-d`), not a post-hoc check.
-  - **`NFR-11` binds updatability, not the patch level** — revised during M11 review, on the site owner's
-    objection to the first draft. That draft required the site to carry **no unpatched core advisory**,
-    which is too strong in a way worth naming: it would put the project in breach from the moment any
-    advisory published until it chose to act, converting an operational judgement — *is this one worth a
-    release right now?* — into a spec violation. **The durable requirement is that the choice exists at
-    all.** So: MUST on the dependency set remaining resolvable and updatable without workarounds, SHOULD on
-    tracking security-supported branches (overridable with a recorded reason, per §1.2). The rule is
-    **currently breached on the MUST** — Composer cannot resolve at all — which is exactly what M17's first
-    ticket fixes. A requirement the project is knowingly failing is a useful document; an absent one is not.
-- **2026-07-19** — **FR-1/FR-5 reading clarified (migration imports all rows, `Song_Active → status`).**
-  The Songs migration does not filter the source on `Song_Active`; it imports every `I8_Songs` row and
-  maps `Song_Active` to the node's published state. FR-1 ("import every active song") is therefore
-  satisfied — every active song is imported and published — while inactive rows (none in the dump; all
-  492 are active) are imported **unpublished** rather than dropped, which is lossless and recoverable.
-  FR-5's count parity holds; its verification check is tightened to compare *published* imported count
-  against the active-source count in **INT8-025**. Rationale and the authoritative mapping live in
-  `content-model.md` §8/§12 *(the decisions log, renumbered from §9 at M12)*. (Surfaced by `sfk-verify` on
-  the migration batch; no FR text changed.)
-- **2026-07-07** — **Accessibility: WCAG 2.1 AA** chosen over 2.2 AA (newer, stricter) and 2.1 A
-  (lighter): 2.1 AA is the established practical/legal baseline; day-one per project principle.
-- **2026-07-07** — **No pagination on the Songs landing** (~400 songs as text links, one page): the
-  value is a complete at-a-glance picture of the body of work; pagination/filtering-by-scale can come
-  in a later slice if needed. Not a contractual count.
-- **2026-07-07** — **Performance thresholds deferred** to a pre-launch NFR pass (NFR-4): a Core Web
-  Vitals number set against a near-empty dev site would be arbitrary or churny (lazy adoption).
-- **2026-07-07** — **Music videos embedded inline** (FR-17) rather than linked: matches the "music
-  videos on the song page" intent.
-- **2026-07-07** — **Tablature deferred** from slice 1 (v2 `music.php` / `I8_Tabs`): the stated
-  song-page scope did not include tabs.
-- **2026-07-07** — **Download link dropped** (v2 `Song_Download`): it was an iTunes purchase-referral
-  link — a defunct integration — so it is not carried into v5.
-- **2026-07-07** — **Requirements re-grounded in the v2 code** (`songlist.php`, `functions.php`) after
-  the as-built summary proved too coarse for field-level semantics. Corrections made: the side-by-side
-  lyric display is triggered by a song **having a parent** (`FK_Song_ID`), not by `Song_Live`; the
-  Alternate-titles filter **defaults to showing** alternates (marked `*`), with "No" hiding them; the
-  landing sorts on raw `Song_Name`; music video comes from `Song_Video` (embed).
-- **2026-07-07** — **`Song_Live` is a hide-from-landing flag, not a studio/live indicator** (v2:
-  `AND Song_Live = 0` in the landing query). It keeps a lyric-variant out of the main list. The v5
-  field SHOULD be renamed to reflect this.
-- **2026-07-07** — **Legacy rich-text cleanup on import** (FR-21): the rich-text fields are
-  inconsistent — some carry HTML from the v1→v2 change, some don't. The import normalizes them to a
-  consistent representation (preserving line/paragraph breaks) rather than importing the inconsistency.
-  Reference: the v3 `stripOldHtml` (strip tags → `nl2br`); exact transform and target text format
-  fixed at the Architecture/migration milestone.
-- **2026-07-07** — **Landing sort ignores leading articles** (FR-8): sort by the first significant
-  word, dropping a leading "A"/"An"/"The" — a deliberate v5 improvement over v2's raw `ORDER BY
-  Song_Name`.
-- **2026-07-25** — **FR-8 extended with a punctuation/symbol catch-all** (INT8-029): the article-only
-  rule left real titles like `(8)copy` and `(No Song)` with nowhere sensible to sort — each became its
-  own one-song, nonsense-headed group on the rendered ledger. Extended the rule (implementation
-  unchanged conceptually, wording clarified here to match): skip past any leading punctuation to find
-  the first letter-or-digit; a letter sorts under itself, anything else (a digit, or a title that is
-  only punctuation) goes into one trailing catch-all group. No hi-fi precedent exists for the catch-all
-  — see `design-system.md`'s matching 2026-07-25 entry.
-- **2026-07-07** — **Type-filter default and page display resolved**: the landing **defaults to Modest
-  Mouse** (matching v2, FR-9); the song's type/group is **not shown on the song page** (FR-12).
-  Consequence: in the *All* view there is no per-song group distinguisher — a known v2 characteristic,
-  noted as a possible future enhancement, **out of scope for slice 1**. Presentation details
-  (two-column list, `*` marker) remain with the wireframes/design milestones.
-- **2026-07-07** — **Alternate-title (song self-reference) is in slice-1 scope** as a Song-to-Song
-  relationship (FR-3, FR-10, FR-13); it does not contradict the brief, which deferred only
-  *release* and *setlist* relationships.
-- **2026-07-07** — ***Released* and *Played live* filters are non-functional in slice 1** (FR-11) but
-  carried in wireframes/design, because they depend on deferred release/setlist relationships.
-- **2026-07-07** — **Grounded in the v2 as-built reference** (schema validated against the final
-  production dump); exact `SongType` values and field-level behaviour reconfirmed at migration.
+> Not here — see **[`decisions.md`](decisions.md)** beside this file. This document holds **builder
+> instructions only**: rules, contractual values, and operational hazards. Why a rule is what it is, and
+> what it used to say, live in the archive so they are out of the reading path (`spec/README.md`, *How
+> versions evolve*). The reference runs **one way** — entries there name rules here; a rule never cites
+> an entry.

@@ -46,12 +46,14 @@ other document needs a link back.
 | Document | What it is |
 |---|---|
 | [`brief/brief.md`](brief/brief.md) | **Binding.** Scope, goals, users, out-of-scope, success criteria. |
+| [`brief/decisions.md`](brief/decisions.md) | *Archive — not binding.* Why the brief says what it says, and every superseded wording. Not in the reading path; search it only when asking *why*. |
 
 ## 2. Requirements
 
 | Document | What it is |
 |---|---|
 | [`requirements/requirements.md`](requirements/requirements.md) | **Binding.** The numbered `FR-n` / `NFR-n` rules; numeric thresholds are contractual. |
+| [`requirements/decisions.md`](requirements/decisions.md) | *Archive — not binding.* Why the requirements say what they say, and every superseded wording. Not in the reading path; search it only when asking *why*. |
 
 ## 3. Architecture & interface contract
 
@@ -60,6 +62,7 @@ other document needs a link back.
 | [`architecture/architecture.md`](architecture/architecture.md) | **Binding.** Module layout, the dependency rule, data model, key flows. |
 | [`architecture/api-contract.md`](architecture/api-contract.md) | **Binding.** Authoritative interface shapes; where code and contract disagree, the contract wins. |
 | <`architecture/<supporting>.md`> | <supporting context — e.g. an integration note or vendor reference; not binding> |
+| [`architecture/decisions.md`](architecture/decisions.md) | *Archive — not binding.* Why the architecture and the contract say what they say, and every superseded wording. Not in the reading path; search it only when asking *why*. |
 
 ## 4. Wireframes
 
@@ -72,6 +75,7 @@ other document needs a link back.
 | [`wireframes/overview.md`](wireframes/overview.md) | **Binding.** The surface index, shared conventions, navigation, state-coverage matrix. |
 | <`wireframes/01-<name>.md`> | <one surface: its states and behaviour> |
 | <`wireframes/<mockup>`> | <renderable mockup — **proportion reference, not a value source**> |
+| [`wireframes/decisions.md`](wireframes/decisions.md) | *Archive — not binding.* Why the wireframes say what they say, and every superseded wording. Not in the reading path; search it only when asking *why*. |
 
 ## 5. Design system
 
@@ -80,6 +84,7 @@ other document needs a link back.
 | Document | What it is |
 |---|---|
 | [`design/design-system.md`](design/design-system.md) | **Binding.** Tokens, components, visual states — and §1.1, which artefact is authoritative for which kind of fact. |
+| [`design/decisions.md`](design/decisions.md) | *Archive — not binding.* Why the design system says what it says, and every superseded wording. Not in the reading path; search it only when asking *why*. |
 | <`design/<token source>`> | <the machine-readable values the implementation imports> |
 
 ## 6. Test strategy
@@ -87,6 +92,7 @@ other document needs a link back.
 | Document | What it is |
 |---|---|
 | [`test-strategy/test-strategy.md`](test-strategy/test-strategy.md) | **Binding.** Frameworks, the pyramid, the gates, the definition of done. |
+| [`test-strategy/decisions.md`](test-strategy/decisions.md) | *Archive — not binding.* Why the test strategy says what it says, and every superseded wording. Not in the reading path; search it only when asking *why*. |
 
 ## 7. Tickets
 

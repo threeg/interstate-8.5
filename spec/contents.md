@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Specification contents (navigation index) |
 | **Repository location** | `spec/contents.md` |
-| **Last updated** | 2026-08-02 (Milestone 12 sign-off — content-model description extended for slice 2) |
+| **Last updated** | 2026-08-08 (v1.4.7 kit update — a `decisions.md` archive row added to every milestone section) |
 
 Every document in `spec/`, in milestone order, so you can reach any part of the specification from one
 place instead of opening folders. Open this file on your forge (GitHub/GitLab render it) or in any
@@ -48,12 +48,14 @@ other document needs a link back.
 |---|---|
 | [`brief/brief.md`](brief/brief.md) | **Binding.** Northstar, slice-1 scope, users, out-of-scope, success criteria. |
 | [`brief/5.0.x-dev2-brief.md`](brief/5.0.x-dev2-brief.md) | **Binding for slice 2.** The `5.0.x-dev2` delta brief: six goals (song-page alternates, the real homepage, reproducible install content, the design-source restructure, a root README, Composer standardisation), the `D-x` decisions the version owes, success criteria and risks. Scopes changes *against* the living spec — it does not reopen the northstar. |
+| [`brief/decisions.md`](brief/decisions.md) | *Archive — **not binding**, and **not in the reading path**.* Why the brief says what it says, and every superseded wording. Search it only when asking *why*. |
 
 ## 2. Requirements
 
 | Document | What it is |
 |---|---|
 | [`requirements/requirements.md`](requirements/requirements.md) | **Binding.** The numbered `FR-n` / `NFR-n` / `DR-n` rules; numeric thresholds are contractual. |
+| [`requirements/decisions.md`](requirements/decisions.md) | *Archive — **not binding**, and **not in the reading path**.* Why the requirements say what they say, and every superseded wording. Search it only when asking *why*. |
 
 ## 3. Architecture & content model
 
@@ -62,6 +64,7 @@ other document needs a link back.
 | [`architecture/architecture.md`](architecture/architecture.md) | **Binding.** Layering and the dependency rule (§2.1), data model, migration and rendering flows, stack (§6). |
 | [`architecture/api-contract.md`](architecture/api-contract.md) | **Binding.** Authoritative route/response shapes; where code and contract disagree, the contract wins. |
 | [`architecture/content-model.md`](architecture/content-model.md) | **Binding.** The Drupal realisation: content types, fields and machine names, the Song type taxonomy, Remote-video media, Restricted HTML. Config is exported and verified against this — never hand-authored. *Slice 2 added the `Page` type and its Layout Builder scoping, the `Homepage hero` block, and the default content that makes a fresh install reproducible.* |
+| [`architecture/decisions.md`](architecture/decisions.md) | *Archive — **not binding**, and **not in the reading path**.* Why the architecture, the content model and the contract say what they say, and every superseded wording. One archive for all three binding documents in this folder, grouped by document. Search it only when asking *why*. |
 
 ## 4. Wireframes
 
@@ -74,6 +77,7 @@ other document needs a link back.
 | `wireframes/Interstate-8 Wireframes.dc.html` | The click-through structural canvas the go/no-go was decided against (all three screens, desktop + mobile). Supporting — **proportion reference, not a value source** (design-system §1.1). |
 | [`wireframes/design-brief.md`](wireframes/design-brief.md) | Supporting: the visual direction brief handed to Claude Design. |
 | [`wireframes/references/README.md`](wireframes/references/README.md) | Supporting: the inspiration and reference images beside it (palette extraction, shield mark, v1/v2 screenshots). |
+| [`wireframes/decisions.md`](wireframes/decisions.md) | *Archive — **not binding**, and **not in the reading path**.* Why the wireframes say what they say, and every superseded wording. Search it only when asking *why*. |
 
 ## 5. Design system
 
@@ -83,12 +87,14 @@ other document needs a link back.
 | `design/tokens.css` | The machine-readable token set the theme imports. The binding source for every colour, type and spacing **value**; components read `var(--…)` and never hardcode hex/px. |
 | `design/interstate-8-design-refinement/project/Interstate-8 1B.dc.html` | The canonical hi-fi: all three screens at four widths, the component library, the token panel. Binding for **placement and component shape** (design-system §1.1). |
 | [`design/interstate-8-design-refinement/README.md`](design/interstate-8-design-refinement/README.md) | Supporting: what the Claude Design export contains and how it is organised. |
+| [`design/decisions.md`](design/decisions.md) | *Archive — **not binding**, and **not in the reading path**.* Why the design system says what it says, and every superseded wording. Search it only when asking *why*. |
 
 ## 6. Test strategy
 
 | Document | What it is |
 |---|---|
 | [`test-strategy/test-strategy.md`](test-strategy/test-strategy.md) | **Binding.** Frameworks, the pyramid, the gates (§2.2), red-green and its exemptions, the definition of done. |
+| [`test-strategy/decisions.md`](test-strategy/decisions.md) | *Archive — **not binding**, and **not in the reading path**.* Why the test strategy says what it says, and every superseded wording. Search it only when asking *why*. |
 
 ## 7. Tickets
 

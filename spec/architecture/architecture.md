@@ -271,51 +271,10 @@ Pinned majors: Drupal 11, Tailwind v4. Keep this section in step with the root `
 
 ---
 
-## 7. Decisions log
+## 7. Decisions and superseded wording
 
-> Dated record of changes to this document — what changed and why. Append per amendment.
->
-> **Started 2026-08-01, not backfilled.** `content-model.md`, `design-system.md` and
-> `wireframes/overview.md` have carried a log since their milestones; this document did not, so the
-> Milestone 3 decisions are recorded in §6's *Rationale / exclusions* column and in the milestone's
-> sign-off rather than here. The log runs forward from this entry.
-
-- **2026-08-02** — **Slice 2 architecture deltas (Milestone 12).** The content-model detail and the full
-  reasoning for `D-h`/`D-b`/`D-d` live in `content-model.md` §9–§11 and its own log; recorded here are the
-  four changes to *this* document:
-  - **§1 and §6 — the Layout Builder line moved from a page to a content type.** It read *"Layout Builder
-    only for the home page"*; it now reads **"the `page` content type only, and nothing else"**. This is a
-    **widening in letter and a tightening in principle**: slice 1 could say "one page" because `page` did
-    not exist, but the real bar was always *composed vs structured* content, and stating it that way is
-    what makes it enforceable when About and Terms arrive. The **binding half is the exclusion** — Layout
-    Builder never on `song` or any later archive type, because per-instance layout variance on structured
-    content is what would dirty the future JSON surface (§1).
-  - **§6's *Excluded* row sharpened** from "Layout Builder for entity pages" — `page` is an entity page
-    too, so the old wording now excluded the very thing §6 permits.
-  - **§2.1 — new `default-content/` layer**, a sibling of `migration`: both populate `content-model` from
-    outside and depend on nothing else. Kept separate from `migration` because its source is the
-    repository rather than the v2 dump and it runs at install rather than on demand. **The boundary check
-    does not know this layer yet** — teaching `tooling/check-boundary.sh` about it is **M17 tooling
-    work**, flagged in §2.1 so it cannot be quietly absorbed into a feature ticket.
-  - **§4.4/§4.5 — two new flows**, the homepage render and fresh-install seeding, so every slice-2 `FR`
-    and `NFR` has a traced path through the layers as §4's other flows do.
-- **2026-08-01** — **Dropped "provisional" from §2.1.** The layering was described as *"Provisional
-  Drupal-oriented layering, finalised here"*, which contradicted itself, and the root `CLAUDE.md` and
-  `spec/tickets/CONVENTIONS.md` §3 both said the layer set would be *"finalised in the Architecture
-  milestone"* — future tense, for a milestone signed off on 2026-07-11. The layering itself is
-  **unchanged**: `content-model → services → theme`, `migration → content-model`, nothing imports
-  `theme`. Only the label changed, in all three places at once, so the three stay identical as §2.1
-  requires. Prompted by the v1.4.3 kit update's rule that anything temporary must name the condition
-  that retires it — this one's condition had been met for three weeks. (Operator approval, 2026-08-01.)
-- **2026-08-02** — **Corrected two stale cells in §3.1's data-model table (INT8-044).** Both described
-  a state the project had already left behind:
-  - **Music video** read *"modelling TBD in `content-model.md`"*. `content-model.md` §4 settled this on
-    2026-07-07 and revised it at INT8-013: Core Media *Remote video* entities referenced by `field_video`
-    (oEmbed). Because v2 `Song_Video` stored raw embed markup rather than a bare URL, `content-model.md`
-    §9's 2026-07-19 entry descoped the import to **manual, pre-launch entry**; §8's source-mapping table
-    already read *"not imported — `field_video` populated manually, pre-launch"*.
-  - **Exclude from list** read *"Rename pending"*. The rename shipped at INT8-010: `field_exclude_from_list`
-    exists in exported config (`field.storage.node.field_exclude_from_list.yml`), the migration
-    (`migrate_plus.migration.song.yml:75`) and `views.view.songs.yml`'s filter.
-  Neither decision is reopened — both were correct and complete in `content-model.md`; only this
-  document's overview table had not caught up. (`sfk-verify` finding, 2026-08-01; corrected 2026-08-02.)
+> Not here — see **[`decisions.md`](decisions.md)** beside this file. This document holds **builder
+> instructions only**: rules, contractual values, and operational hazards. Why a rule is what it is, and
+> what it used to say, live in the archive so they are out of the reading path (`spec/README.md`, *How
+> versions evolve*). The reference runs **one way** — entries there name rules here; a rule never cites
+> an entry.

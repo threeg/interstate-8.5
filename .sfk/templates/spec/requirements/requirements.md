@@ -22,7 +22,14 @@
 
 1. **Identifiers.** Functional requirements are `FR-n`; non-functional are `NFR-n`. Numbers are
    permanent once allocated — never reused or renumbered. New requirements take the next free
-   number; superseded ones are amended in place and annotated (e.g. *“rewritten — vX.Y”*).
+   number; a superseded one is **rewritten in place** and marked — exactly `*(amended vX.Y.Z)*`, at the
+   end of the rule, nothing else.
+   **The superseded wording does not stay in the rule.** It moves to [`decisions.md`](decisions.md)
+   verbatim, keyed by the id. Dead text left beside live text is read as current: in one project a
+   superseded tail was left spliced onto the *next* rule and asserted a behaviour that had been removed,
+   and an implementer working from that rule alone would have built it. The marker is a flag, **not a
+   cross-reference** — it never points at the archive, because a rule that cites its entry soon acquires a
+   sentence explaining the citation, and the narration is back.
 2. **Modal verbs.** MUST / MUST NOT are binding; SHOULD is a strong default that may be overridden
    with a recorded reason; MAY is optional.
 3. **Traceability.** Every `FR`/`NFR` is realised by at least one ticket (its `implements` field)
@@ -30,6 +37,18 @@
 4. **Numeric thresholds are contractual.** Any number in this document (limits, tolerances,
    timeouts, counts) is binding. Implementation references it as a named constant; tests assert it.
    Changing one means editing this document first.
+5. **This document holds builder instructions.** Three things belong in it, and a fourth does not:
+   - **Rules** — what MUST, MUST NOT, SHOULD hold. The test for any sentence: *can this be rewritten as a
+     rule?* If yes, make it the rule and delete the prose. *"The band is a fixed height so the budget is
+     computable without rendering"* → **the budget MUST be computable without rendering.**
+   - **Contractual values** — thresholds, limits, names (§1.4).
+   - **Operational hazards** — findings a builder would otherwise rediscover expensively, and whose
+     absence lets someone build the wrong thing: *"the standard vulnerability audit reports this package
+     clean, so a clean audit is not sufficient evidence here"*; a published parameter set that throws
+     against the runtime's default memory limit; a comment-syntax edge case that silently breaks a parser.
+     These are **not** narration and are never removed for length.
+   - **Not: justification.** Why a rule is what it is belongs in [`decisions.md`](decisions.md). A builder
+     needs the rule; a reader asking *"why can't I just change this?"* searches the archive for the id.
 
 ---
 
@@ -101,15 +120,10 @@
 
 ---
 
-## 7. Decisions log
+## 7. Decisions and superseded wording
 
-> A dated record of decisions taken during requirement interviews — especially where a default was
-> chosen among alternatives, or a threshold was set to a specific value. This is where future-you
-> learns *why* FR-12 says 25 and not 50. Append, never rewrite.
-
-- **<DATE>** — <decision, the options considered, and the rationale>.
-
-<!-- For later versions, add a dated sub-section per version delta, e.g.:
-### 7.1 vX.Y.0 decisions (Milestone NN, <DATE>)
-- <decision> ...
--->
+> Not here — see **[`decisions.md`](decisions.md)** beside this file. This document holds **builder
+> instructions only**: rules, contractual values, and operational hazards. Why a rule is what it is, and
+> what it used to say, live in the archive so they are out of the reading path (`spec/README.md`, *How
+> versions evolve*). The reference runs **one way** — entries there name rules here; a rule never cites
+> an entry.

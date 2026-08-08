@@ -1,13 +1,15 @@
 ---
 name: sfk-next-milestone
-description: Work the next milestone in the spec-first process to a committed draft. Reads spec/milestone-plan.md, marks the next milestone In progress, runs its authoring interview or build, commits the draft deliverable, and iterates on the user's feedback. Does NOT mark the milestone complete — that is sfk-signoff. Trigger on "next milestone", "work the next milestone", "continue the project", or naming a step such as "start the requirements" or "start the test strategy".
+description: Work the next milestone in the spec-first process to a reviewable draft. Reads spec/milestone-plan.md, marks the next milestone In progress, runs its authoring interview or build, and iterates on the user's feedback; commit cadence follows the project's commit protocol. Does NOT mark the milestone complete — that is sfk-signoff. Trigger on "next milestone", "work the next milestone", "continue the project", or naming a step such as "start the requirements" or "start the test strategy".
 ---
 
-# sfk-next-milestone — work one milestone to a committed draft
+# sfk-next-milestone — work one milestone to a reviewable draft
 
 Use to work the next milestone the current version has laid down. Each milestone is its own session.
-You produce and **commit** the deliverable as a draft and iterate with the user; you do **not** sign it
-off — that is the separate `sfk-signoff` skill, which the user triggers.
+You produce the deliverable as a draft and iterate with the user; you do **not** sign it off — that is
+the separate `sfk-signoff` skill, which the user triggers. **When the draft is committed depends on the
+runtime — step 4 is the single place that says which cadence applies**, and for an authoring milestone
+in a hand-off runtime the answer is *not here*: the whole commit defers to sign-off.
 
 > **`.sfk/` is read-only.** Copy any template you need *out* of `.sfk/templates/` to
 > its working location and edit the copy — never edit inside `.sfk/`.
@@ -44,13 +46,17 @@ off — that is the separate `sfk-signoff` skill, which the user triggers.
      `.sfk/templates/spec/<folder>/` into its working `spec/<folder>/` location (e.g.
      `architecture/architecture.md` and `architecture/api-contract.md`) — **only if that working document
      does not exist yet** — then interview the user section by section and fill the **working** copy.
+     **Copy that folder's `decisions.md` out at the same time**, empty: it is where this document's
+     rationale and every later superseded wording go, and a milestone that creates the binding document
+     without its archive leaves the next amendment nowhere to put the old text.
 
      > **If the working document already exists, it is living and binding: never copy a template over it.**
      > Doing so would replace a signed-off specification with a placeholder skeleton, silently and before
      > the user sees anything. Instead **read it and amend it in place**, per the delta-pass model in
-     > `spec/README.md`: new rules take **new** `FR`/`NFR` numbers, superseded ones are amended where they
-     > stand and annotated (e.g. *"rewritten — vX.Y"*). Present the **diff** for review; do not re-interview
-     > from scratch. This is the normal case for **every authoring milestone of a delta version**, and it
+     > `spec/README.md`: new rules take **new** `FR`/`NFR` numbers; a superseded one is **rewritten where it
+     > stands** and marked exactly `*(amended vX.Y.Z)*`, with **its previous wording moved verbatim into the
+     > `decisions.md` beside the document** — never left inline, where it reads as current. Present the
+     > **diff** for review; do not re-interview from scratch. This is the normal case for **every authoring milestone of a delta version**, and it
      > covers the version brief too — `sfk-version` already drafted `spec/vX.Y.Z-brief.md`, and this
      > milestone is its **review and ratification**, which is why it was still ⬜. The existence of the file
      > is the whole test; there are no other exceptions to reason about.
@@ -135,7 +141,47 @@ off — that is the separate `sfk-signoff` skill, which the user triggers.
    agent commits per ticket as usual. Loop until the user is satisfied. The milestone stays `In progress`
    throughout.
 
-6. **Hand off to sign-off.** When the user is happy, tell them the deliverable is ready and that
+6. **Fresh eyes on any binding document this milestone *created* — before hand-off, not after.**
+   A document **amended** this milestone has a natural check: the prior version, and a diff the user can
+   read. A document **created from nothing** has neither. So when this milestone produced a binding
+   `spec/` document that did not exist before, it gets read end to end by someone — or something — that
+   did **not** author it, and the findings go to the user *before* they sign anything off.
+
+   - **Where a distinct `tests` model is configured** (root `CLAUDE.md` › *Models*), spawn a subagent
+     pinned to it and have it read the finished document **against the milestone's inputs** — the brief,
+     the requirements, the contract it must agree with — reporting contradictions, rules that forbid the
+     version's own scope, and claims cited to the wrong id. Give it the document and the inputs, **not
+     your reasoning about them**.
+   - **Otherwise — and this includes Cowork, where you may not be able to pin a subagent at all** — say
+     plainly that the fresh eyes must be **the user's**, and ask for a full read. Do not substitute
+     another self-review and do not describe one as independent. A second pass by the author is the thing
+     this step exists to replace.
+   - **Report what it found in your hand-off**, including "nothing" — a silent check is indistinguishable
+     from a skipped one.
+
+   > **Why a re-read by the author does not count.** Measured on one milestone of twenty-four new rules:
+   > six self-verification passes, **every one finding a real defect, and every one but the last
+   > introducing a smaller defect of the same class in its own correction** — a justification struck as
+   > false in one clause and re-used two lines later, a mis-citation corrected to a *different* wrong id.
+   > The checker shares the author's model of what the document says, so the same misreading survives
+   > every pass. Among the defects that pass caught: two rules that between them required an authenticated
+   > session and a stated role on **every** route — and sign-in is a route, so the application was
+   > unreachable by its own specification.
+   >
+   > This is the kit's own **grader ≠ graded** rule (root `CLAUDE.md` › *Models*), which it already
+   > applies to tests and to ungated tickets. A binding document is the thing every later ticket is
+   > checked against; it had no such rule until now.
+   >
+   > **Before sign-off, never after.** A pass that runs after the milestone is ✅ either forces un-signing
+   > it — destroying the one human gate the method has — or leaves a signed-off milestone with a known
+   > finding standing against it, which reads as sound to everyone downstream.
+   >
+   > **This does not replace `sfk-verify` spec mode, and spec mode does not replace this.** Spec mode is
+   > *cross-document*, at the ticket-generation gate: requirements can only contradict the brief once both
+   > exist. This is *single-document*, at the moment it is written, when the author still remembers what
+   > they meant. Neither is redundant; do not drop one because the other ran.
+
+7. **Hand off to sign-off.** When the user is happy, tell them the deliverable is ready and that
    `sfk-signoff` will mark the milestone complete and advance the plan. **Never** mark it `Complete`
    yourself.
 

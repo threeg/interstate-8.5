@@ -8,7 +8,7 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 ## Project & kit
 
 - **Project code:** `INT8` — the ticket prefix (`INT8-001`). Set by `sfk-init`.
-- **Spec-First Kit version applied:** `1.4.4` — the *kit* version this project is on (set by
+- **Spec-First Kit version applied:** `1.4.7` — the *kit* version this project is on (set by
   `sfk-init`, raised by `sfk-update-kit`). This is **not** the software's release version (that is
   chosen by the project and tracked in `spec/milestone-plan.md`). The kit's own version, changelog
   and pristine templates live in `.sfk/` (read-only — never edit it by hand; skills copy templates
@@ -72,7 +72,7 @@ gaps and stays agent-legible — not merely as scaffolding.
 - The documents in `spec/` are the **binding specification.** Do not reopen or reinterpret a settled
   decision — implement to the spec. If the spec is genuinely wrong, **stop before writing the code that
   depends on it**: put it to the user both ways — *change the spec, or change the code to match it?* — and
-  if the spec changes, amend it (and its decisions log) **first**, then implement. Never silently diverge,
+  if the spec changes, amend it (and the `decisions.md` beside it) **first**, then implement. Never silently diverge,
   and never implement first and reconcile the document afterwards. **Asked before the code exists, both
   answers cost the same and the choice is genuinely yours; asked afterwards, amending is the cheap option
   and sunk cost decides.** A ticket does not reach `in-review` with an amendment still owed. (The spec
@@ -228,9 +228,9 @@ is safe in every runtime.
 ## Definition of done (implementation tickets)
 
 A ticket reaches **`in-review`** (ready for the user's review) when: **the gate scoped to what the
-ticket actually changed** passes with zero warnings (below); **red-green was followed** — the failing
-test was written first and confirmed to fail for the right reason, or the test strategy explicitly
-exempts that layer (say which in the completion report); new/changed numbered-requirement behaviour has
+ticket actually changed** passes with zero warnings (below); **red-green was followed, and `## Notes`
+quotes the observed failure** — the test's name and its failure message **verbatim** (see below), or the
+test strategy explicitly exempts that layer (say which in the completion report); new/changed numbered-requirement behaviour has
 tests **in the same commit**; the relevant heavier gate passes where the ticket says so; **any spec
 amendment this ticket required was made *before* the code that depends on it, and is referenced from the
 ticket**; and the ticket's status + `## Notes` and its `BOARD.md` row are updated in that commit. It
@@ -240,6 +240,35 @@ another, each in a small status-only commit. **`sfk-signoff` does not finalize t
 run while one is open, so a building milestone ends with `sfk-close-ticket` then `sfk-signoff`. Docs-only,
 pure-styling and build-plumbing tickets may set `tests_required: false` and must state the exemption in
 the body.
+
+> **Red-green needs the observed failure, not a claim that there was one.** Quote the test's name and the
+> message it actually produced:
+>
+> > `testLandingSortsIgnoringLeadingArticles`: `Failed asserting that 'The Good Times Are Killing Me' is identical to 'Good Times Are Killing Me'`
+>
+> **The bar: a reader can tell a real red-green from a plausible one without re-running anything.**
+> *"All the new tests passed on the first implementation attempt"* fails that bar — it is equally true of a
+> test written from the spec before the implementer saw the problem and of one written afterwards to fit
+> code that already worked. It costs one copy-paste you already have on screen.
+>
+> **Why this one item is held to evidence when the others are held to a statement:** every other line above
+> describes something still on disk and auditable later — a gate can be re-run, a spec amendment re-read, a
+> `BOARD.md` row re-checked. *"The failing test was written first, from the spec, before the implementer saw
+> the problem"* is a fact about **a moment that leaves no trace**. It is either captured in this commit or
+> gone permanently, and under this project's independent test authorship (`tests: claude-opus-4-8`) it is
+> exactly the property that authorship buys.
+>
+> **Permitted substitutes, when there is honestly no red to show.** State which applies and why, in one
+> line — don't manufacture a failure to satisfy the form:
+> - **A pure refactor** whose verification is the untouched existing suite (say so, and that it was green
+>   before and after) plus any byte-identical golden/snapshot comparison.
+> - **A guard whose absence cannot be expressed** in the type system or the test framework — name what you
+>   tried and why it could not be made to fail.
+> - **A layer the test strategy exempts** — cite the section.
+>
+> Anything else with `tests_required: true` needs the quoted failure. **Binds from the next ticket
+> onward** (the v1.4.7 kit update, 2026-08-08); closed tickets are not backfilled, because a quote written
+> now would be a fabrication.
 
 **Which gate, scoped by what the ticket's diff actually touches (INT8-046)** — full reasoning in
 `spec/test-strategy/test-strategy.md` §9/§11. The scope follows the diff, never the ticket's stated

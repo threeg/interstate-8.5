@@ -138,9 +138,10 @@
 
 ---
 
-## 5. Decisions log
+## 5. Decisions and superseded wording
 
-> Dated record of visual-design decisions — palette choices, what was deliberately kept minimal,
-> deferred visual work. Append per version.
-
-- **<DATE>** — <decision and rationale>.
+> Not here — see **[`decisions.md`](decisions.md)** beside this file. This document holds **builder
+> instructions only**: rules, contractual values, and operational hazards. Why a rule is what it is, and
+> what it used to say, live in the archive so they are out of the reading path (`spec/README.md`, *How
+> versions evolve*). The reference runs **one way** — entries there name rules here; a rule never cites
+> an entry.

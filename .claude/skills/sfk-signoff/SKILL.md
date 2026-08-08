@@ -15,6 +15,18 @@ records the user's sign-off and advances the project.
    (🔶) in `spec/milestone-plan.md`. If they have outstanding feedback, do **not** sign off — hand
    back to `sfk-next-milestone` to revise first.
 
+   > **Say what reviewing this deliverable means, because the two cases differ.** For a document this
+   > milestone **created**, the useful act is a **full read end to end** — there is no prior version to
+   > compare against, so nothing else will catch a rule that contradicts another sixty lines away. For a
+   > document it **amended**, it is the **diff**: what changed, and whether each change is what was
+   > intended. Say which case applies before asking for approval.
+   >
+   > **And report the fresh-eyes pass.** `sfk-next-milestone` step 6 requires that a *newly created*
+   > binding document is read by someone who did not author it. State whether that happened, what it
+   > found, or that it was skipped — the user is about to spend their one gate on this document, and
+   > "nobody independent has read it" is the single most decision-relevant thing you can tell them.
+   > **Never block on it**: report and let them choose. You are not a second gate.
+
 2. **Account for the deliverable.**
    - For a **building** milestone the work was already committed per ticket by `sfk-next-ticket`; if any
      stray changes remain, commit them per the Commit protocol (agent commits in Code).

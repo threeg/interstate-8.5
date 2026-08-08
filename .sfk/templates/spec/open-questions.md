@@ -29,7 +29,7 @@ something expensive has been built on top.
    the load-bearing rule: treated as a blocker list, this file would stall delivery within a week. It is a
    *dependency* register.
 3. **An answer is a specification change, not a cleanup ticket.** When one lands, amend the owning `spec/`
-   document **first** (and its decisions log), then change code to match. Never patch the code and leave
+   document **first** (and the `decisions.md` beside it), then change code to match. Never patch the code and leave
    the spec stale.
 4. **Make answers cheap to apply.** Every assumed value should be a **named constant** with a test
    asserting it, so answering a question means editing one constant, one expectation and one fixture —
@@ -94,7 +94,7 @@ Work in this order — it is rule 3 made concrete:
 
 1. **Record it** in the row's *Answer* column, with the date and who confirmed it.
 2. **Amend the owning `spec/` document** so the confirmed value is the specification, and add a line to
-   that document's decisions log saying what changed and why.
+   the `decisions.md` beside that document, saying what changed and why.
 3. **Search for the id** (`Q-4`) across `spec/` and the code to find every place built on the assumption.
 4. **File a ticket** for the code change if it is more than trivial, citing the id and the amended spec
    section.
@@ -103,7 +103,7 @@ Work in this order — it is rule 3 made concrete:
    opposite of `spec/TODO.md`, which keeps only a one-line tombstone, because there the ticket becomes the
    record.)
 
-If an answer **changes** a value already built on, say so explicitly in the decisions log of the owning
+If an answer **changes** a value already built on, say so explicitly in the `decisions.md` beside the owning
 document — a silently-corrected value is indistinguishable from a bug.
 
 ---

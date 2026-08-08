@@ -41,6 +41,14 @@ format in `spec/tickets/TICKET-TEMPLATE.md`; the execution order in `spec/ticket
   implementer's work gets checked against, so the same grader ≠ graded rule that governs tests governs
   writing one; tickets from the **generation milestone** are exempt because you sign those off. Degrade
   to drafting it here when no distinct `tests` model is configured.
+- **`## Notes` quotes the red you saw — the test's name and its failure message, verbatim.**
+  `` `rounds a computed 57.5 up`: `AssertionError: expected 57 to be 58` ``. *"All tests passed first
+  time"* does not discharge it: that is equally true of a test written from the spec beforehand and one
+  written afterwards to fit working code. **This is the one definition-of-done item that cannot be audited
+  later** — a gate re-runs and an amendment can be re-read, but *when* the failing test was written leaves
+  no artefact unless the work commit captures one. Copy the message the moment you see red. If there is
+  honestly no red, name the permitted substitute (root `CLAUDE.md` › *Definition of done*) — **never
+  manufacture a failure to satisfy the form**.
 - **Authorship trailers record who built it.** A ticket's **work** commit ends with a `Co-authored-by`
   trailer for **every model that built it** — both, where independent test authorship is configured and
   `tests_required: true` (the test author *and* the implementer); one otherwise. A **finalize** is
@@ -55,6 +63,14 @@ format in `spec/tickets/TICKET-TEMPLATE.md`; the execution order in `spec/ticket
 - **Close epics when their last child is finalized.** When the `in-review → done` finalize completes an
   epic's last open child, mark the epic `done` in both its ticket file and the `BOARD.md` epic table in
   that same finalize commit.
+- **Correcting a false record means re-opening the work done from it.** When you fix a document, a
+  `## Background` or a set of acceptance criteria that others implemented from, **name the tickets worked
+  against the false version and say, per ticket, whether their work stands** (CONVENTIONS.md §5.5). A
+  correction is not neutral: afterwards a reader sees a `done` ticket beside a true document and **nothing
+  marks it as suspect**, so stopping at the record hides the gap instead of closing it. If that leaves work
+  to redo, file a **record-correction ticket** (§6.7) — the one cleanup kind with a deadline, worked
+  **before the next batch starts**, because while it waits, more tickets close against the record it exists
+  to fix.
 - **Run `sfk-verify` after each batch.** The `sfk-verify` skill (`.claude/skills/sfk-verify/SKILL.md`) audits the batch
   against the spec and reviews it for reuse, quality and efficiency, proposing cleanup tickets.
   Accepted tickets go to the cleanup backlog in `BOARD.md` (CONVENTIONS.md §6); critical ones are
