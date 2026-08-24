@@ -37,8 +37,13 @@ rules in `spec/tickets/CLAUDE.md` and the definition of done in the root `CLAUDE
    trailer — the model performing it — not the pair; the pair belongs on the work commit that built the
    ticket.
    - **Exception — outstanding feedback.** If the user has given feedback on the in-review ticket rather
-     than approving it, do **not** finalize: revise the ticket, re-commit under its id, leave it
-     `in-review`, and stop. Feedback is handled before the queue advances.
+     than approving it, do **not** finalize. **Flip it back to `in-progress` first** — ticket and
+     `BOARD.md` row, its own small status-only commit — then revise, re-commit under its id, and set it to
+     `in-review` again in that work commit with a fresh completion report. Then stop; feedback is handled
+     before the queue advances.
+     **Why the flip:** `in-review` means *the committed state is what is under review* (CONVENTIONS.md §2).
+     Left set through a revision it stops meaning that, and a revision in flight becomes
+     indistinguishable from a settled one — including across turns where you are answering something else.
    - **[PR mode] — you merge, as part of finalizing.** The user's invocation was the approval, so
      **squash-merge** the prior ticket's PR yourself (squash keeps one commit per ticket on the main line
      even after several `sfk-address-review` rounds), then mark the ticket `done` (+ `BOARD.md`, + close

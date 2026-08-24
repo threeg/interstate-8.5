@@ -62,7 +62,10 @@ now and record it there:
    per-comment. Tell the user what you changed per comment, and what (if anything) you did **not** change and
    why.
 
-   The ticket stays `in-review`. Tell them to re-review — **and that the next round is scoped for them**: on
+   **The ticket was flipped to `in-progress` when you started this revision and returns to `in-review`
+   now** — in the work commit, with a fresh completion report (CONVENTIONS.md §2). An open PR is not the
+   only record of state: the ticket file and its `BOARD.md` row have to say whether the committed code is
+   what is under review. Tell them to re-review — **and that the next round is scoped for them**: on
    the forge, *changes since your last review* works because their review was **submitted** (Files changed →
    Submit review → "Comment"), which records the commit it was made against. If they left comments in the
    conversation box instead, that scoping isn't available and they will be re-reading the whole diff; worth

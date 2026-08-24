@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Kit version** | v1.4.7 |
+| **Kit version** | v1.4.13 |
 | **Author** | Gregg Seymour |
 | **Kit identity** | `.sfk/manifest.md` (read-only); changes in `.sfk/CHANGELOG.md` |
 | **A project's applied kit version** | recorded in the project's root `CLAUDE.md` (*Project & kit*) |
@@ -212,8 +212,8 @@ the recommended tool is named, but the durable point is the mode, not the brand.
 | 5 | **Design system** | `spec/design/design-system.md` — tokens, components, visual states; the frontend's visual contract (UI only; omit if no visual design) | Authoring (Cowork) | `sfk-next-milestone` → `sfk-signoff` |
 | 6 | **Test strategy** | `spec/test-strategy/test-strategy.md` — frameworks, the pyramid, gates, definition of done | Authoring (Cowork) | `sfk-next-milestone` → `sfk-signoff` |
 | 7 | **Ticket generation** | `spec/tickets/*.md` + `CONVENTIONS.md` + `BOARD.md` — the work queue in dependency order | Authoring (Cowork) | `sfk-next-milestone` → `sfk-signoff` |
-| 8 | **Scaffolding** | repo, backend/frontend skeletons, test tooling, dependency-rule check — each a separate ticket, built and reviewed one at a time | Building (Code) | `sfk-next-ticket` → `sfk-signoff` |
-| 9 | **Implementation** | working software; each ticket updated in the same commit as its code | Building (Code) | `sfk-next-ticket` + `sfk-verify` |
+| 8 | **Scaffolding** | repo, backend/frontend skeletons, test tooling, dependency-rule check — each a separate ticket, built and reviewed one at a time | Building (Code) | `sfk-next-ticket` → `sfk-close-ticket` → `sfk-signoff` |
+| 9 | **Implementation** | working software; each ticket updated in the same commit as its code | Building (Code) | `sfk-next-ticket` + `sfk-verify` → `sfk-close-ticket` → `sfk-signoff` |
 
 > **Why this order.** Steps 1–3 fix *what* and *how*; steps 4–5 fix *what it looks like* (structure,
 > then visual contract). Step 6 fixes *how you'll know it works* before any code exists, so tests are
@@ -243,13 +243,13 @@ You answer questions and sign off; the agent does the rest. Eleven skills, mappe
 | `sfk-init` | once, on a fresh repo | Short essentials interview; lays down root `CLAUDE.md`, `spec/`, `.gitignore`. Prepares the environment only — starts no milestones. |
 | `sfk-version` | start of each version | Takes a number + goals; writes the version brief and lays down that version's milestone table in the plan. |
 | `sfk-next-milestone` | start of each milestone | Marks the next milestone `In progress`, runs its authoring interview or build, and produces the draft deliverable. Iterates on your feedback. For a **newly created** binding document it also arranges a fresh-eyes read before hand-off. Commit cadence follows the commit protocol. |
-| `sfk-signoff` | when you approve a milestone | Flips it to `Complete`, moves the *Current position*, commits the status change. The human gate. |
+| `sfk-signoff` | when you approve a milestone | Flips it to `Complete`, moves the *Current position*, commits the status change, and **sweeps both registers** — `TODO.md` and `open-questions.md` — for items this milestone may have unblocked. The human gate. It does **not** finalize tickets: it refuses to run while one is `in-review`, so a building milestone ends `sfk-close-ticket` → `sfk-signoff`. |
 | `sfk-next-ticket` | repeatedly, in the build steps (8–9) | Finalizes the previous ticket left `in-review` (→ `done`), then implements the next ready `todo` ticket and leaves it `in-review` for you to review. One at a time, scaffolding **and** implementation. |
-| `sfk-close-ticket` | to close a reviewed ticket and stop | Finalizes the current `in-review` ticket (→ `done`, its own commit) **without** starting the next — for a batch boundary (then run `sfk-verify`) or to pause. |
-| `sfk-address-review` | when a ticket's PR has comments | Pulls the review comments off the ticket's pull/merge request and revises the code on its branch. Only relevant in `pr` review mode; the merge stays yours. |
+| `sfk-close-ticket` | to close a reviewed ticket and stop | Finalizes the current `in-review` ticket (→ `done`, its own commit) **without** starting the next — for a batch boundary (then run `sfk-verify`), **at a milestone's end before `sfk-signoff`**, or to pause. |
+| `sfk-address-review` | when a ticket's PR has comments | Pulls the review comments off the ticket's pull/merge request — **both** the line-anchored review comments and the conversation timeline, which are **different endpoints**, so fetching one silently misses the other — and revises the code on its branch. Only relevant in `pr` review mode. |
 | `sfk-verify` | **spec mode:** before ticket generation · **code mode:** at batch boundaries | Two modes, one skill. **Spec mode** reads all the authoring deliverables *together* and reports drift, contradiction, untestable requirements and leftovers — the only pass that sees the whole spec at once, since each milestone was authored in its own session. Findings become spec amendments (with your approval), never tickets; needs no configuration. **Code mode** audits a batch against the spec, reviews quality and proposes cleanup tickets, reading `spec/verify/verify.md`. Mode comes from the milestone the current version is on — *not* from whether code exists, which is always true after v1. |
-| `sfk-todo` | anytime, mid-flow — you ask, or the agent offers | One-line capture into the `spec/TODO.md` parking lot for work you can't ticket yet (its blocking decision doesn't exist). Always records the *decision owed*; commits `spec/TODO.md` on its own; no interview. Harvested by `sfk-version`. Parking changes scope, so the agent **offers** and waits for your yes. |
-| *(no skill)* `spec/open-questions.md` | continuously, without being asked | The register of values you build against but can't confirm — `Q-n` for the client, `S-n` for yourselves. There is **no skill**: rows are opened by whichever skill hits the unknown (`sfk-next-milestone` while authoring, `sfk-next-ticket` while implementing), because recording what isn't known needs no permission. Read at `sfk-version`, checked and sharpened at `sfk-verify`. |
+| `sfk-todo` | anytime, mid-flow — you ask, or the agent offers | One-line capture into the `spec/TODO.md` parking lot for work you can't ticket yet (its blocking decision doesn't exist). Always records the *decision owed*; commits `spec/TODO.md` on its own; no interview. Harvested by `sfk-version`, **swept at each `sfk-signoff`**. Parking changes scope, so the agent **offers** and waits for your yes. |
+| *(no skill)* `spec/open-questions.md` | continuously, without being asked | The register of values you build against but can't confirm — `Q-n` for the client, `S-n` for yourselves. There is **no skill**: rows are opened by whichever skill hits the unknown (`sfk-next-milestone` while authoring, `sfk-next-ticket` while implementing), because recording what isn't known needs no permission. Read at `sfk-version`, checked and sharpened at `sfk-verify`, and **swept at each `sfk-signoff`** (*has the answer arrived — and was the ask ever sent?*). |
 | `sfk-update-kit` | when a newer kit ships | After you copy the newer `.sfk/` + `.claude/` over the project, applies the changelog's declared deltas to the files **you** own — interviewing where a change needs input, never overwriting your content. No external kit needed. |
 | `sfk-feedback` | anytime you hit friction | Captures feedback about the kit itself as self-describing files in `spec/.sfk-feedback/` (gitignored, never committed) to send back to SFK. |
 
@@ -366,7 +366,10 @@ shipped.
 drives **requirement deltas** against the living spec:
 
 - New requirements take **new** `FR-`/`NFR-` numbers.
-- Superseded requirements are **rewritten in place** and marked exactly `*(amended vX.Y.Z)*`, never
+- Superseded requirements are **rewritten in place** and marked immediately after the identifier with
+  one of five forms — `*(rewritten — …)*`, `*(amended — …)*`, `*(extended — …)*`, `*(clarified — …)*`,
+  `*(annotated — …)*` (`requirements.md` §1.1; a closed set, and the choice carries no consequence
+  beyond telling a reader how the rule changed) — never
   silently reinterpreted — and **the superseded wording moves to the `decisions.md` beside that document**,
   keyed by the id. It does not stay beside the live rule.
 
@@ -389,6 +392,13 @@ drives **requirement deltas** against the living spec:
 >
 > **The test for any sentence in a binding document:** *can this be rewritten as a rule?* If yes, make it
 > the rule and delete the prose. If no, it is history — it belongs in `decisions.md`.
+>
+> **The same register applies outside `spec/`** — see *Write instructions, not arguments* in the root
+> `CLAUDE.md`. It covers **annotations on wireframes and design artefacts** too: an annotation gives
+> direction where the drawing cannot, and a rule living inside one is in the one place it can neither bind
+> nor survive a re-export. An artefact is written for someone who has to act on it, not for someone deciding whether
+> to approve you, and that holds for a ticket, a commit message and a code comment as much as for a rule.
+> Nothing in this kit asks for justification in code.
 >
 > **One exception, and it matters: operational hazards stay.** A finding a builder would otherwise
 > rediscover expensively, whose absence lets someone build the wrong thing — *a clean vulnerability audit
@@ -423,7 +433,7 @@ contradictions. It sorts what it finds by how much judgement the fix needs:
 
 | Tier | What it is | How to act |
 |---|---|---|
-| **Mechanical** | Superseded wording marked `*(amended vX.Y.Z)*`, delimited and identifiable — and, on a project upgrading from an older kit, a whole in-document *Decisions log* section | Safe to apply as a batch on your approval — the text is **relocated** to `decisions.md`, not rewritten, so nothing is lost and the result is verifiable by comparison |
+| **Mechanical** | Superseded wording carrying any of the five §1.1 markers, delimited and identifiable — and, on a project upgrading from an older kit, a whole in-document *Decisions log* section | Safe to apply as a batch on your approval — the text is **relocated** to `decisions.md`, not rewritten, so nothing is lost and the result is verifiable by comparison |
 | **Judgement** | Prose that could be a rule, or could be dropped | **Reported only.** One at a time, as ordinary reviewed work — never a batch |
 | **Leave alone** | Operational hazards | Never proposed for removal |
 
@@ -466,7 +476,7 @@ a dependency addition or a gate fix into feature commits is where a reviewer's a
 features usually depend on the plumbing anyway, so it wants to land first.
 
 > Note the two distinct "version" concepts. A **project version** (`v0.1.0`, `v0.2.0`) is *your
-> software's* release, scoped by `sfk-version`. A **kit version** (this kit's `v1.4.7`) is *the
+> software's* release, scoped by `sfk-version`. A **kit version** (this kit's `v1.4.13`) is *the
 > method's* release, applied by `sfk-update-kit`. They are independent.
 
 ---
@@ -656,7 +666,8 @@ the bigger levers). Off by default; single-model behaviour is unchanged.
 The **definition of done** for an implementation ticket lives in the root `CLAUDE.md` and the ticket
 template: the default gate passes with zero warnings; new/changed numbered-requirement behaviour has
 tests in the same commit; the relevant heavier gate passes where the ticket says so; the `## Notes` quote
-the failing test's name and message **verbatim**; and the ticket's
+the failing test's name and message **verbatim**; **any spec amendment the ticket needed was made
+before the code that depends on it**; and the ticket's
 status + notes and its `BOARD.md` row are updated in that same commit.
 
 > **Why the red-green item asks for evidence when the rest ask for a statement.** Every other item above
@@ -665,7 +676,9 @@ status + notes and its `BOARD.md` row are updated in that same commit.
 > about **a moment that leaves no trace** — captured in that commit or lost for good. So a claim like *"all
 > tests passed first time"* is not a weaker record; it is the permanent absence of one, and it reads
 > identically whether red-green happened or not. Where there is honestly no red (a pure refactor, a guard
-> that cannot be made to fail, an exempt layer), name the substitute — never manufacture a failure. On meeting that bar
+> that cannot be made to fail, an exempt layer), name the substitute — never manufacture a failure.
+
+On meeting that bar
 `sfk-next-ticket` leaves the ticket at **`in-review`**; it is finalized to **`done`** when you review it
 — the next `sfk-next-ticket` run (asking for the next ticket is your approval), or **`sfk-close-ticket`**
 to close one without starting another, **including the last ticket of a milestone** — in a small

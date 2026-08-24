@@ -12,10 +12,37 @@ ticket depends on a higher-numbered one (CONVENTIONS.md §4.3). It is a *derived
 files' `depends_on` and `before` edges and is regenerated, never hand-edited for status
 (CONVENTIONS.md §5.4). Epics are containers and sit outside the execution order.
 
+<!-- sfk:invariant board-no-resort -->
 **Top-to-bottom order is authoritative; id order is not.** A **promoted** row (§6.5) sits deliberately
 out of id sequence, and its `flag` cell says so. Never re-sort this table by id — that silently
 reverses a real constraint. The `before:` field in the ticket file is what makes the constraint
 recoverable if it happens.
+
+<!-- sfk:invariant board-version-order -->
+> When there are multiple versions, order the version sections **latest first**, and follow each
+> version's execution order with its own cleanup backlog. Shipped versions collapse into a
+> **"Shipped — vX.Y.0"** section.
+>
+> **Both halves matter.** Left expanded, shipped versions put hundreds of rows of finished work above the
+> ones being built — one project reached 1,503 lines with the current version's rows starting at line 458.
+> Collapsing and reordering took that to 1,199.
+>
+> **Expect them to be a smaller share than they look.** In that project shipped versions were 378 lines
+> against a **722-line cleanup backlog** — and only 88 of those were table rows. If this file is long and
+> collapsing did not fix it, the bulk is prose that has grown around the backlog, not the shipped work.
+
+---
+
+## Contents
+
+> One line per version, newest first, plus the non-version sections — those are what people hunt for.
+> **Coarse by design: never one line per ticket.** Ticket rows change on almost every commit, so a
+> per-ticket index is stale more often than not, and a stale index is worse than none.
+
+- [`5.0.x-dev` slice 1 — execution order](#50x-dev-slice-1--execution-order)
+- [`5.0.x-dev` slice 1 — cleanup backlog](#50x-dev-slice-1--cleanup-backlog)
+- [Capability epics](#capability-epics)
+- [Traceability — requirements to tickets](#traceability--requirements-to-tickets)
 
 **Status legend:** ⬜ `todo` · 🔶 `in-progress` · ⛔ `blocked` · 👀 `in-review` · ✅ `done`
 
@@ -133,6 +160,23 @@ on a higher-numbered one. Epics close when their children are all `done`.
 ## `5.0.x-dev` slice 1 — cleanup backlog
 
 Reactive tickets from post-batch `sfk-verify` review (CONVENTIONS §6). Not on the critical path unless promoted.
+
+<!-- sfk:invariant backlog-rows-not-narrative -->
+> **Rows here, narrative in [`decisions.md`](decisions.md).** A promotion's **constraint** is the row: its
+> position, its `🔺 before <id>` flag, and the ticket's `before:` field. A promotion's **reasoning** belongs
+> in the promoted ticket's `## Background`, where whoever implements it will read it. The **pass-level**
+> narrative — what a `sfk-verify` run found, what it deferred and why — goes in `decisions.md` beside this
+> file.
+>
+> **Neither belongs in prose beside the table.** A note that duplicates the ticket is free to drift from
+> it; a note that is the *only* record puts a permanent fact in a document whose own header calls it a
+> derived view. One project's backlog reached **722 lines of which 88 were table rows**.
+>
+> **Forward-only. This governs the next pass and is not an instruction to rewrite what is here.** Existing
+> prose migrates opportunistically: when a ticket is next touched, its rationale moves into it and the
+> board note goes. **Do not sweep, and do not relocate it in bulk either** — moving preserves the text and
+> breaks every reference to where it was, which in one project was **27 references across 13 files** plus
+> the anchor in this file's own *Contents* list. `decisions.md` has the procedure if you move it anyway.
 
 > **This board is the whole queue.** Work that is known but **not yet specifiable** — where the design
 > or product decision doesn't exist yet, so no honest ticket can be written — is parked in

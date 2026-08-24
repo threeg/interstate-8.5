@@ -58,7 +58,7 @@ kit yourself.**
    > **kit-owned in substance but lives in the project-owned tree**, so the copy does **not** cover it —
    > the payload is only `.sfk/` and `.claude/`. Read the sentence above literally and you will bucket
    > the guide as "kit-owned, therefore already handled", which is exactly wrong. Whenever a changelog
-   > entry touches the method, **refresh it wholesale from `.sfk/templates/spec/README.md`**; step 7
+   > entry touches the method, **refresh it wholesale from `.sfk/templates/spec/README.md`**; step 8
    > checks that you did.
    >
    > This has happened. Two consecutive releases declared a guide refresh, both were skipped, and the
@@ -140,14 +140,34 @@ kit yourself.**
    and why it is safe (naming the `decisions.md` that now holds it), and leave anything the user does not
    confirm exactly where it is.
 
-7. **Self-check the guide, before you bump anything.** Compare the `| **Kit version** | vX.Y.Z |` row in
+7. **Check the invariant markers survived.** Templates carry `<!-- sfk:invariant <id> -->` before blocks
+   that state a rule a project **must not lose** — ordering rules, permanence rules, the no-forward-
+   dependency invariant. For each marker in `.sfk/templates/<path>`, check the project's `<path>` still
+   contains the same marker. **Report every missing one by id and by file. Never re-insert it silently.**
+
+   **Report, don't repair.** A project may have removed a block deliberately, and a skill quietly restoring
+   text into a document the project owns is worse than the drift — it is an unreviewed edit to a binding
+   file. Offer to restore, name what the rule says, and let the user choose.
+
+   **Why this exists.** These rules live in prose inside documents a project is *supposed* to diverge from
+   — it fills in its own tickets, versions and notes — so a plain diff against the pristine is almost
+   entirely legitimate difference and nobody would run one. A missing rule is therefore **completely
+   silent**: one project's `BOARD.md` lost its version-ordering rule and ran three versions without it,
+   with valid tables, correct statuses and sound ordering *within* each version. Nothing looked wrong. It
+   was found by someone reading the project from outside, not by any check on either side.
+
+   > **Maintainers: what earns a marker.** Not every piece of guidance — a rule whose loss is **silent**
+   > (nothing looks wrong afterwards) **and consequential** (the document goes on being used incorrectly).
+   > A marker on ordinary advice makes the check noisy, and a noisy check gets ignored.
+
+8. **Self-check the guide, before you bump anything.** Compare the `| **Kit version** | vX.Y.Z |` row in
    the project's `spec/README.md` against `kit_version` in `.sfk/manifest.md`. **They must match.** If
    they differ, the guide refresh was missed — **refresh `spec/README.md` from
    `.sfk/templates/spec/README.md` now**, then re-check. Do not proceed while they disagree, and do not
    "fix" it by editing the row: refreshing the guide is what *sets* that row, which is the only thing
    that makes this check honest rather than cosmetic.
 
-   **Order matters — this runs *before* step 8's bump**, or the bump satisfies the check by itself and
+   **Order matters — this runs *before* step 9's bump**, or the bump satisfies the check by itself and
    it tests nothing.
 
    **Why a check and not more instruction:** this failure is silent, self-concealing and cumulative — a
@@ -156,7 +176,7 @@ kit yourself.**
    catches it on the run that makes it. If the row is missing entirely (a project from an older kit),
    the refresh adds it — that is the same fix, not a special case.
 
-8. **Bump and commit.** Set the applied kit version in the root `CLAUDE.md` (*Project & kit*) to the
+9. **Bump and commit.** Set the applied kit version in the root `CLAUDE.md` (*Project & kit*) to the
    `kit_version` from `.sfk/manifest.md`. Commit the copied kit folders **and** the applied deltas
    together (per the **Commit protocol** in the root `CLAUDE.md` — hand off if you are not in a git-safe
    runtime), e.g. `process: update kit to vX.Y.Z`. Summarise for the user what changed, what you

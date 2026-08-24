@@ -59,6 +59,20 @@ sharpening accumulates instead of being lost in conversation.
 
 ---
 
+<!-- sfk:invariant open-question-cited-in-owning-document -->
+> **`Owning document` is optional, and it buys a check.** Name the `spec/` document whose text this
+> assumption actually sits in, and **write the id into that document** where the assumption appears — not
+> only here. `sfk-verify` §A.8 then asserts the two agree.
+>
+> **Why the register alone is not enough.** A reader of `architecture.md` has no way to discover that a
+> value in front of them is unconfirmed; nothing in that document says so, and nobody consults a register
+> to find out whether to trust a paragraph. That reader is usually a fresh session with no memory of the
+> conversation that opened the row. One project found two rows whose owning document was named here and
+> whose id appeared nowhere in it.
+>
+> **Leave it blank rather than guessing.** The check only applies to a row that names a document, so an
+> unfilled cell costs nothing and a wrong one costs a false finding. Fill it as rows are touched.
+
 ## 1. Questions for the client (`Q-n`)
 
 > **Write this table so it can be sent to the client as it stands** — no edits, no translation. Assume the
@@ -66,8 +80,8 @@ sharpening accumulates instead of being lost in conversation.
 > question, and always say what we are assuming meanwhile, so silence is visibly a choice. Fill the
 > **Answer** column in and send it back; nothing else is needed from them.
 
-| Id | Question | Why we need it | What we assume until told otherwise | Answer | Needed by |
-|----|----------|----------------|--------------------------------------|--------|-----------|
+| Id | Question | Why we need it | What we assume until told otherwise | Answer | Needed by | Owning document |
+|----|----------|----------------|--------------------------------------|--------|-----------|-----------------|
 
 <!-- Good: "Your brand guide shows four different greens. Which one should headings use?"
      Bad:  "Confirm token value for --color-heading per design-system §2.1."
@@ -80,10 +94,10 @@ sharpening accumulates instead of being lost in conversation.
 > Internal unknowns — nobody outside the team needs to answer these. Kept numerically separate from `Q-n`
 > so that a search for *"what are we waiting on from the client"* stays clean. Same five rules apply.
 
-| Id | Question | Why it matters | What we assume for now | Resolution |
-|----|----------|----------------|------------------------|------------|
-| `S-1` | When two `song_type` terms share a weight, what decides which the Type filter offers first? | `SongTypeOptions::getTerms()` sorts on weight alone, so a tie is resolved by the database's returned order — undefined, and different from the stable-`uasort()` order the same method used before INT8-041. | Ties are not reachable — today's four types have distinct weights — and the current behaviour stands unpinned until a fifth type shares one. | left open |
-| `S-2` | What actually causes the Composer version-lock errors when applying module and security updates? | The `5.0.x-dev2` brief §2 F scopes goal F (Composer standardisation) around a **diagnosis nobody has verified**. The failing command and its error text have not been seen — the three divergences named in the brief were read off `composer.json` / `composer.lock` during the M10 review and are *consistent with* the symptom, not proven to be its cause. If the real cause is something else (a stale lock, an `allow-plugins` refusal, a contrib constraint), goal F's scope is wrong in a way that only surfaces at M17. | ~~That `drupal/core-recommended` is the primary cause: it pins 45 transitive dependencies, including `drupal/core` at exactly `11.4.2`, which is the textbook source of an unresolvable contrib update. Secondary contributors assumed to be the absent `config.platform.php` and `minimum-stability: dev`.~~ **Superseded — see Resolution.** | **`closed` 2026-08-02**, answered by Gregg pasting the real error from `lando composer update drupal/ctools --with-dependencies`. **Not a dependency conflict at all: Composer's security-advisory policy is refusing to load a vulnerable `drupal/core`.** Every problem reads `found drupal/core[…] but these were not loaded, because they are affected by security advisories`. The site runs **core 11.4.2, affected by `SA-CORE-2026-010` (information disclosure), `-011` and `-012` (XSS); 11.4.4 fixes all three**. `drupal/core-recommended` 11.4.2 requires core at *exactly* 11.4.2, so an update that doesn't name it leaves core pinned to a blocked version and the whole resolve fails. **The assumption was wrong in kind, not just in detail** — `core-recommended` is the mechanism that traps the site on the blocked version, but the *cause* is an unapplied security release, and `config.platform.php` is unrelated. `5.0.x-dev2-brief.md` §2 F rewritten to match. |
+| Id | Question | Why it matters | What we assume for now | Resolution | Owning document |
+|----|----------|----------------|------------------------|------------|-----------------|
+| `S-1` | When two `song_type` terms share a weight, what decides which the Type filter offers first? | `SongTypeOptions::getTerms()` sorts on weight alone, so a tie is resolved by the database's returned order — undefined, and different from the stable-`uasort()` order the same method used before INT8-041. | Ties are not reachable — today's four types have distinct weights — and the current behaviour stands unpinned until a fifth type shares one. | left open | |
+| `S-2` | What actually causes the Composer version-lock errors when applying module and security updates? | The `5.0.x-dev2` brief §2 F scopes goal F (Composer standardisation) around a **diagnosis nobody has verified**. The failing command and its error text have not been seen — the three divergences named in the brief were read off `composer.json` / `composer.lock` during the M10 review and are *consistent with* the symptom, not proven to be its cause. If the real cause is something else (a stale lock, an `allow-plugins` refusal, a contrib constraint), goal F's scope is wrong in a way that only surfaces at M17. | ~~That `drupal/core-recommended` is the primary cause: it pins 45 transitive dependencies, including `drupal/core` at exactly `11.4.2`, which is the textbook source of an unresolvable contrib update. Secondary contributors assumed to be the absent `config.platform.php` and `minimum-stability: dev`.~~ **Superseded — see Resolution.** | **`closed` 2026-08-02**, answered by Gregg pasting the real error from `lando composer update drupal/ctools --with-dependencies`. **Not a dependency conflict at all: Composer's security-advisory policy is refusing to load a vulnerable `drupal/core`.** Every problem reads `found drupal/core[…] but these were not loaded, because they are affected by security advisories`. The site runs **core 11.4.2, affected by `SA-CORE-2026-010` (information disclosure), `-011` and `-012` (XSS); 11.4.4 fixes all three**. `drupal/core-recommended` 11.4.2 requires core at *exactly* 11.4.2, so an update that doesn't name it leaves core pinned to a blocked version and the whole resolve fails. **The assumption was wrong in kind, not just in detail** — `core-recommended` is the mechanism that traps the site on the blocked version, but the *cause* is an unapplied security release, and `config.platform.php` is unrelated. `5.0.x-dev2-brief.md` §2 F rewritten to match. | |
 
 ---
 

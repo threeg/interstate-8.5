@@ -50,6 +50,7 @@ This file deliberately does **not** list individual ids. See *Resolving an id* i
 
 - **Add a row when you invent a family, not when you invent an id.** Families are rare and stable; ids are
   many. A family's row is written once, in the milestone that first mints that family.
+<!-- sfk:invariant ids-permanent -->
 - **Ids are permanent** — never reused, never renumbered (see `requirements.md` §1). That is what makes
   searching for one reliable.
 - **If a family's entries are ever removed from the document that lists them, that document must keep a

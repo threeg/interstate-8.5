@@ -54,6 +54,16 @@ there; it does **not** work the milestones (that is `sfk-next-milestone`).
      **draft**: it is ratified in the version-brief milestone, not by writing it (see step 4).
 
 4. **Lay down the milestone table** in `spec/milestone-plan.md` for this version:
+
+   > **Put the new version's section at the TOP, above the shipped ones, and add its line to that file's
+   > *Contents* list.** Both trackers run newest-first — `BOARD.md` says so too, for its own version
+   > sections — because they are read to answer *"what now?"*, not *"what happened?"*. Appending to the
+   > bottom buries the version being built under every version that shipped, which is what a project
+   > measured at 83% of its milestone plan sitting above the tables it exists to point at.
+   >
+   > **This rule lives here as well as in the template because the template is project-owned.** A project
+   > whose file loses the guidance blockquote loses the rule permanently — and you, not the document, are
+   > what writes the section.
    - **First release:** the full nine steps — brief, requirements, architecture & contract, wireframes
      and design system (omit both if no UI), test strategy, ticket generation, scaffolding,
      implementation.

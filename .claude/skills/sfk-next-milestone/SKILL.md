@@ -40,7 +40,27 @@ in a hand-off runtime the answer is *not here*: the whole commit defers to sign-
 
 2. **Mark it `In progress` (🔶)** and move the *Current position* line to it.
 
-3. **Run the step** and write the deliverable into its `spec/` folder:
+3. **Run the step.** Where the deliverable goes depends on which kind of milestone this is:
+
+   > **Authoring steps only — this does not constrain a building milestone.** Scaffolding, tooling deltas
+   > and implementation exist *to* change code and build configuration; that is their deliverable, it goes
+   > through `sfk-next-ticket` one ticket at a time, and nothing below applies to them.
+   >
+   > **An authoring milestone's deliverable is the `spec/` document. Anything you change outside `spec/`
+   > is a deviation, and it is never silent.** The authoring/building split is not only about *when to
+   > commit* (step 4) — it is about **what this milestone is for**. Two routes, and take one of them
+   > deliberately:
+   >
+   > - **File it for a later building milestone** — the default. It becomes a ticket, gets reviewed, and
+   >   lands where code changes belong.
+   > - **Make the change and name it** in your hand-off (step 7) as a deviation from the split, saying
+   >   what you touched and why it could not wait.
+   >
+   > **The common trigger is a red gate caused by a spec edit** — a linter or a build step reaching into
+   > `spec/` and failing on a document you just wrote. Fixing the tool config there may well be right;
+   > doing it without saying so is what is not. Silence is the whole problem: an unremarked edit to build
+   > configuration during a spec milestone lands where a reviewer is not looking for it.
+
    - **Authoring steps** (brief → requirements → architecture & contract → wireframes → design system →
      test strategy → ticket generation): **copy this milestone's template out** of
      `.sfk/templates/spec/<folder>/` into its working `spec/<folder>/` location (e.g.
@@ -54,7 +74,9 @@ in a hand-off runtime the answer is *not here*: the whole commit defers to sign-
      > Doing so would replace a signed-off specification with a placeholder skeleton, silently and before
      > the user sees anything. Instead **read it and amend it in place**, per the delta-pass model in
      > `spec/README.md`: new rules take **new** `FR`/`NFR` numbers; a superseded one is **rewritten where it
-     > stands** and marked exactly `*(amended vX.Y.Z)*`, with **its previous wording moved verbatim into the
+     > stands** and marked immediately after its identifier with one of the five forms in
+     > `requirements.md` §1.1 (*rewritten / amended / extended / clarified / annotated*), with **its
+     > previous wording moved verbatim into the
      > `decisions.md` beside the document** — never left inline, where it reads as current. Present the
      > **diff** for review; do not re-interview from scratch. This is the normal case for **every authoring milestone of a delta version**, and it
      > covers the version brief too — `sfk-version` already drafted `spec/vX.Y.Z-brief.md`, and this
@@ -185,6 +207,14 @@ in a hand-off runtime the answer is *not here*: the whole commit defers to sign-
    `sfk-signoff` will mark the milestone complete and advance the plan. **Never** mark it `Complete`
    yourself.
 
+   - **Name every change you made outside `spec/`** (step 3), with what it was and why it could not be a
+     ticket. If there were none, say nothing — this is a report, not a checklist item.
+   - **Write the deliverable as instructions, not as an argument.** You are handing it to someone who has
+     to *act* on it, not to someone deciding whether to approve you — and the second is the register that
+     comes naturally, because a human is about to say yes or no. The test: **could a builder act on this
+     without being persuaded by it?** Reasoning belongs in the `decisions.md` beside the document (root
+     `CLAUDE.md`, *Write instructions, not arguments*), never inline in the rule.
+
 ## Rules
 
 - **Never edit `.sfk/`** — copy a template out to its working location and edit the copy.
@@ -197,4 +227,8 @@ in a hand-off runtime the answer is *not here*: the whole commit defers to sign-
 - **Ticket generation waits for a fully signed-off spec.** It may not start while any preceding spec
   milestone of that version is ⬜ or 🔶 (see the hard gate in step 1) — no exceptions, no provisional
   queue.
+- **An authoring milestone produces a `spec/` document.** Changes outside `spec/` are a ticket for a
+  later building milestone, or a **named deviation** in the hand-off — never a silent edit (step 3).
+  **This binds authoring steps only:** scaffolding, tooling deltas and implementation exist to change
+  code, and are unaffected.
 - For implementation milestones, defer to `sfk-next-ticket` and `spec/tickets/CLAUDE.md`.

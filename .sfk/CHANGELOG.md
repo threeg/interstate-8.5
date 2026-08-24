@@ -30,6 +30,476 @@ are told to.
 
 ---
 
+## v1.4.13 — cite the clause that decides, and a status that stays true
+
+Three items from one project, two of them about a citation that looks sound and points at the wrong thing.
+**No pre-copy step.**
+
+- **NEW (minor): cite the clause that *decides*, not the one that is memorable.** An architecture rule of
+  the form *"at most N of X, and no more"* decided **none** of the three cases put to it — narrower tests in
+  the same section decided all three. But the cap is the quotable half, so it got quoted, including as the
+  reason a screen could not do something that was in fact prevented **elsewhere in the stack**. The spec
+  owner does not work in that layer and reasonably took the citation at face value; two sessions went after
+  the wrong constraint.
+
+  **Every gate behaved correctly.** All nine §A checks ask *"is this rule still true?"* — and it was true:
+  not stale, not contradicted, not a leftover, accurately transcribed. Its problem was that its wording
+  claimed more scope than its own clauses exercised, and nothing asks that.
+
+  The root `CLAUDE.md`'s *binding specification* non-negotiable gains a clause: **name the clause that
+  actually refuses**, and where the real constraint lives elsewhere, say where. It changes only the
+  **precision of the citation**, never what binds — the rule binds until amended, and amending stays the
+  user's call.
+
+  *Rejected from the same report:* a spec-mode check establishing what each rule has actually refused. A
+  spec-mode pass reads documents, not decision history — and the base rate defeats it: a **new** rule has
+  refused nothing, and a rule guarding something nobody has attempted has refused nothing *while working
+  perfectly*. A check whose findings are mostly false positives is worse than none (`TESTING.md`).
+
+  **Apply:** **amend** — the *binding specification* bullet in the root `CLAUDE.md` (**append** the clause;
+  do not reorder the list around it).
+
+- **NEW (minor): an open question should be cited in the document it affects, and §A.8 now checks it.**
+  §A.8 ran one direction only — every `Q-n`/`S-n` *cited in the spec* exists in the register. Nothing
+  checked the reverse, and **nothing in the kit required an open id to appear in the document its
+  assumption sits in.** So a value can look settled to every reader of that document while the register
+  records it as unconfirmed — and that reader is usually a fresh session with no memory of the conversation
+  that opened the row. One project found two such rows in a single session.
+
+  `spec/open-questions.md` gains an **optional `Owning document` column**, and §A.8 checks that a row
+  naming a document has its id in that document's own text.
+
+  **Optional is the design, not a hedge.** Required would be an `add` against a filled-in table needing an
+  interview per row; conditional means the check earns value as rows are touched, and **a blank cell reports
+  as *not checked*, never as passing**.
+
+  *Not adopted:* the reporting project's own test file. Stacks and frameworks vary — they said so — and
+  §A.8 already performs this shape of sweep.
+
+  **Apply:**
+  - **add** — an `Owning document` column to both tables in `spec/open-questions.md`, and the block above
+    §1 explaining it (it carries an `sfk:invariant` marker);
+  - **n/a — kit-owned** — `sfk-verify` §A.8.
+  - **Leave existing rows blank.** Do not interview to backfill them, and do not guess — a wrong cell costs
+    a false finding where an empty one costs nothing. Fill them as rows are touched.
+
+- **NEW (minor): feedback sends an `in-review` ticket back to `in-progress`.** The kit said to revise and
+  *"leave it `in-review`"* (`sfk-next-ticket`) or *"the ticket stays `in-review`"* (`sfk-address-review`),
+  and §2 documented no return path. So a **settled review and a revision in flight were identical on disk**
+  — ticket file and `BOARD.md` row both reading `in-review` while the committed code was neither what was
+  reviewed nor what would be. Not theoretical: on one project the fixes sat uncommitted across several
+  conversation turns, including an unrelated digression, with nothing on disk saying so.
+
+  `in-review` now returns to `in-progress` for the duration of a revision — its own small status-only
+  commit, before the work — and goes back to `in-review` only when the fix is **committed** with a fresh
+  completion report. `in-review` becomes an invariant: *the committed state is what is under review*.
+
+  **Not a new state, and no safety change:** `in-progress` is already a sign-off blocker alongside
+  `in-review`, so a milestone still cannot sign off over a ticket mid-revision. The cost is one extra
+  status-only commit per feedback round — the same price the kit has paid for `in-review → done` since
+  v1.0.1.
+
+  **Apply:**
+  - **amend** — §2 of `spec/tickets/CONVENTIONS.md`: the `in-progress` row's meaning and entry condition
+    (it read *"work has started"* and implied first-time work only), plus the return-path paragraph;
+  - **amend** — the *Status lifecycle* bullet in `spec/tickets/CLAUDE.md`;
+  - **n/a — kit-owned** — `sfk-next-ticket`, `sfk-address-review`.
+  - **A ticket sitting `in-review` right now stays there.** This governs the next feedback round; do not
+    re-label anything on update.
+
+---
+
+## v1.4.12 — an archive for the ticket system, and two kinds of sweep
+
+One item, from the project that measured it. **No pre-copy step.**
+
+- **NEW (minor): `spec/tickets/decisions.md` — the ticket system's decision record.** `spec/tickets/` was
+  the **only** folder under `spec/` without an archive; the six milestone folders all gained one in v1.4.6.
+  So `BOARD.md` — the most instruction-shaped document in the repo, and one its own header calls a
+  *derived* view — was the only place with nowhere to put reasoning. Nine verification passes' worth
+  accumulated inline: one project's cleanup backlog reached **722 lines, of which 88 were table rows**.
+
+  **The obvious fix was wrong, and the report proves it.** *"Move the rationale into the promoted ticket,
+  have the row cite it"* is right as a **rule** and lossy as a **sweep**. Of 16 tickets carrying a live
+  `before:` field, **13 already explain their own promotion** — the board prose duplicates them. But two
+  said nothing, making the board the **sole record**; and one read *"the promotion decision is the user's
+  and is recorded in `BOARD.md`'s cleanup backlog"* — deleting that prose **breaks a live citation naming
+  the board as the authority**. Nothing distinguishes the three cases by inspection.
+
+  So the split is: the **constraint** stays on the board as data (row position, the `🔺 before <id>` flag,
+  the ticket's `before:` field); the **reasoning** goes in the promoted ticket's `## Background`, where
+  whoever implements it will read it; and the **pass-level narrative** — what a run found, what it deferred
+  and why — goes in the new archive. Deferral reasons matter most there: a row sitting in the backlog
+  records no reasoning at all.
+
+  `sfk-verify`'s ordering check gains one clause: for each `🔺` row, does that ticket's own `## Background`
+  say **why** it was promoted? Report if not. **This is the only cheap moment** — while the ticket is open
+  the answer is recoverable; once it is `done`, the reasoning survives only where it was written at the
+  time. It reports and never writes the explanation itself.
+
+  **Apply:**
+  - **add** — `spec/tickets/decisions.md`, copied from `.sfk/templates/spec/tickets/decisions.md`, empty;
+  - **add** — the *rows here, narrative in `decisions.md`* block to the cleanup backlog section of
+    `spec/tickets/BOARD.md` (it carries an `sfk:invariant` marker);
+  - **amend** — §6.5 of `spec/tickets/CONVENTIONS.md`, which now says the promoted ticket's `## Background`
+    carries the reason;
+  - **add** — a `tickets/decisions.md` row to `spec/contents.md`;
+  - **n/a — kit-owned** — `sfk-verify`.
+  - **FORWARD-ONLY. Do not sweep the existing backlog.** The rule governs the next pass. Existing prose
+    migrates opportunistically: when a ticket is next touched, its rationale moves into it and the board
+    note goes. A sweep is lossy for the reason above — duplicated, sole-source and actively-cited prose are
+    indistinguishable by inspection, and the cost of getting one wrong is a constraint no gate will miss.
+  - **Do not relocate the existing prose in bulk either.** *"Move it, don't delete it"* sounds safe and is
+    not: relocation preserves the content and **breaks every reference to where it was**. Measured on one
+    project, the backlog is the target of **27 references across 13 files** — version briefs, the milestone
+    plan, `CLAUDE.md`, `CONVENTIONS.md`, six ticket files, the board itself — plus the anchor in `BOARD.md`'s
+    own *Contents* list. The reference-update is comparable in size to the move.
+  - **If you move it anyway**, `spec/tickets/decisions.md` carries the four-step procedure, and the order is
+    the point: sweep and list every reference → move → update them all → re-sweep. **Enumerate spellings
+    before sweeping** — a search for `cleanup backlog` finds 21 references across 11 files, looks thorough,
+    and omits the six written `cleanup-backlog`. A rename breaks the same references as a move.
+
+- **FIX (minor): a *rule* sweep and a *phrase* sweep need different remedies.** v1.4.11 said: when asking
+  *"does a rule about X exist?"*, read the section that would hold it rather than grepping guessed wording.
+  Correct — and it does not transfer to the other question. **"Where is this cited?" has no section to
+  read**: the target is free text scattered across a corpus, so the remedy is to **enumerate the spellings
+  first**, search case-insensitively, and carry the control.
+
+  The trap is a compound noun that is *sometimes* hyphenated. Searching one spelling returns a plausible
+  number of hits and silently omits the rest — a sweep for `cleanup backlog` found 21 references across 11
+  files and **missed the single citation the exercise existed to find**, because that ticket wrote it
+  hyphenated. The method's own vocabulary is full of these: `red-green`, `record-correction`,
+  `open-questions`, `per-version`.
+
+  **Apply:** **n/a — kit-owned** (`sfk-verify` step 4).
+
+---
+
+## v1.4.11 — rules that go missing, and sweeps that conclude falsely
+
+Four items from one project. **No pre-copy step.**
+
+- **FIX (major): pure record drift is corrected in the pass, not routed through the board.** A code-mode
+  finding that a *record* is false — a stale status paragraph, an overstated register row, a ticket's
+  `## Notes` misdescribing when a red was observed — had to become a **record-correction ticket** (§6.7): a
+  `BOARD.md` row, `depends_on`, a `before:` deadline, the full status lifecycle, and a **separate later run**
+  just to flip it to `done`. For ~175 lines of markdown across eight files, touching no code, with nothing
+  to test.
+
+  **The `before:` deadline exists purely to manage the gap the ticket queue introduces** — the batch keeps
+  building against the false record while the correction waits its turn. Correct it in the session that
+  found it and the gap never opens, so the machinery has nothing to do. The same pass produced two
+  false-record findings; one went through the full lifecycle and the other was fixed in a `process:` commit,
+  and the difference was **which handling path it was routed through**, not any property of the finding.
+
+  §6.7 is **narrowed, not removed**. Pure record drift with no code implicated and no decision owed is
+  corrected in the pass and committed as a `process:` commit, carrying §5.5's retrospective half in the
+  message — which tickets were worked against the false version, and whether each one's work stands. The
+  ticket path stays for the case §6.7 was written for: the correction also touches code, or needs a
+  decision. This also makes code mode consistent with spec mode, which has always applied findings of this
+  kind rather than ticketing them.
+
+  **Apply:** **amend** — `spec/tickets/CONVENTIONS.md` §6.7 (it gains the "does this need to be a ticket at
+  all?" test ahead of the existing rule; the rest is unchanged). **n/a — kit-owned** — `sfk-verify`.
+  **Open record-correction tickets stay as they are** — do not dissolve them back into commits; the rule
+  governs the next finding.
+
+- **FIX (minor): a design artefact is not a value source.** §A.4 ended *"numeric and named values are
+  contractual — a mismatch is never cosmetic"*, unqualified. Read across a wireframe that is wrong: a
+  character bound changed in the contract, the drawn field's counter still showed the old number, and the
+  verifier reported a **critical** — three artefacts disagreeing on a contractual value. The downstream
+  ticket took its bound from the contract, so the risk could not occur, and the project's design-authority
+  table already said the drawing binds placement, not field values.
+
+  Now scoped to **binding documents**. A wireframe binds layout, a design system appearance; a number inside
+  one is usually sample content. The verifier reads the project's own **design-authority statement** before
+  reporting any design finding, and a genuinely misleading number is capped at **improvement**, never
+  critical.
+
+  **And spec mode gains a fourth limit: never propose an edit to a generated artefact.** §A.4's framing
+  pointed the agent at hand-editing two tool exports, which that project's conventions forbid — a manual
+  edit there is overwritten by the next export. Check whether a file is hand-maintained first; a re-export
+  is a different and often much larger ask, and it is the user's call. Stated for any generated file — an
+  export, a lockfile, a build artefact, a generated client.
+
+  **Apply:** **n/a — kit-owned** (`sfk-verify`).
+
+- **NEW (minor): design annotations get required properties, and come under the instructions rule.** The kit
+  shipped no default annotation convention — the wireframe template asked a project to state *"how
+  annotations are written"* and stopped. A project that does not notice ends up with notes
+  indistinguishable from content; the reporting project *did* invent one and it was still not obvious
+  enough, so during a verification pass an agent read an annotation, took it for binding direction, and
+  **edited a tool export**.
+
+  The template now requires two properties without prescribing a carrier: **unmistakable at the point of
+  use** (visually and structurally distinct, machine-findable) and **removable without loss** (delete every
+  annotation and a valid artefact remains — if it doesn't, something binding is living in an annotation,
+  which is the one place a rule can neither bind nor survive a re-export).
+
+  Separately, v1.4.10's *Write instructions, not arguments* listed spec rules, tickets, code comments and
+  commit messages — **design annotations were not on it**, so the rule never reached them. One project's
+  annotations ran to three paragraphs, one of which contained an actual rule. Added.
+
+  **Apply:**
+  - **amend** — `spec/wireframes/overview.md` §4 (*Mockup conventions*) gains the two properties and the
+    direction-not-explanation rule;
+  - **amend** — the *Write instructions, not arguments* non-negotiable in the root `CLAUDE.md`, which now
+    names annotations;
+  - **refresh** — `spec/README.md`.
+  - **If you already have an annotation convention, keep it** and check it against the two properties. The
+    kit deliberately prescribes no carrier.
+
+- **NEW (minor): both trackers get a contents list, and `milestone-plan.md` an ordering rule.** Measured on
+  one project: `BOARD.md` at **1,503 lines** with the current version's rows starting at line 458;
+  `milestone-plan.md` at **772 lines**, its *Current position* section running 18–658 — **83% of the file**
+  above the tables it exists to point at.
+
+  Both gain a **Contents** list, deliberately coarse: one line per version, plus `BOARD.md`'s non-version
+  sections. **Never one line per ticket or milestone** — those change on almost every commit, so the index
+  would be stale more often than not, and a stale index is worse than none. `milestone-plan.md` gains the
+  newest-first ordering rule it never had.
+
+  **`BOARD.md` needed no ordering rule.** It has said *"order the version sections latest first"* and
+  *"shipped versions collapse into a Shipped section"* since v1.0.0. The reporting item concluded the kit
+  never said this and cited both templates — correct for `milestone-plan.md`, **wrong for `BOARD.md`**. If
+  your board runs oldest-first with shipped versions expanded, that is drift from a rule already in your
+  file. **Expect the collapse to be a smaller share than it looks:** in that project shipped versions were
+  378 lines against a **722-line cleanup backlog**, only 88 of which were table rows. Collapsing and
+  reordering took 1,504 → 1,199. If your board is long and that did not fix it, the bulk is prose grown
+  around the backlog.
+
+  The ordering rule is now **also in `sfk-version`**, which is what actually writes a new version's
+  section. Both templates are project-owned, so a project whose file loses the guidance blockquote loses
+  the rule permanently, with nothing to restore it.
+
+  **Apply:**
+  - **add** — a *Contents* section to `spec/milestone-plan.md` and `spec/tickets/BOARD.md`, after the
+    header block. Fill it from the version sections already in each file;
+  - **amend** — `spec/milestone-plan.md`'s header gains the newest-first rule;
+  - **n/a — kit-owned** — `sfk-version`.
+  - **Reordering is optional and is not a migration.** New projects get newest-first; an existing project
+    may reorder at its next version boundary, or never. Do **not** reorder version sections as part of the
+    update — that is a large diff through documents whose ordering carries meaning.
+
+- **NEW (major): a kit rule that a project's copy loses is now detected.** One project's `BOARD.md` was
+  missing its version-ordering rule for **three versions**. The rule has been in the template since
+  v1.0.0; their copy did not have it, and nothing on either side could tell — valid tables, correct
+  statuses, sound ordering *within* each version. Nothing looked wrong. It was found by someone reading
+  the project from outside.
+
+  **Measured, because it decides whether the mechanism is worth it:** 40+ directive-shaped lines across
+  17 project-owned templates, and roughly **7 of 10 sampled rules have no restatement** in any skill or
+  in the refreshed guide. *"Never re-sort by id"*, *"never delete a line from Resolved"*, *"ids are
+  permanent"* and *"keep the position line current"* are all template-only. Restating them all in their
+  writing skills would be thirty-plus duplications, each free to drift — the failure the pinned-rule check
+  exists to catch. **One detection mechanism beats thirty restatements.**
+
+  Templates now carry `<!-- sfk:invariant <id> -->` before a block stating a rule a project must not
+  lose; `sfk-update-kit` reports any marker missing from the project's copy. **It reports and never
+  repairs** — a project may have removed a block deliberately, and a skill quietly restoring text into a
+  binding document it does not own is worse than the drift. A **diff cannot do this job**, which is why
+  nobody had: these are rules in prose inside documents a project is *supposed* to diverge from.
+
+  **Apply:** **n/a — kit-owned** (`sfk-update-kit`, `tools/`). The markers arrive with the copy.
+  **Expect the first run after this update to report missing markers** if your documents predate them —
+  that is the check working, not a fault. Restore the ones you want; a block you removed on purpose stays
+  removed.
+
+- **FIX (major): a positive control proves a sweep *ran*, not that its *pattern* was right.** v1.4.9's
+  control guards one failure and not this one: searching for a **concept** by guessing its wording
+  returns a clean control and an empty sweep, both working exactly as designed while the conclusion is
+  false. A project searched the kit for *"newest first"*, *"reverse"* and *"descending"* — never **"latest
+  first"**, the phrase actually used — and filed a confident report that the kit had never specified
+  ordering.
+
+  So when the question is *"does a rule about X exist?"*, **read the section that would hold it** rather
+  than grepping guessed wording. A zero result there does not merely under-report: **it licences
+  inventing a rule that already exists.** Stated for sweeps over `.sfk/` as much as over the project,
+  where the consequence is worse — the conclusion becomes a new convention.
+
+  **Apply:** **n/a — kit-owned** (`sfk-verify`).
+
+- **FIX (minor): a cleanup row belongs to the version that will *work* it.** §6.2 named a per-version
+  cleanup backlog and said nothing about a row raised in one version and worked in the next — precisely
+  the rows that matter. Carry unworked rows into the new version's backlog, noting where they were
+  raised; never leave them in a collapsed *Shipped* section, and never split one backlog across two
+  versions.
+
+  **Apply:** **amend** — §6.2 of `spec/tickets/CONVENTIONS.md`. **If you have unworked cleanup rows
+  sitting under a shipped version, move them forward** — that one *is* worth doing at update time,
+  because they are invisible where they are.
+
+---
+
+## v1.4.10 — an authoring milestone has a boundary, and artefacts instruct
+
+Two items from one project. One gap underneath both: the kit said what an authoring milestone **produces**
+and never stated its **boundary** — neither what it may modify nor what register it writes in. **No
+pre-copy step.**
+
+- **FIX (major): an authoring milestone may not silently change anything outside `spec/`.**
+  `sfk-next-milestone`'s authoring/building split existed only for *commit cadence* (step 4) and *who runs
+  the tickets* (step 3), and its Rules list ended with routing. A reader asking *"may I touch code here?"*
+  found nothing — so during a test-strategy milestone an agent edited `eslint.config.js` and carried on.
+  The edit may well have been right; nothing marked it as unusual.
+
+  The deliverable is the `spec/` document. Anything outside it is either **a ticket for a later building
+  milestone** or **a named deviation** in the hand-off. Deliberately **not** a prohibition: a red gate
+  blocks everything, so forbidding the fix outright produces a stuck milestone or the same silent edit.
+  Silence is the failure, not the edit — the same shape as spec-before-code, which forbids doing it
+  silently and in the wrong order rather than doing it at all.
+
+  **This binds authoring steps only.** Scaffolding, tooling deltas and implementation exist *to* change
+  code; the skill now says so three times over, because the first draft of this rule sat above both
+  branches of step 3 and read as constraining a build.
+
+  **Apply:** **n/a — kit-owned** (`sfk-next-milestone`).
+
+- **FIX (major): artefacts are written as instructions, not as arguments.** A recurrence. v1.4.6 split
+  instructions from record for `spec/` documents; the habit moved somewhere with no archive. An agent
+  added **one line** to a config file under **fourteen lines of comment** — what the rule was, which file
+  exposed it, why that file could not be edited, why the first fix was too narrow, and the general lesson.
+  One sentence was needed.
+
+  The kit created the pressure: reasoning is asked for in the guide, in the skills and in all six
+  `decisions.md` templates, and nothing said **where** a *why* goes for a non-`spec/` artefact. There is
+  also a reviewer-facing pull the kit never named — the agent writes for a human about to approve or
+  reject, so it argues its case *in the artefact*, which is a different register from instructing whoever
+  builds from it later.
+
+  The root `CLAUDE.md` gains one non-negotiable: **write instructions, not arguments**, tested by *could a
+  builder act on this without being persuaded by it?* It is phrased as **where** reasoning goes rather than
+  whether to record it — a `spec/` document's reasoning to the `decisions.md` beside it, a ticket's to its
+  `## Background`, an open value's to `open-questions.md`, anything transient to the hand-off — so it
+  cannot be read as undoing the archive. And it states outright that **nothing in the kit asks for
+  justification in code**: comments follow the project's own conventions.
+
+  **Apply:**
+  - **add** — the *Write instructions, not arguments* bullet to the root `CLAUDE.md` *Non-negotiables*
+    (append; do not renumber or reorder the list around it);
+  - **refresh** — `spec/README.md`;
+  - **n/a — kit-owned** — `sfk-next-milestone`, whose hand-off now carries the same test.
+  - **Nothing existing is rewritten.** This governs what you write next. Do not sweep the project for
+    over-long comments or prose and trim them as part of the update.
+
+---
+
+## v1.4.9 — a clean sweep has to prove it ran, and findings arrive as choices
+
+Three changes, two of them from one project's verification passes. **Almost entirely kit-owned** — only
+one convention needs applying to a project's own documents. **No pre-copy step.**
+
+- **FIX (major): a sweep reports "clean" only if it carries a positive control.** `sfk-verify` leans on
+  grep-shaped sweeps — contractual values (§B.6), register-id citations (§A.8), assumed values with no row
+  — and nowhere said that a zero result is unreliable. One project recorded **eight** distinct invocation
+  shapes that each silently returned nothing *while the string was present*. One produced a citation census
+  claiming five open register rows had no citation in any binding document; **the true number was one**, and
+  the census was reported as a finding and acted on.
+
+  The kit already knew this. `SFK-DESIGN.md` §6 has said since v1.4.3 that *a grep matching nothing is
+  indistinguishable from a grep that found nothing wrong* — it was simply never applied to the skill's own
+  sweeps.
+
+  So every sweep now runs a second pattern **known to be present** and reports its hit count beside the
+  zero. If the control also returns nothing, the check is reported as **not run**, never as clean. The
+  refinement that makes it work: **the control must be the identical invocation**, differing only in the
+  pattern — a control on a slightly different code path vouches for a sweep that never executed.
+
+  **One cause is not environmental and every project hits it.** `git grep -- 'spec/**/*.md'` silently skips
+  every **top-level** file in `spec/` — the index, the guide, the parking lot and all three registers,
+  which are exactly what §A.7 and §A.8 are about. Use **`'spec/*.md'`**, which reaches every depth: a git
+  pathspec `*` **crosses `/`**, unlike a shell glob. Verified here — 7 files against 5.
+
+  **Apply:** **n/a — kit-owned** (`sfk-verify`). Nothing to change in a project.
+
+- **NEW (major): spec-mode findings arrive as a decision queue, not a prose report.** On a mature spec —
+  nine binding documents, ~7,000 lines, three versions of amendments — one pass returned **55 findings, 20
+  of them critical**. Accurate, and unreadable at that size: the user had to separate what needed a choice
+  from what did not, reconstruct the options, and infer which one was recommended.
+
+  The half that removes work rather than reformatting it is the **split**. A **correction with a
+  determinable right side** — one document says six and three say seven — has its direction settled by the
+  evidence, so it is stated and applied on approval and **never queued**; roughly half the criticals were
+  this. Only a **decision** goes in the queue: 2–4 named options, **the recommendation first and marked**,
+  each option carrying its cost, asked in **rounds** because answers create follow-on questions the first
+  round cannot know.
+
+  Step 2's *"Why a picker here and not everywhere"* note is also amended. Its reasoning was sound but it
+  read as a blanket discouragement — and **its own test (*do the answers form a closed set?*) selects the
+  findings queue**, where each item resolves one of three ways the skill already enumerates. The skill had
+  talked itself out of the pattern where it pays best. Code mode gets the same shape.
+
+  **Apply:** **n/a — kit-owned** (`sfk-verify`).
+
+- **NEW (minor): five amendment markers, and a neutrality test at intake.** v1.4.6 pinned a single marker
+  form; a project had independently defined five — *rewritten / amended / extended / clarified /
+  annotated* — placed immediately after the identifier. The kit adopts those five. Matching five words is
+  no harder than one, so the machine-matchability argument for a single form did not hold, and the five
+  carry information it threw away.
+
+  **The marker carries no mechanical consequence, deliberately, and the template says so** — all five
+  archive their previous wording identically. The tempting move is to let *clarified* skip the archive, and
+  it is wrong: **one author's *clarified* is another's *narrowed*.**
+
+  Adopting a project's convention raised the fair question of whether taking feedback from one or two
+  projects shapes the kit around them. So intake now asks, before accepting anything: **would this change
+  make sense to a project with a different stack, domain and team shape?** With the distinction this case
+  turned on — **separate the vocabulary from the consequences**: naming generalises, machinery built around
+  it does not, because the moment a distinction decides whether a gate runs or evidence is kept, it was
+  designed from the project in front of you.
+
+  **Apply:**
+  - **amend** — the *Identifiers* convention in `spec/requirements/requirements.md`: one marker form
+    becomes five. **Forward-only — do not re-mark existing amendments.** An existing
+    `*(amended vX.Y.Z)*` is the new set's *amended* case and stays exactly as it is; the tooling matches
+    the word inside the brackets, so old and new both resolve;
+  - **refresh** — `spec/README.md`;
+  - **n/a — kit-owned** — `sfk-next-milestone`, `sfk-verify`, and the neutrality test (repo-root
+    `FEEDBACK.md` is maintainer-side; the feedback template ships inside `.sfk/`).
+
+---
+
+## v1.4.8 — the guide's summary rows catch up with the skills
+
+One fix, found the same way as v1.4.7's: a project diffing its `spec/README.md` against the pristine
+template. **No pre-copy step.**
+
+- **FIX (major): nine places where the method guide said less than the skills do.** The project had been
+  carrying these as local corrections and **re-applying them after every refresh** — which is the real
+  signal. When a project patches a kit-owned file repeatedly, the kit is wrong and the patches are
+  unreported feedback.
+
+  Every one is an **omission**, not a false statement:
+  - the **milestone table** showed a building milestone ending `sfk-next-ticket` → `sfk-signoff`, which
+    v1.4.1 made impossible — sign-off refuses to run while a ticket is `in-review`. Rows **8 and 9** were
+    both wrong; the project caught row 8;
+  - the **`sfk-signoff` row** never learned it sweeps both registers, nor that it does not finalize
+    tickets (both v1.4.1);
+  - the **`sfk-close-ticket` row** never learned it is a milestone's terminus;
+  - the **`sfk-address-review` row** still said *"the merge stays yours"* after v1.4.0 made the skill do
+    the merging — and under-described it: the skill fetches **both** the line-anchored review comments
+    and the conversation timeline, which are **different endpoints**, so fetching one silently misses the
+    other. The skill has said so in detail since v1.3.0; the guide never did;
+  - the **`sfk-todo`** and **`open-questions.md`** rows never learned about the sign-off sweep;
+  - the **definition-of-done summary** never gained v1.4.2's spec-before-code rule;
+  - and a **run-on introduced in v1.4.5**, which glued the definition-of-done sentence onto the end of the
+    red-green blockquote.
+
+  **None was catchable by v1.4.4's pinned-rule check**, which matches phrases — here the defect is
+  *absence*. So the durable half is a maintainer rule (`SFK-DESIGN.md` §8): when a release changes a
+  skill's behaviour, grep that skill's name in the guide, because the skills table, the milestone table's
+  *Skills* column and the definition-of-done paragraph lag **independently**. That is a habit rather than
+  a gate, and it is labelled as one.
+
+  **Apply:** **refresh** — `spec/README.md`. **n/a** — `SFK-DESIGN.md` is maintainer-side and ships in no
+  project.
+
+  **If your project carries local corrections to `spec/README.md`, check them against this refresh
+  before re-applying them** — most should now be redundant. Any that are not are kit bugs the kit has
+  not heard about yet: send them back through `sfk-feedback` rather than re-patching after every update.
+
+---
+
 ## v1.4.7 — a section number is a citation target
 
 One fix, found by the first project to apply v1.4.6. **No pre-copy step.**

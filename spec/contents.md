@@ -108,6 +108,7 @@ other document needs a link back.
 | [`tickets/CONVENTIONS.md`](tickets/CONVENTIONS.md) | How tickets are structured, numbered and related; the status lifecycle and the ordering rules. |
 | [`tickets/TICKET-TEMPLATE.md`](tickets/TICKET-TEMPLATE.md) | The per-type body formats and the frontmatter specification. |
 | [`tickets/CLAUDE.md`](tickets/CLAUDE.md) | Ticket workflow rules (auto-loaded when working in `tickets/`). |
+| [`tickets/decisions.md`](tickets/decisions.md) | *Archive — **not binding**, and **not in the reading path**.* What each `sfk-verify` pass found, what was promoted against which gate, and what was deferred and why. Search it only when asking *why*. |
 
 ## Verification
 

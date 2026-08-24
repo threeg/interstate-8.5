@@ -45,7 +45,7 @@ The `status` field takes exactly one of the five values defined by the template:
 | Status | Board icon | Meaning | Entry condition |
 |--------|-----------|---------|-----------------|
 | `todo` | ⬜ | Not started. The default at creation. | — |
-| `in-progress` | 🔶 | Actively being worked. **All** `depends_on` ids are `done` (§4). | Work has started. |
+| `in-progress` | 🔶 | Actively being worked — **first time, or being revised after feedback**. **All** `depends_on` ids are `done` (§4). | Work has started, or an `in-review` ticket received feedback instead of approval. |
 | `blocked` | ⛔ | Cannot proceed despite dependencies being met — an external problem, a discovered defect elsewhere, or a decision needed. | Recorded with the reason in `## Notes`, **naming what it is blocked on**. |
 | `in-review` | 👀 | Implemented, committed and self-tested by `sfk-next-ticket`; the definition of done holds bar the user's review. A freshly implemented ticket rests here. | Implementation finished, gates green (§5). |
 | `done` | ✅ | Reviewed and approved. The `in-review → done` flip is its own small status-only commit. | Finalized on the next `sfk-next-ticket` run, or by `sfk-close-ticket` (including a milestone's last ticket). |
@@ -63,6 +63,19 @@ invoking it is their approval), and `sfk-close-ticket` does the same finalize wi
 each as a small status-only commit. **`sfk-signoff` does not finalize tickets**; it refuses to run while
 one is open, so a building milestone ends `sfk-close-ticket` → `sfk-signoff`. `blocked` may be entered
 from `in-progress` and is left back to `in-progress` once unblocked.
+
+**`in-review` returns to `in-progress` while feedback is being addressed.** When feedback arrives on an
+`in-review` ticket instead of approval, flip it **back to `in-progress`** — its own small status-only
+commit, before the revision — and set it to `in-review` again only when the fix is **committed** and a
+fresh completion report is written.
+
+**Why the flip is worth two extra edits.** `in-review` has to mean one thing: *the currently committed
+state is what is under review*. Leave it set through a revision and it stops meaning that — a settled
+review and a revision in flight look identical on disk, both a ticket file and a `BOARD.md` row reading
+`in-review`, while the committed code is neither what was reviewed nor what will be. The window is not
+theoretical: on one project fixes sat uncommitted across several conversation turns, including an
+unrelated digression, with nothing on disk saying so. Neither state lets a milestone sign off — `in-review`
+and `in-progress` are both blockers — so this costs honesty of the record and nothing else.
 
 The milestone tracker (`spec/milestone-plan.md`) uses its own three-symbol vocabulary (⬜ / 🔶 /
 ✅) for *milestones*; that is a separate, coarser lifecycle and is not the per-ticket status here.
@@ -101,6 +114,7 @@ constraint simply leaves the line out. Existing tickets never need editing to ga
    until every ticket naming it in a `before` list is `done`** (§4.6 — `before: [Y]` on X gates Y exactly
    as `depends_on: [X]` on Y would). Starting earlier means building on unfinished foundations and is a
    process violation.
+<!-- sfk:invariant no-forward-dependencies -->
 3. **No forward dependencies.** Because ids are allocated in execution order (§1.1), every id in a
    `depends_on` list is numerically lower than the ticket's own id. The set of tickets is therefore a
    **valid topological ordering**: reading `BOARD.md` top to bottom is a legal build sequence. Any
@@ -261,6 +275,13 @@ Reactive tickets discovered by post-batch review rather than planned up front.
 2. **Board placement.** Cleanup tickets live in a dedicated **Cleanup backlog** table in `BOARD.md`,
    separate from the main execution-order table, so they stay visible without cluttering the critical
    path.
+
+   **A backlog belongs to the version that will *work* the row, not the one that raised it.** Cleanup
+   rows routinely outlive the version that found them. When a version ships with rows unworked, **carry
+   them into the new version's backlog** and note the version they were raised in on the row — do not
+   leave them behind in a collapsed *Shipped* section, where they are invisible, and do not split the
+   same backlog across two versions. Splitting is ambiguous for precisely the rows that matter: the ones
+   still open.
 3. **Dependencies.** Each cleanup ticket's `depends_on` lists the tickets whose code it cleans up.
    Nothing in the main sequence depends on a cleanup ticket unless explicitly promoted.
 4. **When to work them.** Between batches or at the end of a milestone, at the developer's discretion,
@@ -277,15 +298,36 @@ Reactive tickets discovered by post-batch review rather than planned up front.
    - **its `flag` cell** becomes `🔺 before <the id>` (§5.4), so the row itself says it is out of
      sequence rather than relying on position alone.
 
+   **The promoted ticket's own `## Background` says why it was promoted** — which gate, and what would
+   have failed. That is the one place a person implementing it will read, and it is what stops the board
+   becoming the sole record of a decision. `sfk-verify` reports a promoted ticket whose file does not
+   explain itself, because that is the only cheap moment to fix it: once the ticket is `done`, the
+   reasoning exists nowhere a reader will look.
+
    Promotion is a **binary property with a definition** — *would this fail a gate?* — which is what
    keeps the flag honest. It is deliberately not a priority scale: an undefined level rots into a
    record of what was urgent months ago, and with nobody owning it, nothing would catch that.
 6. **Scope.** Cleanup tickets do not implement new requirements (`implements: []`); they improve
    internal quality of already-shipped code. A finding that reveals a genuine spec gap is a
    specification change (§5.5), not a cleanup ticket.
-7. **Record-correction tickets are a distinct kind, and they have a deadline.** A ticket whose purpose is
-   *make the record true* — a batch left a document, a `## Background`, or a set of acceptance criteria
-   false — is **not** a quality ticket, and §6.4's *"at the developer's discretion"* does not apply to it.
+7. **Record-correction tickets are a distinct kind, and they have a deadline — but only when the
+   correction cannot be applied now.** A ticket whose purpose is *make the record true* — a batch left a
+   document, a `## Background`, or a set of acceptance criteria false — is **not** a quality ticket, and
+   §6.4's *"at the developer's discretion"* does not apply to it.
+
+   **First ask whether it needs to be a ticket at all.** If the drift is **pure record**, with no code
+   implicated and no decision owed, **correct it in the pass that found it** and commit it as a `process:`
+   commit, carrying §5.5's retrospective half in the message — which tickets were worked against the false
+   version, and whether each one's work stands. No board row, no lifecycle, no later run to close it.
+
+   **Why the ticket is the wrong shape there: the deadline exists to manage a gap the ticket itself
+   creates.** While a correction waits its turn, the batch keeps building against the false record — that
+   is what the *before:* edge is for. Fix the record in the same session and the gap never opens, so the
+   whole apparatus has nothing to do. A ticket carrying a deadline to compensate for a delay its own
+   existence causes is machinery paying for itself.
+
+   **Keep the ticket when the correction genuinely cannot land now:** it also touches code, or it needs a
+   decision the user has to make. Then the gap is real, and everything below applies.
    Give it that name, carry **§5.5's retrospective half inside it** (the tickets worked against the false
    version, and whether each one's work stands), and **work it before the next batch starts.**
 

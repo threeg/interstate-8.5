@@ -21,6 +21,10 @@ format in `spec/tickets/TICKET-TEMPLATE.md`; the execution order in `spec/ticket
 - **Status lifecycle:** `todo → in-progress → in-review → done` (`blocked` when stuck). Set
   `in-progress` when you start; set **`in-review`** when implementation is finished and the definition
   of done holds (this is where `sfk-next-ticket` leaves a ticket); `done` only after the user's review.
+  **Feedback sends it back:** when an `in-review` ticket gets feedback instead of approval, flip it to
+  `in-progress` before revising and back to `in-review` in the commit that lands the fix. `in-review` has
+  to mean *the committed state is what is under review*, or a revision in flight and a settled review look
+  identical on disk (CONVENTIONS.md §2).
 - **In a ticket file the status is the bare token; in `BOARD.md` it is `<icon> <token>`** — ⬜ `todo` ·
   🔶 `in-progress` · ⛔ `blocked` · 👀 `in-review` · ✅ `done`. The board is scanned by eye across
   hundreds of rows, so it gets the icon; a ticket's `status:` frontmatter is machine-read and does not.

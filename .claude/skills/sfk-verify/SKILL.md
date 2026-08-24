@@ -66,6 +66,11 @@ Verification is a first-class step, and there are two distinct things worth veri
    > announce-then-wait gates: the batch-boundary offer is a yes/no, and `sfk-signoff`'s register sweep is
    > "report and ask once, never block". Applying a picker to those would be ceremony. Judge by whether the
    > answers form a closed set, not by whether there is a wait.
+   >
+   > **By that test, the other place a picker is earned is the findings queue** (*What to produce*). Each
+   > finding resolves one of three ways the skill already enumerates — amend, open a register row, park —
+   > with rejection being the user declining. That is a closed set, so it takes the same shape. Read this
+   > note as naming **two** places, not as an argument against pickers generally.
 
 3. **Load your instructions — code mode only.** Read `spec/verify/verify.md`.
    - **If it does not exist, create it now, by interview.** Copy
@@ -81,6 +86,64 @@ Verification is a first-class step, and there are two distinct things worth veri
      commands to give you yet.
 
 4. **Run the checks for that mode** — §A for spec mode, §B for code mode, plus §C either way.
+
+   > **Every sweep carries a positive control, or it is not reported as clean.** Several checks below are
+   > greps — contractual values (§B.6), register-id citations (§A.8), assumed values with no row. **A zero
+   > result is not evidence of absence; very often it means the sweep did not run.** So run a second
+   > pattern you *know* is present, and report its hit count beside the zero. If the control also returns
+   > nothing, the sweep is broken: report that check as **not run**, never as clean.
+   >
+   > **The control must be the identical invocation, differing only in the pattern.** This is the part
+   > that is easy to get wrong and it defeats the whole guard: a control run through a slightly different
+   > command exercises a different code path and vouches for a sweep that never executed. Same tool, same
+   > flags, same pathspec, same pipeline — change the pattern and nothing else.
+   >
+   > **Why a sweep fails silently** — the causes vary by machine, which is exactly why the control matters
+   > more than any list of them: a file list passed as an unquoted variable arriving as one filename, a
+   > `grep` that is not the implementation you assumed, `xargs` resolving a different binary than your
+   > interactive shell, a pattern that does not match the corpus's actual form. All of them exit as though
+   > the pattern genuinely matched nothing.
+   >
+   > **One cause is not environmental and every project hits it: pathspec globs.**
+   > `git grep -- 'spec/**/*.md'` silently **skips every top-level file in `spec/`** — the index, the
+   > method guide, the parking lot, the open-questions register, the id registry, the milestone plan —
+   > because git's `**/` needs a real directory boundary. Those are precisely the files §A.7 and §A.8 are
+   > about. Use **`git grep -- 'spec/*.md'`**, which reaches every depth: a git pathspec `*` **crosses
+   > `/`**, unlike a shell glob. That difference is the whole bug, and it reads like the obvious way to
+   > say *"every specification document"*.
+   >
+   > **A control proves the sweep *ran*. It does not prove the pattern was *right*.** These are different
+   > failures and the control only catches the first. When you are searching for a **concept** rather than
+   > a literal string — *"is there a rule about ordering?"*, *"is this value cited anywhere?"* — a control
+   > returns hits, the sweep returns nothing, and both are working exactly as designed while you conclude
+   > something false.
+   >
+   > **Two questions, two remedies. Do not apply the wrong one.**
+   >
+   > - **A *rule* sweep — "does a rule about X exist?"** Read the section that would hold it. **Do not grep
+   >   for wording you have guessed.**
+   > - **A *phrase* sweep — "where is this cited?"** There is no section to read: the thing you are looking
+   >   for is scattered free text. So **enumerate the spellings** before you start, search
+   >   **case-insensitively**, and carry the control as always. A compound noun that is *sometimes*
+   >   hyphenated is the common trap — `cleanup backlog` / `cleanup-backlog`, and the same for `red-green`,
+   >   `record-correction`, `open-questions`, `per-version`. Searching one spelling returns a plausible
+   >   number of hits and silently omits the rest.
+   >
+   > That distinction has cost real work: a sweep for `cleanup backlog` found 21 references across 11 files
+   > and **missed the one citation the exercise existed to find**, because that ticket wrote it hyphenated.
+   > Adding the variant took it to 27 across 13.
+   >
+   > **For a rule sweep specifically:** A zero result there does not merely under-report — it licences
+   > **inventing a rule that already exists**, which is worse than missing one. This has happened: a
+   > project searched the kit for *"newest first"*, *"reverse"* and *"descending"*, never for **"latest
+   > first"** — the phrase actually used — and filed a confident report that the kit had never specified
+   > ordering. The rule had been there since v1.0.0.
+   >
+   > **This applies to sweeps over `.sfk/` as much as over the project.** Establishing what the *kit*
+   > requires is the same hazard with a worse consequence, because the conclusion becomes a new convention.
+   >
+   > **If you delegate any sweep to a subagent, put this rule in its prompt.** Each one inherits the
+   > hazard independently and cannot see the parent's method.
 
 ---
 
@@ -100,21 +163,48 @@ with the file and section on both sides of each one.
 4. **Cross-document contradiction.** The same fact stated two ways: a threshold that differs between
    requirements and architecture prose, a field a wireframe shows that the contract doesn't provide, design
    tokens for components absent from the wireframes, a test-strategy layer the architecture doesn't have.
-   **Numeric and named values are contractual** — a mismatch is never cosmetic.
+   **Numeric and named values are contractual between *binding* documents** — a mismatch there is never
+   cosmetic.
+
+   > **A design artefact is not a value source.** A wireframe binds layout and composition; a design system
+   > binds appearance. A number *inside* one — a character count in a drawn field, a price in a mockup — is
+   > usually **sample content**, and the spec changing it is not a defect in the drawing. Reporting it as
+   > one costs a round trip on a non-issue, and worse, points at editing the artefact.
+   >
+   > **Read the project's own design-authority statement before reporting any design finding.** Mature
+   > projects state which artefact binds which kind of fact; that statement decides this, not your own
+   > re-derivation. If it binds layout, composition or appearance and the number is content, **it is not a
+   > finding**. If the number is *visibly* misleading — an implementer could read it as the bound — say so
+   > as an **improvement**, never a critical.
+   >
+   > **Never propose an edit to a generated artefact.** Before proposing any change, check whether the file
+   > is hand-maintained or a tool export / build output. A manual edit to an export is overwritten by the
+   > next one, so the honest options are a re-export or leaving it — and a re-export is a much larger ask
+   > than an edit, which the user should be the one to weigh. This applies to any generated file, not only
+   > design: an export, a lockfile, a build artefact, a generated client.
 5. **Testability.** Every `NFR` has a measurable threshold, and every `FR` states observable behaviour with
    its boundaries and error cases. "Fast", "intuitive", "robust" are findings — they cannot fail a test.
 6. **Terminology drift.** One concept under several names across documents (or one name meaning different
    things). Cheap to fix now; expensive once it is in code, tests and tickets.
 7. **Leftovers.** Placeholder text still in a signed-off document; a `(to confirm)` marker that should be a
    row in `spec/open-questions.md`; a section left as template guidance; a `TODO` in a binding document.
-8. **Register integrity.** Every `Q-n`/`S-n` cited in the spec exists in `spec/open-questions.md`, and every
-   open row is still real. Every id family in use appears in `spec/id-registry.md`. Any assumed value with
-   no row is a finding.
+8. **Register integrity — and it runs both ways.** Every `Q-n`/`S-n` cited in the spec exists in
+   `spec/open-questions.md`, and every open row is still real. **This is a sweep — carry a positive
+   control** (step 4): a citation census that silently matched nothing reads exactly like a register with
+   no citations, and has been acted on as one. Every id family in use appears in `spec/id-registry.md`.
+   Any assumed value with no row is a finding.
+   - **The reverse direction: is each open row cited in the document it affects?** For every open row that
+     names an **`Owning document`**, check that document's own text contains the row's id. A row can be
+     perfectly recorded here and appear nowhere in the document a reader would actually meet it in —
+     leaving an unconfirmed value looking settled to everyone except whoever wrote the register. The next
+     reader is usually a fresh session with no memory of the conversation that opened it.
+   - **Skip a row whose `Owning document` is blank** — the column is optional (see that file), so an
+     unfilled cell is not a finding. Report it as *not checked*, never as passing.
 9. **Ready for ticket generation.** Could a dependency-ordered ticket queue be derived from this spec as it
    stands, without asking a question the documents should already answer? Name what a ticket author would
    still have to guess.
 
-### Spec mode's three limits
+### Spec mode's four limits
 
 > **1. Report inconsistency and ambiguity — never dispute a settled decision.** *"Requirements say 25,
 > architecture prose says 30"* is the job. *"25 seems low to me"* is not: it reopens a decision the user
@@ -126,7 +216,13 @@ with the file and section on both sides of each one.
 > `spec/open-questions.md` if it needs information you don't have, or **park** it in `spec/TODO.md` if it
 > needs a decision that does not exist yet. Never create a ticket from a spec-mode finding.
 >
-> **3. Amending a signed-off document needs the user's explicit approval, and a decisions-log line.**
+> **3. Check the artefact is hand-maintained before proposing a change to it.** Some things under `spec/`
+> are **generated** — a design-tool export, a rendered mockup, a produced diagram. A manual edit to one is
+> overwritten by the next export, so proposing an edit there is proposing work that will silently vanish.
+> Say the artefact is generated, name what a re-export would cost, and let the user decide — including
+> deciding not to.
+>
+> **4. Amending a signed-off document needs the user's explicit approval, and a decisions-log line.**
 > Every document you are reviewing has already been approved. Present the finding and the proposed
 > amendment, get a yes, then amend **in place** and record what changed and why in that document's
 > `decisions.md` beside it. Never silently edit an approved deliverable. In the authoring phase you are in a
@@ -158,6 +254,14 @@ with the file and section on both sides of each one.
      row position, and a re-sort, a version-section move, or a hand edit drops it leaving the board
      looking perfectly ordinary. Report a broken pair as a finding: a promoted ticket that has drifted
      below the gate it was promoted ahead of is a gate failure waiting to happen.
+   - **And check the promoted ticket explains itself.** For each `🔺` row, does that ticket's own
+     `## Background` say **why** it was promoted — which gate, and what would have failed? If not, report
+     it. **This is the only cheap moment.** While the ticket is open the answer is recoverable; once it is
+     `done` the reasoning survives only wherever it was written down at the time, and if that was a note
+     beside the board it is in a *derived* document that a later tidy-up will treat as disposable. One
+     project found historic promotions whose sole record was board prose, and one ticket that explicitly
+     cited the board as the authority — so deleting that prose would have broken a live reference.
+     Report; do not write the explanation yourself.
    - **Check that the red was quoted, not asserted.** For every `tests_required: true` ticket in the batch,
      `## Notes` must carry the failing test's name and its **verbatim** failure message (root `CLAUDE.md` ›
      *Definition of done*), or a named permitted substitute. A sentence like *"all tests passed on the first
@@ -177,7 +281,9 @@ with the file and section on both sides of each one.
      deliberate check. Verify the trailers *mechanically* (see §4b of your instructions for the command), and
      match on the **model family**, never an exact string or the project's contractual model identifiers.
 6. **Contractual-value sweep.** Grep the code, the tests, **and** the docs for the contractual values
-   listed in §3 of your instructions, and confirm each still matches the spec. A value that is correct
+   listed in §3 of your instructions, and confirm each still matches the spec. **Carry a positive control
+   through the identical invocation** (step 4) — a clean sweep here is a claim of no drift, and it is
+   worthless if the command never matched anything. A value that is correct
    in most places but drifted in one is exactly what the tests pass over; this is the check that catches
    it.
    - **Unconfirmed values must cite their open question.** For each row in `spec/open-questions.md`,
@@ -229,9 +335,39 @@ file and section. If a check found nothing, say so — a silent check is indisti
 > scopes it, per that file's rule *"add a row when you invent a family, not when you invent an id"*. Do not
 > start minting durable labels without one.
 
-- **Spec mode:** for each finding, the proposed **amendment** and which document owns it. Group them so the
-  user can approve in batches. Nothing is edited before they say yes, and nothing becomes a ticket. Close by
-  stating plainly whether the spec is ready for ticket generation, and if not, what is outstanding.
+- **Spec mode: a short summary, then the decisions as a queue.** Nothing is edited before the user says
+  yes, and nothing becomes a ticket.
+
+  **First, split every finding into one of two kinds — this is what removes most of the reading.**
+  - **A correction with a determinable right side.** One document says six and three say seven: the
+    direction is settled by the evidence, and only the amendment is left. **State the direction and the
+    evidence, and apply on approval — do not put these in the queue.** On a mature spec these are often
+    about half the criticals, and queueing them is pure ceremony.
+  - **A decision.** The evidence does not settle it; the user has to choose. Only these are queued.
+
+  **Then produce, in this order:**
+  1. **A short summary** — what was audited, how many findings, the verdict on readiness for ticket
+     generation, and the few that genuinely block it. Prose is right here.
+  2. **The corrections**, grouped by owning document, for batch approval.
+  3. **The decisions, one question at a time** — 2–4 named options, **your recommendation first and marked
+     as such**, and each option carrying **its cost**, not just its label. Use the runtime's picker where
+     there is one; a numbered list reads identically without.
+  4. **Ask in rounds.** Some answers create follow-on questions the first round cannot know — in one pass,
+     choosing live filtering over reload created a trap (a client-side filter sees only the rendered page,
+     so a search for something on page 3 finds nothing) that surfaced only once the first answer was in. A
+     second short round caught it before anything was written down.
+
+  **The recommendation has to be real, or this is just a different widget for the same work.** A queue of
+  neutral options moves the thinking back to the user, which is what it exists to prevent. Recommend, and
+  expect to be overridden sometimes — that is the mechanism working.
+
+  Close by stating plainly whether the spec is ready for ticket generation, and if not, what is outstanding.
+
+  > **Why this and not a prose report.** On a mature spec — nine binding documents, ~7,000 lines, three
+  > versions of amendments — one pass returned **55 findings, 20 of them critical**. Grouped prose is
+  > accurate and unreadable at that size: the user has to separate what needs a choice from what does not,
+  > reconstruct the options, and infer which one you favour. The findings are a **closed set per item**, so
+  > they take a picker (step 2's note).
 
   > **The shape report — only when asked, and always in its own section.** A project may ask you to report
   > where its documents violate the *builder instructions only* rule (`spec/README.md`, *How versions
@@ -240,7 +376,8 @@ file and section. If a check found nothing, say so — a silent check is indisti
   > exists. Separate section, separate approval, or the pass loses its point.
   >
   > Sort what you find into three tiers and **say which tier each item is in**:
-  > - **Mechanical** — superseded wording marked `*(amended vX.Y.Z)*`. It is delimited, so the fix
+  > - **Mechanical** — superseded wording carrying any of the five markers (`requirements.md` §1.1:
+  >   *rewritten / amended / extended / clarified / annotated*). It is delimited, so the fix
   >   **relocates** it to the `decisions.md` beside the owning document, verbatim, rather than rewriting anything.
   >   Safe to offer as a batch: nothing is lost, and the result is checkable.
   > - **Judgement** — prose that reads as narration and could be a rule or could go. **Report; never
@@ -253,7 +390,9 @@ file and section. If a check found nothing, say so — a silent check is indisti
   >
   > **Refuse the timing if it is wrong.** Not mid-batch, while open tickets cite text whose surroundings
   > would shift under them — say so and propose the start of the next delta pass instead.
-- **Code mode:** for accepted findings, draft **cleanup tickets** per `spec/tickets/CONVENTIONS.md` §6:
+- **Code mode:** the same shape applies — summarise, then put the **per-finding choices** (file it as a
+  cleanup ticket / promote it / reject it) as a queue rather than prose, since that is a closed set too.
+  For accepted findings, draft **cleanup tickets** per `spec/tickets/CONVENTIONS.md` §6:
   ordinary `task` tickets, `batch: cleanup`, `implements: []`, numbered after the current highest id, placed
   in the Cleanup backlog table in `BOARD.md`. Do not auto-promote — flag candidates and let the user decide.
 
@@ -272,8 +411,21 @@ file and section. If a check found nothing, say so — a silent check is indisti
   > ticket's work commit records its test author. **Degrade gracefully:** with no distinct `tests` model,
   > or a runtime that cannot pin one to a subagent, draft it here as usual.
 
-  > **A finding that a record is false files a *record-correction* ticket** (CONVENTIONS.md §6.7), not an
-  > ordinary cleanup ticket — and it is the one kind with a **deadline**: worked before the next batch
+  > **A finding that a record is false is not automatically a ticket.** If it is **pure record drift** —
+  > no code implicated, no decision owed — **apply the correction in this pass** and commit it as a
+  > `process:` commit. Carry §5.5's retrospective half in the message: which tickets were worked against
+  > the false version, and whether each one's work stands. That is the audit value the ticket format was
+  > actually buying, and it survives fine outside a board row.
+  >
+  > **Why not a ticket:** a record-correction ticket carries a `before:` deadline that exists purely to
+  > manage the gap the queue introduces — the batch keeps building against the false record while the
+  > correction waits its turn. Correct it here and the gap never opens. Spec mode already works this way
+  > for the same kind of finding; code mode inherited "always file a ticket" from its *normal* findings,
+  > which are implementation-shaped and genuinely belong on the board.
+  >
+  > **File a *record-correction* ticket** (CONVENTIONS.md §6.7) **only when the correction cannot land
+  > now** — it also touches code, or it needs a decision the user has to make. Then the gap is real, and
+  > it is the one ticket kind with a **deadline**: worked before the next batch
   > starts, not at discretion. Name it as one, and put §5.5's retrospective half **inside** it: which
   > tickets were worked against the false version, and whether each one's work stands. Say so in your
   > report, and flag it if the user is about to start another batch with one open.

@@ -49,7 +49,11 @@ this skill, fix this template. Leave blank if you're only reporting the problem.
 
 1. **Triage.** Judge this item against SFK's principles and current shape. Decide: **accept**,
    **reject**, or **defer**. `category`/`area`/`severity` in the frontmatter are the sorting keys;
-   cluster duplicates from different projects.
+   cluster duplicates from different projects. **Apply the neutrality test:** would this change make
+   sense to a project with a different stack, domain and team shape? If it only holds up given *this*
+   project's specifics, it is a project convention, not a kit rule — and where a proposal has both a
+   vocabulary and a set of consequences, the vocabulary usually generalises while the consequences do
+   not (repo-root `FEEDBACK.md`).
 2. **If accepted:** make the real change in the kit — the relevant `SKILL.md`, template in
    `.sfk/templates/`, `spec/README.md`, or `CLAUDE.md` — and add a `.sfk/CHANGELOG.md` entry with its
    **Apply** note. Record the *why* in `SFK-DESIGN.md` if it carries reasoning worth preserving.

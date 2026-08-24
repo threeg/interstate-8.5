@@ -104,6 +104,7 @@ other document needs a link back.
 |---|---|
 | [`tickets/BOARD.md`](tickets/BOARD.md) | **The queue** — every ticket, its status, order and traceability. |
 | [`tickets/CONVENTIONS.md`](tickets/CONVENTIONS.md) | How tickets are structured, numbered and related. |
+| [`tickets/decisions.md`](tickets/decisions.md) | *Archive — not binding.* What each verification pass found, what was promoted or deferred and why. Not in the reading path; search it only when asking *why*. |
 | [`tickets/TICKET-TEMPLATE.md`](tickets/TICKET-TEMPLATE.md) | The per-type body formats. |
 | [`tickets/CLAUDE.md`](tickets/CLAUDE.md) | Ticket workflow rules (auto-loaded when working in `tickets/`). |
 

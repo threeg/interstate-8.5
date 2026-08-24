@@ -13,6 +13,25 @@ goals; `sfk-next-milestone` marks the next milestone `In progress` and commits i
 `sfk-signoff` flips it to `Complete` and moves the *Current position* line. Tracker and work move
 together, commit by commit.
 
+<!-- sfk:invariant plan-version-order -->
+> **Newest first, and keep a contents list.** Version sections run **latest at the top**, shipped ones
+> below in descending order — this document is read to answer *"what now?"*, not *"what happened?"*, so
+> the version being built must not sit hundreds of lines below the position line that points at it. New
+> work then lands where the reader already is, which is also where the skills edit most often.
+>
+> Keep the contents list below **coarse — one line per version**, and per milestone group where a project
+> has them. **Never one line per milestone or ticket:** those change on almost every commit, so the list
+> would be stale more often than not, and a stale index is worse than none.
+
+---
+
+## Contents
+
+> One line per version, newest first. Update it when a version is added, not as milestones complete.
+
+- [<VERSION> — <theme> (in progress)](#version--theme-in-progress)
+- [<earlier version> — <theme> (shipped)](#earlier-version--theme-shipped)
+
 ---
 
 ## Current position

@@ -8,7 +8,7 @@ at `spec/README.md`); layer-specific guidance lives in `<code>/<layer>/CLAUDE.md
 ## Project & kit
 
 - **Project code:** `INT8` — the ticket prefix (`INT8-001`). Set by `sfk-init`.
-- **Spec-First Kit version applied:** `1.4.7` — the *kit* version this project is on (set by
+- **Spec-First Kit version applied:** `1.4.13` — the *kit* version this project is on (set by
   `sfk-init`, raised by `sfk-update-kit`). This is **not** the software's release version (that is
   chosen by the project and tracked in `spec/milestone-plan.md`). The kit's own version, changelog
   and pristine templates live in `.sfk/` (read-only — never edit it by hand; skills copy templates
@@ -77,6 +77,13 @@ gaps and stays agent-legible — not merely as scaffolding.
   answers cost the same and the choice is genuinely yours; asked afterwards, amending is the cheap option
   and sunk cost decides.** A ticket does not reach `in-review` with an amendment still owed. (The spec
   being *silent* is different — that is an open question: record it and carry on.)
+  - **When you cite a rule as the reason something cannot be done, cite the clause that *decides* it.**
+    Not the one that is easiest to remember. A broad rule and a narrow test often sit in the same section,
+    the broad one is more quotable, and it will be quoted — including for refusals it plays no part in.
+    Name the clause that actually refuses, and if the real constraint lives somewhere else entirely, say
+    where. **This never changes what binds:** the rule binds until amended, and amending is the user's
+    call. It changes only the precision of the citation — which is what a reader outside that specialism
+    has to trust, and what they will go and act on.
 - **Red-green is binding, not a preference.** For deterministic and contract-pinned work: write the
   failing test **first**, confirm it fails for the right reason, **then** implement. Never write the
   implementation first and back-fill tests. This is the default for all implementation work and is
@@ -103,6 +110,17 @@ gaps and stays agent-legible — not merely as scaffolding.
   is error-prone (hallucination/consistency risk) and is not permitted.
 - **Lazy adoption.** Add tooling only when a concrete trigger exists; avoid speculative complexity.
   Design stall — not excess ceremony — is the documented historical killer of this project.
+- **Write instructions, not arguments.** Every artefact here — a `spec/` rule, a ticket, a code comment,
+  a commit message, an annotation on a wireframe or design artefact — is read by someone who has to
+  **act** on it, not by someone deciding whether to approve you. State the fact and leave out the case
+  for it. The test: **could a builder act on this without being persuaded by it?**
+  - **This is about *where* reasoning goes, not whether to record it.** Where the kit asks for a *why*, it
+    names the home: a `spec/` document's reasoning goes in the `decisions.md` beside it, a ticket's in its
+    `## Background`, an open value's in `spec/open-questions.md`, and anything transient in the hand-off
+    message. Recording it in its home is required; restating it beside the rule is not.
+  - **Nothing here asks for justification in code.** Comments follow this project's own code conventions.
+    A one-line change does not carry a paragraph explaining what prompted it, which alternative was
+    rejected, or what the general lesson was — that is a hand-off note, or nothing.
 
 ## Where things live
 

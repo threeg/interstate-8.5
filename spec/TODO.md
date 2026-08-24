@@ -132,6 +132,7 @@ in the spec milestones that run **before** ticket generation. That is why the pa
 
 ## Resolved
 
+<!-- sfk:invariant todo-tombstones-permanent -->
 > One line per entry that has become a ticket — a **forwarding address**, not a parking-lot item.
 > **Never delete a line from here:** it is what keeps a live `TODO-n` citation resolvable, and the trace
 > from a parked idea to the work it became.

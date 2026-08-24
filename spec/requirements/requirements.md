@@ -28,10 +28,28 @@
 
 ## 1. Conventions
 
+<!-- sfk:invariant requirements-identifiers -->
 1. **Identifiers.** Functional requirements are `FR-n`; non-functional are `NFR-n`. Numbers are
    permanent once allocated — never reused or renumbered. New requirements take the next free number;
-   a superseded one is **rewritten in place** and marked — exactly `*(amended vX.Y.Z)*`, at the end of
-   the rule, nothing else.
+   a superseded one is **rewritten in place** and marked, **immediately after the identifier**, with one
+   of **five** forms — and nothing else:
+
+   | Marker | Use it when |
+   |---|---|
+   | `*(rewritten — <version>)*` | the rule was replaced; read it fresh |
+   | `*(amended — <version>)*` | the rule changed |
+   | `*(extended — <version>)*` | the rule now covers more than it did |
+   | `*(clarified — <version>)*` | the wording sharpened; the meaning did not change |
+   | `*(annotated — <version>)*` | a note was added; the rule itself is untouched |
+
+   `<version>` is **this project's** version string, whatever scheme it uses. The set is **closed** —
+   these five cover the cases, and inventing a sixth breaks the tooling that matches them.
+
+   **The marker carries no mechanical consequence, deliberately.** It tells a reader *how* the rule
+   changed and nothing follows from it: all five archive their previous wording identically, all five
+   leave tickets and tests exactly as bound as before. It is tempting to make *clarified* skip the
+   archive — resist it. **One author's *clarified* is another's *narrowed*,** and a distinction that
+   decides whether evidence is kept will be wrong in the direction that saves work.
    **The superseded wording does not stay in the rule.** It moves to [`decisions.md`](decisions.md)
    verbatim, keyed by the id. Dead text left beside live text is read as current: in one project a
    superseded tail was left spliced onto the *next* rule and asserted a behaviour that had been removed,

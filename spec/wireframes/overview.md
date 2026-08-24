@@ -93,6 +93,22 @@ title/lyrics for →"**.
 > once, in `spec/design/design-system.md` §1.1 (*Artefact authority*). Offering a mockup without pointing
 > at that is how an implementer ends up picking a value by eye.
 
+> **Annotations: two properties, whatever carries them.** The carrier is this project's choice and may
+> differ per artefact (prose beside a grey-box region here; a marked element or comment convention in an
+> exported mockup). Whatever carries it MUST satisfy both:
+>
+> - **Unmistakable at the point of use.** An implementer reading the artefact must never have to ask
+>   whether they are looking at the design or at a note about it. Visually *and* structurally distinct,
+>   with a machine-findable marker so a check could count or strip them.
+> - **Removable without loss.** Delete every annotation and a valid artefact must remain. If it doesn't,
+>   something binding is living in an annotation — and an annotation is the one place a rule can neither
+>   bind nor survive a re-export.
+>
+> **An annotation gives direction, and only where the drawing cannot.** It is not the place for why an
+> alternative was rejected, how a neighbouring mechanism works, or what a later milestone will do — those
+> have homes (root `CLAUDE.md`, *Write instructions, not arguments*). If the drawing already says it, the
+> annotation is noise; if the annotation states a rule, the rule is in the wrong document.
+
 ---
 
 ## 5. State coverage matrix

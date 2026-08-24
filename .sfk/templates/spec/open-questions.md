@@ -59,6 +59,20 @@ sharpening accumulates instead of being lost in conversation.
 
 ---
 
+<!-- sfk:invariant open-question-cited-in-owning-document -->
+> **`Owning document` is optional, and it buys a check.** Name the `spec/` document whose text this
+> assumption actually sits in, and **write the id into that document** where the assumption appears — not
+> only here. `sfk-verify` §A.8 then asserts the two agree.
+>
+> **Why the register alone is not enough.** A reader of `architecture.md` has no way to discover that a
+> value in front of them is unconfirmed; nothing in that document says so, and nobody consults a register
+> to find out whether to trust a paragraph. That reader is usually a fresh session with no memory of the
+> conversation that opened the row. One project found two rows whose owning document was named here and
+> whose id appeared nowhere in it.
+>
+> **Leave it blank rather than guessing.** The check only applies to a row that names a document, so an
+> unfilled cell costs nothing and a wrong one costs a false finding. Fill it as rows are touched.
+
 ## 1. Questions for the client (`Q-n`)
 
 > **Write this table so it can be sent to the client as it stands** — no edits, no translation. Assume the
@@ -66,10 +80,10 @@ sharpening accumulates instead of being lost in conversation.
 > question, and always say what we are assuming meanwhile, so silence is visibly a choice. Fill the
 > **Answer** column in and send it back; nothing else is needed from them.
 
-| Id | Question | Why we need it | What we assume until told otherwise | Answer | Needed by |
-|----|----------|----------------|--------------------------------------|--------|-----------|
-| `Q-1` | <One plain sentence. No ids, no file names, no jargon.> | <One line a non-technical reader understands.> | <the value we are building to> | | <date or milestone> |
-| `Q-2` | <…> | <…> | <…> | | <…> |
+| Id | Question | Why we need it | What we assume until told otherwise | Answer | Needed by | Owning document |
+|----|----------|----------------|--------------------------------------|--------|-----------|-----------------|
+| `Q-1` | <One plain sentence. No ids, no file names, no jargon.> | <One line a non-technical reader understands.> | <the value we are building to> | | <date or milestone> | <`spec/…` the doc this assumption sits in> |
+| `Q-2` | <…> | <…> | <…> | | <…> | <…> |
 
 <!-- Good: "Your brand guide shows four different greens. Which one should headings use?"
      Bad:  "Confirm token value for --color-heading per design-system §2.1."
@@ -82,9 +96,9 @@ sharpening accumulates instead of being lost in conversation.
 > Internal unknowns — nobody outside the team needs to answer these. Kept numerically separate from `Q-n`
 > so that a search for *"what are we waiting on from the client"* stays clean. Same five rules apply.
 
-| Id | Question | Why it matters | What we assume for now | Resolution |
-|----|----------|----------------|------------------------|------------|
-| `S-1` | <…> | <…> | <…> | |
+| Id | Question | Why it matters | What we assume for now | Resolution | Owning document |
+|----|----------|----------------|------------------------|------------|-----------------|
+| `S-1` | <…> | <…> | <…> | | <`spec/…` the doc this assumption sits in> |
 
 ---
 
