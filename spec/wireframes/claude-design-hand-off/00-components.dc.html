@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<style>
+  *, *::before, *::after { box-sizing:border-box; }
+  body { margin:0; background:#f2f2f2; }
+  a { color:#333; }
+  a:hover { color:#000; }
+</style>
+</helmet>
+
+<div style="font-family:ui-sans-serif,system-ui,sans-serif;color:#222;background:#f2f2f2;padding:32px 24px 80px">
+<div style="max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:40px">
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font:11px/1 ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:#777">Interstate-8 · v5 wireframes · low fidelity</div>
+    <div style="font-size:26px;font-weight:700;letter-spacing:-.01em">00 — Components</div>
+    <div style="font-size:13px;line-height:1.5;color:#555;max-width:64ch">Only components carrying states a single screen cannot show are defined here. Everything else — footer, song links, list rows — is drawn in place on the screen pages.</div>
+  </div>
+
+  <div data-annotation="legend" style="border:1px dashed #C2185B;background:#fff;padding:12px 14px;display:flex;gap:10px;align-items:flex-start">
+    <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+    <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">Every block in this pink dashed style carries <b>data-annotation</b> in the markup. Annotations describe behaviour, conditional states and response constraints only. Removing every <b>[data-annotation]</b> element leaves a complete wireframe.</span>
+  </div>
+
+  <!-- ============ 01 header ============ -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:12px;border-bottom:2px solid #222;padding-bottom:6px">
+      <div style="font:700 13px/1 ui-monospace,monospace;letter-spacing:.1em">C1</div>
+      <div style="font-size:17px;font-weight:700">Global header / nav</div>
+      <div style="font-size:12px;color:#777">4 states</div>
+    </div>
+
+    <div style="border:1px solid #ccc;background:#fff">
+      <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">State A — default (solid) · desktop</div>
+      <div style="padding:14px">
+        <div style="border:1px solid #c4c4c4;background:#e4e4e4;padding:14px 18px;display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:9px;min-width:0"><div style="width:24px;height:28px;border:2px solid #333;border-radius:5px 5px 13px 13px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#333;flex:none">8</div><div style="display:flex;flex-direction:column;gap:2px;min-width:0"><div style="font-size:15px;font-weight:700;letter-spacing:.02em;color:#333">INTERSTATE-8</div><div style="font-size:10px;color:#555">A Modest Mouse Fan Collaborative</div></div></div>
+          <div style="flex:1;min-width:0"></div>
+          <div style="display:flex;gap:18px;flex-wrap:wrap;font-size:11px;color:#444">
+            <div style="border-bottom:2px solid #333;padding-bottom:2px;font-weight:700">Home</div>
+            <div>Tour Dates</div>
+            <div>Songs</div>
+            <div>Discography</div>
+            <div>Band</div>
+            <div>News</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div data-annotation style="border:1px dashed #C2185B;background:#fff;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+      <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">Home and Songs navigate. Tour Dates, Discography, Band and News render but do not resolve in this build. The current section carries the underline marker.</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">State B — transparent over hero</div>
+        <div style="padding:14px">
+          <div style="border:1px solid #c4c4c4;background:#bdbdbd;position:relative;height:190px;overflow:hidden">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:11px/1 ui-monospace,monospace;color:#6d6d6d">background photo</div>
+            <div style="position:absolute;inset:0;background:linear-gradient(#0000006b,#00000000 55%)"></div>
+            <div style="position:relative;padding:12px 14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:8px;min-width:0"><div style="width:21px;height:24px;border:2px solid #fff;border-radius:5px 5px 11px 11px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex:none">8</div><div style="display:flex;flex-direction:column;gap:2px;min-width:0"><div style="font-size:13px;font-weight:700;letter-spacing:.02em;color:#fff">INTERSTATE-8</div><div style="font-size:9px;color:#fff">A Modest Mouse Fan Collaborative</div></div></div>
+              <div style="flex:1;min-width:0"></div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:10px;color:#fff">
+                <div style="border-bottom:2px solid #fff;padding-bottom:2px;font-weight:700">Home</div>
+                <div>Tour Dates</div><div>Songs</div><div>Discography</div><div>Band</div><div>News</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">State C — current section marked (Songs)</div>
+        <div style="padding:14px">
+          <div style="border:1px solid #c4c4c4;background:#e4e4e4;padding:12px 14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:8px;min-width:0"><div style="width:21px;height:24px;border:2px solid #333;border-radius:5px 5px 11px 11px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#333;flex:none">8</div><div style="display:flex;flex-direction:column;gap:2px;min-width:0"><div style="font-size:13px;font-weight:700;letter-spacing:.02em;color:#333">INTERSTATE-8</div><div style="font-size:9px;color:#555">A Modest Mouse Fan Collaborative</div></div></div>
+            <div style="flex:1;min-width:0"></div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:10px;color:#444">
+              <div>Home</div><div>Tour Dates</div>
+              <div style="border-bottom:2px solid #333;padding-bottom:2px;font-weight:700">Songs</div>
+              <div>Discography</div><div>Band</div><div>News</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start">
+      <div style="border:1px solid #ccc;background:#fff;width:352px;max-width:100%">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">State D — mobile, collapsed · 320px</div>
+        <div style="padding:14px">
+          <div style="width:320px;max-width:100%;border:1px solid #c4c4c4;background:#e4e4e4;padding:10px 12px;display:flex;align-items:center;gap:10px">
+            <div style="display:flex;align-items:center;gap:7px;min-width:0;flex:1"><div style="width:19px;height:22px;border:2px solid #333;border-radius:4px 4px 10px 10px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#333;flex:none">8</div><div style="font-size:12px;font-weight:700;letter-spacing:.02em;color:#333;min-width:0">INTERSTATE-8</div></div>
+            <div style="border:1px solid #9a9a9a;background:#d2d2d2;width:34px;height:34px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px">
+              <div style="width:16px;height:2px;background:#555"></div>
+              <div style="width:16px;height:2px;background:#555"></div>
+              <div style="width:16px;height:2px;background:#555"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid #ccc;background:#fff;width:352px;max-width:100%">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">State D — mobile, menu open</div>
+        <div style="padding:14px">
+          <div style="width:320px;max-width:100%;border:1px solid #c4c4c4;background:#e4e4e4">
+            <div style="padding:10px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #c4c4c4">
+              <div style="display:flex;align-items:center;gap:7px"><div style="width:19px;height:22px;border:2px solid #333;border-radius:4px 4px 10px 10px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#333;flex:none">8</div><div style="font-size:12px;font-weight:700;letter-spacing:.02em;color:#333">INTERSTATE-8</div></div>
+              <div style="border:1px solid #9a9a9a;background:#d2d2d2;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#555">×</div>
+            </div>
+            <div style="display:flex;flex-direction:column;background:#eee">
+              <div style="padding:12px;font-size:11px;border-bottom:1px solid #d8d8d8">Home</div>
+              <div style="padding:12px;font-size:11px;border-bottom:1px solid #d8d8d8">Tour Dates</div>
+              <div style="padding:12px;font-size:11px;font-weight:700;border-bottom:1px solid #d8d8d8;border-left:3px solid #333">Songs</div>
+              <div style="padding:12px;font-size:11px;border-bottom:1px solid #d8d8d8">Discography</div>
+              <div style="padding:12px;font-size:11px;border-bottom:1px solid #d8d8d8">Band</div>
+              <div style="padding:12px;font-size:11px">News</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div data-annotation style="border:1px dashed #C2185B;background:#fff;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+      <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">State B applies only while a hero is in view; the header swaps to state A once the page scrolls past it. Wordmark, tagline and nav links must stay legible over any photograph in state B. Below the mobile breakpoint the nav collapses to the toggle; the open panel overlays page content and the toggle becomes a close control.</span>
+    </div>
+  </div>
+
+  <!-- ============ 02 filter control ============ -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:12px;border-bottom:2px solid #222;padding-bottom:6px">
+      <div style="font:700 13px/1 ui-monospace,monospace;letter-spacing:.1em">C2</div>
+      <div style="font-size:17px;font-weight:700">Filter control</div>
+      <div style="font-size:12px;color:#777">3 states · 2 control types</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">Default</div>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:10px;color:#666">Type</div>
+          <div style="border:1px solid #9a9a9a;background:#f4f4f4;padding:9px 11px;display:flex;align-items:center;gap:8px">
+            <div style="flex:1;font-size:11px;color:#333">All</div>
+            <div style="font-size:9px;color:#666">▾</div>
+          </div>
+        </div>
+      </div>
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">Active / selected</div>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:10px;color:#666">Type</div>
+          <div style="border:2px solid #333;background:#e2e2e2;padding:8px 10px;display:flex;align-items:center;gap:8px">
+            <div style="flex:1;font-size:11px;color:#111;font-weight:700">Modest Mouse</div>
+            <div style="font-size:9px;color:#333">▾</div>
+          </div>
+        </div>
+      </div>
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">Disabled</div>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:10px;color:#aaa">Released</div>
+          <div style="border:1px dashed #bbb;background:#f0f0f0;padding:9px 11px;display:flex;align-items:center;gap:8px">
+            <div style="flex:1;font-size:11px;color:#aaa">Coming soon</div>
+            <div style="font-size:9px;color:#bbb">▾</div>
+          </div>
+        </div>
+      </div>
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">Segmented toggle — default (Show selected)</div>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:10px;color:#666">Alternate titles</div>
+          <div style="display:flex;border:1px solid #777;align-self:flex-start">
+            <div style="padding:7px 14px;background:#cfcfcf;font-size:11px;font-weight:700;color:#111">Show</div>
+            <div style="padding:7px 14px;font-size:11px;color:#555;border-left:1px solid #777">Hide</div>
+          </div>
+        </div>
+      </div>
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">Segmented toggle — other side selected</div>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:10px;color:#666">Alternate titles</div>
+          <div style="display:flex;border:1px solid #777;align-self:flex-start">
+            <div style="padding:7px 14px;font-size:11px;color:#555">Show</div>
+            <div style="padding:7px 14px;background:#cfcfcf;font-size:11px;font-weight:700;color:#111;border-left:1px solid #777">Hide</div>
+          </div>
+        </div>
+      </div>
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">Apply</div>
+        <div style="padding:14px">
+          <div style="border:1px solid #777;background:#d2d2d2;padding:9px 22px;font-size:11px;font-weight:700;color:#222;display:inline-block">Apply</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div data-annotation style="border:1px dashed #C2185B;background:#fff;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+      <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">Disabled controls are visible and inert — no focus, no menu, no keyboard entry, and they read "Coming soon" rather than broken. Filtering is server-rendered: Apply reloads the page with the new query, so there is no in-place re-render state to design.</span>
+    </div>
+  </div>
+
+  <!-- ============ 03 lyric pair ============ -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:12px;border-bottom:2px solid #222;padding-bottom:6px">
+      <div style="font:700 13px/1 ui-monospace,monospace;letter-spacing:.1em">C3</div>
+      <div style="font-size:17px;font-weight:700">Lyric pair</div>
+      <div style="font-size:12px;color:#777">3 states</div>
+    </div>
+
+    <div style="border:1px solid #ccc;background:#fff">
+      <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">Side-by-side (wide)</div>
+      <div style="padding:14px">
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr))">
+          <div style="display:flex;flex-direction:column;gap:8px;padding-right:24px;border-right:2px dashed #c4c4c4;min-width:0">
+            <div style="font-size:11px;font-weight:700;border-bottom:1px solid #999;padding-bottom:5px">This version — Dramamine (Bee Sting)</div>
+            <div style="display:flex;flex-direction:column;gap:5px;padding-top:4px">
+              <div style="height:7px;background:#dcdcdc;width:92%"></div><div style="height:7px;background:#dcdcdc;width:78%"></div>
+              <div style="height:7px;background:#dcdcdc;width:86%"></div><div style="height:7px;background:#dcdcdc;width:64%"></div>
+              <div style="height:7px;background:#dcdcdc;width:88%"></div><div style="height:7px;background:#dcdcdc;width:52%"></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;padding-left:24px;min-width:0">
+            <div style="font-size:11px;font-weight:700;border-bottom:1px solid #999;padding-bottom:5px">Normal version — Dramamine</div>
+            <div style="display:flex;flex-direction:column;gap:5px;padding-top:4px">
+              <div style="height:7px;background:#dcdcdc;width:90%"></div><div style="height:7px;background:#dcdcdc;width:72%"></div>
+              <div style="height:7px;background:#dcdcdc;width:84%"></div><div style="height:7px;background:#dcdcdc;width:60%"></div>
+              <div style="height:7px;background:#dcdcdc;width:92%"></div><div style="height:7px;background:#dcdcdc;width:48%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start">
+      <div style="border:1px solid #ccc;background:#fff;width:352px;max-width:100%">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">Stacked (mobile · 320px)</div>
+        <div style="padding:14px">
+          <div style="width:320px;max-width:100%;display:flex;flex-direction:column;gap:20px">
+            <div style="display:flex;flex-direction:column;gap:8px;padding-bottom:20px;border-bottom:2px dashed #c4c4c4">
+              <div style="font-size:11px;font-weight:700;border-bottom:1px solid #999;padding-bottom:5px">This version — Dramamine (Bee Sting)</div>
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="height:7px;background:#dcdcdc;width:92%"></div><div style="height:7px;background:#dcdcdc;width:70%"></div><div style="height:7px;background:#dcdcdc;width:84%"></div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="font-size:11px;font-weight:700;border-bottom:1px solid #999;padding-bottom:5px">Normal version — Dramamine</div>
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="height:7px;background:#dcdcdc;width:88%"></div><div style="height:7px;background:#dcdcdc;width:74%"></div><div style="height:7px;background:#dcdcdc;width:58%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid #ccc;background:#fff;flex:1;min-width:300px">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">One side identical to the parent</div>
+        <div style="padding:14px">
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr))">
+            <div style="display:flex;flex-direction:column;gap:8px;padding-right:24px;border-right:2px dashed #c4c4c4;min-width:0">
+              <div style="font-size:11px;font-weight:700;border-bottom:1px solid #999;padding-bottom:5px">This version — Dramamine (alt title)</div>
+              <div style="font-size:11px;color:#555;padding-top:4px">[same as normal version]</div>
+              <div style="font-size:11px;text-decoration:underline;color:#333">Dramamine</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;padding-left:24px;min-width:0">
+              <div style="font-size:11px;font-weight:700;border-bottom:1px solid #999;padding-bottom:5px">Normal version — Dramamine</div>
+              <div style="display:flex;flex-direction:column;gap:5px;padding-top:4px">
+                <div style="height:7px;background:#dcdcdc;width:90%"></div><div style="height:7px;background:#dcdcdc;width:72%"></div><div style="height:7px;background:#dcdcdc;width:84%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div data-annotation style="border:1px dashed #C2185B;background:#fff;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+      <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">The pair carries no panel framing — no border, no tinted header bar. The column headings and the dashed split are what separate the two sets, the same divider treatment as the song page's main/rail split; each heading names the version it holds. Below the wide breakpoint the columns stack, this version first. The "[same as normal version]" side links to the parent song rather than repeating its lyrics.</span>
+    </div>
+  </div>
+
+  <!-- ============ 04 hero ============ -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:12px;border-bottom:2px solid #222;padding-bottom:6px">
+      <div style="font:700 13px/1 ui-monospace,monospace;letter-spacing:.1em">C4</div>
+      <div style="font-size:17px;font-weight:700">Hero</div>
+      <div style="font-size:12px;color:#777">3 states</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">Band hero (home) — with background image</div>
+        <div style="padding:14px">
+          <div style="border:1px solid #c4c4c4;background:#bdbdbd;height:200px;position:relative;display:flex;align-items:flex-end;padding:20px;overflow:hidden">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:11px/1 ui-monospace,monospace;color:#6d6d6d">background photo</div>
+            <div style="position:absolute;inset:0;background:linear-gradient(#0000,#00000080)"></div>
+            <div style="position:relative;display:flex;flex-direction:column;gap:8px;max-width:75%">
+              <div style="font:9px/1 ui-monospace,monospace;letter-spacing:.1em;color:#fff">SET EDITORIAL MESSAGE</div>
+              <div style="height:13px;background:#fff;width:100%"></div>
+              <div style="height:13px;background:#fff;width:62%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">Band hero (home) — no image, empty library</div>
+        <div style="padding:14px">
+          <div style="border:1px solid #c4c4c4;background:#e4e4e4;height:200px;display:flex;align-items:flex-end;padding:20px">
+            <div style="display:flex;flex-direction:column;gap:8px;max-width:75%">
+              <div style="font:9px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">SET EDITORIAL MESSAGE</div>
+              <div style="height:13px;background:#9a9a9a;width:100%"></div>
+              <div style="height:13px;background:#9a9a9a;width:62%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">Page-title hero (secondary pages) — short</div>
+        <div style="padding:14px">
+          <div style="border:1px solid #c4c4c4;background:#bdbdbd;height:110px;position:relative;overflow:hidden">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:10px/1 ui-monospace,monospace;color:#6d6d6d">page-title hero photo</div>
+            <div style="position:absolute;inset:0;background:linear-gradient(#00000026,#00000080)"></div>
+            <div style="position:absolute;left:20px;bottom:14px;font-size:22px;font-weight:700;color:#fff">Songs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div data-annotation style="border:1px dashed #C2185B;background:#fff;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+      <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">The band hero's background photo is drawn at random from a library on every page load; the page-title hero carries its screen's own photo and its title, not editorial copy. The message is editor-set copy, not the page title, and it is the only text in the hero. With an empty library the hero keeps its height and the message stays readable on a plain background.</span>
+    </div>
+  </div>
+
+  <!-- ============ 05 coming soon stub ============ -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:12px;border-bottom:2px solid #222;padding-bottom:6px">
+      <div style="font:700 13px/1 ui-monospace,monospace;letter-spacing:.1em">C5</div>
+      <div style="font-size:17px;font-weight:700">"Coming soon" rail stub</div>
+      <div style="font-size:12px;color:#777">1 state</div>
+    </div>
+    <div style="border:1px solid #ccc;background:#fff">
+      <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">Disabled placeholder</div>
+      <div style="padding:14px;display:flex;gap:12px;flex-wrap:wrap">
+        <div style="border:1.5px dashed #c4c4c4;background:#fff;padding:14px;width:240px;max-width:100%;display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:#777">RELEASES</div>
+          <div style="font-size:12px;color:#888">Coming soon</div>
+        </div>
+      </div>
+    </div>
+    <div data-annotation style="border:1px dashed #C2185B;background:#fff;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+      <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">The stub is inert and holds its slot at the same footprint the real content will take, so the surrounding layout does not reshuffle when the content arrives.</span>
+    </div>
+  </div>
+
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showAnnotations&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Wireframe&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() { this.sync(); }
+  componentDidUpdate() { this.sync(); }
+  sync() {
+    const show = this.props.showAnnotations !== false;
+    document.querySelectorAll('[data-annotation]').forEach(n => { n.style.display = show ? '' : 'none'; });
+  }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

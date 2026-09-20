@@ -5,7 +5,8 @@
 | **Document** | Wireframes overview |
 | **Repository location** | `spec/wireframes/overview.md` |
 | **Status** | Binding specification (for UI) — Milestone 4 signed off (2026-07-11) |
-| **Chosen visual direction** | **6d** in `Interstate-8 Wireframes.dc.html` (go/no-go: **GO**). Self-contained HTML canvas covering all three screens, desktop + mobile. |
+| **Chosen visual direction** | **6d** in `claude-design-hand-off/Interstate-8 Wireframes.dc.html` (go/no-go: **GO**). *(amended — 5.0.x-dev2: **superseded** as the wire set, and **moved** into the export bundle. Kept because shipped tickets cite it; still the record of the go/no-go.)* |
+| **Current wire set** *(5.0.x-dev2)* | `claude-design-hand-off/` — `00-components`, `01-homepage`, `02-songs-landing`, `03-song-page`, one `.dc.html` per page. Supporting context; the markdown here binds. |
 | **Workflow** | This folder is the **binding structural spec**; the **visual wires are produced in Claude Design** and their exports return here as supporting context (see §4). |
 
 > **Purpose.** The binding description of the slice-1 screens, their states, and the navigation between
@@ -73,7 +74,34 @@ title/lyrics for →"**.
 
 ## 4. Mockup conventions
 
-### 4.1 What this folder binds
+### 4.1 The export bundle is generated — normalise it on arrival, then leave it alone
+
+**`claude-design-hand-off/` comes from Claude Design and is replaced wholesale on every export.** Two
+consequences, and they pull in opposite directions, so both are stated:
+
+**On arrival, normalise the bundle.** The exporter's default shape is not the repository's, so every
+export needs the same two corrections before it is committed:
+
+1. **Flatten it.** The exporter nests the files under `<project-name>/project/`; this repository holds them
+   flat in `claude-design-hand-off/`. Assets and `support.js` are referenced relatively, so flattening is
+   safe — verify no `.md` outside the bundle still points at the nested path.
+2. **Delete the generated `README.md`.** The exporter emits one in every bundle; it is **not** part of the
+   design project and cannot be removed at source. It addresses coding agents and tells them the designs
+   carry dimensions, colours and layout rules to be matched pixel-perfectly — **for a wireframe bundle
+   that is the opposite of the truth** (§4.2, and `design-system.md` §1.1: these are grey-box structural
+   wires and never a value source). Delete it rather than annotating it; an annotated file still carries
+   the wrong instruction in every other line.
+
+**After that, do not edit inside the bundle.** Any further change is lost at the next export, silently.
+
+- To change a wire, change it **in Claude Design and re-export**, then normalise again.
+- To remove a *design* file, delete it at source in Claude Design — that is project content and the
+  deletion sticks. This is the opposite of the `README.md` case above, and the distinction is whether the
+  exporter or the project owns the file.
+- Anything that must survive an export — a decision, a correction, a rule about the wires — goes in the
+  markdown **outside** the bundle: these files, or `decisions.md`.
+
+### 4.2 What this folder binds
 
 - **These files bind which surfaces and states exist**, and which content each surface carries. A
   surface or state absent here is not built; a state listed here MUST be designed and implemented.
@@ -86,7 +114,8 @@ title/lyrics for →"**.
   not discharge a placement.
 
 > `design-system.md` §1.1 (*Artefact authority*) records which artefact binds which kind of fact, and
-> its wording is aligned to this at Milestone 14.
+> its wording is aligned to this at Milestone 14. §4.1's no-edit rule applies to **every** generated
+> export bundle, including the design ones, not only the wires.
 
 - **Here (this folder):** low-fidelity, structural — grey-box regions and prose annotations. No colour,
   type, or spacing decisions.
@@ -98,8 +127,11 @@ title/lyrics for →"**.
 - **A visual-design pass follows** in **Milestone 5 (Design system)** — tokens, components, states.
 
 > **Interactive HTML mockups** are part of this workflow, not an afterthought: the go/no-go was decided
-> against a click-through canvas, `Interstate-8 Wireframes.dc.html` (all three screens, desktop +
-> mobile), which sits beside these files as supporting context. Offer the same for any new screen.
+> against a click-through canvas, now at
+> `claude-design-hand-off/Interstate-8 Wireframes.dc.html`. *(amended — 5.0.x-dev2.)* **The wire
+> set is now one file per page** in that same folder, not a single canvas — a screen's wire is the file
+> that names it, and a shared component's structure is defined once in `00-components` and composed, never
+> redrawn, by the screen pages. Offer the same for any new screen.
 >
 > **But say what a mockup is *not*.** That canvas is a **proportion and structure reference, not a value
 > source**: it predates the token set, its palette carried the wireframe's maroon accent rather than the

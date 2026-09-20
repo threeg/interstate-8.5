@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<style>
+  *, *::before, *::after { box-sizing:border-box; }
+  body { margin:0; background:#f2f2f2; }
+  a { color:#333; }
+  a:hover { color:#000; }
+</style>
+</helmet>
+
+<div style="font-family:ui-sans-serif,system-ui,sans-serif;color:#222;background:#f2f2f2;padding:32px 24px 80px">
+<div style="max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:36px">
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font:11px/1 ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:#777">Interstate-8 · v5 wireframes · low fidelity</div>
+    <div style="font-size:26px;font-weight:700;letter-spacing:-.01em">03 — Song page</div>
+    <div style="font-size:13px;line-height:1.5;color:#555;max-width:64ch">Composition carried over from wireframe 4c: page-title hero carrying the song name, main column split from the "coming soon" rail by a dashed rule. Three variants share one page shape; only the Lyrics section differs.</div>
+  </div>
+
+  <div data-annotation="legend" style="border:1px dashed #C2185B;background:#fff;padding:12px 14px;display:flex;gap:10px;align-items:flex-start">
+    <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+    <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">Pink dashed blocks carry <b>data-annotation</b> and describe behaviour only. Removing every <b>[data-annotation]</b> element leaves a complete wireframe.</span>
+  </div>
+
+  <!-- ===== A standard desktop ===== -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:12px;border-bottom:2px solid #222;padding-bottom:6px">
+      <div style="font:700 13px/1 ui-monospace,monospace;letter-spacing:.1em">A</div>
+      <div style="font-size:17px;font-weight:700">Standard song — desktop</div>
+    </div>
+
+    <div style="border:1px solid #bbb;background:#fff">
+      <div style="background:#e4e4e4;border-bottom:1px solid #c4c4c4;padding:14px 32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:9px;min-width:0">
+          <div style="width:24px;height:28px;border:2px solid #333;border-radius:5px 5px 13px 13px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#333;flex:none">8</div>
+          <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+            <div style="font-size:15px;font-weight:700;letter-spacing:.02em;color:#333">INTERSTATE-8</div>
+            <div style="font-size:10px;color:#555">A Modest Mouse Fan Collaborative</div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:0"></div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:11px;color:#444">
+          <div>Home</div><div>Tour Dates</div>
+          <div style="border-bottom:2px solid #333;padding-bottom:2px;font-weight:700">Songs</div>
+          <div>Discography</div><div>Band</div><div>News</div>
+        </div>
+      </div>
+
+      <div style="position:relative;background:#bdbdbd;height:170px;overflow:hidden">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:10px/1 ui-monospace,monospace;color:#6d6d6d">page-title hero photo</div>
+        <div style="position:absolute;inset:0;background:linear-gradient(#00000040,#00000085)"></div>
+        <div style="position:absolute;left:44px;bottom:20px;font-size:30px;font-weight:700;color:#fff">Ocean Breathes Salty</div>
+      </div>
+
+      <div style="padding:24px 44px 28px;display:grid;grid-template-columns:minmax(0,1fr) 260px">
+        <div style="padding-right:32px;border-right:2px dashed #c4c4c4;display:flex;flex-direction:column;gap:24px;min-width:0">
+          <div style="font-size:11px;text-decoration:underline;color:#333">← Back to Songs</div>
+
+          <div style="border-left:3px solid #999;padding:8px 0 8px 18px;display:flex;flex-direction:column;gap:7px">
+            <div style="height:9px;background:#dcdcdc;width:88%"></div>
+            <div style="height:9px;background:#dcdcdc;width:54%"></div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font:11px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">LYRICS</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="height:8px;background:#dcdcdc;width:88%"></div><div style="height:8px;background:#dcdcdc;width:72%"></div><div style="height:8px;background:#dcdcdc;width:80%"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;padding-top:8px">
+              <div style="height:8px;background:#dcdcdc;width:84%"></div><div style="height:8px;background:#dcdcdc;width:62%"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;padding-top:8px">
+              <div style="height:8px;background:#dcdcdc;width:90%"></div><div style="height:8px;background:#dcdcdc;width:70%"></div><div style="height:8px;background:#dcdcdc;width:48%"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font:11px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">NOTES</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="height:7px;background:#e2e2e2;width:100%"></div><div style="height:7px;background:#e2e2e2;width:92%"></div><div style="height:7px;background:#e2e2e2;width:58%"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font:11px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">VIDEO</div>
+            <div style="background:#dcdcdc;height:200px;display:flex;align-items:center;justify-content:center;font:10px/1 ui-monospace,monospace;color:#7a7a7a">embedded video (oEmbed)</div>
+          </div>
+        </div>
+
+        <div style="padding-left:28px;display:flex;flex-direction:column;gap:14px;min-width:0">
+          <div style="font:10px/1 ui-monospace,monospace;letter-spacing:.1em;color:#888">MORE ABOUT THIS SONG</div>
+          <div style="border:1.5px dashed #c4c4c4;padding:14px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:#777">RELEASES</div>
+            <div style="font-size:12px;color:#888">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #c4c4c4;padding:14px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:#777">LAST PLAYED LIVE</div>
+            <div style="font-size:12px;color:#888">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #c4c4c4;padding:14px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:#777">TIMES PLAYED / TOUR STATS</div>
+            <div style="font-size:12px;color:#888">Coming soon</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid #c4c4c4;background:#e9e9e9;padding:16px 32px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center">
+        <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;font-size:10px;color:#555">
+          <div>About</div><div>Contact</div><div>Support</div><div>Legal</div><div>Privacy Policy</div>
+        </div>
+        <div style="font-size:10px;color:#666">© Interstate-8 · a Modest Mouse fan collaborative</div>
+        <div style="font-size:9px;color:#888;max-width:60ch">Interstate-8.com is in no way associated with or authorized by Modest Mouse or any of their agents.</div>
+      </div>
+    </div>
+
+    <div data-annotation style="border:1px dashed #C2185B;background:#fff;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+      <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">The song's type/group is never shown on this page. A field with no value takes its heading with it. The rail is inert and holds these three slots at full length whatever the song contains, so nothing reshuffles when the real data arrives.</span>
+    </div>
+  </div>
+
+  <!-- ===== B standard mobile ===== -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:12px;border-bottom:2px solid #222;padding-bottom:6px">
+      <div style="font:700 13px/1 ui-monospace,monospace;letter-spacing:.1em">B</div>
+      <div style="font-size:17px;font-weight:700">Standard song — mobile 320px</div>
+    </div>
+    <div style="border:1px solid #bbb;background:#fff;width:320px;max-width:100%">
+      <div style="background:#e4e4e4;border-bottom:1px solid #c4c4c4;padding:10px 12px;display:flex;align-items:center;gap:10px">
+        <div style="display:flex;align-items:center;gap:7px;flex:1;min-width:0">
+          <div style="width:19px;height:22px;border:2px solid #333;border-radius:4px 4px 10px 10px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#333;flex:none">8</div>
+          <div style="font-size:12px;font-weight:700;letter-spacing:.02em;color:#333">INTERSTATE-8</div>
+        </div>
+        <div style="border:1px solid #9a9a9a;background:#d2d2d2;width:34px;height:34px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;flex:none">
+          <div style="width:16px;height:2px;background:#555"></div><div style="width:16px;height:2px;background:#555"></div><div style="width:16px;height:2px;background:#555"></div>
+        </div>
+      </div>
+      <div style="position:relative;background:#bdbdbd;height:130px;overflow:hidden">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:9px/1 ui-monospace,monospace;color:#6d6d6d">page-title hero photo</div>
+        <div style="position:absolute;inset:0;background:linear-gradient(#00000040,#00000090)"></div>
+        <div style="position:absolute;left:16px;right:16px;bottom:14px;font-size:20px;font-weight:700;color:#fff;line-height:1.15">Ocean Breathes Salty</div>
+      </div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:18px">
+        <div style="font-size:11px;text-decoration:underline;color:#333">← Back to Songs</div>
+        <div style="border-left:3px solid #999;padding:6px 0 6px 14px;display:flex;flex-direction:column;gap:6px">
+          <div style="height:8px;background:#dcdcdc;width:92%"></div><div style="height:8px;background:#dcdcdc;width:58%"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="font:10px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">LYRICS</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="height:7px;background:#dcdcdc;width:92%"></div><div style="height:7px;background:#dcdcdc;width:74%"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px;padding-top:6px">
+            <div style="height:7px;background:#dcdcdc;width:86%"></div><div style="height:7px;background:#dcdcdc;width:58%"></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="font:10px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">NOTES</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="height:7px;background:#e2e2e2;width:100%"></div><div style="height:7px;background:#e2e2e2;width:64%"></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="font:10px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">VIDEO</div>
+          <div style="background:#dcdcdc;height:150px;display:flex;align-items:center;justify-content:center;font:9px/1 ui-monospace,monospace;color:#7a7a7a">video</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:10px/1 ui-monospace,monospace;letter-spacing:.1em;color:#888">MORE ABOUT THIS SONG</div>
+          <div style="border:1.5px dashed #c4c4c4;padding:10px;display:flex;flex-direction:column;gap:4px">
+            <div style="font-size:9px;font-weight:700;letter-spacing:.06em;color:#777">RELEASES</div><div style="font-size:11px;color:#888">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #c4c4c4;padding:10px;display:flex;flex-direction:column;gap:4px">
+            <div style="font-size:9px;font-weight:700;letter-spacing:.06em;color:#777">LAST PLAYED LIVE</div><div style="font-size:11px;color:#888">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #c4c4c4;padding:10px;display:flex;flex-direction:column;gap:4px">
+            <div style="font-size:9px;font-weight:700;letter-spacing:.06em;color:#777">TIMES PLAYED / TOUR STATS</div><div style="font-size:11px;color:#888">Coming soon</div>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:1px solid #c4c4c4;background:#e9e9e9;padding:16px 14px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;font-size:9px;color:#555">
+          <div>About</div><div>Contact</div><div>Support</div><div>Legal</div><div>Privacy Policy</div>
+        </div>
+        <div style="font-size:9px;color:#666">© Interstate-8 · a Modest Mouse fan collaborative</div>
+        <div style="font-size:8px;color:#888">Interstate-8.com is in no way associated with or authorized by Modest Mouse or any of their agents.</div>
+      </div>
+    </div>
+    <div data-annotation style="border:1px dashed #C2185B;background:#fff;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+      <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">Below the nav breakpoint the rail drops beneath the main column, keeping its order, and the dashed split becomes the boundary between them. The slogan is dropped from the mobile header bar.</span>
+    </div>
+  </div>
+
+  <!-- ===== C alternate desktop ===== -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:12px;border-bottom:2px solid #222;padding-bottom:6px">
+      <div style="font:700 13px/1 ui-monospace,monospace;letter-spacing:.1em">C</div>
+      <div style="font-size:17px;font-weight:700">Alternate version — desktop</div>
+      <div style="font-size:12px;color:#777">same page shape as A; only the Lyrics section differs</div>
+    </div>
+
+    <div style="border:1px solid #bbb;background:#fff">
+      <div style="background:#e4e4e4;border-bottom:1px solid #c4c4c4;padding:14px 32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:9px;min-width:0">
+          <div style="width:24px;height:28px;border:2px solid #333;border-radius:5px 5px 13px 13px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#333;flex:none">8</div>
+          <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+            <div style="font-size:15px;font-weight:700;letter-spacing:.02em;color:#333">INTERSTATE-8</div>
+            <div style="font-size:10px;color:#555">A Modest Mouse Fan Collaborative</div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:0"></div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:11px;color:#444">
+          <div>Home</div><div>Tour Dates</div>
+          <div style="border-bottom:2px solid #333;padding-bottom:2px;font-weight:700">Songs</div>
+          <div>Discography</div><div>Band</div><div>News</div>
+        </div>
+      </div>
+
+      <div style="position:relative;background:#bdbdbd;height:170px;overflow:hidden">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:10px/1 ui-monospace,monospace;color:#6d6d6d">page-title hero photo</div>
+        <div style="position:absolute;inset:0;background:linear-gradient(#00000040,#00000085)"></div>
+        <div style="position:absolute;left:44px;right:44px;bottom:18px;display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:30px;font-weight:700;color:#fff">King Rat (Live Version)</div>
+          <div style="font-size:12px;color:#fff">alternate title/lyrics for → <span style="text-decoration:underline">King Rat</span></div>
+        </div>
+      </div>
+
+      <div style="padding:24px 44px 28px;display:grid;grid-template-columns:minmax(0,1fr) 260px">
+        <div style="padding-right:32px;border-right:2px dashed #c4c4c4;display:flex;flex-direction:column;gap:24px;min-width:0">
+          <div style="font-size:11px;text-decoration:underline;color:#333">← Back to Songs</div>
+
+          <div style="border-left:3px solid #999;padding:8px 0 8px 18px;display:flex;flex-direction:column;gap:7px">
+            <div style="height:9px;background:#dcdcdc;width:80%"></div>
+            <div style="height:9px;background:#dcdcdc;width:48%"></div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="font:11px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">LYRICS</div>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr))">
+              <div style="padding-right:24px;border-right:2px dashed #c4c4c4;display:flex;flex-direction:column;gap:10px;min-width:0">
+                <div style="font-size:12px;font-weight:700;color:#333">This version — King Rat (Live Version)</div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="height:8px;background:#dcdcdc;width:92%"></div><div style="height:8px;background:#dcdcdc;width:74%"></div><div style="height:8px;background:#dcdcdc;width:86%"></div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px;padding-top:6px">
+                  <div style="height:8px;background:#dcdcdc;width:88%"></div><div style="height:8px;background:#dcdcdc;width:52%"></div>
+                </div>
+              </div>
+              <div style="padding-left:24px;display:flex;flex-direction:column;gap:10px;min-width:0">
+                <div style="font-size:12px;font-weight:700;color:#333">Normal version — <span style="text-decoration:underline">King Rat</span></div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="height:8px;background:#dcdcdc;width:90%"></div><div style="height:8px;background:#dcdcdc;width:70%"></div><div style="height:8px;background:#dcdcdc;width:84%"></div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px;padding-top:6px">
+                  <div style="height:8px;background:#dcdcdc;width:86%"></div><div style="height:8px;background:#dcdcdc;width:46%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font:11px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">NOTES</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="height:7px;background:#e2e2e2;width:100%"></div><div style="height:7px;background:#e2e2e2;width:86%"></div><div style="height:7px;background:#e2e2e2;width:52%"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font:11px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">VIDEO</div>
+            <div style="background:#dcdcdc;height:200px;display:flex;align-items:center;justify-content:center;font:10px/1 ui-monospace,monospace;color:#7a7a7a">embedded video (oEmbed)</div>
+          </div>
+        </div>
+
+        <div style="padding-left:28px;display:flex;flex-direction:column;gap:14px;min-width:0">
+          <div style="font:10px/1 ui-monospace,monospace;letter-spacing:.1em;color:#888">MORE ABOUT THIS SONG</div>
+          <div style="border:1.5px dashed #c4c4c4;padding:14px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:#777">RELEASES</div><div style="font-size:12px;color:#888">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #c4c4c4;padding:14px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:#777">LAST PLAYED LIVE</div><div style="font-size:12px;color:#888">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #c4c4c4;padding:14px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:#777">TIMES PLAYED / TOUR STATS</div><div style="font-size:12px;color:#888">Coming soon</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid #c4c4c4;background:#e9e9e9;padding:16px 32px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center">
+        <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;font-size:10px;color:#555">
+          <div>About</div><div>Contact</div><div>Support</div><div>Legal</div><div>Privacy Policy</div>
+        </div>
+        <div style="font-size:10px;color:#666">© Interstate-8 · a Modest Mouse fan collaborative</div>
+        <div style="font-size:9px;color:#888;max-width:60ch">Interstate-8.com is in no way associated with or authorized by Modest Mouse or any of their agents.</div>
+      </div>
+    </div>
+
+    <div data-annotation style="border:1px dashed #C2185B;background:#fff;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+      <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">The pair carries no panel framing — no surrounding border, no tinted header bar. The column headings and the dashed split are what separate the two sets, the same divider treatment as the main/rail split. The "alternate title/lyrics for →" link belongs to the page title, not to the lyric block.</span>
+    </div>
+  </div>
+
+  <!-- ===== D alternate mobile ===== -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:12px;border-bottom:2px solid #222;padding-bottom:6px">
+      <div style="font:700 13px/1 ui-monospace,monospace;letter-spacing:.1em">D</div>
+      <div style="font-size:17px;font-weight:700">Alternate version — mobile 320px</div>
+    </div>
+    <div style="border:1px solid #bbb;background:#fff;width:320px;max-width:100%">
+      <div style="background:#e4e4e4;border-bottom:1px solid #c4c4c4;padding:10px 12px;display:flex;align-items:center;gap:10px">
+        <div style="display:flex;align-items:center;gap:7px;flex:1;min-width:0">
+          <div style="width:19px;height:22px;border:2px solid #333;border-radius:4px 4px 10px 10px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#333;flex:none">8</div>
+          <div style="font-size:12px;font-weight:700;letter-spacing:.02em;color:#333">INTERSTATE-8</div>
+        </div>
+        <div style="border:1px solid #9a9a9a;background:#d2d2d2;width:34px;height:34px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;flex:none">
+          <div style="width:16px;height:2px;background:#555"></div><div style="width:16px;height:2px;background:#555"></div><div style="width:16px;height:2px;background:#555"></div>
+        </div>
+      </div>
+      <div style="position:relative;background:#bdbdbd;height:130px;overflow:hidden">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:9px/1 ui-monospace,monospace;color:#6d6d6d">page-title hero photo</div>
+        <div style="position:absolute;inset:0;background:linear-gradient(#00000040,#00000090)"></div>
+        <div style="position:absolute;left:16px;right:16px;bottom:12px;display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:19px;font-weight:700;color:#fff;line-height:1.15">King Rat (Live Version)</div>
+          <div style="font-size:10px;color:#fff">alternate title/lyrics for → <span style="text-decoration:underline">King Rat</span></div>
+        </div>
+      </div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:18px">
+        <div style="font-size:11px;text-decoration:underline;color:#333">← Back to Songs</div>
+        <div style="border-left:3px solid #999;padding:6px 0 6px 14px;display:flex;flex-direction:column;gap:6px">
+          <div style="height:8px;background:#dcdcdc;width:88%"></div><div style="height:8px;background:#dcdcdc;width:52%"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="font:10px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">LYRICS</div>
+          <div style="display:flex;flex-direction:column;gap:10px;padding-bottom:16px;border-bottom:2px dashed #c4c4c4">
+            <div style="font-size:11px;font-weight:700;color:#333">This version — King Rat (Live Version)</div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <div style="height:7px;background:#dcdcdc;width:92%"></div><div style="height:7px;background:#dcdcdc;width:72%"></div><div style="height:7px;background:#dcdcdc;width:84%"></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-size:11px;font-weight:700;color:#333">Normal version — <span style="text-decoration:underline">King Rat</span></div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <div style="height:7px;background:#dcdcdc;width:90%"></div><div style="height:7px;background:#dcdcdc;width:68%"></div><div style="height:7px;background:#dcdcdc;width:80%"></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="font:10px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">NOTES</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="height:7px;background:#e2e2e2;width:100%"></div><div style="height:7px;background:#e2e2e2;width:60%"></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="font:10px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">VIDEO</div>
+          <div style="background:#dcdcdc;height:150px;display:flex;align-items:center;justify-content:center;font:9px/1 ui-monospace,monospace;color:#7a7a7a">video</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:10px/1 ui-monospace,monospace;letter-spacing:.1em;color:#888">MORE ABOUT THIS SONG</div>
+          <div style="border:1.5px dashed #c4c4c4;padding:10px;display:flex;flex-direction:column;gap:4px">
+            <div style="font-size:9px;font-weight:700;letter-spacing:.06em;color:#777">RELEASES</div><div style="font-size:11px;color:#888">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #c4c4c4;padding:10px;display:flex;flex-direction:column;gap:4px">
+            <div style="font-size:9px;font-weight:700;letter-spacing:.06em;color:#777">LAST PLAYED LIVE</div><div style="font-size:11px;color:#888">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #c4c4c4;padding:10px;display:flex;flex-direction:column;gap:4px">
+            <div style="font-size:9px;font-weight:700;letter-spacing:.06em;color:#777">TIMES PLAYED / TOUR STATS</div><div style="font-size:11px;color:#888">Coming soon</div>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:1px solid #c4c4c4;background:#e9e9e9;padding:16px 14px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;font-size:9px;color:#555">
+          <div>About</div><div>Contact</div><div>Support</div><div>Legal</div><div>Privacy Policy</div>
+        </div>
+        <div style="font-size:9px;color:#666">© Interstate-8 · a Modest Mouse fan collaborative</div>
+        <div style="font-size:8px;color:#888">Interstate-8.com is in no way associated with or authorized by Modest Mouse or any of their agents.</div>
+      </div>
+    </div>
+    <div data-annotation style="border:1px dashed #C2185B;background:#fff;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+      <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">Stacked, this version comes first and the parent's lyrics follow, both still inside the Lyrics section; the dashed split turns horizontal between them.</span>
+    </div>
+  </div>
+
+  <!-- ===== E parent ===== -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:12px;border-bottom:2px solid #222;padding-bottom:6px">
+      <div style="font:700 13px/1 ui-monospace,monospace;letter-spacing:.1em">E</div>
+      <div style="font-size:17px;font-weight:700">Parent with alternates — desktop</div>
+      <div style="font-size:12px;color:#777">page body; header, hero and footer as in A</div>
+    </div>
+    <div style="border:1px solid #bbb;background:#fff">
+      <div style="position:relative;background:#bdbdbd;height:140px;overflow:hidden">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:10px/1 ui-monospace,monospace;color:#6d6d6d">page-title hero photo</div>
+        <div style="position:absolute;inset:0;background:linear-gradient(#00000040,#00000085)"></div>
+        <div style="position:absolute;left:44px;bottom:18px;font-size:28px;font-weight:700;color:#fff">King Rat</div>
+      </div>
+      <div style="padding:24px 44px 28px;display:grid;grid-template-columns:minmax(0,1fr) 260px">
+        <div style="padding-right:32px;border-right:2px dashed #c4c4c4;display:flex;flex-direction:column;gap:24px;min-width:0">
+          <div style="font-size:11px;text-decoration:underline;color:#333">← Back to Songs</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font:11px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">LYRICS</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="height:8px;background:#dcdcdc;width:88%"></div><div style="height:8px;background:#dcdcdc;width:70%"></div><div style="height:8px;background:#dcdcdc;width:82%"></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font:11px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">ALTERNATE VERSIONS</div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div style="font-size:13px;text-decoration:underline;color:#333">King Rat (Live Version)</div>
+              <div style="font-size:13px;text-decoration:underline;color:#333">King Rat (Early Demo)</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font:11px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">NOTES</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="height:7px;background:#e2e2e2;width:100%"></div><div style="height:7px;background:#e2e2e2;width:56%"></div>
+            </div>
+          </div>
+        </div>
+        <div style="padding-left:28px;display:flex;flex-direction:column;gap:14px;min-width:0">
+          <div style="font:10px/1 ui-monospace,monospace;letter-spacing:.1em;color:#888">MORE ABOUT THIS SONG</div>
+          <div style="border:1.5px dashed #c4c4c4;padding:14px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:#777">RELEASES</div><div style="font-size:12px;color:#888">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #c4c4c4;padding:14px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:#777">LAST PLAYED LIVE</div><div style="font-size:12px;color:#888">Coming soon</div>
+          </div>
+          <div style="border:1.5px dashed #c4c4c4;padding:14px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:#777">TIMES PLAYED / TOUR STATS</div><div style="font-size:12px;color:#888">Coming soon</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== F states ===== -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:12px;border-bottom:2px solid #222;padding-bottom:6px">
+      <div style="font:700 13px/1 ui-monospace,monospace;letter-spacing:.1em">F</div>
+      <div style="font-size:17px;font-weight:700">States — fields omitted · identical lyrics · 404</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">
+
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">No quote, no notes, no video</div>
+        <div style="padding:18px;display:grid;grid-template-columns:minmax(0,1fr) 110px">
+          <div style="padding-right:18px;border-right:2px dashed #c4c4c4;display:flex;flex-direction:column;gap:14px;min-width:0">
+            <div style="font-size:11px;text-decoration:underline;color:#333">← Back to Songs</div>
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <div style="font:10px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">LYRICS</div>
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="height:7px;background:#dcdcdc;width:82%"></div><div style="height:7px;background:#dcdcdc;width:54%"></div>
+              </div>
+            </div>
+          </div>
+          <div style="padding-left:14px;display:flex;flex-direction:column;gap:8px">
+            <div style="border:1.5px dashed #c4c4c4;padding:8px;font-size:8px;color:#888">RELEASES<br>Coming soon</div>
+            <div style="border:1.5px dashed #c4c4c4;padding:8px;font-size:8px;color:#888">LAST PLAYED<br>Coming soon</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">Alternate whose lyrics match the parent</div>
+        <div style="padding:18px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="font-size:19px;font-weight:700">King Rat (Early Demo)</div>
+            <div style="font-size:11px;color:#555">alternate title/lyrics for → <span style="text-decoration:underline">King Rat</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="font:10px/1 ui-monospace,monospace;letter-spacing:.1em;color:#666">LYRICS</div>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr))">
+              <div style="padding-right:16px;border-right:2px dashed #c4c4c4;display:flex;flex-direction:column;gap:8px;min-width:0">
+                <div style="font-size:11px;font-weight:700;color:#333">This version — King Rat (Early Demo)</div>
+                <div style="font-size:11px;color:#555">[same as normal version]</div>
+                <div style="font-size:11px;text-decoration:underline;color:#333">King Rat</div>
+              </div>
+              <div style="padding-left:16px;display:flex;flex-direction:column;gap:8px;min-width:0">
+                <div style="font-size:11px;font-weight:700;color:#333">Normal version — King Rat</div>
+                <div style="display:flex;flex-direction:column;gap:5px">
+                  <div style="height:7px;background:#dcdcdc;width:90%"></div><div style="height:7px;background:#dcdcdc;width:70%"></div><div style="height:7px;background:#dcdcdc;width:82%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">404 — unknown song</div>
+        <div style="padding:18px;display:flex;flex-direction:column;gap:14px">
+          <div style="font-size:22px;font-weight:700;color:#777">Song not found</div>
+          <div style="height:8px;background:#e2e2e2;width:70%"></div>
+          <div style="height:8px;background:#ececec;width:45%"></div>
+          <div style="border:1px solid #777;background:#d2d2d2;padding:9px 14px;font-size:11px;color:#222;align-self:flex-start">Back to Songs</div>
+        </div>
+      </div>
+    </div>
+
+    <div data-annotation style="border:1px dashed #C2185B;background:#fff;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+      <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">An empty field takes its heading with it; no section renders with a heading and nothing under it. The rail stays at full length regardless of how many sections the song has. When an alternate's lyrics are identical to the parent's, its column reads "[same as normal version]" and links to the parent instead of repeating them. 404 is the site's standard error page with a path back to the Songlist.</span>
+    </div>
+  </div>
+
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showAnnotations&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Wireframe&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() { this.sync(); }
+  componentDidUpdate() { this.sync(); }
+  sync() {
+    const show = this.props.showAnnotations !== false;
+    document.querySelectorAll('[data-annotation]').forEach(n => { n.style.display = show ? '' : 'none'; });
+  }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

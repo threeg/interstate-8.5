@@ -71,10 +71,12 @@ other document needs a link back.
 | Document | What it is |
 |---|---|
 | [`wireframes/overview.md`](wireframes/overview.md) | **Binding.** The screen index, shared layout and vocabulary, navigation, state-coverage matrix. |
-| [`wireframes/01-homepage.md`](wireframes/01-homepage.md) | Home — design-only in slice 1; the go/no-go viability gate, not implemented. |
+| [`wireframes/01-homepage.md`](wireframes/01-homepage.md) | Home — the go/no-go viability gate in slice 1. *Slice 2 builds its shell and hero; the remaining components stay design-only.* |
 | [`wireframes/02-songs-landing.md`](wireframes/02-songs-landing.md) | Songs landing (Songlist) — the filterable, complete song list and its states. |
 | [`wireframes/03-song-page.md`](wireframes/03-song-page.md) | Song page — text, video, and version cross-links. |
-| `wireframes/Interstate-8 Wireframes.dc.html` | The click-through structural canvas the go/no-go was decided against (all three screens, desktop + mobile). Supporting — **proportion reference, not a value source** (design-system §1.1). |
+| `wireframes/claude-design-hand-off/00-components.dc.html` · `01-homepage` · `02-songs-landing` · `03-song-page` | **The current wire set** — one file per page, plus a components page that defines each shared component once. Supporting; the markdown above binds. Annotations are marked `data-annotation` and are removable without loss. |
+| `wireframes/claude-design-hand-off/Interstate-8 Wireframes.dc.html` | The click-through structural canvas the go/no-go was decided against — direction **6d**, all three screens, desktop + mobile. **Superseded as the wire set at slice 2; kept because shipped tickets cite it.** Supporting — **proportion reference, not a value source** (design-system §1.1). |
+| [`wireframes/wire-request-5.0.x-dev2.md`](wireframes/wire-request-5.0.x-dev2.md) | Supporting: the brief handed to Claude Design to rebuild the wire set for slice 2. |
 | [`wireframes/design-brief.md`](wireframes/design-brief.md) | Supporting: the visual direction brief handed to Claude Design. |
 | [`wireframes/references/README.md`](wireframes/references/README.md) | Supporting: the inspiration and reference images beside it (palette extraction, shield mark, v1/v2 screenshots). |
 | [`wireframes/decisions.md`](wireframes/decisions.md) | *Archive — **not binding**, and **not in the reading path**.* Why the wireframes say what they say, and every superseded wording. Search it only when asking *why*. |

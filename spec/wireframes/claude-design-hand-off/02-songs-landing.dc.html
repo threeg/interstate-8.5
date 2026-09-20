@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<style>
+  *, *::before, *::after { box-sizing:border-box; }
+  body { margin:0; background:#f2f2f2; }
+  a { color:#333; }
+  a:hover { color:#000; }
+</style>
+</helmet>
+
+<div style="font-family:ui-sans-serif,system-ui,sans-serif;color:#222;background:#f2f2f2;padding:32px 24px 80px">
+<div style="max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:36px">
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font:11px/1 ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:#777">Interstate-8 · v5 wireframes · low fidelity</div>
+    <div style="font-size:26px;font-weight:700;letter-spacing:-.01em">02 — Songs landing (Songlist)</div>
+    <div style="font-size:13px;line-height:1.5;color:#555;max-width:64ch">Composition carried over from wireframe 4b as built in slice 1: page-title hero, filter bar with Apply, sticky letter rail beside a three-column ledger.</div>
+  </div>
+
+  <div data-annotation="legend" style="border:1px dashed #C2185B;background:#fff;padding:12px 14px;display:flex;gap:10px;align-items:flex-start">
+    <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+    <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">Pink dashed blocks carry <b>data-annotation</b> and describe behaviour only. Removing every <b>[data-annotation]</b> element leaves a complete wireframe.</span>
+  </div>
+
+  <!-- ===== A desktop ===== -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:12px;border-bottom:2px solid #222;padding-bottom:6px">
+      <div style="font:700 13px/1 ui-monospace,monospace;letter-spacing:.1em">A</div>
+      <div style="font-size:17px;font-weight:700">Desktop — populated</div>
+    </div>
+
+    <div style="border:1px solid #bbb;background:#fff">
+      <div style="background:#e4e4e4;border-bottom:1px solid #c4c4c4;padding:14px 32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:9px;min-width:0">
+          <div style="width:24px;height:28px;border:2px solid #333;border-radius:5px 5px 13px 13px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#333;flex:none">8</div>
+          <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+            <div style="font-size:15px;font-weight:700;letter-spacing:.02em;color:#333">INTERSTATE-8</div>
+            <div style="font-size:10px;color:#555">A Modest Mouse Fan Collaborative</div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:0"></div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:11px;color:#444">
+          <div>Home</div><div>Tour Dates</div>
+          <div style="border-bottom:2px solid #333;padding-bottom:2px;font-weight:700">Songs</div>
+          <div>Discography</div><div>Band</div><div>News</div>
+        </div>
+      </div>
+
+      <div style="position:relative;background:#bdbdbd;height:110px;overflow:hidden">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:10px/1 ui-monospace,monospace;color:#6d6d6d">page-title hero photo</div>
+        <div style="position:absolute;inset:0;background:linear-gradient(#00000026,#00000080)"></div>
+        <div style="position:absolute;left:44px;bottom:16px;font-size:22px;font-weight:700;color:#fff">Songs</div>
+      </div>
+
+      <div style="padding:22px 44px 28px">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+          <div style="font-size:11px;color:#666">412 results</div>
+        </div>
+
+        <div style="border:1px solid #c4c4c4;background:#fafafa;padding:12px 16px;display:flex;gap:22px;flex-wrap:wrap;align-items:flex-end;margin-bottom:18px">
+          <div style="display:flex;flex-direction:column;gap:5px;min-width:160px">
+            <div style="font-size:10px;color:#666">Type</div>
+            <div style="border:2px solid #333;background:#e2e2e2;padding:7px 9px;display:flex;align-items:center;gap:8px">
+              <div style="flex:1;font-size:11px;font-weight:700;color:#111">Modest Mouse</div><div style="font-size:9px;color:#333">▾</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="font-size:10px;color:#666">Alternate titles</div>
+            <div style="display:flex;border:1px solid #777">
+              <div style="padding:7px 14px;background:#cfcfcf;font-size:11px;font-weight:700;color:#111">Show</div>
+              <div style="padding:7px 14px;font-size:11px;color:#555;border-left:1px solid #777">Hide</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px;min-width:130px">
+            <div style="font-size:10px;color:#aaa">Released</div>
+            <div style="border:1px dashed #bbb;background:#f0f0f0;padding:8px 9px;font-size:11px;color:#aaa">Coming soon</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px;min-width:130px">
+            <div style="font-size:10px;color:#aaa">Played live</div>
+            <div style="border:1px dashed #bbb;background:#f0f0f0;padding:8px 9px;font-size:11px;color:#aaa">Coming soon</div>
+          </div>
+          <div style="margin-left:auto">
+            <div style="border:1px solid #777;background:#d2d2d2;padding:9px 22px;font-size:11px;font-weight:700;color:#222">Apply</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:34px minmax(0,1fr);gap:18px">
+          <div style="display:flex;flex-direction:column;gap:1px;font-size:11px;font-weight:700;color:#333;align-self:start">
+            <div style="padding:2px 0">A</div><div style="padding:2px 0">B</div><div style="padding:2px 0">C</div>
+            <div style="padding:2px 0">D</div><div style="padding:2px 0">E</div><div style="padding:2px 0">F</div>
+            <div style="padding:2px 0;color:#c6c6c6">G</div><div style="padding:2px 0">H</div>
+            <div style="padding:2px 0">I</div><div style="padding:2px 0;color:#c6c6c6">…</div>
+            <div style="padding:2px 0">W</div><div style="padding:2px 0;color:#c6c6c6">X</div>
+            <div style="padding:2px 0">Y</div><div style="padding:2px 0;color:#c6c6c6">Z</div>
+            <div style="padding:2px 0">#</div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 24px">
+            <div style="grid-column:1/-1;background:#e6e6e6;padding:4px 10px;font-size:12px;font-weight:700;margin-bottom:2px">A</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">…But Theyre Not Singing Gohsts</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">A Different City</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">A Life Of Arctic Sounds</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">A Manic Depressive Named Laughing Boy</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">A Song</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">AEIOU And Sometimes Why <span style="border:1px solid #9a9a9a;padding:0 5px;font:9px ui-monospace,monospace;color:#555">alt</span></div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">All Night Diner</div>
+            <div style="border-bottom:1px solid #e6e6e6"></div>
+            <div style="border-bottom:1px solid #e6e6e6"></div>
+
+            <div style="grid-column:1/-1;background:#e6e6e6;padding:4px 10px;font-size:12px;font-weight:700;margin:8px 0 2px">B</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">Baby Blue Sedan</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">Bankrupt On Selling</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">Black Cadillacs</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">Blame It On The Tetons</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">Bukowski</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">Bury Me With It</div>
+
+            <div style="grid-column:1/-1;background:#e6e6e6;padding:4px 10px;font-size:12px;font-weight:700;margin:8px 0 2px">C</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">Cicatriz ESP</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">Convenient Parking</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">Convincing People</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">Cowboy Dan</div>
+            <div style="font-size:13px;line-height:2;border-bottom:1px solid #e6e6e6;color:#333">Custom Concern</div>
+
+            <div style="grid-column:1/-1;font:11px/1.6 ui-monospace,monospace;color:#999;padding:14px 10px 0">[… the remaining songs, same ledger, through Z then the # group …]</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid #c4c4c4;background:#e9e9e9;padding:16px 32px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center">
+        <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;font-size:10px;color:#555">
+          <div>About</div><div>Contact</div><div>Support</div><div>Legal</div><div>Privacy Policy</div>
+        </div>
+        <div style="font-size:10px;color:#666">© Interstate-8 · a Modest Mouse fan collaborative</div>
+        <div style="font-size:9px;color:#888;max-width:60ch">Interstate-8.com is in no way associated with or authorized by Modest Mouse or any of their agents.</div>
+      </div>
+    </div>
+
+    <div data-annotation style="border:1px dashed #C2185B;background:#fff;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+      <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">Every song is on this one page: no pagination, no lazy loading. Filtering is server-rendered — Apply reloads the page with the new query, so there is no in-place re-render state to design. Type defaults to Modest Mouse and alternate titles default to Show. Released and Played live are inert and read "Coming soon", not broken. Sorting ignores a leading "A"/"An"/"The" and any leading punctuation; anything that still starts with a digit or a non-Latin character falls into the "#" bucket, which sits after Z. The rail is sticky and stays docked below the site header while the ledger scrolls; letters with no songs under the current filter are muted and do not jump.</span>
+    </div>
+  </div>
+
+  <!-- ===== B states ===== -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:12px;border-bottom:2px solid #222;padding-bottom:6px">
+      <div style="font:700 13px/1 ui-monospace,monospace;letter-spacing:.1em">B</div>
+      <div style="font-size:17px;font-weight:700">States — no results · loading · error</div>
+      <div style="font-size:12px;color:#777">ledger region; header, hero, filter bar and footer unchanged</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">
+
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">No results for this filter combination</div>
+        <div style="padding:18px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div style="border:2px solid #333;background:#e2e2e2;padding:6px 9px;font-size:10px;font-weight:700;color:#111">Covers ▾</div>
+            <div style="display:flex;border:1px solid #777;font-size:10px">
+              <div style="padding:6px 10px;color:#555">Show</div>
+              <div style="padding:6px 10px;background:#cfcfcf;font-weight:700;border-left:1px solid #777">Hide</div>
+            </div>
+          </div>
+          <div style="border:1px dashed #c4c4c4;background:#fafafa;padding:26px 18px;display:flex;flex-direction:column;gap:10px;align-items:flex-start">
+            <div style="font-size:13px;font-weight:700;color:#777">No songs match these filters</div>
+            <div style="height:8px;background:#e2e2e2;width:70%"></div>
+            <div style="font-size:11px;text-decoration:underline;color:#333">Clear filters</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">Loading</div>
+        <div style="padding:18px;display:flex;flex-direction:column;gap:10px">
+          <div style="height:10px;background:#e2e2e2;width:26%"></div>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 18px">
+            <div style="height:8px;background:#ededed;margin-bottom:9px"></div><div style="height:8px;background:#ededed;margin-bottom:9px"></div><div style="height:8px;background:#ededed;margin-bottom:9px"></div>
+            <div style="height:8px;background:#ededed;margin-bottom:9px"></div><div style="height:8px;background:#ededed;margin-bottom:9px"></div><div style="height:8px;background:#ededed;margin-bottom:9px"></div>
+            <div style="height:8px;background:#ededed"></div><div style="height:8px;background:#ededed"></div><div style="height:8px;background:#ededed"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid #ccc;background:#fff">
+        <div style="padding:6px 10px;border-bottom:1px solid #ddd;font:10px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#777">Error</div>
+        <div style="padding:18px">
+          <div style="border:1px dashed #c4c4c4;background:#fafafa;padding:26px 18px;display:flex;flex-direction:column;gap:10px;align-items:flex-start">
+            <div style="font-size:13px;font-weight:700;color:#777">The songlist could not be loaded</div>
+            <div style="height:8px;background:#e2e2e2;width:60%"></div>
+            <div style="border:1px solid #777;background:#d2d2d2;padding:8px 14px;font-size:11px;color:#222">Try again</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div data-annotation style="border:1px dashed #C2185B;background:#fff;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+      <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">The filter bar keeps the values the reader set in every one of these states. Loading is the ordinary server round-trip after Apply, so it stays unobtrusive — no skeleton animation. Clear filters returns Type to Modest Mouse and alternate titles to Show. Error is the site's standard error page.</span>
+    </div>
+  </div>
+
+  <!-- ===== C mobile ===== -->
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:baseline;gap:12px;border-bottom:2px solid #222;padding-bottom:6px">
+      <div style="font:700 13px/1 ui-monospace,monospace;letter-spacing:.1em">C</div>
+      <div style="font-size:17px;font-weight:700">Mobile — 320px</div>
+      <div style="font-size:12px;color:#777">no letter rail; single-column ledger</div>
+    </div>
+    <div style="border:1px solid #bbb;background:#fff;width:320px;max-width:100%">
+      <div style="background:#e4e4e4;border-bottom:1px solid #c4c4c4;padding:10px 12px;display:flex;align-items:center;gap:10px">
+        <div style="display:flex;align-items:center;gap:7px;flex:1;min-width:0">
+          <div style="width:19px;height:22px;border:2px solid #333;border-radius:4px 4px 10px 10px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#333;flex:none">8</div>
+          <div style="font-size:12px;font-weight:700;letter-spacing:.02em;color:#333">INTERSTATE-8</div>
+        </div>
+        <div style="border:1px solid #9a9a9a;background:#d2d2d2;width:34px;height:34px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;flex:none">
+          <div style="width:16px;height:2px;background:#555"></div>
+          <div style="width:16px;height:2px;background:#555"></div>
+          <div style="width:16px;height:2px;background:#555"></div>
+        </div>
+      </div>
+
+      <div style="position:relative;background:#bdbdbd;height:90px;overflow:hidden">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:9px/1 ui-monospace,monospace;color:#6d6d6d">page-title hero photo</div>
+        <div style="position:absolute;inset:0;background:linear-gradient(#00000026,#00000085)"></div>
+        <div style="position:absolute;left:16px;bottom:12px;font-size:18px;font-weight:700;color:#fff">Songs</div>
+      </div>
+
+      <div style="padding:14px">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><div style="font-size:10px;color:#666">412 results</div></div>
+
+        <div style="border:1px solid #c4c4c4;background:#fafafa;padding:10px;display:flex;flex-direction:column;gap:9px;margin-bottom:14px">
+          <div style="border:2px solid #333;background:#e2e2e2;padding:9px 10px;display:flex;align-items:center;gap:8px">
+            <div style="flex:1;font-size:11px;font-weight:700;color:#111">Modest Mouse</div><div style="font-size:9px">▾</div>
+          </div>
+          <div style="display:flex;border:1px solid #777">
+            <div style="flex:1;text-align:center;padding:9px;background:#cfcfcf;font-size:11px;font-weight:700;color:#111">Show alt.</div>
+            <div style="flex:1;text-align:center;padding:9px;font-size:11px;color:#555;border-left:1px solid #777">Hide</div>
+          </div>
+          <div style="display:flex;gap:9px">
+            <div style="flex:1;min-width:0;border:1px dashed #bbb;background:#f0f0f0;padding:9px;font-size:10px;color:#aaa">Released — coming soon</div>
+            <div style="flex:1;min-width:0;border:1px dashed #bbb;background:#f0f0f0;padding:9px;font-size:10px;color:#aaa">Played live — coming soon</div>
+          </div>
+          <div style="border:1px solid #777;background:#d2d2d2;padding:11px;text-align:center;font-size:11px;font-weight:700;color:#222">Apply</div>
+        </div>
+
+        <div style="background:#e6e6e6;padding:4px 8px;font-size:11px;font-weight:700;margin-bottom:2px">A</div>
+        <div style="font-size:12px;line-height:1.9;border-bottom:1px solid #e6e6e6;color:#333">…But Theyre Not Singing Gohsts</div>
+        <div style="font-size:12px;line-height:1.9;border-bottom:1px solid #e6e6e6;color:#333">A Different City</div>
+        <div style="font-size:12px;line-height:1.9;border-bottom:1px solid #e6e6e6;color:#333">A Life Of Arctic Sounds</div>
+        <div style="font-size:12px;line-height:1.9;border-bottom:1px solid #e6e6e6;color:#333">AEIOU And Sometimes Why <span style="border:1px solid #9a9a9a;padding:0 4px;font:9px ui-monospace,monospace;color:#555">alt</span></div>
+        <div style="background:#e6e6e6;padding:4px 8px;font-size:11px;font-weight:700;margin:8px 0 2px">B</div>
+        <div style="font-size:12px;line-height:1.9;border-bottom:1px solid #e6e6e6;color:#333">Baby Blue Sedan</div>
+        <div style="font-size:12px;line-height:1.9;border-bottom:1px solid #e6e6e6;color:#333">Bukowski</div>
+        <div style="font:10px/1.6 ui-monospace,monospace;color:#999;padding-top:10px">[… the remaining songs, through Z then # …]</div>
+      </div>
+
+      <div style="border-top:1px solid #c4c4c4;background:#e9e9e9;padding:16px 14px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;font-size:9px;color:#555">
+          <div>About</div><div>Contact</div><div>Support</div><div>Legal</div><div>Privacy Policy</div>
+        </div>
+        <div style="font-size:9px;color:#666">© Interstate-8 · a Modest Mouse fan collaborative</div>
+        <div style="font-size:8px;color:#888">Interstate-8.com is in no way associated with or authorized by Modest Mouse or any of their agents.</div>
+      </div>
+    </div>
+
+    <div data-annotation style="border:1px dashed #C2185B;background:#fff;padding:10px 12px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font:700 11px/1.5 ui-monospace,monospace;letter-spacing:.1em;color:#C2185B">NOTE</span>
+      <span style="font:11px/1.5 ui-monospace,monospace;color:#C2185B;flex:1;min-width:0">Below the nav breakpoint the letter rail is not rendered at all and the ledger is a single column; group headers carry the alphabet instead. The slogan is dropped from the mobile header bar. Song rows and Apply keep a 44px touch target.</span>
+    </div>
+  </div>
+
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showAnnotations&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Wireframe&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() { this.sync(); }
+  componentDidUpdate() { this.sync(); }
+  sync() {
+    const show = this.props.showAnnotations !== false;
+    document.querySelectorAll('[data-annotation]').forEach(n => { n.style.display = show ? '' : 'none'; });
+  }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

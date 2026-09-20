@@ -107,14 +107,14 @@ explaining the citation, and the narration is back in the binding text. Wanting 
 
 - **2026-08-02** — **`D-e` settled: sharpen the split rather than demote wireframes.** Wires bind *which
   surfaces and states exist*; the design file binds *everything about how they look*
-  (`overview.md` §4.1). The word **structure** previously appeared on both sides of
+  (`overview.md` §4.2). The word **structure** previously appeared on both sides of
   `design-system.md` §1.1 — wires "binding for structure and state coverage", the hi-fi binding
   "placement, structure, hierarchy" — and that overlap is what let a wire be read as an implementation
   reference. Demoting wires to non-binding inputs was rejected: a hi-fi rarely draws every empty,
   loading and error state, so state coverage would have ended up owned by nothing, which is `D-a`'s
   failure repeated one level up. §1.1's matching wording is aligned at M14, which owns that document.
   **New rule carried from `D-a`'s root cause:** *a composition drawn only in isolation has not been
-  designed*. It is stated in `overview.md` §4.1 as a requirement on design artefacts rather than as an
+  designed*. It is stated in `overview.md` §4.2 as a requirement on design artefacts rather than as an
   observation, because the isolated-panel hi-fi satisfied every rule that existed at the time.
 
 - **2026-08-02** — **Homepage reclassified from design-only to partly built** (`01-homepage.md`,
@@ -123,6 +123,51 @@ explaining the citation, and the narration is back in the binding text. Wanting 
   version brief §5. The hero is drawn as a build target — every breakpoint, nav over it in both states.
   **Superseded wording, verbatim** — `01-homepage.md` *States*:
   > Not applicable — a static design draft, not an implemented, data-driven screen in slice 1.
+
+- **2026-08-02** — **Wire set split one file per page; the slice-1 canvas superseded and moved.** Exported
+  to `claude-design-hand-off/` as `00-components` plus `01`–`03`, pairing with the markdown files.
+  The single canvas `Interstate-8 Wireframes.dc.html` moved into that bundle rather than being deleted —
+  six documents cite it, one of them a shipped ticket (`INT8-032`), and the project's convention is
+  demote-don't-erase. Citations in `overview.md` and `contents.md` updated to the new path in the same
+  pass. **The components page is what stops the four files drifting:** a shared component's structure is
+  defined there once and composed by the screen pages, never redrawn.
+  **Rejected at review: Claude Design's `D-e` recommendation.** It proposed that wires stay binding for
+  *"structure and state coverage"* on the grounds that `design-system.md` §1.1 already says so, making
+  `D-e` a ratification. Both halves are wrong. `D-e` was already settled earlier this milestone — wires
+  bind *which surfaces and states exist*, and the word **structure** comes off the wires side precisely
+  because §1.1 currently has it on **both** sides (wires "binding for structure and state coverage"; the
+  hi-fi binding "placement, **structure**, hierarchy"), and that overlap is what let a wire be read as an
+  implementation reference. Adopting the recommendation would have preserved the ambiguity `D-e` exists to
+  remove, and would have reopened a settled decision.
+  **Two files in the export are to be removed at source, not locally.** The slice-2 export included
+  `Interstate-8 Wireframes Archive.dc.html` — the **rejected** homepage directions **6a and 6c**, which the
+  2026-07-11 entry above recorded as *"remain in Claude Design's archive, not exported"*. That statement
+  was true when written and the export changed it; the directions themselves are still rejected. Nothing
+  cites 6a or 6c — no id, no ticket, no spec reference — so keeping them buys no citation integrity while
+  costing a full-colour uncited artefact that a reader could mistake for current. **Deleted at source in
+  Claude Design** — 6a/6c are project content, so that deletion sticks.
+  **The generated `README.md` is a different case, and the first instruction given for it was wrong.** It
+  told coding agents to match the designs pixel-perfectly and treat them as carrying dimensions and
+  colours — the opposite of what a wireframe is (`design-system.md` §1.1) — so it goes. But it is an
+  **exporter default, not part of the design project**, and cannot be removed at source: every export
+  emits a fresh one. It is therefore deleted from the repository copy on arrival, as a standing
+  normalisation step (`overview.md` §4.1), not once.
+  **That correction reshaped the rule.** §4.1 first read *"never edit inside the bundle"*, which was too
+  strong to be followed: the bundle arrives in a shape the repository does not use (nested under
+  `project/`) and carrying a file that must not stay. The rule now separates **normalisation on arrival** —
+  flatten, drop the exporter's README — from **no edits thereafter**. The distinction that makes it
+  actionable: **whether the exporter or the design project owns the file** decides whether a deletion
+  sticks at source or has to be repeated on every import.
+  **Kept, on the same test that removes those two:** `Interstate-8 Wireframes.dc.html` (direction **6d**,
+  the chosen one) stays, marked superseded. `INT8-032` cites it, and the version brief already ruled the
+  analogous case — `Interstate-8 1B.dc.html` kept and marked superseded because shipped tickets cite it.
+  The convention protects citations, so the presence or absence of one is what decides each file.
+
+  **Corrected at review: the tour-stats teaser.** Claude Design flagged it as present in the wire but
+  absent from `design-system.md` §3's home-module list, and offered dropping it from the wire as one
+  resolution. The authority runs the other way: `01-homepage.md` is the binding wireframe and lists
+  **Tour-stats teaser** as *Confirmed*, so the wire is right and §3's list is incomplete. §3 is M14's
+  document; the gap is carried to it rather than fixed by deleting a confirmed component.
 
   And `overview.md` §5's Home row:
   > | Home | — (design-only; not implemented in slice 1) | — | ☐ (static draft) | — |
