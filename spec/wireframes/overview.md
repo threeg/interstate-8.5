@@ -20,7 +20,7 @@
 
 | # | Screen | File | Purpose |
 |---|--------|------|---------|
-| 1 | Home | `01-homepage.md` | Bespoke landing. **Design-only in slice 1** — the go/no-go viability check; not implemented. |
+| 1 | Home | `01-homepage.md` | Bespoke landing. *(amended — 5.0.x-dev2)* **Shell and hero built in slice 2**; its remaining components stay design-only until the content types they need exist. |
 | 2 | Songs landing (Songlist) | `02-songs-landing.md` | The filterable, complete song list. |
 | 3 | Song page | `03-song-page.md` | A single song: text, video, and version cross-links. |
 
@@ -29,7 +29,7 @@
 ## 2. Navigation structure
 
 ```
-Home  (design-only in slice 1)
+Home  (shell + hero built in slice 2)
   │
   └─ global nav ─▶ Songs (Songlist) ─▶ Song page
                           ▲                 │
@@ -38,8 +38,9 @@ Home  (design-only in slice 1)
 ```
 
 - The **global nav** shows the intended v5 sections (Home, Tour Dates, Songs, Discography, Band, News)
-  for design continuity. In the slice-1 **build**, only **Home** (design-only) and **Songs** resolve;
-  the rest are deferred — present in the design, not wired.
+  for design continuity. *(amended — 5.0.x-dev2)* In the **build**, only **Home** and **Songs**
+  resolve; the rest are deferred — present in the design, not wired. Home resolves to a `page` node
+  (FR-22), not a route.
 - Each song title on the landing links to its **Song page** (FR-16); a song page links **back to the
   landing** and across to its **version** pages (FR-13/FR-20).
 
@@ -71,6 +72,21 @@ title/lyrics for →"**.
 ---
 
 ## 4. Mockup conventions
+
+### 4.1 What this folder binds
+
+- **These files bind which surfaces and states exist**, and which content each surface carries. A
+  surface or state absent here is not built; a state listed here MUST be designed and implemented.
+- **The design file binds everything about how they look** — placement, proportion, type, colour,
+  spacing, responsive behaviour.
+- **Where a wireframe fixes a placement it says so explicitly**, naming it as an exception. Silence
+  means the design decides.
+- **A composition drawn only in isolation has not been designed.** A design artefact MUST show each
+  composition **in the page it belongs to**, at every breakpoint it specifies. An isolated panel does
+  not discharge a placement.
+
+> `design-system.md` §1.1 (*Artefact authority*) records which artefact binds which kind of fact, and
+> its wording is aligned to this at Milestone 14.
 
 - **Here (this folder):** low-fidelity, structural — grey-box regions and prose annotations. No colour,
   type, or spacing decisions.
@@ -115,7 +131,7 @@ title/lyrics for →"**.
 
 | Screen | Empty | Loading | Populated | Error |
 |--------|:-----:|:-------:|:---------:|:-----:|
-| Home | — (design-only; not implemented in slice 1) | — | ☐ (static draft) | — |
+| Home *(amended — 5.0.x-dev2)* | ☐ (hero with an empty image library → plain background, FR-25) | ☐ (server render) | ☐ (hero message over a background image, FR-23) | ☐ (site error page) |
 | Songs landing | ☐ (no-results for a filter combo, FR-19) | ☐ (server render) | ☐ | ☐ (site error page) |
 | Song page | ☐ (missing fields omitted cleanly, FR-15) | ☐ | ☐ (standard / alternate / parent variants) | ☐ (404 unknown slug) |
 
