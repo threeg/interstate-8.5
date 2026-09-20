@@ -163,6 +163,14 @@ explaining the citation, and the narration is back in the binding text. Wanting 
   analogous case — `Interstate-8 1B.dc.html` kept and marked superseded because shipped tickets cite it.
   The convention protects citations, so the presence or absence of one is what decides each file.
 
+  **`INT8-032`'s citation of the canvas is left pointing at the old path, deliberately.** Closed tickets
+  are records of what was known when they shipped, and the project does not edit them to track later
+  moves. The citation still reads true — it names the canvas as *an example of a generated design-tool
+  artefact*, not for its contents. **This is the one dead path in the repository and it is intentional:**
+  a verification pass that reports it has found the thing, not a defect, and the correct response is to
+  leave it. Every other reference was updated to `claude-design-hand-off/` (`overview.md` ×2,
+  `contents.md`, `design-system.md` §1.1). (Operator decision, M13.)
+
   **Corrected at review: the tour-stats teaser.** Claude Design flagged it as present in the wire but
   absent from `design-system.md` §3's home-module list, and offered dropping it from the wire as one
   resolution. The authority runs the other way: `01-homepage.md` is the binding wireframe and lists

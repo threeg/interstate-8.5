@@ -45,7 +45,7 @@ ships a plausible-looking error. A ticket's `## Design authority` section cites 
 | **Placement, structure, hierarchy, component shape** | `…/project/Interstate-8 1B.dc.html` (the canonical hi-fi) | The full visual at x-wide/desktop/tablet/mobile, plus the component library. Rendered at the real output dimensions in a browser, so its proportions are trustworthy. **Match this.** |
 | **Which surfaces exist, their states and flow** | `spec/wireframes/overview.md` + `01`–`03` | Binding for structure and state coverage; deliberately low-fidelity, so it is **not** a value source. |
 | **Component states and rules in prose** | this document, §3–§4 | Where a state or rule is not expressible in the hi-fi (hover/focus behaviour, motion, the empty state's wording). |
-| **Illustrative only — never a value source** | `…/project/assets/interstate-shield.svg` and `.png`; everything under `…/project/uploads/`; `spec/wireframes/Interstate-8 Wireframes.dc.html`; `…/project/Interstate-8 Hi-Fi.dc.html`; `spec/wireframes/references/` | See below. |
+| **Illustrative only — never a value source** | `…/project/assets/interstate-shield.svg` and `.png`; everything under `…/project/uploads/`; `spec/wireframes/claude-design-hand-off/Interstate-8 Wireframes.dc.html`; `…/project/Interstate-8 Hi-Fi.dc.html`; `spec/wireframes/references/` | See below. |
 
 **Why those are illustrative.** The **raw SVG/PNG assets** are inputs the hi-fi composes — the shield mark
 carries its own internal padding and proportions, which are not the proportions it is drawn at in a page;
