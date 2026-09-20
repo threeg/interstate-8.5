@@ -4,7 +4,7 @@
 |---|---|
 | **Document** | Milestone plan and progress tracker |
 | **Repository location** | `spec/milestone-plan.md` |
-| **Last updated** | 2026-08-02 (Milestone 12 signed off — slice 2's architecture and content model are binding) |
+| **Last updated** | 2026-08-02 (Milestone 13 signed off — slice 2's wireframes and the re-exported wire set are binding) |
 
 This document is the single source of truth for **where the project is**. It is extracted from the
 project brief so the brief stays stable after approval while this tracker is updated as each milestone
@@ -39,20 +39,35 @@ together, commit by commit.
 
 ## Current position
 
-Version `5.0.x-dev2` (slice 2 — consolidation) — **Milestone 13 (Wireframe deltas), `Not started` (⬜).**
-Milestones 10, 11 and 12 were all signed off 2026-08-02: the [version brief](brief/5.0.x-dev2-brief.md) is
-ratified, [`requirements.md`](requirements/requirements.md) carries slice 2's rules (**`FR-22`–`FR-25`,
-`NFR-9`–`NFR-11`**, with `FR-20` amended in place), and the architecture is settled.
+Version `5.0.x-dev2` (slice 2 — consolidation) — **Milestone 14 (Design deltas), `Not started` (⬜).**
+Milestones 10–13 all signed off 2026-08-02: the [version brief](brief/5.0.x-dev2-brief.md) is ratified,
+[`requirements.md`](requirements/requirements.md) carries slice 2's rules (**`FR-22`–`FR-25`,
+`NFR-9`–`NFR-11`**, with `FR-20` amended in place), the architecture is settled, and the wires are redrawn.
 
-**What M12 settled, and what it leaves M13.** `D-h`: a **general `page` content type**, not a single-use
-homepage type, with **Layout Builder enabled on `page` and nothing else** and per-node override on. `D-b`:
-a `homepage_hero` block type needing **one new field** (`field_message`) — the image library and its
-random behaviour are reused from `page_hero` wholesale. `D-d`: **`default_content` 2.x**, chosen because
-exported config hard-references the hero block's UUID, making UUID preservation a gate.
+**M14 is internally sequenced.** The design-source restructure — one design file per page, a tokens page, a
+components page — lands **before** the song-page and homepage-hero designs are authored, or they are
+authored into a layout that is about to change.
 
-M13 owes `D-a` (where the alternate-version pair sits in the song page) and `D-e` (whether wireframes stay
-binding for state coverage). Note that `FR-20` was **amended at M11 specifically to clear the way** — it no
-longer requires the lyric pair to sit "alongside", so M13 can place it wherever the design says.
+**Six items carried in, and the first three are M14's own decisions:**
+
+1. **`D-f`** — which artefact binds token values: `tokens.css`, or a new design tokens page.
+2. **`D-g`** — the components-page precedence rule, written into `design-system.md` §1.1.
+3. **`D-e`'s alignment.** M13 settled `D-e` — wires bind *which surfaces and states exist*, the design file
+   binds *how they look* ([`wireframes/overview.md`](wireframes/overview.md) §4.2) — but did **not** edit
+   §1.1, which is M14's document and where the word **structure** still sits on **both** sides. That
+   overlap is the ambiguity `D-e` exists to remove.
+4. **§3's Lyric pair row** — record that the pair carries **no panel framing** (`D-a`), keeping the dashed
+   column split as its separator.
+5. **§3's home-module list omits the tour-stats teaser**, which [`01-homepage.md`](wireframes/01-homepage.md)
+   lists as *Confirmed*. The wireframe is authoritative; §3 is the incomplete one.
+6. **Hero naming** — two block types now exist (`page_hero`, `homepage_hero`); confirm the naming carries
+   into the design.
+
+**What M13 settled.** `D-a`: the alternate-version lyric pair **replaces the Lyrics section in place**,
+unframed, with the parent cross-link moved up to the page title — so a standard song and an alternate have
+the same page shape. `D-e`: as above. The wire set was re-exported **one file per page** into
+[`wireframes/claude-design-hand-off/`](wireframes/claude-design-hand-off/), with a components page that
+defines each shared component once.
 
 **The brief grew during ratification, from four goals to six.** The M10 review found that three things the
 draft treated as open were already settled by slice 1 — the hero image library's modelling, the random-pick
@@ -128,7 +143,7 @@ deltas against the living spec rather than a fresh specification. Scope in
 | 10 | Version brief — review and ratify | `spec/brief/5.0.x-dev2-brief.md` reviewed and approved (the draft already exists; this milestone is its ratification) | Cowork | ✅ |
 | 11 | Requirement deltas | `spec/requirements/requirements.md` — new `FR`/`NFR` for the homepage hero (its **set message** is the new part) and for content reproducibility; amend-in-place for the song-page alternates. **Writes down `INT8-028`'s existing per-page-load random-image behaviour as an `FR`** — D-c is a requirement to record, not a decision to make. Also owes the **dependency-updatability `NFR`** handed back by D-i. *Delivered `FR-22`–`FR-25`, `NFR-9`–`NFR-11`, `FR-20` amended* | Cowork | ✅ |
 | 12 | Architecture & content-model deltas | `spec/architecture/architecture.md` + `content-model.md` — **the heaviest milestone of the slice**: the homepage content type and how narrowly Layout Builder is scoped on it (D-h); the hero block type's message field and **placement**, reusing `page_hero`'s existing `field_background_images` shape and formatter (D-b); the default-content mechanism, contrib surveyed first and seeding rather than enforcing (D-d, `TODO-002`). *Delivered `content-model.md` §9–§11 and `architecture.md` §2.1/§4.4/§4.5/§6; root `CLAUDE.md` kept identical* | Cowork | ✅ |
-| 13 | Wireframe deltas | `spec/wireframes/` — alternate-version placement inside the real song page (D-a) and the homepage hero; wireframe cleanup, and whether wires stay binding for state coverage (D-e) | Cowork | 🔶 |
+| 13 | Wireframe deltas | `spec/wireframes/` — alternate-version placement inside the real song page (D-a) and the homepage hero; wireframe cleanup, and whether wires stay binding for state coverage (D-e). *Delivered: D-a and D-e settled; wire set re-exported one file per page into `claude-design-hand-off/`* | Cowork | ✅ |
 | 14 | Design deltas | `spec/design/` — **restructure first**: one design file per page, a tokens page, a components page, with the components-page precedence rule (D-g) and the token authority call (D-f) written into `design-system.md` §1/§1.1; **then** the song-page and homepage-hero designs authored into the new layout | Cowork | ⬜ |
 | 15 | Test-strategy delta | `spec/test-strategy/test-strategy.md` — coverage for the new hero and nav-over-hero, and what would actually catch the reproducibility gap | Cowork | ⬜ |
 | 16 | Ticket generation | `spec/tickets/*.md` + a `BOARD.md` slice-2 section, **including tickets for goals E (root `README.md`) and F (Composer standardisation)**. **F must yield a *dedicated* core-security-update ticket** — apply Drupal core 11.4.2 → 11.4.4 (`SA-CORE-2026-010`/`-011`/`-012`), first in M17's order and separate from the dependency-strategy work, per §2 F. Re-milestones `INT8-047`; tombstones `TODO-001`/`TODO-002` in `spec/TODO.md` *Resolved* | Cowork | ⬜ |
