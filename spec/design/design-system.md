@@ -21,7 +21,10 @@ this order:
 | What | Path | Use |
 |------|------|-----|
 | **Design tokens (import this)** | `spec/design/tokens.css` | The binding token set. Components read `var(--…)`; **never hardcode hex/px.** |
-| **Canonical hi-fi design** | `spec/design/interstate-8-design-refinement/project/Interstate-8 1B.dc.html` | The full visual: all three screens (x-wide/desktop/tablet/mobile), the component library, and the token panel. Open in a browser to view. **Match this.** |
+| **Components design page** *(5.0.x-dev2)* | `spec/design/claude-design-hand-off/00-components.dc.html` | Every shared component's **shape and states**, defined once. |
+| **Per-page design files** *(5.0.x-dev2)* | `spec/design/claude-design-hand-off/01-homepage` · `02-songs-landing` · `03-song-page` (`.dc.html`) | **Composition and placement** for the page each names. One file per page. |
+| **Tokens design page** *(5.0.x-dev2)* | `spec/design/claude-design-hand-off/00-tokens.dc.html` | A **rendering** of `tokens.css` for reading. **Not a source** — see §1.1. |
+| **Superseded hi-fi** | `spec/design/interstate-8-design-refinement/project/Interstate-8 1B.dc.html` | *(amended — 5.0.x-dev2.)* The slice-1 single-canvas hi-fi. **Superseded by the per-page files above and kept because shipped tickets cite it.** Do not build from it where a per-page file covers the same screen. |
 | **This document** | `spec/design/design-system.md` | Token/component/state decisions in prose (§2–§4). |
 | **Shield mark** | `…/project/assets/interstate-shield.svg` (+ `.png`) | The "8" route-shield logo/motif. |
 | **Photos in use** | `…/project/uploads/` — hero `pexels-jack-redgate-333633-3014002.jpg`; songs hero `pexels-hobiphotography-36346406.jpg`; song hero `pexels-tomverdoot-3444649.jpg`; news `live_2013.jpg`, `isaac_brock_bridge_school_2010.jpg`, `band.jpg`; covers `tmaa_cover.jpg`, `wysf_cover.jpg` | Real assets referenced by the hi-fi. |
@@ -29,9 +32,20 @@ this order:
 | **Behaviour / rules** | `spec/requirements/requirements.md` (`FR`/`NFR`) | The contract the UI must satisfy. |
 | **Content model** | `spec/architecture/content-model.md` | The fields each component renders. |
 
-**Build rule:** the theme (owned starterkit + **SDC** + **Tailwind v4**) consumes `tokens.css` as the
-single source of visual truth; each SDC component maps to an entry in §3; every screen matches
-`Interstate-8 1B.dc.html`. Contrast holds to WCAG 2.1 AA (NFR-1); responsive from 320px (NFR-2).
+**Build rule** *(amended — 5.0.x-dev2)**:** the theme (owned starterkit + **SDC** + **Tailwind v4**)
+consumes `tokens.css` as the single source of visual truth; each SDC component maps to an entry in §3 and
+takes its shape from the **components page**; each screen matches **the design file that names it**.
+Contrast holds to WCAG 2.1 AA (NFR-1); responsive from 320px (NFR-2).
+
+**One design file per page, and a components page.** A screen's design is the file named for that screen;
+a shared component's shape is defined once on the components page and **composed** by the page files,
+never redrawn in them. A new screen adds a file rather than editing one every other screen also binds to.
+
+> **The export bundle is generated — normalise it on arrival, then leave it alone.** `claude-design-hand-off/`
+> is replaced wholesale on every export: flatten it out of the exporter's `project/` subfolder and delete
+> the generated `README.md` (it tells coding agents to match designs pixel-perfectly, which is wrong for
+> any artefact that is not a value source). After that, no edits — change the design in Claude Design and
+> re-export. The same rule governs the wires; see `spec/wireframes/overview.md` §4.1.
 
 ### 1.1 Artefact authority (which artefact binds which kind of fact)
 
@@ -39,22 +53,29 @@ The table above says where to *look*; this one says which artefact **wins** when
 the same question. They are **not interchangeable**, and a ticket that takes a value from the wrong one
 ships a plausible-looking error. A ticket's `## Design authority` section cites this table.
 
+*(rewritten — 5.0.x-dev2.)*
+
 | Kind of fact | Authoritative artefact | Notes |
 |---|---|---|
-| **Exact values** — colour, type, spacing, radius | `spec/design/tokens.css` | The machine-readable set the theme imports. Components read `var(--…)`; **never** a hardcoded hex/px, even one copied out of the hi-fi. §2 below summarises these for readers and is not a second source. |
-| **Placement, structure, hierarchy, component shape** | `…/project/Interstate-8 1B.dc.html` (the canonical hi-fi) | The full visual at x-wide/desktop/tablet/mobile, plus the component library. Rendered at the real output dimensions in a browser, so its proportions are trustworthy. **Match this.** |
-| **Which surfaces exist, their states and flow** | `spec/wireframes/overview.md` + `01`–`03` | Binding for structure and state coverage; deliberately low-fidelity, so it is **not** a value source. |
-| **Component states and rules in prose** | this document, §3–§4 | Where a state or rule is not expressible in the hi-fi (hover/focus behaviour, motion, the empty state's wording). |
+| **Exact values** — colour, type, spacing, radius | `spec/design/tokens.css` | The machine-readable set the theme imports. Components read `var(--…)`; **never** a hardcoded hex/px, even one copied out of a design file. §2 below and the **tokens design page** both *render* this set for reading; **neither is a second source**, and where either disagrees with `tokens.css`, `tokens.css` wins. Regenerate them from it, never the reverse. |
+| **A component's shape and its states** | `…/claude-design-hand-off/00-components.dc.html` | Defined once, for every page that uses it. A page file showing the component differently is **wrong**, not a variant. |
+| **Composition and placement within a page** | that page's own design file — `01-homepage`, `02-songs-landing`, `03-song-page` | Where components sit relative to each other, and how that changes across breakpoints. **A composition drawn only in isolation has not been designed** — it must appear in the page it belongs to, at every breakpoint that page specifies. |
+| **Which surfaces and states exist** | `spec/wireframes/overview.md` + `01`–`03` | Binding for **which** surfaces and states must exist and what content each carries. Deliberately low-fidelity: **not** a value source, and **not** a placement source. |
+| **Component rules not expressible visually** | this document, §3–§4 | Hover and focus behaviour, motion, the empty state's wording — things a drawing cannot state. |
 | **Illustrative only — never a value source** | `…/project/assets/interstate-shield.svg` and `.png`; everything under `…/project/uploads/`; `spec/wireframes/claude-design-hand-off/Interstate-8 Wireframes.dc.html`; `…/project/Interstate-8 Hi-Fi.dc.html`; `spec/wireframes/references/` | See below. |
 
-**Why those are illustrative.** The **raw SVG/PNG assets** are inputs the hi-fi composes — the shield mark
+**Why those are illustrative.** The **raw SVG/PNG assets** are inputs a design composes — the shield mark
 carries its own internal padding and proportions, which are not the proportions it is drawn at in a page;
-deriving a component's shape from the asset instead of from the hi-fi reproduces the artwork's framing
-rather than the design's. The **wireframes canvas** is the structural go/no-go artefact (direction 6d,
-pre-Milestone-5): its colours and spacing predate the token set and were never meant to bind. The second
-export in the bundle, **`Interstate-8 Hi-Fi.dc.html`**, does not bind because the bundle's own README names
-`1B` as the primary design — where the two differ, `1B` wins, and `Hi-Fi` is history. The **`uploads/`
-photos** are real assets in use, but their *cropping and placement* come from the hi-fi.
+deriving a component's shape from the asset reproduces the artwork's framing rather than the design's. The
+**wireframes canvas** is the structural go/no-go artefact (direction 6d, pre-Milestone-5): its colours and
+spacing predate the token set and were never meant to bind. The second export in the slice-1 bundle,
+**`Interstate-8 Hi-Fi.dc.html`**, does not bind because that bundle named `1B` as the primary design.
+The **`uploads/` photos** are real assets in use, but their *cropping and placement* come from the design.
+
+**`Interstate-8 1B.dc.html` is superseded, and that needs saying rather than assuming** *(added —
+5.0.x-dev2)*. It is still **cited by shipped tickets**, so it is kept and still reads as authoritative to
+anyone who follows one of those citations. It is not: where a per-page design file covers the same screen,
+**that file wins**. `1B` binds nothing that a slice-2 file covers.
 
 > **A mockup built with substitute assets is a proportion reference, not a value source.** Where an
 > artefact stands in for anything not yet final — unavailable fonts, placeholder imagery, sample copy — it
@@ -121,14 +142,14 @@ values.
 | **Site slogan** | "A Modest Mouse Fan Collaborative" | shown / hidden | Shown under the wordmark on **both** transparent and solid headers, at every desktop/tablet width. Hidden **only** on the mobile (☰) header bar — there's no room for it there. (Corrects the original slice-1 read, which showed it solid-header-hidden at every width.) |
 | **Header · mobile menu** | closed (☰) · open (✕, nav panel below the bar) | current-section (left-border accent) | Open panel: full-width rows, `padding:14px 24px`, `border-bottom:1px solid` divider between rows (not a gap-separated column). Current item gets a `3px solid` **left border** accent instead of the desktop underline. |
 | **Footer** | one, identical everywhere | — | secondary menu (About/Contact/Support/Legal/Privacy) + © + disclaimer. Confirmed: follows the 980px content column, not the full sheet width, even though the two read as equal at most viewports. |
-| **Hero** | band hero (home, full, "TAKE AN EXIT") · page-title hero (secondary, short) | — | photo + darkening scrim for legibility |
+| **Hero** *(amended — 5.0.x-dev2)* | **homepage hero** (`homepage_hero`; full height; carries a **set editorial message**, not the page title) · **page-title hero** (`page_hero`; secondary pages, short; renders the page title) | — | photo + darkening scrim for legibility. Both draw one background image at random from their library, re-picked per page load (FR-25); an empty library renders a plain background. The **primary nav sits over the homepage hero** transparent, solidifying past 24px (FR-24) — see the Header/nav row. The page-title hero never appears on the front page. |
 | **News card** | — | — | 4:3 photo · Oswald headline · date · Lora excerpt |
 | **Latest News** | 3-up grid of News Cards | — | homepage; "SHOW MORE →" |
-| **Home module** | upcoming tour · recently-passed · this-week-in-history · song-spotlight · from-discography | — | label (teal) + Lora list + "MORE →" |
+| **Home module** *(extended — 5.0.x-dev2)* | upcoming tour · recently-passed · this-week-in-history · **tour-stats teaser** · song-spotlight · from-discography | — | label (teal) + Lora list + "MORE →". The list now matches `spec/wireframes/01-homepage.md`, which is authoritative for which modules exist; the tour-stats teaser was confirmed there and missing here. **All of these are design-only in slice 2** — each needs a content type slice 2 does not build. |
 | **Contribute block** | — | — | tint panel + Polo-Blue CTA |
 | **Filter bar** | — | default · **hover** (select/toggle/APPLY darken, `#336585`) · **focus** (2px teal outline, 2px offset) · **open** (native select expanded) · disabled (Released/Played-live "coming soon") | Type select, Alt-titles Show/Hide segmented toggle, APPLY (teal) |
 | **Song ledger** | letter-rail + group header + row | row default · **zebra** (alternating row fill `#fafbfb`, cosmetic) · **alt-title** (teal chip, FR-10 marking) · **hover** (Tint `#e4edf2` fill, full row width) · **focus** (2px inset ring, no fill change) | 3-col, sticky rail; "412 results". Note: "zebra" (cosmetic alternating-row shading) and "alt-title" (the FR-10 alternate-version marker chip) are two independent states — don't conflate them. **Rail/grouping (INT8-029):** the rail runs `A`–`Z` then a trailing **`#`** catch-all for any title that doesn't bucket to a letter (a leading digit, symbol, or a script with no ASCII-letter equivalent) — a slice-1 addition with no hi-fi precedent (see decisions log). |
-| **Lyric pair** | side-by-side (desktop) · stacked (mobile) | — | "THIS VERSION" \| "NORMAL VERSION →"; "[same as normal version]" (FR-20). The two columns split on a `2px dashed var(--color-line-accent)` rule — the same divider treatment as the song page's main/rail split, not a component-specific colour. |
+| **Lyric pair** *(rewritten — 5.0.x-dev2)* | side-by-side (desktop) · stacked (mobile) | — | "THIS VERSION" \| "NORMAL VERSION →"; "[same as normal version]" (FR-20). **Carries no panel framing — no surrounding border, no tinted header bar.** The column headings and the split rule are what separate the two sets. The columns split on a `2px dashed var(--color-line-accent)` rule — the same divider treatment as the song page's main/rail split, not a component-specific colour; stacked, that rule turns horizontal between them. **It occupies the Lyrics section of the song page in place** (`spec/wireframes/03-song-page.md`, Variant A), so a standard song and an alternate version have the same page shape; the "alternate title/lyrics for →" link belongs to the page title, not to this component. |
 | **"Coming soon" stub** | — | disabled | reserves rail for deferred releases/last-played/tour-stats (FR-14 spirit). Precise spec: `1.5px dashed var(--color-line)` border, `var(--radius-md)` radius; label Oswald 700 10px `.07em`; value Lora 13px. Label and value are `--color-fg-muted`, with **no container opacity** — *corrected 2026-07-26 (INT8-019)*, see decisions log: the hi-fi's own literal choices (`--color-fg-disabled` at whole-block `opacity:.65`) measure 1.77:1 on white, and the colour alone (no opacity) is still only 2.56:1 — both fail NFR-1's 4.5:1 on real text. `--color-fg-disabled` remains correct for a genuinely disabled native form control (e.g. the filter bar's Released/Played-live selects), where the browser's own disabled rendering applies; it is no longer used for text that merely *looks* disabled. |
 | **Quote block** | — | — | left-rule, italic Lora |
 | **Button / CTA** | primary teal · CTA polo-blue | default · hover (−12%) · disabled (Pumice, 70%) | see token panel. Governs solid CTA buttons only (e.g. "SUBMIT IT", "APPLY") |

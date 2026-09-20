@@ -110,3 +110,53 @@ explaining the citation, and the narration is back in the binding text. Wanting 
   `--color-line` itself (1.46:1, already used for the filter bar's border and already Axe-clean in
   production) — both are purely decorative panel dividers, not functional UI boundaries, which is
   exactly the category 1.4.11 does not mandate a floor for.
+
+---
+
+## Slice 2 (`5.0.x-dev2`) — Milestone 14
+
+- **2026-08-02** — **`D-f` settled: `tokens.css` keeps binding token values; the tokens design page is a
+  rendering, not a source.** The alternatives were making the design page the source and generating
+  `tokens.css` from it, or splitting by kind (page binds colour and type, file binds spacing and computed
+  values). Both were rejected on the same ground: **the theme imports `tokens.css`**, so a second source is
+  one the code never reads, and reconciling them becomes a manual step nobody runs. The split-by-kind option
+  is worse than either single source — it is exactly the two-artefacts-one-question ambiguity `D-e` was
+  opened to remove. A further reason specific to this project: a design page lives inside a `.dc.html`
+  export bundle that is **replaced wholesale on every export**, so anything authored there is the least
+  durable place a binding value could sit.
+
+- **2026-08-02** — **`D-g` settled as the brief proposed: the components page binds a component's shape and
+  states; a page file binds composition and placement.** Rejected: *page files may override a component
+  where they say so* — the override is the drift the components page exists to prevent, with a permission
+  slip attached; and *the components page binds placement too* — placement is precisely what `TODO-001`
+  proved must be decided in the real page, so centralising it would rebuild the failure that opened slice 2.
+  **The consequence in §1.1 is that one row became two.** The old row bound *placement, structure,
+  hierarchy and component shape* to a single artefact, which was coherent only while one file held
+  everything. Splitting the sources without splitting that row would have left both new files claiming
+  a component's shape.
+
+- **2026-08-02** — **`D-e`'s alignment landed here** (settled at M13, `wireframes/overview.md` §4.2). The
+  word **structure** sat on both sides of §1.1 — wires "binding for structure and state coverage", the
+  hi-fi binding "placement, **structure**, hierarchy" — and that overlap is what let a wire be read as an
+  implementation reference. The wires row now binds **which** surfaces and states exist and what content
+  each carries, and says plainly it is neither a value source nor a placement source.
+
+- **2026-08-02** — **`Interstate-8 1B.dc.html` marked superseded in §1 and §1.1.** Kept, not deleted:
+  shipped tickets cite it, and the project's convention is demote-don't-erase. The hazard it leaves is
+  specific and worth naming — a reader arriving **via one of those ticket citations** finds a document that
+  still reads as the canonical hi-fi, so the supersession is stated in both places rather than implied by
+  the newer files' existence.
+
+- **2026-08-02** — **Three §3 rows corrected against artefacts that already disagreed with them.**
+  - **Lyric pair** — records `D-a`: no panel framing, occupies the Lyrics section in place, cross-link
+    belongs to the page title. **Superseded wording, verbatim:**
+    > | **Lyric pair** | side-by-side (desktop) · stacked (mobile) | — | "THIS VERSION" \| "NORMAL VERSION →"; "[same as normal version]" (FR-20). The two columns split on a `2px dashed var(--color-line-accent)` rule — the same divider treatment as the song page's main/rail split, not a component-specific colour. |
+  - **Home module** — the **tour-stats teaser** was missing. `01-homepage.md` lists it as *Confirmed*, and
+    the wireframe is authoritative for which surfaces exist, so the design system was the incomplete one.
+    Found when Claude Design flagged the disagreement at M13 and proposed dropping it from the wire — the
+    authority runs the other way. **Superseded wording, verbatim:**
+    > | **Home module** | upcoming tour · recently-passed · this-week-in-history · song-spotlight · from-discography | — | label (teal) + Lora list + "MORE →" |
+  - **Hero** — named the two variants to the block types now in the content model (`homepage_hero`,
+    `page_hero`) and recorded the random-background and nav-over-hero behaviour the requirements pinned at
+    M11. **Superseded wording, verbatim:**
+    > | **Hero** | band hero (home, full, "TAKE AN EXIT") · page-title hero (secondary, short) | — | photo + darkening scrim for legibility |
